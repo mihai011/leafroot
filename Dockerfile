@@ -7,6 +7,6 @@ RUN apt -y upgrade
 RUN mkdir /workspace
 WORKDIR /workspace
 
-COPY . .
+COPY /app .
 
 RUN pip install --upgrade pip -r requirements.txt
