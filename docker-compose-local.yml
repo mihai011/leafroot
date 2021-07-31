@@ -1,0 +1,22 @@
+version: "3"
+
+services:
+  backend:
+    build:
+      context: .
+    image: backend
+    container_name: backend
+    hostname: backend
+    restart: on-failure
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/workspace
+    command: > 
+      sh -c "sleep infinity"
+    networks:
+      - shared_network
+
+networks:
+    shared_network:
+        driver: bridge
