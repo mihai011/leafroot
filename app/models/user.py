@@ -1,10 +1,10 @@
 from sqlalchemy.sql.sqltypes import Boolean
-from models import Base
+from models import ExtraBase, Base
 
 from sqlalchemy import Column, Integer, String
 
 
-class User(Base):
+class User(Base, ExtraBase):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True)
