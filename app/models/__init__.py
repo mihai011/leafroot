@@ -1,16 +1,12 @@
 import os
 from datetime import datetime
-import graphene
 
 from dotenv import load_dotenv
 
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import session, sessionmaker, scoped_session
 from sqlalchemy import Column, Integer, Boolean, DateTime, String
-from graphene_sqlalchemy import SQLAlchemyObjectType
-
-
 
 load_dotenv()
 
@@ -22,14 +18,16 @@ SQLALCHEMY_DATABASE_URL = "{}://{}:{}@{}/{}"\
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL
 )
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-session = SessionLocal()
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+session = scoped_session(SessionLocal)
 
 Base = declarative_base()
+Base.query = session.query_property()
 
 class ExtraBase:
 
+    id = Column(Integer, primary_key=True)
     created_at = Column(DateTime, default = datetime.now())
     updated_at = Column(DateTime, default = datetime.now())
 
@@ -48,22 +46,22 @@ class ExtraBase:
 
         return session.query(Cls).all()
 
+    @classmethod
+    def GetById(Cls, id):
 
+        return session.query(Cls).filter(Cls.id==id).first()
 
-from models.user import User
+    @classmethod
+    def GetByArgs(Cls, args):
 
-class UserGraph(SQLAlchemyObjectType):
-    class Meta:
-        model = User
+        query = session.query(Cls)
 
-class Query(graphene.ObjectType):
-    hello = graphene.String(name=graphene.String(default_value="stranger"))
-    list_users = graphene.List(UserGraph)
+        for attr,value in args.items():
+            query = query.filter( getattr(Cls,attr) == value )
 
-    def resolve_hello(self, info, name):
-        return "Hello " + name
+        return query.all()
+        
 
-    def resolve_list_users(self, info):
-        return User.GetAll()
+# all models imported here
 
-
+from models.user import QueryUser, User

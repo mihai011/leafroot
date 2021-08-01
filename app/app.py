@@ -1,14 +1,10 @@
 from typing import Optional
 from fastapi import FastAPI
+from sqlalchemy.orm import session
 from starlette.graphql import GraphQLApp
-
 import graphene
-import os
-import sys
-sys.path.append(os.getcwd())
 
-from models import User
-from models import Query
+from models import QueryUser, User, session
 
 app = FastAPI()
 
@@ -34,4 +30,5 @@ def create_users(quantity: int):
 
         User.AddNew(args)
 
-app.add_route("/graphql", GraphQLApp(schema=graphene.Schema(query=Query)))
+app.add_route("/graphql", \
+    GraphQLApp(schema=graphene.Schema(query=QueryUser)))
