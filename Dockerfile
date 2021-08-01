@@ -8,5 +8,6 @@ RUN mkdir /workspace
 WORKDIR /workspace
 
 COPY /app .
+COPY /.env .
 
 RUN pip install --upgrade pip -r requirements.txt

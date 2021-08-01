@@ -1,26 +1,11 @@
-import os
-
-from dotenv import load_dotenv
-load_dotenv()
-
 from typing import Optional
 from fastapi import FastAPI
 
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+import os
+import sys
+sys.path.append(os.getcwd())
 
-# SQLALCHEMY_DATABASE_URL = "sqlite:///./sql_app.db"
-SQLALCHEMY_DATABASE_URL = "{}://{}:{}@{}/{}"\
-    .format("postgresql",os.getenv("POSTGRES_USER"),\
-    os.getenv("POSTGRES_PASSWORD"), os.getenv("db"), os.getenv("POSTGRES_DB") )
-
-engine = create_engine(
-    SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
-)
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-Base = declarative_base()
+from models import User
 
 app = FastAPI()
 
