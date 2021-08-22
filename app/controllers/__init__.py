@@ -1,9 +1,8 @@
-import random, string
+import random, string, json
 
 from fastapi.responses import JSONResponse
 
-
-from models import User
+from models import User, Token
 
 
 def random_string():
@@ -12,21 +11,27 @@ def random_string():
 
 def parse(request):
 
-  args = request.path_params
+  if request.method == "GET":
+    args = request.path_params
+
+  if request.method == "POST":
+    args = request.json()
 
   return args
 
-def create_response_ok(message):
+def create_response_ok(message, item=None):
 
   data = {}  
   data['message'] = message
+  data['item'] = item
   data['status'] = 200
   return JSONResponse(content=data)
 
-def create_response_bad(message):
+def create_response_bad(message, item=None):
 
   data = {}  
   data['message'] = message
+  data['item'] = item
   data['status'] = 400
   return JSONResponse(content=data)
 
@@ -38,9 +43,16 @@ async def create_bulk_users(users):
     args = {}
     args['email'] = "{}@{}".format(random_string(), random_string())
     args['username'] = random_string()
-    args['verified'] = True
+    password = random_string()
 
     User.AddNew(args)
+
+    token_args = {}
+    token_args['password'] = password
+    token_args['email'] = args['email']
+
+    Token.AddNew(token_args)
+
 
   return True
 

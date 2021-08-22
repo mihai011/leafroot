@@ -1,32 +1,62 @@
 import graphene
+from jose import jwt
 
 from sqlalchemy.sql.sqltypes import Boolean
-from graphene import Connection, Node
-from sqlalchemy import Column, Integer, Boolean, DateTime, String
+from sqlalchemy import Column, Boolean, String
 from graphene_sqlalchemy import SQLAlchemyObjectType
-from graphene_sqlalchemy_filter import FilterableConnectionField, FilterSet
+from graphene_sqlalchemy_filter import  FilterSet
 
-from models import ExtraBase, Base
+from models import ExtraBase, Base, session
+from models import secret
 
+
+class Token(Base, ExtraBase):
+    __tablename__ = "tokens"
+
+    token = Column(String)
+
+    @classmethod
+    def AddNew(Cls, args):
+
+        token = jwt.encode(args, secret, algorithm='HS256')
+
+        obj = Cls(token=token)
+        session.add(obj)
+        session.commit()
+
+        return obj
+
+    @classmethod
+    def Search(Cls, args):
+
+        token = jwt.encode(args, secret, algorithm='HS256')
+
+        actual_token = Cls.GetByArgs({'token':token})
+
+        if actual_token:
+            return actual_token[0]
+        else:
+            return None
+    
 
 class User(Base, ExtraBase):
     __tablename__ = "users"
 
     username = Column(String(80), unique=True, nullable=False)
     email = Column(String(120), unique=True, nullable=False)
-    verified = Column(Boolean, default=False)
-
+    permissions = Column(String(3))
+        
     def __repr__(self):
         return '<User %r>' % self.username
 
+    @classmethod
+    def AddNew(Cls, args):
 
-class Admin(User):
+        user = Cls(**args)
+        session.add(user)
+        session.commit()
 
-    pass
-
-class NormalUser(User):
-
-    pass
+        return user
 
         
 # classes necessary for graphql functionality, 

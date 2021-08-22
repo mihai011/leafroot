@@ -4,3 +4,5 @@ graphene>=2.0
 graphene-sqlalchemy>=2.0
 graphene-sqlalchemy-filter==1.12.2
 autopep8
+python-jose[cryptography]
+sqlalchemy_serializer

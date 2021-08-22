@@ -8,8 +8,9 @@ from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import session, sessionmaker, scoped_session
-from sqlalchemy import Column, Integer, Boolean, DateTime, String
-from sqlalchemy.ext.declarative import DeclarativeMeta
+from sqlalchemy import Column, Integer, DateTime
+
+from jose import jwt
 
 
 load_dotenv()
@@ -28,6 +29,8 @@ session = scoped_session(SessionLocal)
 
 Base = declarative_base()
 Base.query = session.query_property()
+
+secret = '$QmB*R>Nq!$.YdzkKvt{fBX7<Bmgm4~gy")&IthT+AtkA>/C@BkDyL0vRTraG"g'
 
 
 class ExtraBase(SerializerMixin):
@@ -78,4 +81,4 @@ class ExtraBase(SerializerMixin):
 
 # all models imported here
 
-from models.user import QueryUser, User
+from models.user import QueryUser, User, Token

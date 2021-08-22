@@ -1,1 +1,5 @@
 Generic single-database configuration.
+
+Command to run for user.
+
+alembic revision --autogenerate -m "<migration name>"
