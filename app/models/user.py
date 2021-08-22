@@ -20,6 +20,9 @@ class User(Base, ExtraBase):
         return '<User %r>' % self.username
 
 
+
+# classes necessary for graphql functionality
+
 class UserGraph(SQLAlchemyObjectType):
     class Meta:
         model = User
