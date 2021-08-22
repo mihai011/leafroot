@@ -3,11 +3,15 @@ from datetime import datetime
 import json
 
 from dotenv import load_dotenv
+from sqlalchemy import pool
 
 from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy import create_engine
+from sqlalchemy.pool import NullPool
+from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, AsyncConnection
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import session, sessionmaker, scoped_session
+from sqlalchemy.orm import session, sessionmaker
+from sqlalchemy.future import select
 from sqlalchemy import Column, Integer, DateTime
 
 from jose import jwt
@@ -17,18 +21,18 @@ load_dotenv()
 
 # SQLALCHEMY_DATABASE_URL = "sqlite:///./sql_app.db"
 SQLALCHEMY_DATABASE_URL = "{}://{}:{}@{}/{}"\
-    .format("postgresql",os.getenv("POSTGRES_USER"),\
+    .format("postgresql+asyncpg",os.getenv("POSTGRES_USER"),\
     os.getenv("POSTGRES_PASSWORD"), "db", os.getenv("POSTGRES_DB") )
 
-engine = create_engine(
+engine = create_async_engine(
     SQLALCHEMY_DATABASE_URL
 )
 
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-session = scoped_session(SessionLocal)
+
+SessionMaker = sessionmaker(autocommit=False, autoflush=False, bind=engine, class_=AsyncSession)
+session = SessionMaker()
 
 Base = declarative_base()
-Base.query = session.query_property()
 
 secret = '$QmB*R>Nq!$.YdzkKvt{fBX7<Bmgm4~gy")&IthT+AtkA>/C@BkDyL0vRTraG"g'
 
@@ -62,21 +66,32 @@ class ExtraBase(SerializerMixin):
     @classmethod
     def GetById(Cls, id):
 
-        obj = session.query(Cls).filter(Cls.id==id).first()
+        obj = session.query(Cls).where(Cls.id==id).first()
         if not obj:
             return None
 
         return obj.serialize()
 
     @classmethod
-    def GetByArgs(Cls, args):
+    async def GetByArgs(Cls, args):
 
-        query = session.query(Cls)
+        current_session = SessionMaker()
 
-        for attr,value in args.items():
-            query = query.filter( getattr(Cls,attr) == value )
+        def filter_sync(session):
 
-        return query.all()
+            query = session.query(Cls)
+
+            for attr,value in args.items():
+
+                query = query.filter( getattr(Cls,attr) == value )
+
+            return query.all()
+
+        results = await current_session.run_sync(filter_sync)
+
+        await current_session.close()
+
+        return results
         
 
 # all models imported here

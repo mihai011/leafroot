@@ -45,14 +45,13 @@ async def create_bulk_users(users):
     args['username'] = random_string()
     password = random_string()
 
-    User.AddNew(args)
+    await User.AddNew(args)
 
     token_args = {}
     token_args['password'] = password
     token_args['email'] = args['email']
 
-    Token.AddNew(token_args)
-
-
+    await Token.AddNew(token_args)
+    
   return True
 

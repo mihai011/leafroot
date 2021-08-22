@@ -16,22 +16,22 @@ class Token(Base, ExtraBase):
     token = Column(String)
 
     @classmethod
-    def AddNew(Cls, args):
+    async def AddNew(Cls, args):
 
         token = jwt.encode(args, secret, algorithm='HS256')
 
         obj = Cls(token=token)
         session.add(obj)
-        session.commit()
+        await session.commit()
 
         return obj
 
     @classmethod
-    def Search(Cls, args):
+    async def Search(Cls, args):
 
         token = jwt.encode(args, secret, algorithm='HS256')
 
-        actual_token = Cls.GetByArgs({'token':token})
+        actual_token = await Cls.GetByArgs({'token':token})
 
         if actual_token:
             return actual_token[0]
@@ -50,11 +50,11 @@ class User(Base, ExtraBase):
         return '<User %r>' % self.username
 
     @classmethod
-    def AddNew(Cls, args):
+    async def AddNew(Cls, args):
 
         user = Cls(**args)
         session.add(user)
-        session.commit()
+        await session.commit()
 
         return user
 

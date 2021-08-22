@@ -29,14 +29,14 @@ async def create_users(id: int):
     return create_response_ok(user)
 
 @user_router.post("/login")
-def login(params: Dict[Any, Any]):
+async def login(params: Dict[Any, Any]):
 
     if "email" not in params:
         return create_response_bad("Email is required")
     if "password" not in params:
         return create_response_bad("Password is required")
 
-    users = User.GetByArgs({"email":params['email']})
+    users = await User.GetByArgs({"email":params['email']})
     if len(users) > 1:
         return create_response_bad("More than 1 user has the same email")
 
@@ -48,14 +48,14 @@ def login(params: Dict[Any, Any]):
         args = {}
         args['email'] = params['email']
         args['password'] = params['password']
-        token = Token.Search(args)
+        token = await Token.Search(args)
         if token:
             return create_response_ok("User logged in!", token.to_dict())
         else:
             return create_response_bad("Password is not correct!")
 
 @user_router.post("/sign-up")
-def sign_up(params: Dict[Any, Any]):
+async def sign_up(params: Dict[Any, Any]):
 
     if "password" not in params:
         return create_response_bad("Password is not present")
@@ -63,7 +63,7 @@ def sign_up(params: Dict[Any, Any]):
     password = params.pop('password')
     
     try:
-        User.AddNew(params)
+        await User.AddNew(params)
     except Exception as e:
          return create_response_bad(str(e))
 
