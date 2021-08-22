@@ -20,8 +20,17 @@ class User(Base, ExtraBase):
         return '<User %r>' % self.username
 
 
+class Admin(User):
 
-# classes necessary for graphql functionality
+    pass
+
+class NormalUser(User):
+
+    pass
+
+        
+# classes necessary for graphql functionality, 
+# pretty useless for now, and i don't recommend them
 
 class UserGraph(SQLAlchemyObjectType):
     class Meta:

@@ -1,27 +1,28 @@
 import random
-import string 
+import string
 
+from fastapi import APIRouter
+
+from controllers import parse, create_response_ok,\
+  create_bulk_users
 
 from models import User
-from controllers import parse, create_response_ok
+
+user_router = APIRouter(prefix="/users",
+    tags=["users"])
 
 
-def random_string():
+@user_router.post("/create_users/{quantity}", )
+async def create_users(quantity: int):
 
-  return ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(10))
+    await create_bulk_users(quantity)
+  
+    return create_response_ok("Users created succesfully!")
 
 
-def create_users(request):
+@user_router.get("/get_user/{id}", )
+async def create_users(id: int):
 
-  params = parse(request)
+    user = User.GetById(id)
 
-  for _ in range(int(params['quantity'])):
-
-      args = {}
-      args['email'] = "{}@{}".format(random_string(), random_string())
-      args['username'] = random_string()
-      args['verified'] = True
-
-      User.AddNew(args)
-
-  return create_response_ok("Users created succesfully!")
+    return create_response_ok(user)

@@ -1,12 +1,16 @@
 import os
 from datetime import datetime
+import json
 
 from dotenv import load_dotenv
 
+from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import session, sessionmaker, scoped_session
 from sqlalchemy import Column, Integer, Boolean, DateTime, String
+from sqlalchemy.ext.declarative import DeclarativeMeta
+
 
 load_dotenv()
 
@@ -25,11 +29,17 @@ session = scoped_session(SessionLocal)
 Base = declarative_base()
 Base.query = session.query_property()
 
-class ExtraBase:
+
+class ExtraBase(SerializerMixin):
 
     id = Column(Integer, primary_key=True)
     created_at = Column(DateTime, default = datetime.now())
     updated_at = Column(DateTime, default = datetime.now())
+
+
+    def serialize(self):
+
+        return self.to_dict()
 
 
     @classmethod
@@ -49,7 +59,11 @@ class ExtraBase:
     @classmethod
     def GetById(Cls, id):
 
-        return session.query(Cls).filter(Cls.id==id).first()
+        obj = session.query(Cls).filter(Cls.id==id).first()
+        if not obj:
+            return None
+
+        return obj.serialize()
 
     @classmethod
     def GetByArgs(Cls, args):
