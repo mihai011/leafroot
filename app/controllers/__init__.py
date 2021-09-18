@@ -1,6 +1,6 @@
 import random, string, json
 
-from fastapi.responses import JSONResponse
+from fastapi.responses import ORJSONResponse
 
 from models import User, Token
 
@@ -25,7 +25,7 @@ def create_response_ok(message, item=None):
   data['message'] = message
   data['item'] = item
   data['status'] = 200
-  return JSONResponse(content=data)
+  return ORJSONResponse(content=data)
 
 def create_response_bad(message, item=None):
 
@@ -33,7 +33,7 @@ def create_response_bad(message, item=None):
   data['message'] = message
   data['item'] = item
   data['status'] = 400
-  return JSONResponse(content=data)
+  return ORJSONResponse(content=data)
 
 
 async def create_bulk_users(users, session):

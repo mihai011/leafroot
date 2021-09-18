@@ -41,7 +41,7 @@ starlette==0.14.2
 toml==0.10.2
 typing-extensions==3.10.0.2
 uvicorn==0.15.0
-uvloop
+uvloop==0.16.0
 watchgod==0.7
 websockets==10.0
 zipp==3.5.0
