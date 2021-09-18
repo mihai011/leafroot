@@ -8,8 +8,6 @@ services:
     container_name: backend
     hostname: backend
     restart: on-failure
-    ports:
-      - "8000:8000"
     volumes:
       - .:/workspace
     command: > 

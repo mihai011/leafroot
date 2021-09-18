@@ -20,7 +20,9 @@ async def create_users(quantity: int, session: AsyncSession = Depends(get_sessio
 
     await create_bulk_users(quantity, session)
   
-    return create_response_ok("Users created succesfully!")
+    # return create_response_ok("Users created succesfully!")
+    
+    return True
 
 
 @user_router.get("/get_user/{id}", )
