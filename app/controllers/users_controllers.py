@@ -2,8 +2,10 @@ import random
 import string
 from typing import Any, Dict
 
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Depends
+from sqlalchemy.ext.asyncio import AsyncSession
 
+from models import get_session
 from controllers import parse, create_response_ok,\
   create_bulk_users, create_response_bad
 
@@ -14,29 +16,29 @@ user_router = APIRouter(prefix="/users",
 
 
 @user_router.post("/create_users/{quantity}", )
-async def create_users(quantity: int):
+async def create_users(quantity: int, session: AsyncSession = Depends(get_session)):
 
-    await create_bulk_users(quantity)
+    await create_bulk_users(quantity, session)
   
     return create_response_ok("Users created succesfully!")
 
 
 @user_router.get("/get_user/{id}", )
-async def create_users(id: int):
+async def create_users(id: int, session: AsyncSession = Depends(get_session)):
 
-    user = User.GetById(id)
+    user = User.GetById(id, session)
 
     return create_response_ok(user)
 
 @user_router.post("/login")
-async def login(params: Dict[Any, Any]):
+async def login(params: Dict[Any, Any], session: AsyncSession = Depends(get_session)):
 
     if "email" not in params:
         return create_response_bad("Email is required")
     if "password" not in params:
         return create_response_bad("Password is required")
 
-    users = await User.GetByArgs({"email":params['email']})
+    users = await User.GetByArgs({"email":params['email']}, session)
     if len(users) > 1:
         return create_response_bad("More than 1 user has the same email")
 
@@ -48,14 +50,14 @@ async def login(params: Dict[Any, Any]):
         args = {}
         args['email'] = params['email']
         args['password'] = params['password']
-        token = await Token.Search(args)
+        token = await Token.Search(args, session)
         if token:
             return create_response_ok("User logged in!", token.to_dict())
         else:
             return create_response_bad("Password is not correct!")
 
 @user_router.post("/sign-up")
-async def sign_up(params: Dict[Any, Any]):
+async def sign_up(params: Dict[Any, Any], session: AsyncSession = Depends(get_session)):
 
     if "password" not in params:
         return create_response_bad("Password is not present")
@@ -63,13 +65,13 @@ async def sign_up(params: Dict[Any, Any]):
     password = params.pop('password')
     
     try:
-        await User.AddNew(params)
+        await User.AddNew(params, session)
     except Exception as e:
          return create_response_bad(str(e))
 
     del params['username']
     params['password'] = password
-    token = Token.AddNew(params)
+    token = Token.AddNew(params, session)
 
     return create_response_ok("User created!", token.to_dict() )
 

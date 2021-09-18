@@ -16,7 +16,7 @@ class Token(Base, ExtraBase):
     token = Column(String)
 
     @classmethod
-    async def AddNew(Cls, args):
+    async def AddNew(Cls, session, args):
 
         token = jwt.encode(args, secret, algorithm='HS256')
 
@@ -27,11 +27,11 @@ class Token(Base, ExtraBase):
         return obj
 
     @classmethod
-    async def Search(Cls, args):
+    async def Search(Cls, session, args):
 
         token = jwt.encode(args, secret, algorithm='HS256')
 
-        actual_token = await Cls.GetByArgs({'token':token})
+        actual_token = await Cls.GetByArgs({'token':token}, session)
 
         if actual_token:
             return actual_token[0]
@@ -50,7 +50,7 @@ class User(Base, ExtraBase):
         return '<User %r>' % self.username
 
     @classmethod
-    async def AddNew(Cls, args):
+    async def AddNew(Cls, session, args):
 
         user = Cls(**args)
         session.add(user)
@@ -60,7 +60,7 @@ class User(Base, ExtraBase):
 
         
 # classes necessary for graphql functionality, 
-# pretty useless for now, and i don't recommend them
+# pretty useless for now, and I don't recommend them
 
 class UserGraph(SQLAlchemyObjectType):
     class Meta:

@@ -36,7 +36,7 @@ def create_response_bad(message, item=None):
   return JSONResponse(content=data)
 
 
-async def create_bulk_users(users):
+async def create_bulk_users(users, session):
 
   for _ in range(users):
 
@@ -45,13 +45,13 @@ async def create_bulk_users(users):
     args['username'] = random_string()
     password = random_string()
 
-    await User.AddNew(args)
+    await User.AddNew(session, args)
 
     token_args = {}
     token_args['password'] = password
     token_args['email'] = args['email']
 
-    await Token.AddNew(token_args)
+    await Token.AddNew(session, token_args)
     
   return True
 

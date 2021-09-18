@@ -20,21 +20,28 @@ from jose import jwt
 load_dotenv()
 
 # SQLALCHEMY_DATABASE_URL = "sqlite:///./sql_app.db"
-SQLALCHEMY_DATABASE_URL = "{}://{}:{}@{}/{}"\
+SQLALCHEMY_DATABASE_URL_ASYNC = "{}://{}:{}@{}/{}"\
     .format("postgresql+asyncpg",os.getenv("POSTGRES_USER"),\
     os.getenv("POSTGRES_PASSWORD"), "db", os.getenv("POSTGRES_DB") )
 
+SQLALCHEMY_DATABASE_URL_SYNC = "{}://{}:{}@{}/{}"\
+    .format("postgresql",os.getenv("POSTGRES_USER"),\
+    os.getenv("POSTGRES_PASSWORD"), "db", os.getenv("POSTGRES_DB") )
+
 engine = create_async_engine(
-    SQLALCHEMY_DATABASE_URL
+    SQLALCHEMY_DATABASE_URL_ASYNC, echo=False, future=True
 )
 
 
-SessionMaker = sessionmaker(autocommit=False, autoflush=False, bind=engine, class_=AsyncSession)
-session = SessionMaker()
-
 Base = declarative_base()
-
 secret = '$QmB*R>Nq!$.YdzkKvt{fBX7<Bmgm4~gy")&IthT+AtkA>/C@BkDyL0vRTraG"g'
+
+async def get_session() -> AsyncSession:
+    async_session = sessionmaker(
+        engine, class_=AsyncSession, expire_on_commit=False
+    )
+    async with async_session() as session:
+        yield session
 
 
 class ExtraBase(SerializerMixin):
@@ -45,46 +52,41 @@ class ExtraBase(SerializerMixin):
 
 
     def serialize(self):
-
         return self.to_dict()
 
 
     @classmethod
-    def AddNew(Cls, args):
+    async def AddNew(Cls, session, args):
 
         obj = Cls(**args)
         session.add(obj)
-        session.commit()
+        await session.commit()
 
         return obj
 
     @classmethod
-    def GetAll(Cls):
+    async def GetAll(Cls, session):
 
-        return session.query(Cls).all()
+        return await session.query(Cls).all()
 
     @classmethod
-    def GetById(Cls, id):
+    async def GetById(Cls, id, session):
 
-        obj = session.query(Cls).where(Cls.id==id).first()
+        obj = await session.query(Cls).where(Cls.id==id).first()
         if not obj:
             return None
 
         return obj.serialize()
 
     @classmethod
-    async def GetByArgs(Cls, args):
+    async def GetByArgs(Cls, session, args):
 
-        current_session = SessionMaker()
+        current_session = session
 
         def filter_sync(session):
-
             query = session.query(Cls)
-
             for attr,value in args.items():
-
                 query = query.filter( getattr(Cls,attr) == value )
-
             return query.all()
 
         results = await current_session.run_sync(filter_sync)
