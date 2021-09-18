@@ -29,7 +29,7 @@ SQLALCHEMY_DATABASE_URL_SYNC = "{}://{}:{}@{}/{}"\
     os.getenv("POSTGRES_PASSWORD"), "db", os.getenv("POSTGRES_DB") )
 
 engine = create_async_engine(
-    SQLALCHEMY_DATABASE_URL_ASYNC, echo=False, future=True
+    SQLALCHEMY_DATABASE_URL_ASYNC, echo=False, future=True, pool_size=100, max_overflow=100
 )
 
 
