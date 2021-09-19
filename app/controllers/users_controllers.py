@@ -4,6 +4,7 @@ from typing import Any, Dict
 
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.future import select
 
 from models import get_session
 from controllers import parse, create_response_ok,\
@@ -26,7 +27,7 @@ async def create_users(quantity: int, session: AsyncSession = Depends(get_sessio
 @user_router.get("/get_user/{id}", )
 async def create_users(id: int, session: AsyncSession = Depends(get_session)):
 
-    user = User.GetById(id, session)
+    user = await User.GetById(id, session)
 
     return create_response_ok(user)
 

@@ -72,7 +72,9 @@ class ExtraBase(SerializerMixin):
     @classmethod
     async def GetById(Cls, id, session):
 
-        obj = await session.query(Cls).where(Cls.id==id).first()
+        query = select(Cls).where(Cls.id == id)
+        result = await session.execute(query)
+        (obj,) = result.one()
         if not obj:
             return None
 
