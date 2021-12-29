@@ -74,7 +74,9 @@ async def sign_up(params: Dict[Any, Any], session: AsyncSession = Depends(get_se
     params['password'] = password
     token = Token.AddNew(params, session)
 
-    return create_response_ok("User created!", token.to_dict() )
+    return create_response_ok("User created!", token.to_dict())
+
+# small fix
 
 
 
