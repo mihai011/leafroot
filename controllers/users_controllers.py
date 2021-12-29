@@ -6,11 +6,11 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
-from models import get_session
+from data.models import get_session
 from controllers import parse, create_response_ok,\
   create_bulk_users, create_response_bad
 
-from models import User, Token
+from data import User, Token
 
 user_router = APIRouter(prefix="/users",
     tags=["users"])
@@ -30,6 +30,7 @@ async def create_users(id: int, session: AsyncSession = Depends(get_session)):
     user = await User.GetById(id, session)
 
     return create_response_ok(user)
+
 
 @user_router.post("/login")
 async def login(params: Dict[Any, Any], session: AsyncSession = Depends(get_session)):
@@ -57,6 +58,7 @@ async def login(params: Dict[Any, Any], session: AsyncSession = Depends(get_sess
         else:
             return create_response_bad("Password is not correct!")
 
+
 @user_router.post("/sign-up")
 async def sign_up(params: Dict[Any, Any], session: AsyncSession = Depends(get_session)):
 
@@ -75,25 +77,3 @@ async def sign_up(params: Dict[Any, Any], session: AsyncSession = Depends(get_se
     token = Token.AddNew(params, session)
 
     return create_response_ok("User created!", token.to_dict() )
-
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-

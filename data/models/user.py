@@ -6,8 +6,8 @@ from sqlalchemy import Column, Boolean, String
 from graphene_sqlalchemy import SQLAlchemyObjectType
 from graphene_sqlalchemy_filter import  FilterSet
 
-from models import ExtraBase, Base, session
-from models import secret
+from data.models import ExtraBase, Base, session
+from data.models import secret
 
 
 class Token(Base, ExtraBase):

@@ -2,9 +2,8 @@ import os
 from datetime import datetime
 import json
 
-from dotenv import load_dotenv
+from jose import jwt
 from sqlalchemy import pool
-
 from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy import create_engine
 from sqlalchemy.pool import NullPool
@@ -14,19 +13,16 @@ from sqlalchemy.orm import session, sessionmaker
 from sqlalchemy.future import select
 from sqlalchemy import Column, Integer, DateTime
 
-from jose import jwt
-
-
-load_dotenv()
+from app import config
 
 # SQLALCHEMY_DATABASE_URL = "sqlite:///./sql_app.db"
 SQLALCHEMY_DATABASE_URL_ASYNC = "{}://{}:{}@{}/{}"\
-    .format("postgresql+asyncpg",os.getenv("POSTGRES_USER"),\
-    os.getenv("POSTGRES_PASSWORD"), "db", os.getenv("POSTGRES_DB") )
+    .format("postgresql+asyncpg",config["POSTGRES_USER"],\
+    config["POSTGRES_PASSWORD"], "db", config["POSTGRES_DB"] )
 
 SQLALCHEMY_DATABASE_URL_SYNC = "{}://{}:{}@{}/{}"\
-    .format("postgresql",os.getenv("POSTGRES_USER"),\
-    os.getenv("POSTGRES_PASSWORD"), "db", os.getenv("POSTGRES_DB") )
+    .format("postgresql", config["POSTGRES_USER"],\
+    config["POSTGRES_PASSWORD"], "db", config["POSTGRES_DB"] )
 
 engine = create_async_engine(
     SQLALCHEMY_DATABASE_URL_ASYNC, echo=False, future=True, pool_size=100, max_overflow=100
@@ -96,8 +92,3 @@ class ExtraBase(SerializerMixin):
         await current_session.close()
 
         return results
-        
-
-# all models imported here
-
-from models.user import QueryUser, User, Token

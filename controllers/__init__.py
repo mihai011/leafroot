@@ -2,7 +2,7 @@ import random, string, json
 
 from fastapi.responses import ORJSONResponse
 
-from models import User, Token
+from data import User, Token
 
 
 def random_string():

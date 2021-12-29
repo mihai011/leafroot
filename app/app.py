@@ -1,13 +1,11 @@
-from typing import Optional
-from fastapi import FastAPI, APIRouter
-from sqlalchemy.orm import session
 from starlette.graphql import GraphQLApp
 import graphene
+import time
+
+from fastapi import FastAPI, APIRouter, Request
 
 from controllers.users_controllers import user_router
-
-from models import QueryUser, User, session
-from controllers.users_controllers import create_users
+from data import QueryUser
 
 app = FastAPI()
 
@@ -17,3 +15,11 @@ general_router.add_route("/graphql", \
     GraphQLApp(schema=graphene.Schema(query=QueryUser)))
 
 app.include_router(user_router)
+
+@app.middleware("http")
+async def add_process_time_header(request: Request, call_next):
+    start_time = time.time()
+    response = await call_next(request)
+    process_time = time.time() - start_time
+    response.headers["X-Process-Time"] = str(process_time)
+    return response
