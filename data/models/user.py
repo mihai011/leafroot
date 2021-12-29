@@ -58,6 +58,12 @@ class User(Base, ExtraBase):
 
         return user
 
+class Admin(User):
+
+    
+    def __repr__(self):
+        return '<User %r>' % self.username
+
         
 # classes necessary for graphql functionality, 
 # pretty useless for now, and I don't recommend them

@@ -27,12 +27,12 @@ def create_response_ok(message, item=None):
   data['status'] = 200
   return ORJSONResponse(content=data)
 
-def create_response_bad(message, item=None):
+def create_response_bad(message, status=400,  item=None):
 
   data = {}  
   data['message'] = message
   data['item'] = item
-  data['status'] = 400
+  data['status'] = status
   return ORJSONResponse(content=data)
 
 

@@ -1,13 +1,10 @@
-import random
-import string
 from typing import Any, Dict
 
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.future import select
 
 from data.models import get_session
-from controllers import parse, create_response_ok,\
+from controllers import create_response_ok,\
   create_bulk_users, create_response_bad
 
 from data import User, Token
@@ -33,7 +30,7 @@ async def create_users(id: int, session: AsyncSession = Depends(get_session)):
 
 
 @user_router.post("/login")
-async def login(params: Dict[Any, Any], session: AsyncSession = Depends(get_session)):
+async def login(params: Dict[str, str], session: AsyncSession = Depends(get_session)):
 
     if "email" not in params:
         return create_response_bad("Email is required")
@@ -60,20 +57,25 @@ async def login(params: Dict[Any, Any], session: AsyncSession = Depends(get_sess
 
 
 @user_router.post("/sign-up")
-async def sign_up(params: Dict[Any, Any], session: AsyncSession = Depends(get_session)):
+async def sign_up(params: Dict[str, str], session: AsyncSession = Depends(get_session)):
 
     if "password" not in params:
         return create_response_bad("Password is not present")
 
-    password = params.pop('password')
-    
+    if "email" not in params:
+        return create_response_bad("Email address is not present")
+
+    if "username" not in params:
+        return create_response_bad("Username is not present")
+
+    token = await Token.AddNew(session, params)
+    params.pop("password")
+
     try:
-        await User.AddNew(params, session)
+        await User.AddNew(session, params)
     except Exception as e:
          return create_response_bad(str(e))
 
-    del params['username']
-    params['password'] = password
-    token = Token.AddNew(params, session)
+
 
     return create_response_ok("User created!", token.to_dict() )

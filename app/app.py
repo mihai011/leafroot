@@ -5,6 +5,7 @@ import time
 from fastapi import FastAPI, APIRouter, Request
 
 from controllers.users_controllers import user_router
+from controllers.base_controllers import base_router
 from data import QueryUser
 
 app = FastAPI()
@@ -15,6 +16,7 @@ general_router.add_route("/graphql", \
     GraphQLApp(schema=graphene.Schema(query=QueryUser)))
 
 app.include_router(user_router)
+app.include_router(base_router)
 
 @app.middleware("http")
 async def add_process_time_header(request: Request, call_next):
