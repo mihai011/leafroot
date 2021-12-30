@@ -37,7 +37,7 @@ async def get_session() -> AsyncSession:
         engine, class_=AsyncSession, expire_on_commit=False
     )
     async with async_session() as session:
-        yield session
+        return session
 
 
 class ExtraBase(SerializerMixin):
@@ -46,10 +46,8 @@ class ExtraBase(SerializerMixin):
     created_at = Column(DateTime, default = datetime.now())
     updated_at = Column(DateTime, default = datetime.now())
 
-
     def serialize(self):
         return self.to_dict()
-
 
     @classmethod
     async def AddNew(Cls, session, args):
@@ -79,16 +77,24 @@ class ExtraBase(SerializerMixin):
     @classmethod
     async def GetByArgs(Cls, session, args):
 
-        current_session = session
-
         def filter_sync(session):
             query = session.query(Cls)
             for attr,value in args.items():
                 query = query.filter( getattr(Cls,attr) == value )
             return query.all()
 
-        results = await current_session.run_sync(filter_sync)
+        results = await session.run_sync(filter_sync)
 
-        await current_session.close()
+        await session.close()
 
         return results
+
+    @classmethod
+    async def DeleteAll(Cls, session):
+
+        def delete(session):
+            query = session.query(Cls).delete()
+
+        await session.run_sync(delete)
+        await session.commit()
+        return True

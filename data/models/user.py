@@ -31,7 +31,7 @@ class Token(Base, ExtraBase):
 
         token = jwt.encode(args, secret, algorithm='HS256')
 
-        actual_token = await Cls.GetByArgs({'token':token}, session)
+        actual_token = await Cls.GetByArgs(session, {'token':token})
 
         if actual_token:
             return actual_token[0]
@@ -44,6 +44,7 @@ class User(Base, ExtraBase):
 
     username = Column(String(80), unique=True, nullable=False)
     email = Column(String(120), unique=True, nullable=False)
+    hashed_pass = Column(String(256), unique=True, nullable=False)
     permissions = Column(String(3))
         
     def __repr__(self):

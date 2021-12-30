@@ -1,9 +1,9 @@
-import random, string, json
+import random, string
 
 from fastapi.responses import ORJSONResponse
 
 from data import User, Token
-
+from utils import get_password_hash
 
 def random_string():
 
@@ -19,6 +19,7 @@ def parse(request):
 
   return args
 
+
 def create_response_ok(message, item=None):
 
   data = {}  
@@ -26,6 +27,7 @@ def create_response_ok(message, item=None):
   data['item'] = item
   data['status'] = 200
   return ORJSONResponse(content=data)
+
 
 def create_response_bad(message, status=400,  item=None):
 
@@ -43,15 +45,10 @@ async def create_bulk_users(users, session):
     args = {}
     args['email'] = "{}@{}".format(random_string(), random_string())
     args['username'] = random_string()
+    args['hashed_pass'] = get_password_hash(random_string())
     password = random_string()
 
     await User.AddNew(session, args)
-
-    token_args = {}
-    token_args['password'] = password
-    token_args['email'] = args['email']
-
-    await Token.AddNew(session, token_args)
     
   return True
 

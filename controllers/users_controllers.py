@@ -6,25 +6,35 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from data.models import get_session
 from controllers import create_response_ok,\
   create_bulk_users, create_response_bad
+from utils import create_access_token, get_password_hash,\
+    verify_password, oauth2_scheme, authenthicate_user
 
-from data import User, Token
+from data import User
 
 user_router = APIRouter(prefix="/users",
     tags=["users"])
 
 
 @user_router.post("/create_users/{quantity}", )
-async def create_users(quantity: int, session: AsyncSession = Depends(get_session)):
+async def create_users(quantity: int, session: AsyncSession = Depends(get_session),\
+    token: str = Depends(oauth2_scheme)):
+
+    if not await authenthicate_user(token, session):
+        return create_response_bad("Token expired! Please login again!")
 
     await create_bulk_users(quantity, session)
-  
+    await session.close()
     return create_response_ok("Users created succesfully!")
 
 
 @user_router.get("/get_user/{id}", )
-async def create_users(id: int, session: AsyncSession = Depends(get_session)):
+async def create_users(id: int, session: AsyncSession = Depends(get_session),\
+    token: str = Depends(oauth2_scheme)):
 
+    if not await authenthicate_user(token, session):
+        return create_response_bad("Token expired! Please login again!")
     user = await User.GetById(id, session)
+    await session.close()
 
     return create_response_ok(user)
 
@@ -37,7 +47,7 @@ async def login(params: Dict[str, str], session: AsyncSession = Depends(get_sess
     if "password" not in params:
         return create_response_bad("Password is required")
 
-    users = await User.GetByArgs({"email":params['email']}, session)
+    users = await User.GetByArgs(session, {"email":params['email']})
     if len(users) > 1:
         return create_response_bad("More than 1 user has the same email")
 
@@ -45,15 +55,13 @@ async def login(params: Dict[str, str], session: AsyncSession = Depends(get_sess
 
     if not user:
         return create_response_bad("User not found")
+
+    if verify_password(params['password'], user.hashed_pass):
+        token = create_access_token(params)
+        return create_response_ok("User logged in!", {"token": token, "user":user.to_dict()})
     else:
-        args = {}
-        args['email'] = params['email']
-        args['password'] = params['password']
-        token = await Token.Search(args, session)
-        if token:
-            return create_response_ok("User logged in!", token.to_dict())
-        else:
-            return create_response_bad("Password is not correct!")
+        return create_response_bad("Incorrect password!")
+        
 
 
 @user_router.post("/sign-up")
@@ -68,14 +76,14 @@ async def sign_up(params: Dict[str, str], session: AsyncSession = Depends(get_se
     if "username" not in params:
         return create_response_bad("Username is not present")
 
-    token = await Token.AddNew(session, params)
-    params.pop("password")
+    password = params.pop("password")
+    hashed_pass = get_password_hash(password)
+    params['hashed_pass'] = hashed_pass
 
     try:
-        await User.AddNew(session, params)
+        user = await User.AddNew(session, params)
+        await session.close()
     except Exception as e:
          return create_response_bad(str(e))
 
-
-
-    return create_response_ok("User created!", token.to_dict() )
+    return create_response_ok("User created!", user.to_dict())
