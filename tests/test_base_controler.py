@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio.engine import AsyncConnection
 from controllers import users_controllers
 from httpx import AsyncClient
 
-from data.models import get_session
+from data.models import get_session_simple
 from data  import User, Token
 from app.app import app
 
@@ -20,7 +20,7 @@ def test_greetings_controller():
 @pytest.mark.asyncio
 async def test_initial_user_flow():
 
-  session  = await get_session()
+  session  = await get_session_simple()
 
   await User.DeleteAll(session)
   await Token.DeleteAll(session)
@@ -49,6 +49,8 @@ async def test_initial_user_flow():
     response = await client.get("/users/get_user/{}".format(user_id), headers=headers)
     assert response.status_code == 200
 
-    response = await client.post("/users/create_users/{}".format(100), headers=headers)
+    response = await client.post("/users/create_users/{}".format(2), headers=headers)
     assert response.status_code == 200
+
+    
 

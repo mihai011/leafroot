@@ -1,13 +1,14 @@
 import os
 from datetime import datetime
 import json
+from typing import final
 
 from jose import jwt
 from sqlalchemy import pool
 from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy import create_engine
 from sqlalchemy.pool import NullPool
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, AsyncConnection
+from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import session, sessionmaker
 from sqlalchemy.future import select
@@ -25,19 +26,27 @@ SQLALCHEMY_DATABASE_URL_SYNC = "{}://{}:{}@{}/{}"\
     config["POSTGRES_PASSWORD"], "db", config["POSTGRES_DB"] )
 
 engine = create_async_engine(
-    SQLALCHEMY_DATABASE_URL_ASYNC, echo=False, future=True, pool_size=100, max_overflow=100
+    SQLALCHEMY_DATABASE_URL_ASYNC, echo=False, future=True, pool_size=0,max_overflow=100,
+    connect_args={'timeout':500}
 )
 
+async_session = sessionmaker(
+        engine, class_=AsyncSession, expire_on_commit=False)
 
 Base = declarative_base()
 secret = '$QmB*R>Nq!$.YdzkKvt{fBX7<Bmgm4~gy")&IthT+AtkA>/C@BkDyL0vRTraG"g'
 
+
 async def get_session() -> AsyncSession:
-    async_session = sessionmaker(
-        engine, class_=AsyncSession, expire_on_commit=False
-    )
+    
+    async with async_session() as session:
+        yield session
+
+
+async def get_session_simple() -> AsyncSession:
     async with async_session() as session:
         return session
+
 
 
 class ExtraBase(SerializerMixin):

@@ -5,6 +5,25 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Python: upload objects",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal", 
+            "args": [
+                "users.json", 
+                "http://127.0.0.1:8000/users/sign-up", 
+                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InZkc3ZzIiwicGFzc3dvcmQiOiJmM2J5ZjAxaGVlT0M3RktWcU04eiIsImV4cCI6MTY0MTEyMDYzM30.-67S5N-5GEl9s62vLV5XADzqHoAs-M9qgdSK5oEGMl8"
+            ],
+        },
+        {
+            "name": "Python: Current File",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal"
+        },
+        {
             "name": "Python: Module",
             "type": "python",
             "request": "launch",

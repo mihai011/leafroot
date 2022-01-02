@@ -6,7 +6,7 @@ from sqlalchemy import Column, Boolean, String
 from graphene_sqlalchemy import SQLAlchemyObjectType
 from graphene_sqlalchemy_filter import  FilterSet
 
-from data.models import ExtraBase, Base, session
+from data.models import ExtraBase, Base
 from data.models import secret
 
 
@@ -47,21 +47,6 @@ class User(Base, ExtraBase):
     hashed_pass = Column(String(256), unique=True, nullable=False)
     permissions = Column(String(3))
         
-    def __repr__(self):
-        return '<User %r>' % self.username
-
-    @classmethod
-    async def AddNew(Cls, session, args):
-
-        user = Cls(**args)
-        session.add(user)
-        await session.commit()
-
-        return user
-
-class Admin(User):
-
-    
     def __repr__(self):
         return '<User %r>' % self.username
 

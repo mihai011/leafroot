@@ -26,6 +26,20 @@ async def create_users(quantity: int, session: AsyncSession = Depends(get_sessio
     await session.close()
     return create_response_ok("Users created succesfully!")
 
+@user_router.post("/create_user")
+async def create_user(params: Dict[str, str], session: AsyncSession = Depends(get_session),\
+    token: str = Depends(oauth2_scheme)):
+
+    if not await authenthicate_user(token, session):
+        return create_response_bad("Token expired! Please login again!")
+    
+    try:
+        user = User.AddNew(session, params)
+    except Exception as e:
+        return create_response_bad(str(e))
+    
+    return create_response_ok("User created!", user.to_dict())
+
 
 @user_router.get("/get_user/{id}", )
 async def create_users(id: int, session: AsyncSession = Depends(get_session),\
@@ -51,10 +65,10 @@ async def login(params: Dict[str, str], session: AsyncSession = Depends(get_sess
     if len(users) > 1:
         return create_response_bad("More than 1 user has the same email")
 
-    user = users[0]
+    if not users:
+        return create_response_bad("No user with such email found")
 
-    if not user:
-        return create_response_bad("User not found")
+    user = users[0]
 
     if verify_password(params['password'], user.hashed_pass):
         token = create_access_token(params)
@@ -77,13 +91,14 @@ async def sign_up(params: Dict[str, str], session: AsyncSession = Depends(get_se
         return create_response_bad("Username is not present")
 
     password = params.pop("password")
-    hashed_pass = get_password_hash(password)
+    hashed_pass = await get_password_hash(password)
     params['hashed_pass'] = hashed_pass
 
     try:
         user = await User.AddNew(session, params)
-        await session.close()
     except Exception as e:
-         return create_response_bad(str(e))
+        return create_response_bad(str(e))
+    finally:
+        await session.close()
 
     return create_response_ok("User created!", user.to_dict())
