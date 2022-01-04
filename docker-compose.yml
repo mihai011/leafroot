@@ -9,7 +9,7 @@ services:
     hostname: backend
     restart: on-failure
     ports:
-      - "127.0.0.1:8000:8000"
+      - "0.0.0.0:8000:8000"
     volumes:
       - .:/workspace
     command: > 
