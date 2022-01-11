@@ -5,19 +5,39 @@ from sqlalchemy.ext.asyncio.engine import AsyncConnection
 from controllers import users_controllers
 from httpx import AsyncClient
 
-from data.models import get_session_simple
+from data.models import get_session, get_session_simple
 from data  import User, Token
 from app.app import app
 
-from tests import client
 
-def test_greetings_controller():
+def temp_db(f):
+    async def func(SessionLocal, *args, **kwargs):
+        #Sessionmaker instance to connect to test DB
+        #  (SessionLocal)From fixture
 
-  response = client.get("/")
-  assert response.status_code == 200
-  assert response.json()['message'] == "Hello World"
+        async def override_get_db():
+            async with SessionLocal() as session:
+              yield session
+
+        #get to use SessionLocal received from fixture_Force db change
+        app.dependency_overrides[get_session] = override_get_db
+        # Run tests
+        await f(*args, **kwargs)
+        # get_Undo db
+        app.dependency_overrides[get_session] = get_session
+    return func
 
 @pytest.mark.asyncio
+@temp_db
+async def test_greetings_controller():
+
+  async with AsyncClient(app=app, base_url="http://test") as client:
+    response = await client.get("/")
+    assert response.status_code == 200
+    assert response.json()['message'] == "Hello World"
+
+@pytest.mark.asyncio
+@temp_db
 async def test_initial_user_flow():
 
   session  = await get_session_simple()

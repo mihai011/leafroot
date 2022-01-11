@@ -24,7 +24,7 @@
             "console": "integratedTerminal"
         },
         {
-            "name": "Python: Module",
+            "name": "Python: tests",
             "type": "python",
             "request": "launch",
             "module": "pytest",
