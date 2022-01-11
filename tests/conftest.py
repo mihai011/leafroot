@@ -24,6 +24,6 @@ def SessionLocal():
 
     # Run the tests
     yield SessionLocal
-
+    
     # Drop the test database
     drop_database(SQLALCHEMY_DATABASE_URL_SYNC)

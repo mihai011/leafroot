@@ -42,11 +42,13 @@ async def get_session() -> AsyncSession:
     async with async_session() as session:
         yield session
 
+    await session.close()
+
 async def get_session_simple() -> AsyncSession:
 
     async with async_session() as session:
         return session
-
+    
 
 class ExtraBase(SerializerMixin):
 
