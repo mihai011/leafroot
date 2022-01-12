@@ -16,6 +16,7 @@ from sqlalchemy import Column, Integer, DateTime
 
 from app import config
 
+
 # SQLALCHEMY_DATABASE_URL = "sqlite:///./sql_app.db"
 SQLALCHEMY_DATABASE_URL_ASYNC = "{}://{}:{}@{}/{}"\
     .format("postgresql+asyncpg",config["POSTGRES_USER"],\
@@ -23,7 +24,15 @@ SQLALCHEMY_DATABASE_URL_ASYNC = "{}://{}:{}@{}/{}"\
 
 SQLALCHEMY_DATABASE_URL_SYNC = "{}://{}:{}@{}/{}"\
     .format("postgresql", config["POSTGRES_USER"],\
-    config["POSTGRES_PASSWORD"], "db", config["POSTGRES_DB"] )
+    config["POSTGRES_PASSWORD"], "db", config["POSTGRES_DB"])
+
+SQLALCHEMY_DATABASE_URL_BASE_SYNC = "{}://{}:{}@{}/"\
+    .format("postgresql", config["POSTGRES_USER"],\
+    config["POSTGRES_PASSWORD"], "db")
+
+SQLALCHEMY_DATABASE_URL_BASE_ASYNC = "{}://{}:{}@{}/"\
+    .format("postgresql+asyncpg", config["POSTGRES_USER"],\
+    config["POSTGRES_PASSWORD"], "db")
 
 engine = create_async_engine(
     SQLALCHEMY_DATABASE_URL_ASYNC, echo=False, future=True, pool_size=0,max_overflow=100,
@@ -49,6 +58,24 @@ async def get_session_simple() -> AsyncSession:
     async with async_session() as session:
         return session
     
+def temp_db(f):
+    from app.app import app
+    async def func(SessionLocal, *args, **kwargs):
+        #Sessionmaker instance to connect to test DB
+        #  (SessionLocal)From fixture
+
+        async def override_get_db():
+            async with SessionLocal() as session:
+              yield session
+            await session.close()
+
+        #get to use SessionLocal received from fixture_Force db change
+        app.dependency_overrides[get_session] = override_get_db
+        # Run tests
+        await f(*args, **kwargs)
+        # get_Undo db
+        app.dependency_overrides[get_session] = get_session
+    return func
 
 class ExtraBase(SerializerMixin):
 
