@@ -1,26 +1,33 @@
+from fastapi import Depends
 from fastapi.testclient import TestClient
 
-import asyncio
-
 from app.app import app
-from data.models import get_session 
+from data.models import get_session
+from data.models.user import User
 
 client = TestClient(app)
 
-def temp_db(f):
-    async def func(SessionLocal, *args, **kwargs):
-        #Sessionmaker instance to connect to test DB
-        #  (SessionLocal)From fixture
 
-        async def override_get_db():
-            async with SessionLocal() as session:
-              yield session
-            await session.close()
 
-        #get to use SessionLocal received from fixture_Force db change
-        app.dependency_overrides[get_session] = override_get_db
-        # Run tests
-        await f(*args, **kwargs)
-        # get_Undo db
-        app.dependency_overrides[get_session] = get_session
-    return func
+class DataSource():
+
+    def __init__(self, session: Depends(get_session)):
+
+        self.session = session
+        self.client = client
+        args = {"username":"Test_user", \
+            "email":"test@gmail.com", \
+            "password":"test"}
+
+        response = client.post("users/sign-up", json=args)
+        assert response['status'] == 200
+
+        args={
+            "username":"Test_user",
+            "password": "test"
+        }
+
+        response = client.post('/users/login', json=args)
+
+        self.headers = {"Authorization":"Bearer {}".format(response['item']['token'])}
+        

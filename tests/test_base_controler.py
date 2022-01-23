@@ -9,15 +9,17 @@ from data.models import get_session, get_session_simple
 from data  import User, Token
 from app.app import app
 from data.models import temp_db
-
+from tests import DataSource
 
 
 @pytest.mark.asyncio
 @temp_db
 async def test_greetings_controller():
 
+  ds = DataSource()
+
   async with AsyncClient(app=app, base_url="http://test") as client:
-    response = await client.get("/")
+    response = await client.get("/", headers=ds.headers)
     assert response.status_code == 200
     assert response.json()['message'] == "Hello World"
 
@@ -57,7 +59,6 @@ async def test_initial_user_flow():
 @pytest.mark.asyncio
 @temp_db
 async def test_initial_user_flow1():
-
 
   user_signup_data = {"password":"test", \
     "username":"control", \

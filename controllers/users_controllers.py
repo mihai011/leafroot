@@ -1,4 +1,5 @@
 from typing import Any, Dict
+from fastapi import Request
 
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -16,25 +17,16 @@ user_router = APIRouter(prefix="/users",
 
 
 @user_router.post("/create_users/{quantity}", )
-async def create_users(quantity: int, session: AsyncSession = Depends(get_session),\
-    token: str = Depends(oauth2_scheme)):
+async def create_users(quantity: int, request: Request):
 
-    if not await authenthicate_user(token, session):
-        return create_response_bad("Token expired! Please login again!")
-
-    await create_bulk_users(quantity, session)
-    await session.close()
+    await create_bulk_users(quantity, request.session)
     return create_response_ok("Users created succesfully!")
 
 @user_router.post("/create_user")
-async def create_user(params: Dict[str, str], session: AsyncSession = Depends(get_session),\
-    token: str = Depends(oauth2_scheme)):
-
-    if not await authenthicate_user(token, session):
-        return create_response_bad("Token expired! Please login again!")
+async def create_user(params: Dict[str, str], request: Request):
     
     try:
-        user = User.AddNew(session, params)
+        user = await User.AddNew(request.session, params)
     except Exception as e:
         return create_response_bad(str(e))
     
@@ -42,26 +34,23 @@ async def create_user(params: Dict[str, str], session: AsyncSession = Depends(ge
 
 
 @user_router.get("/get_user/{id}", )
-async def create_users(id: int, session: AsyncSession = Depends(get_session),\
-    token: str = Depends(oauth2_scheme)):
+async def create_users(id: int, request: Request):
 
-    if not await authenthicate_user(token, session):
-        return create_response_bad("Token expired! Please login again!")
-    user = await User.GetById(id, session)
-    await session.close()
+
+    user = await User.GetById(id, request.session)
 
     return create_response_ok(user)
 
 
 @user_router.post("/login")
-async def login(params: Dict[str, str], session: AsyncSession = Depends(get_session)):
+async def login(params: Dict[str, str], request: Request):
 
     if "email" not in params:
         return create_response_bad("Email is required")
     if "password" not in params:
         return create_response_bad("Password is required")
 
-    users = await User.GetByArgs(session, {"email":params['email']})
+    users = await User.GetByArgs(request.sesion, {"email":params['email']})
     if len(users) > 1:
         return create_response_bad("More than 1 user has the same email")
 
@@ -79,7 +68,7 @@ async def login(params: Dict[str, str], session: AsyncSession = Depends(get_sess
 
 
 @user_router.post("/sign-up")
-async def sign_up(params: Dict[str, str], session: AsyncSession = Depends(get_session)):
+async def sign_up(params: Dict[str, str], request: Request):
 
     if "password" not in params:
         return create_response_bad("Password is not present")
@@ -95,10 +84,8 @@ async def sign_up(params: Dict[str, str], session: AsyncSession = Depends(get_se
     params['hashed_pass'] = hashed_pass
 
     try:
-        user = await User.AddNew(session, params)
+        user = await User.AddNew(request.sesion, params)
     except Exception as e:
         return create_response_bad(str(e))
-    finally:
-        await session.close()
 
     return create_response_ok("User created!", user.to_dict())

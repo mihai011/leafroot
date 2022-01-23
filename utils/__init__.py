@@ -36,7 +36,7 @@ async def authenthicate_user(token, session):
 
   try:
     payload = jwt.decode(token, config['SECRET_KEY'], algorithms=[config['ALGORITHM']])
-  except jwt.ExpiredSignatureError:
+  except Exception:
     return None
 
   users = await User.GetByArgs(session, {"email":payload["email"]})
