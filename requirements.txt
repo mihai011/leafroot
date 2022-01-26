@@ -68,6 +68,7 @@ sniffio==1.2.0
 sortedcontainers==2.4.0
 SQLAlchemy==1.4.23
 SQLAlchemy-serializer==1.4.1
+SQLAlchemy-Utils==0.38.2
 starlette==0.14.2
 toml==0.10.2
 tqdm==4.62.3
