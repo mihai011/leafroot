@@ -27,28 +27,30 @@ app.include_router(user_router)
 app.include_router(atom_router)
 app.include_router(base_router)
 
-@app.middleware("http")
-async def auth_user(request: Request, call_next, session: AsyncSession = Depends(get_session)):
-    """
-    verify the bearer token from headers
-    """
 
-    if os.path.basename(os.path.normpath(str(request.url))) not in ['login', "sign-up"]:
+# @app.middleware("http")
+# async def auth_user(request: Request, call_next, session: AsyncSession = Depends(get_session)):
+#     """
+#     verify the bearer token from headers
+#     """
 
-        if 'Authorization' in request.headers:
-            auth_header = request.headers['Authorization']
-            token = auth_header.split(" ")[-1]
-            request.sesion = session
-            if await authenthicate_user(token, session):
-                response = await call_next(request)
-            else:
-                response = create_response_bad("Token expired! Please login again!")
-            await request.sesion.close()
-            return response
-        else:
-            return create_response_bad("No token in request present!")
+#     if os.path.basename(os.path.normpath(str(request.url))) not in ['login', "sign-up"]:
 
-    return await call_next(request)
+#         if 'Authorization' in request.headers:
+#             auth_header = request.headers['Authorization']
+#             token = auth_header.split(" ")[-1]
+            
+#             if await authenthicate_user(token, session):
+#                 response = await call_next(request)
+#             else:
+#                 response = create_response_bad("Token expired! Please login again!")
+#             await request.sesion.close()
+#             return response
+#         else:
+#             return create_response_bad("No token in request present!")
+
+#     request.state.state = session
+#     return await call_next(request)
 
 @app.middleware("http")
 async def add_time_headers(request: Request, call_next):

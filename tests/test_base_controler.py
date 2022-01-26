@@ -11,6 +11,8 @@ from app.app import app
 from data.models import temp_db
 from tests import DataSource
 
+import nest_asyncio
+nest_asyncio.apply()
 
 @pytest.mark.asyncio
 @temp_db

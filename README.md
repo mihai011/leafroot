@@ -2,7 +2,7 @@
 A FAST-API base project for fast development (imporving developer cycles);
 
 Start:
-gunicorn app.app:app --workers 12 -k uvicorn.workers.UvicornH11Worker --bind 0.0.0.0
+gunicorn app.app:app --workers <cores> -k uvicorn.workers.UvicornH11Worker --bind 0.0.0.0
 
 Create migration and apply it:
 
