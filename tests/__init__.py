@@ -11,7 +11,7 @@ client = TestClient(app)
 
 class DataSource():
 
-    def __init__(self, session: Depends(get_session)):
+    def __init__(self, session = Depends(get_session)):
 
         self.session = session
         self.client = client
