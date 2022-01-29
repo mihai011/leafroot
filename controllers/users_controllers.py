@@ -1,6 +1,7 @@
 from typing import Any, Dict
-from fastapi import Request
+from functools import wraps
 
+from fastapi import Request
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -15,22 +16,34 @@ user_router = APIRouter(prefix="/users",
     tags=["users"])
 
 
+
+def auth_decorator(controller):
+
+    @wraps(controller)
+    async def auth(*args, **kwargs):
+
+        token = kwargs['token']
+        session = kwargs['session']
+
+        if not await authenthicate_user(token, session):
+            return create_response_bad("Token expired! Please login again!")
+
+        return await controller(*args, **kwargs)
+
+    return auth
+
 @user_router.post("/create_users/{quantity}")
+@auth_decorator
 async def create_users(quantity: int, session: AsyncSession = Depends(get_session),\
     token: str = Depends(oauth2_scheme)):
-
-    if not await authenthicate_user(token, session):
-        return create_response_bad("Token expired! Please login again!")
 
     await create_bulk_users(quantity, session)
     return create_response_ok("Users created succesfully!")
 
 @user_router.post("/create_user")
+@auth_decorator
 async def create_user(params: Dict[str, str], session: AsyncSession = Depends(get_session),\
     token: str = Depends(oauth2_scheme)):
-
-    if not await authenthicate_user(token, session):
-        return create_response_bad("Token expired! Please login again!")
 
     try:
         user = await User.AddNew(session, params)
@@ -43,9 +56,6 @@ async def create_user(params: Dict[str, str], session: AsyncSession = Depends(ge
 @user_router.get("/get_user/{id}", )
 async def create_users(id: int, session: AsyncSession = Depends(get_session),\
     token: str = Depends(oauth2_scheme)):
-
-    if not await authenthicate_user(token, session):
-        return create_response_bad("Token expired! Please login again!")
 
     user = await User.GetById(id, session)
 
