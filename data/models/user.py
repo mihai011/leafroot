@@ -4,7 +4,7 @@ from jose import jwt
 from sqlalchemy.sql.sqltypes import Boolean
 from sqlalchemy import Column, Boolean, String
 from graphene_sqlalchemy import SQLAlchemyObjectType
-from graphene_sqlalchemy_filter import  FilterSet
+from graphene_sqlalchemy_filter import FilterSet
 
 from data.models import ExtraBase, Base
 from data.models import secret
@@ -31,13 +31,13 @@ class Token(Base, ExtraBase):
 
         token = jwt.encode(args, secret, algorithm='HS256')
 
-        actual_token = await Cls.GetByArgs(session, {'token':token})
+        actual_token = await Cls.GetByArgs(session, {'token': token})
 
         if actual_token:
             return actual_token[0]
         else:
             return None
-    
+
 
 class User(Base, ExtraBase):
     __tablename__ = "users"
@@ -46,17 +46,18 @@ class User(Base, ExtraBase):
     email = Column(String(120), unique=True, nullable=False)
     hashed_pass = Column(String(256), unique=True, nullable=False)
     permissions = Column(String(3))
-        
+
     def __repr__(self):
         return '<User %r>' % self.username
 
-        
-# classes necessary for graphql functionality, 
+
+# classes necessary for graphql functionality,
 # pretty useless for now, and I don't recommend them
 
 class UserGraph(SQLAlchemyObjectType):
     class Meta:
         model = User
+
 
 class UserFilter(FilterSet):
     class Meta:
@@ -72,9 +73,11 @@ class UserFilter(FilterSet):
         else:
             return User.username != 'admin'
 
+
 class QueryUser(graphene.ObjectType):
     list_users = graphene.List(UserGraph)
-    get_user_id = graphene.Field(UserGraph, user_id=graphene.NonNull(graphene.Int))
+    get_user_id = graphene.Field(
+        UserGraph, user_id=graphene.NonNull(graphene.Int))
     all_users = graphene.List(UserGraph, filters=UserFilter())
 
     def resolve_list_users(self, info):

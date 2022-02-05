@@ -8,27 +8,26 @@ from data.models.user import User
 client = TestClient(app)
 
 
-
 class DataSource():
 
     def __init__(self):
 
         self.client = client
-        args = {"username":"Test_user", \
-            "email":"test@gmail.com", \
-            "password":"test"}
+        args = {"username": "Test_user",
+                "email": "test@gmail.com",
+                "password": "test"}
 
         response = client.post("users/sign-up", json=args)
         assert response.status_code == 200
 
-        args={
-            "username":"Test_user",
+        args = {
+            "username": "Test_user",
             "password": "test",
-            "email":"test@gmail.com", \
+            "email": "test@gmail.com",
         }
 
         response = client.post('/users/login', json=args)
         response = response.json()
 
-        self.headers = {"Authorization":"Bearer {}".format(response['item']['token'])}
-        
+        self.headers = {"Authorization": "Bearer {}".format(
+            response['item']['token'])}

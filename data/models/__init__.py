@@ -19,57 +19,61 @@ from app import config
 
 # SQLALCHEMY_DATABASE_URL = "sqlite:///./sql_app.db"
 SQLALCHEMY_DATABASE_URL_ASYNC = "{}://{}:{}@{}/{}"\
-    .format("postgresql+asyncpg",config["POSTGRES_USER"],\
-    config["POSTGRES_PASSWORD"], "db", config["POSTGRES_DB"] )
+    .format("postgresql+asyncpg", config["POSTGRES_USER"],
+            config["POSTGRES_PASSWORD"], "db", config["POSTGRES_DB"])
 
 SQLALCHEMY_DATABASE_URL_SYNC = "{}://{}:{}@{}/{}"\
-    .format("postgresql", config["POSTGRES_USER"],\
-    config["POSTGRES_PASSWORD"], "db", config["POSTGRES_DB"])
+    .format("postgresql", config["POSTGRES_USER"],
+            config["POSTGRES_PASSWORD"], "db", config["POSTGRES_DB"])
 
 SQLALCHEMY_DATABASE_URL_BASE_SYNC = "{}://{}:{}@{}/"\
-    .format("postgresql", config["POSTGRES_USER"],\
-    config["POSTGRES_PASSWORD"], "db")
+    .format("postgresql", config["POSTGRES_USER"],
+            config["POSTGRES_PASSWORD"], "db")
 
 SQLALCHEMY_DATABASE_URL_BASE_ASYNC = "{}://{}:{}@{}/"\
-    .format("postgresql+asyncpg", config["POSTGRES_USER"],\
-    config["POSTGRES_PASSWORD"], "db")
+    .format("postgresql+asyncpg", config["POSTGRES_USER"],
+            config["POSTGRES_PASSWORD"], "db")
 
 engine = create_async_engine(
-    SQLALCHEMY_DATABASE_URL_ASYNC, echo=False, future=True, pool_size=0,max_overflow=100,
-    connect_args={'timeout':500}
+    SQLALCHEMY_DATABASE_URL_ASYNC, echo=False, future=True,
+    pool_size=0, max_overflow=100,
+    connect_args={'timeout': 500}
 )
 
 async_session = sessionmaker(
-        engine, class_=AsyncSession, expire_on_commit=False)
+    engine, class_=AsyncSession, expire_on_commit=False)
 
 Base = declarative_base()
 secret = '$QmB*R>Nq!$.YdzkKvt{fBX7<Bmgm4~gy")&IthT+AtkA>/C@BkDyL0vRTraG"g'
 
 
 async def get_session() -> AsyncSession:
-    
+
     async with async_session() as session:
         yield session
 
     await session.close()
 
+
 async def get_session_simple() -> AsyncSession:
 
     async with async_session() as session:
         return session
-    
+
+
 def temp_db(f):
     from app.app import app
+
     async def func(SessionLocal, *args, **kwargs):
-        #Sessionmaker instance to connect to test DB
+        # Sessionmaker instance to connect to test DB
         #  (SessionLocal)From fixture
 
         async def override_get_db():
             async with SessionLocal() as session:
-              yield session
+                yield session
             await session.close()
 
-        #get to use SessionLocal received from fixture_Force db change
+        # get to use SessionLocal received from fixture_Force db change
         app.dependency_overrides[get_session] = override_get_db
         # Run tests
         await f(*args, **kwargs)
@@ -77,11 +81,12 @@ def temp_db(f):
         app.dependency_overrides[get_session] = get_session
     return func
 
+
 class ExtraBase(SerializerMixin):
 
     id = Column(Integer, primary_key=True)
-    created_at = Column(DateTime, default = datetime.now())
-    updated_at = Column(DateTime, default = datetime.now())
+    created_at = Column(DateTime, default=datetime.now())
+    updated_at = Column(DateTime, default=datetime.now())
 
     def serialize(self):
         return self.to_dict()
@@ -116,8 +121,8 @@ class ExtraBase(SerializerMixin):
 
         def filter_sync(session):
             query = session.query(Cls)
-            for attr,value in args.items():
-                query = query.filter( getattr(Cls,attr) == value )
+            for attr, value in args.items():
+                query = query.filter(getattr(Cls, attr) == value)
             return query.all()
 
         results = await session.run_sync(filter_sync)

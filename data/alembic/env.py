@@ -62,10 +62,10 @@ def run_migrations_online():
     connectable = create_engine(SQLALCHEMY_DATABASE_URL_SYNC)
     with connectable.connect() as connection:
         context.configure(
-        connection=connection,
-        target_metadata=target_metadata,
-        include_schemas = True,
-        transaction_per_migration=True,
+            connection=connection,
+            target_metadata=target_metadata,
+            include_schemas=True,
+            transaction_per_migration=True,
         )
 
         with context.begin_transaction():
