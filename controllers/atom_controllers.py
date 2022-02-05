@@ -1,7 +1,11 @@
 from typing import Any, Dict
+from typing import Optional
+from fastapi import Request
+
+from httpx import AsyncClient
 from data.models.atom import Electron, Neutron, Proton
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi.responses import ORJSONResponse
 
@@ -16,7 +20,7 @@ atom_router = APIRouter(prefix="/atoms",
                         tags=["atoms"])
 
 
-@atom_router.post("/create_atom", )
+@atom_router.post("/create_atom")
 @auth_decorator
 async def create_atom(params: Dict[str, int],
                       session: AsyncSession = Depends(get_session),
@@ -43,11 +47,25 @@ async def add_proton(params: Dict[str, int],
     return create_response("Proton created succesfully!", proton.to_dict())
 
 
+@atom_router.get("/proton")
+async def get_proton(req: Request,
+                     session: AsyncSession = Depends(get_session),
+                     ) -> ORJSONResponse:
+    """
+    Getting protons based on params
+    """
+    params = dict(req.query_params)
+    protons = await Proton.GetByArgs(params)
+    protons = [proton.to_dict() for proton in protons]
+
+    return create_response("Protons fetched!", 200, protons)
+
+
 @atom_router.post("/neutron")
 @auth_decorator
 async def add_neutron(params: Dict[str, int],
-                     session: AsyncSession = Depends(get_session),
-                     token: str = Depends(oauth2_scheme)) -> ORJSONResponse:
+                      session: AsyncSession = Depends(get_session),
+                      token: str = Depends(oauth2_scheme)) -> ORJSONResponse:
     """
     This controller creates a neutron with the params received in the body
     """
@@ -56,14 +74,14 @@ async def add_neutron(params: Dict[str, int],
     await session.close()
 
     return create_response("Neutron created succesfully!",
-                              neutron.to_dict(), 200)
+                           neutron.to_dict(), 200)
 
 
 @atom_router.post("/electron")
 @auth_decorator
 async def add_electron(params: Dict[str, int],
-                     session: AsyncSession = Depends(get_session),
-                     token: str = Depends(oauth2_scheme)):
+                       session: AsyncSession = Depends(get_session),
+                       token: str = Depends(oauth2_scheme)):
 
     """
     This controller creates a electron with the params received in the body
@@ -73,4 +91,4 @@ async def add_electron(params: Dict[str, int],
     await session.close()
 
     return create_response("Electron created succesfully!",
-                              electron.to_dict(), 200)
+                           electron.to_dict(), 200)

@@ -4,6 +4,7 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+    
         {
             "name": "Python: upload objects",
             "type": "python",
@@ -29,7 +30,7 @@
             "request": "launch",
             "module": "pytest",
             "args": [
-                "tests"
+                "tests/test_atom_controllers.py"
             ],
         },
         {

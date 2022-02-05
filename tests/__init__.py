@@ -17,7 +17,7 @@ class DataSource():
                 "email": "test@gmail.com",
                 "password": "test"}
 
-        response = client.post("users/sign-up", json=args)
+        response = self.client.post("users/sign-up", json=args)
         assert response.status_code == 200
 
         args = {
@@ -26,7 +26,7 @@ class DataSource():
             "email": "test@gmail.com",
         }
 
-        response = client.post('/users/login', json=args)
+        response = self.client.post('/users/login', json=args)
         response = response.json()
 
         self.headers = {"Authorization": "Bearer {}".format(
