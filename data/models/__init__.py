@@ -114,7 +114,7 @@ class ExtraBase(SerializerMixin):
         if not obj:
             return None
 
-        return obj.serialize()
+        return obj
 
     @classmethod
     async def GetByArgs(Cls, session, args):

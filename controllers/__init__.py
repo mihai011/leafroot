@@ -16,7 +16,7 @@ def auth_decorator(controller):
         session = kwargs['session']
 
         if not await authenthicate_user(token, session):
-            return create_response_bad("Token expired! Please login again!")
+            return create_response("Token expired! Please login again!", 401)
 
         return await controller(*args, **kwargs)
 
@@ -40,16 +40,12 @@ def parse(request):
     return args
 
 
-def create_response_ok(message, item=None):
-
-    data = {}
-    data['message'] = message
-    data['item'] = item
-    data['status'] = 200
-    return ORJSONResponse(content=data)
-
-
-def create_response_bad(message, status=400,  item=None):
+def create_response(message: string, status:int, item=None) -> ORJSONResponse:
+    """
+    Receives a message parameter from which a reponse is created 
+    and item from wich a dictionay is ORJSONResponse object
+    is made as response 
+    """
 
     data = {}
     data['message'] = message
