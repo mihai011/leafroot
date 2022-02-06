@@ -18,30 +18,40 @@ from app import config
 
 
 # SQLALCHEMY_DATABASE_URL = "sqlite:///./sql_app.db"
-SQLALCHEMY_DATABASE_URL_ASYNC = "{}://{}:{}@{}/{}"\
-    .format("postgresql+asyncpg", config["POSTGRES_USER"],
-            config["POSTGRES_PASSWORD"], "db", config["POSTGRES_DB"])
-
-SQLALCHEMY_DATABASE_URL_SYNC = "{}://{}:{}@{}/{}"\
-    .format("postgresql", config["POSTGRES_USER"],
-            config["POSTGRES_PASSWORD"], "db", config["POSTGRES_DB"])
-
-SQLALCHEMY_DATABASE_URL_BASE_SYNC = "{}://{}:{}@{}/"\
-    .format("postgresql", config["POSTGRES_USER"],
-            config["POSTGRES_PASSWORD"], "db")
-
-SQLALCHEMY_DATABASE_URL_BASE_ASYNC = "{}://{}:{}@{}/"\
-    .format("postgresql+asyncpg", config["POSTGRES_USER"],
-            config["POSTGRES_PASSWORD"], "db")
-
-engine = create_async_engine(
-    SQLALCHEMY_DATABASE_URL_ASYNC, echo=False, future=True,
-    pool_size=0, max_overflow=100,
-    connect_args={'timeout': 500}
+SQLALCHEMY_DATABASE_URL_ASYNC = "{}://{}:{}@{}/{}".format(
+    "postgresql+asyncpg",
+    config["POSTGRES_USER"],
+    config["POSTGRES_PASSWORD"],
+    "db",
+    config["POSTGRES_DB"],
 )
 
-async_session = sessionmaker(
-    engine, class_=AsyncSession, expire_on_commit=False)
+SQLALCHEMY_DATABASE_URL_SYNC = "{}://{}:{}@{}/{}".format(
+    "postgresql",
+    config["POSTGRES_USER"],
+    config["POSTGRES_PASSWORD"],
+    "db",
+    config["POSTGRES_DB"],
+)
+
+SQLALCHEMY_DATABASE_URL_BASE_SYNC = "{}://{}:{}@{}/".format(
+    "postgresql", config["POSTGRES_USER"], config["POSTGRES_PASSWORD"], "db"
+)
+
+SQLALCHEMY_DATABASE_URL_BASE_ASYNC = "{}://{}:{}@{}/".format(
+    "postgresql+asyncpg", config["POSTGRES_USER"], config["POSTGRES_PASSWORD"], "db"
+)
+
+engine = create_async_engine(
+    SQLALCHEMY_DATABASE_URL_ASYNC,
+    echo=False,
+    future=True,
+    pool_size=0,
+    max_overflow=100,
+    connect_args={"timeout": 500},
+)
+
+async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 
 Base = declarative_base()
 secret = '$QmB*R>Nq!$.YdzkKvt{fBX7<Bmgm4~gy")&IthT+AtkA>/C@BkDyL0vRTraG"g'
@@ -79,6 +89,7 @@ def temp_db(f):
         await f(*args, **kwargs)
         # get_Undo db
         app.dependency_overrides[get_session] = get_session
+
     return func
 
 
@@ -118,7 +129,6 @@ class ExtraBase(SerializerMixin):
 
     @classmethod
     async def GetByArgs(Cls, session, args):
-
         def filter_sync(session):
             query = session.query(Cls)
             for attr, value in args.items():
@@ -133,7 +143,6 @@ class ExtraBase(SerializerMixin):
 
     @classmethod
     async def DeleteAll(Cls, session):
-
         def delete(session):
             query = session.query(Cls).delete()
 

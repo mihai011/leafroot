@@ -8,16 +8,19 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy_utils import database_exists, drop_database, create_database
 from sqlalchemy import create_engine
 from data import Base
-from data.models import SQLALCHEMY_DATABASE_URL_ASYNC,\
-    SQLALCHEMY_DATABASE_URL_SYNC,\
-    SQLALCHEMY_DATABASE_URL_BASE_SYNC, SQLALCHEMY_DATABASE_URL_BASE_ASYNC
+from data.models import (
+    SQLALCHEMY_DATABASE_URL_ASYNC,
+    SQLALCHEMY_DATABASE_URL_SYNC,
+    SQLALCHEMY_DATABASE_URL_BASE_SYNC,
+    SQLALCHEMY_DATABASE_URL_BASE_ASYNC,
+)
 
 
 @pytest.fixture(scope="function")
 def SessionLocal():
     # settings of test database
     letters = string.ascii_lowercase
-    name = ''.join(random.choice(letters) for i in range(10))
+    name = "".join(random.choice(letters) for i in range(10))
     DB_URL_BASE_SYNC = "{}{}".format(SQLALCHEMY_DATABASE_URL_BASE_SYNC, name)
     DB_URL_BASE_ASYNC = "{}{}".format(SQLALCHEMY_DATABASE_URL_BASE_ASYNC, name)
     engine_sync = create_engine(DB_URL_BASE_SYNC)
@@ -33,7 +36,8 @@ def SessionLocal():
     Base.metadata.create_all(engine_sync)
     engine_async = create_async_engine(DB_URL_BASE_ASYNC)
     SessionLocal = sessionmaker(
-        engine_async, class_=AsyncSession, expire_on_commit=False)
+        engine_async, class_=AsyncSession, expire_on_commit=False
+    )
 
     # Run the tests
     yield SessionLocal

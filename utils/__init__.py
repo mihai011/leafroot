@@ -21,9 +21,10 @@ async def get_password_hash(password):
     return pwd_context.hash(password)
 
 
-def create_access_token(data: dict,
-                        expires_delta: Optional[int] =
-                        int(config['ACCESS_TOKEN_EXPIRE_MINUTES'])):
+def create_access_token(
+    data: dict,
+    expires_delta: Optional[int] = int(config["ACCESS_TOKEN_EXPIRE_MINUTES"]),
+):
 
     to_encode = data.copy()
     if expires_delta:
@@ -32,15 +33,17 @@ def create_access_token(data: dict,
         expire = datetime.utcnow() + timedelta(minutes=15)
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(
-        to_encode, config['SECRET_KEY'], algorithm=config['ALGORITHM'])
+        to_encode, config["SECRET_KEY"], algorithm=config["ALGORITHM"]
+    )
     return encoded_jwt
 
 
 async def authenthicate_user(token, session):
 
     try:
-        payload = jwt.decode(token, config['SECRET_KEY'], algorithms=[
-                             config['ALGORITHM']])
+        payload = jwt.decode(
+            token, config["SECRET_KEY"], algorithms=[config["ALGORITHM"]]
+        )
     except Exception:
         return None
 

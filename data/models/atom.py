@@ -18,27 +18,27 @@ class Atom(Base, ExtraBase):
     y = Column(Float)
     z = Column(Float)
 
-    neutrons = relationship('Neutron')
-    protons = relationship('Proton')
-    electrons = relationship('Electron')
+    neutrons = relationship("Neutron")
+    protons = relationship("Proton")
+    electrons = relationship("Electron")
 
 
 class Proton(Base, ExtraBase):
     __tablename__ = "protons"
 
     charge = Column(Float)
-    atom_id = Column(Integer, ForeignKey('atoms.id'))
+    atom_id = Column(Integer, ForeignKey("atoms.id"))
 
 
 class Neutron(Base, ExtraBase):
     __tablename__ = "neutrons"
 
     charge = Column(Float)
-    atom_id = Column(Integer, ForeignKey('atoms.id'))
+    atom_id = Column(Integer, ForeignKey("atoms.id"))
 
 
 class Electron(Base, ExtraBase):
     __tablename__ = "electrons"
 
     charge = Column(Float)
-    atom_id = Column(Integer, ForeignKey('atoms.id'))
+    atom_id = Column(Integer, ForeignKey("atoms.id"))

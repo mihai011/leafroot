@@ -16,15 +16,16 @@ from utils import oauth2_scheme, authenthicate_user
 
 from data import Atom
 
-atom_router = APIRouter(prefix="/atoms",
-                        tags=["atoms"])
+atom_router = APIRouter(prefix="/atoms", tags=["atoms"])
 
 
 @atom_router.post("/create_atom")
 @auth_decorator
-async def create_atom(params: Dict[str, int],
-                      session: AsyncSession = Depends(get_session),
-                      token: str = Depends(oauth2_scheme)) -> ORJSONResponse:
+async def create_atom(
+    params: Dict[str, int],
+    session: AsyncSession = Depends(get_session),
+    token: str = Depends(oauth2_scheme),
+) -> ORJSONResponse:
 
     atom = await Atom.AddNew(session, params)
     await session.close()
@@ -34,9 +35,11 @@ async def create_atom(params: Dict[str, int],
 
 @atom_router.post("/proton")
 @auth_decorator
-async def add_proton(params: Dict[str, int],
-                     session: AsyncSession = Depends(get_session),
-                     token: str = Depends(oauth2_scheme)) -> ORJSONResponse:
+async def add_proton(
+    params: Dict[str, int],
+    session: AsyncSession = Depends(get_session),
+    token: str = Depends(oauth2_scheme),
+) -> ORJSONResponse:
     """
     This controller creates a proton with the params received in the body
     """
@@ -48,9 +51,10 @@ async def add_proton(params: Dict[str, int],
 
 
 @atom_router.get("/proton")
-async def get_proton(req: Request,
-                     session: AsyncSession = Depends(get_session),
-                     ) -> ORJSONResponse:
+async def get_proton(
+    req: Request,
+    session: AsyncSession = Depends(get_session),
+) -> ORJSONResponse:
     """
     Getting protons based on params
     """
@@ -63,9 +67,11 @@ async def get_proton(req: Request,
 
 @atom_router.post("/neutron")
 @auth_decorator
-async def add_neutron(params: Dict[str, int],
-                      session: AsyncSession = Depends(get_session),
-                      token: str = Depends(oauth2_scheme)) -> ORJSONResponse:
+async def add_neutron(
+    params: Dict[str, int],
+    session: AsyncSession = Depends(get_session),
+    token: str = Depends(oauth2_scheme),
+) -> ORJSONResponse:
     """
     This controller creates a neutron with the params received in the body
     """
@@ -73,15 +79,16 @@ async def add_neutron(params: Dict[str, int],
     neutron = await Neutron.AddNew(session, params)
     await session.close()
 
-    return create_response("Neutron created succesfully!",
-                           neutron.to_dict(), 200)
+    return create_response("Neutron created succesfully!", neutron.to_dict(), 200)
 
 
 @atom_router.post("/electron")
 @auth_decorator
-async def add_electron(params: Dict[str, int],
-                       session: AsyncSession = Depends(get_session),
-                       token: str = Depends(oauth2_scheme)):
+async def add_electron(
+    params: Dict[str, int],
+    session: AsyncSession = Depends(get_session),
+    token: str = Depends(oauth2_scheme),
+):
 
     """
     This controller creates a electron with the params received in the body
@@ -90,5 +97,4 @@ async def add_electron(params: Dict[str, int],
     electron = await Electron.AddNew(session, params)
     await session.close()
 
-    return create_response("Electron created succesfully!",
-                           electron.to_dict(), 200)
+    return create_response("Electron created succesfully!", electron.to_dict(), 200)

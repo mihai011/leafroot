@@ -16,8 +16,9 @@ app = FastAPI()
 
 general_router = APIRouter()
 
-general_router.add_route("/graphql",
-                         GraphQLApp(schema=graphene.Schema(query=QueryUser)))
+general_router.add_route(
+    "/graphql", GraphQLApp(schema=graphene.Schema(query=QueryUser))
+)
 
 app.include_router(user_router)
 app.include_router(atom_router)
@@ -26,6 +27,10 @@ app.include_router(base_router)
 
 @app.middleware("http")
 async def add_time_headers(request: Request, call_next):
+    """
+    Adds time headers to check the time spent on the particular request
+    """
+
     start_time = time.time()
     response = await call_next(request)
     process_time = time.time() - start_time

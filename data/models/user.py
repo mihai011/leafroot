@@ -18,7 +18,7 @@ class Token(Base, ExtraBase):
     @classmethod
     async def AddNew(Cls, session, args):
 
-        token = jwt.encode(args, secret, algorithm='HS256')
+        token = jwt.encode(args, secret, algorithm="HS256")
 
         obj = Cls(token=token)
         session.add(obj)
@@ -29,9 +29,9 @@ class Token(Base, ExtraBase):
     @classmethod
     async def Search(Cls, session, args):
 
-        token = jwt.encode(args, secret, algorithm='HS256')
+        token = jwt.encode(args, secret, algorithm="HS256")
 
-        actual_token = await Cls.GetByArgs(session, {'token': token})
+        actual_token = await Cls.GetByArgs(session, {"token": token})
 
         if actual_token:
             return actual_token[0]
@@ -48,11 +48,12 @@ class User(Base, ExtraBase):
     permissions = Column(String(3))
 
     def __repr__(self):
-        return '<User %r>' % self.username
+        return "<User %r>" % self.username
 
 
 # classes necessary for graphql functionality,
 # pretty useless for now, and I don't recommend them
+
 
 class UserGraph(SQLAlchemyObjectType):
     class Meta:
@@ -62,22 +63,19 @@ class UserGraph(SQLAlchemyObjectType):
 class UserFilter(FilterSet):
     class Meta:
         model = User
-        fields = {
-            'username': ['eq', 'ne', 'in', 'ilike']
-        }
+        fields = {"username": ["eq", "ne", "in", "ilike"]}
 
     @staticmethod
     def is_admin_filter(info, query, value):
         if value:
-            return User.username == 'admin'
+            return User.username == "admin"
         else:
-            return User.username != 'admin'
+            return User.username != "admin"
 
 
 class QueryUser(graphene.ObjectType):
     list_users = graphene.List(UserGraph)
-    get_user_id = graphene.Field(
-        UserGraph, user_id=graphene.NonNull(graphene.Int))
+    get_user_id = graphene.Field(UserGraph, user_id=graphene.NonNull(graphene.Int))
     all_users = graphene.List(UserGraph, filters=UserFilter())
 
     def resolve_list_users(self, info):
