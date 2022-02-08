@@ -8,8 +8,7 @@ from fastapi import APIRouter, Depends, Request
 from fastapi.responses import ORJSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from data.models import get_session
-from data import User
+from data import User, get_session
 
 from controllers import create_bulk_users, auth_decorator, create_response, parse
 from utils import create_access_token, get_password_hash, verify_password
@@ -56,9 +55,7 @@ async def create_user(
 @user_router.get("/get_user/{id_user}")
 @auth_decorator
 async def get_user(
-    id_user: int,
-    request: Request,
-    session: AsyncSession = Depends(get_session)
+    id_user: int, request: Request, session: AsyncSession = Depends(get_session)
 ) -> ORJSONResponse:
     """
     get user by id

@@ -6,8 +6,8 @@ from httpx import AsyncClient
 
 import nest_asyncio
 from app.app import app
-from data.models import temp_db
 from tests import DataSource
+from tests.conftest import temp_db
 
 
 nest_asyncio.apply()

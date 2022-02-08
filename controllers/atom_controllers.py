@@ -6,12 +6,10 @@ from fastapi import APIRouter, Depends
 from fastapi.responses import ORJSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from data.models.atom import Electron, Neutron, Proton
-from data.models import get_session
-from data import Atom
+
+from data import get_session
+from data import Atom, Electron, Neutron, Proton
 from controllers import create_response, auth_decorator, parse
-
-
 
 atom_router = APIRouter(prefix="/atoms", tags=["atoms"])
 

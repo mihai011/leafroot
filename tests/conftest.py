@@ -12,10 +12,10 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy_utils import drop_database, create_database
 
 
-from data import Base
-from data.models import SQLALCHEMY_DATABASE_URL_BASE_SYNC,\
-    SQLALCHEMY_DATABASE_URL_BASE_ASYNC
+from data import Base, get_session
+from data import SQLALCHEMY_DATABASE_URL_BASE_SYNC, SQLALCHEMY_DATABASE_URL_BASE_ASYNC
 
+from app.app import app
 
 
 @pytest.fixture(scope="function")
@@ -48,3 +48,27 @@ def SessionLocal():
 
     # Drop the test database
     drop_database(DB_URL_BASE_SYNC)
+
+
+def temp_db(test_function):
+    """
+    pytest fixture to create a temp date
+    """
+
+    async def func(SessionLocal, *args, **kwargs):
+        # Sessionmaker instance to connect to test DB
+        #  (SessionLocal)From fixture
+
+        async def override_get_db():
+            async with SessionLocal() as session:
+                yield session
+            await session.close()
+
+        # get to use SessionLocal received from fixture_Force db change
+        app.dependency_overrides[get_session] = override_get_db
+        # Run tests
+        await test_function(*args, **kwargs)
+        # get_Undo db
+        app.dependency_overrides[get_session] = get_session
+
+    return func

@@ -4,7 +4,6 @@ General util module
 
 from datetime import datetime, timedelta
 from typing import Optional
-from xmlrpc.client import boolean
 
 from passlib.context import CryptContext
 from fastapi.security import OAuth2PasswordBearer
@@ -18,7 +17,7 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
-def verify_password(plain_password, hashed_password) -> boolean:
+def verify_password(plain_password, hashed_password) -> bool:
     """
     verifies if a hashed password is identical to another hashed password
     """
@@ -55,7 +54,6 @@ async def authenthicate_user(token, session):
     """
     Authenticates users given a token
     """
-
     try:
         payload = jwt.decode(
             token, config["SECRET_KEY"], algorithms=[config["ALGORITHM"]]

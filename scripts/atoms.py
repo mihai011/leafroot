@@ -25,6 +25,6 @@ for i in range(200000):
     args["z"] = random.random()
     atoms.append(args)
 
-with open("atoms.json", "w+",encoding="utf-8") as f:
+with open("atoms.json", "w+", encoding="utf-8") as f:
 
     f.write(json.dumps(atoms))

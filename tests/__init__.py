@@ -1,24 +1,18 @@
 """
 Datasource module for testing
 """
-
-from fastapi import Depends
 from fastapi.testclient import TestClient
-
 from app.app import app
-from data.models import get_session
-from data.models.user import User
-
-client = TestClient(app)
 
 
 class DataSource:
     """
     class for creating data sources on tests
     """
+
     def __init__(self):
 
-        self.client = client
+        self.client = TestClient(app)
         args = {"username": "Test_user", "email": "test@gmail.com", "password": "test"}
 
         response = self.client.post("users/sign-up", json=args)
