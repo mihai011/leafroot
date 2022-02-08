@@ -1,20 +1,18 @@
-import os
-from datetime import datetime
-import json
-from typing import final
+"""
+models init file
+"""
 
-from jose import jwt
-from sqlalchemy import pool
+from datetime import datetime
+
 from sqlalchemy_serializer import SerializerMixin
-from sqlalchemy import create_engine
-from sqlalchemy.pool import NullPool
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import session, sessionmaker
+from sqlalchemy.orm import sessionmaker
 from sqlalchemy.future import select
 from sqlalchemy import Column, Integer, DateTime
 
 from app import config
+from app.app import app
 
 
 # SQLALCHEMY_DATABASE_URL = "sqlite:///./sql_app.db"
@@ -58,6 +56,9 @@ secret = '$QmB*R>Nq!$.YdzkKvt{fBX7<Bmgm4~gy")&IthT+AtkA>/C@BkDyL0vRTraG"g'
 
 
 async def get_session() -> AsyncSession:
+    """
+    Yields session
+    """
 
     async with async_session() as session:
         yield session
@@ -66,13 +67,18 @@ async def get_session() -> AsyncSession:
 
 
 async def get_session_simple() -> AsyncSession:
+    """
+    returns a session
+    """
 
     async with async_session() as session:
         return session
 
 
 def temp_db(f):
-    from app.app import app
+    """
+    pytest fixture to create a temp date
+    """
 
     async def func(SessionLocal, *args, **kwargs):
         # Sessionmaker instance to connect to test DB
@@ -94,32 +100,47 @@ def temp_db(f):
 
 
 class ExtraBase(SerializerMixin):
+    """
+    Extra base class used for child models
+    """
 
     id = Column(Integer, primary_key=True)
     created_at = Column(DateTime, default=datetime.now())
     updated_at = Column(DateTime, default=datetime.now())
 
     def serialize(self):
+        """
+        base serializer method
+        """
         return self.to_dict()
 
     @classmethod
-    async def AddNew(Cls, session, args):
+    async def AddNew(cls, session, args):
+        """
+        add object method
+        """
 
-        obj = Cls(**args)
+        obj = cls(**args)
         session.add(obj)
         await session.commit()
 
         return obj
 
     @classmethod
-    async def GetAll(Cls, session):
+    async def GetAll(cls, session):
+        """
+        Get all obejcts method
+        """
 
-        return await session.query(Cls).all()
+        return await session.query(cls).all()
 
     @classmethod
-    async def GetById(Cls, id, session):
+    async def GetById(cls, object_id, session):
+        """
+        get object by his id
+        """
 
-        query = select(Cls).where(Cls.id == id)
+        query = select(cls).where(cls.id == object_id)
         result = await session.execute(query)
         (obj,) = result.one()
         if not obj:
@@ -128,11 +149,15 @@ class ExtraBase(SerializerMixin):
         return obj
 
     @classmethod
-    async def GetByArgs(Cls, session, args):
+    async def GetByArgs(cls, session, args):
+        """
+        get obejct by args
+        """
+
         def filter_sync(session):
-            query = session.query(Cls)
+            query = session.query(cls)
             for attr, value in args.items():
-                query = query.filter(getattr(Cls, attr) == value)
+                query = query.filter(getattr(cls, attr) == value)
             return query.all()
 
         results = await session.run_sync(filter_sync)
@@ -143,8 +168,12 @@ class ExtraBase(SerializerMixin):
 
     @classmethod
     async def DeleteAll(Cls, session):
+        """
+        Delete all objects method
+        """
+
         def delete(session):
-            query = session.query(Cls).delete()
+            session.query(Cls).delete()
 
         await session.run_sync(delete)
         await session.commit()

@@ -1,20 +1,17 @@
-from typing import Any, Dict
-from typing import Optional
+"""
+atom controllers
+"""
 from fastapi import Request
-
-from httpx import AsyncClient
-from data.models.atom import Electron, Neutron, Proton
-
-from fastapi import APIRouter, Depends, Query
-from sqlalchemy.ext.asyncio import AsyncSession
+from fastapi import APIRouter, Depends
 from fastapi.responses import ORJSONResponse
+from sqlalchemy.ext.asyncio import AsyncSession
 
-
+from data.models.atom import Electron, Neutron, Proton
 from data.models import get_session
-from controllers import create_response, auth_decorator
-from utils import oauth2_scheme, authenthicate_user
-
 from data import Atom
+from controllers import create_response, auth_decorator, parse
+
+
 
 atom_router = APIRouter(prefix="/atoms", tags=["atoms"])
 
@@ -22,11 +19,13 @@ atom_router = APIRouter(prefix="/atoms", tags=["atoms"])
 @atom_router.post("/create_atom")
 @auth_decorator
 async def create_atom(
-    params: Dict[str, int],
+    request: Request,
     session: AsyncSession = Depends(get_session),
-    token: str = Depends(oauth2_scheme),
 ) -> ORJSONResponse:
-
+    """
+    Create atom here
+    """
+    params = await parse(request)
     atom = await Atom.AddNew(session, params)
     await session.close()
 
@@ -36,31 +35,32 @@ async def create_atom(
 @atom_router.post("/proton")
 @auth_decorator
 async def add_proton(
-    params: Dict[str, int],
+    request: Request,
     session: AsyncSession = Depends(get_session),
-    token: str = Depends(oauth2_scheme),
 ) -> ORJSONResponse:
     """
     This controller creates a proton with the params received in the body
     """
-
+    params = await parse(request)
     proton = await Proton.AddNew(session, params)
-    await session.close()
 
     return create_response("Proton created succesfully!", proton.to_dict())
 
 
 @atom_router.get("/proton")
+@auth_decorator
 async def get_proton(
-    req: Request,
+    request: Request,
     session: AsyncSession = Depends(get_session),
 ) -> ORJSONResponse:
     """
     Getting protons based on params
     """
-    params = dict(req.query_params)
-    protons = await Proton.GetByArgs(params)
-    protons = [proton.to_dict() for proton in protons]
+
+    params = await parse(request)
+    params["charge"] = float(params["charge"])
+    protons = await Proton.GetByArgs(session, params)
+    protons = [proton.serialize() for proton in protons]
 
     return create_response("Protons fetched!", 200, protons)
 
@@ -68,14 +68,13 @@ async def get_proton(
 @atom_router.post("/neutron")
 @auth_decorator
 async def add_neutron(
-    params: Dict[str, int],
+    request: Request,
     session: AsyncSession = Depends(get_session),
-    token: str = Depends(oauth2_scheme),
 ) -> ORJSONResponse:
     """
     This controller creates a neutron with the params received in the body
     """
-
+    params = await parse(request)
     neutron = await Neutron.AddNew(session, params)
     await session.close()
 
@@ -85,15 +84,13 @@ async def add_neutron(
 @atom_router.post("/electron")
 @auth_decorator
 async def add_electron(
-    params: Dict[str, int],
+    request: Request,
     session: AsyncSession = Depends(get_session),
-    token: str = Depends(oauth2_scheme),
 ):
-
     """
     This controller creates a electron with the params received in the body
     """
-
+    params = await parse(request)
     electron = await Electron.AddNew(session, params)
     await session.close()
 

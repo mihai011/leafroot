@@ -1,6 +1,10 @@
+"""
+Start of the controller module
+"""
 import random
 import string
 from functools import wraps
+
 from fastapi.responses import ORJSONResponse
 
 from data import User
@@ -8,34 +12,51 @@ from utils import get_password_hash, authenthicate_user
 
 
 def auth_decorator(controller):
+    """
+    authenthication decorator, query and payload parser
+    """
+
     @wraps(controller)
     async def auth(*args, **kwargs):
-
-        token = kwargs["token"]
+        """
+        function that gets token and adds session to the controller
+        """
+        request = kwargs["request"]
         session = kwargs["session"]
+        token = request.headers["authorization"].split(" ")[-1]
 
         if not await authenthicate_user(token, session):
             return create_response("Token expired! Please login again!", 401)
 
-        return await controller(*args, **kwargs)
+        kwargs["session"] = session
+
+        response = await controller(*args, **kwargs)
+
+        return response
 
     return auth
 
 
 def random_string():
+    """
+    makes a random string
+    """
 
     return "".join(
         random.choice(string.ascii_uppercase + string.digits) for _ in range(10)
     )
 
 
-def parse(request):
+async def parse(request):
+    """
+    simple parser for request
+    """
 
     if request.method == "GET":
-        args = request.path_params
+        args = request.query_params._dict
 
     if request.method == "POST":
-        args = request.json()
+        args = await request.json()
 
     return args
 
@@ -55,6 +76,9 @@ def create_response(message: string, status: int, item=None) -> ORJSONResponse:
 
 
 async def create_bulk_users(users, session):
+    """
+    creates a lot of bulk users
+    """
 
     for _ in range(users):
 
@@ -62,8 +86,6 @@ async def create_bulk_users(users, session):
         args["email"] = "{}@{}".format(random_string(), random_string())
         args["username"] = random_string()
         args["hashed_pass"] = await get_password_hash(random_string())
-        password = random_string()
-
         await User.AddNew(session, args)
 
     return True

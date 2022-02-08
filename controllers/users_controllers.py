@@ -1,14 +1,19 @@
-from typing import Any, Dict
-from functools import wraps
+"""
+Basic controllers for users
+"""
 
-from fastapi import Request
-from fastapi import APIRouter, Depends
+from typing import Dict
+
+from fastapi import APIRouter, Depends, Request
+from fastapi.responses import ORJSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from data.models import get_session
-from controllers import create_bulk_users, auth_decorator, create_response
-from utils import create_access_token, get_password_hash, verify_password, oauth2_scheme
 from data import User
+
+from controllers import create_bulk_users, auth_decorator, create_response, parse
+from utils import create_access_token, get_password_hash, verify_password
+
 
 user_router = APIRouter(prefix="/users", tags=["users"])
 
@@ -17,10 +22,15 @@ user_router = APIRouter(prefix="/users", tags=["users"])
 @auth_decorator
 async def create_users(
     quantity: int,
+    request: Request,
     session: AsyncSession = Depends(get_session),
-    token: str = Depends(oauth2_scheme),
 ):
-
+    """
+    creates simple users in the database
+    """
+    params = await parse(request)
+    if params:
+        return create_response("Do not send params for this endpoint!", 400)
     await create_bulk_users(quantity, session)
     return create_response("Users created succesfully!", 200)
 
@@ -28,11 +38,13 @@ async def create_users(
 @user_router.post("/create_user")
 @auth_decorator
 async def create_user(
-    params: Dict[str, str],
+    request: Request,
     session: AsyncSession = Depends(get_session),
-    token: str = Depends(oauth2_scheme),
 ):
-
+    """
+    creating a simple user
+    """
+    params = await parse(request)
     try:
         user = await User.AddNew(session, params)
     except Exception as e:
@@ -41,22 +53,29 @@ async def create_user(
     return create_response("User created!", 200, user.to_dict())
 
 
-@user_router.get(
-    "/get_user/{id}",
-)
-async def create_users(
-    id: int,
-    session: AsyncSession = Depends(get_session),
-    token: str = Depends(oauth2_scheme),
-):
-
-    user = await User.GetById(id, session)
+@user_router.get("/get_user/{id_user}")
+@auth_decorator
+async def get_user(
+    id_user: int,
+    request: Request,
+    session: AsyncSession = Depends(get_session)
+) -> ORJSONResponse:
+    """
+    get user by id
+    """
+    params = await parse(request)
+    if params:
+        return create_response("No params needed on this endpoint!", 400)
+    user = await User.GetById(id_user, session)
 
     return create_response("User fetched!", 200, user.to_dict())
 
 
 @user_router.post("/login")
 async def login(params: Dict[str, str], session: AsyncSession = Depends(get_session)):
+    """
+    login controller for a user
+    """
 
     if "email" not in params:
         return create_response("Email is required", 400)
@@ -77,12 +96,15 @@ async def login(params: Dict[str, str], session: AsyncSession = Depends(get_sess
         return create_response(
             "User logged in!", 200, {"token": token, "user": user.to_dict()}
         )
-    else:
-        return create_response("Incorrect password!", 400)
+
+    return create_response("Incorrect password!", 400)
 
 
 @user_router.post("/sign-up")
 async def sign_up(params: Dict[str, str], session: AsyncSession = Depends(get_session)):
+    """
+    Sign-up controller for the user
+    """
 
     if "password" not in params:
         return create_response("Password is not present", 400)
@@ -99,7 +121,7 @@ async def sign_up(params: Dict[str, str], session: AsyncSession = Depends(get_se
 
     try:
         user = await User.AddNew(session, params)
-    except Exception as e:
-        return create_response(str(e), 400)
+    except Exception as user_error:
+        return create_response(str(user_error), 400)
 
     return create_response("User created!", 200, user.to_dict())

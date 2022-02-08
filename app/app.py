@@ -1,16 +1,19 @@
-from starlette.graphql import GraphQLApp
-import graphene
+"""
+Main module imported in the project.
+Here you include the routers for the application
+and middleware used.
+"""
+
 import time
-import os
+import graphene
 
-
-from fastapi import Depends, FastAPI, APIRouter, Request
+from starlette.graphql import GraphQLApp
+from fastapi import FastAPI, APIRouter, Request
 
 from controllers.users_controllers import user_router
 from controllers.base_controllers import base_router
 from controllers.atom_controllers import atom_router
 from data import QueryUser
-
 
 app = FastAPI()
 

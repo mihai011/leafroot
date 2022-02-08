@@ -1,11 +1,14 @@
+"""
+base module for testing
+"""
 import pytest
 from httpx import AsyncClient
 
+import nest_asyncio
 from app.app import app
 from data.models import temp_db
 from tests import DataSource
 
-import nest_asyncio
 
 nest_asyncio.apply()
 
@@ -13,6 +16,9 @@ nest_asyncio.apply()
 @pytest.mark.asyncio
 @temp_db
 async def test_greetings_controller():
+    """
+    testing simple controller
+    """
 
     ds = DataSource()
 
@@ -25,6 +31,9 @@ async def test_greetings_controller():
 @pytest.mark.asyncio
 @temp_db
 async def test_initial_user_flow():
+    """
+    testing simple flow
+    """
 
     user_signup_data = {
         "password": "test",

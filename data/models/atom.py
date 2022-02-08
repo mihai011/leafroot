@@ -1,17 +1,19 @@
-from email.mime import base
-import graphene
-from jose import jwt
+"""
+Atom class related models
+"""
 
-from sqlalchemy.sql.sqltypes import Boolean
-from sqlalchemy import Column, Boolean, String, Float, Integer, ForeignKey
+from sqlalchemy import Column, Float, Integer, ForeignKey
 from sqlalchemy.orm import relationship
-from graphene_sqlalchemy import SQLAlchemyObjectType
-from graphene_sqlalchemy_filter import FilterSet
+
 
 from data.models import ExtraBase, Base
 
 
 class Atom(Base, ExtraBase):
+    """
+    Atom class represents
+    """
+
     __tablename__ = "atoms"
 
     x = Column(Float)
@@ -24,6 +26,10 @@ class Atom(Base, ExtraBase):
 
 
 class Proton(Base, ExtraBase):
+    """
+    class that represents a proton
+    """
+
     __tablename__ = "protons"
 
     charge = Column(Float)
@@ -31,6 +37,10 @@ class Proton(Base, ExtraBase):
 
 
 class Neutron(Base, ExtraBase):
+    """
+    class that represents a neutron
+    """
+
     __tablename__ = "neutrons"
 
     charge = Column(Float)
@@ -38,6 +48,10 @@ class Neutron(Base, ExtraBase):
 
 
 class Electron(Base, ExtraBase):
+    """
+    class that represents an electron
+    """
+
     __tablename__ = "electrons"
 
     charge = Column(Float)

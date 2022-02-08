@@ -1,12 +1,10 @@
-from typing import Any, Dict
+"""
+base controller for stage
+"""
 
-from fastapi import APIRouter, Depends
-from sqlalchemy.ext.asyncio import AsyncSession
+from fastapi import APIRouter
 
-from data.models import get_session
-from controllers import create_response, create_bulk_users
-
-from data import User, Token
+from controllers import create_response
 
 base_router = APIRouter(prefix="", tags=["base"])
 
@@ -15,5 +13,8 @@ base_router = APIRouter(prefix="", tags=["base"])
     "/",
 )
 async def greeting():
+    """
+    just a simple greeting
+    """
 
     return create_response("Hello World", 200)
