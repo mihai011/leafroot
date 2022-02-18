@@ -131,3 +131,6 @@ dmypy.json
 # database ignore
 /postgres-data
 /pgadmin
+
+# coverage data
+.coverage

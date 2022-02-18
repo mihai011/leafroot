@@ -9,7 +9,6 @@ from app.app import app
 from tests import DataSource
 from tests.conftest import temp_db
 
-
 nest_asyncio.apply()
 
 
@@ -63,6 +62,15 @@ async def test_initial_user_flow():
         assert response.status_code == 200
 
         response = await client.post(
-            "/users/create_users/{}".format(2), headers=headers
+            "/users/create_users/{}".format(2), headers=headers, json={}
         )
         assert response.status_code == 200
+
+        # test with fake authorization headers
+        headers["Authorization"] = "Bearer fake"
+        response = await client.get(
+            "/users/get_user/{}".format(user_id), headers=headers
+        )
+        response_content = response.json()
+        assert response.status_code == 200
+        assert response_content["status"] == 401

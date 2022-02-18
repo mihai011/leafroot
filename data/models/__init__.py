@@ -104,7 +104,7 @@ class ExtraBase(SerializerMixin):
     @classmethod
     async def GetAll(cls, session):
         """
-        Get all obejcts method
+        Get all objects method
         """
 
         return await session.query(cls).all()

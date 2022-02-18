@@ -25,9 +25,8 @@ async def create_atom(
     """
     params = await parse(request)
     atom = await Atom.AddNew(session, params)
-    await session.close()
 
-    return create_response("Atom created succesfully!", atom.to_dict(), 200)
+    return create_response("Atom created succesfully!", atom.serialize(), 200)
 
 
 @atom_router.post("/proton")
@@ -42,7 +41,7 @@ async def add_proton(
     params = await parse(request)
     proton = await Proton.AddNew(session, params)
 
-    return create_response("Proton created succesfully!", proton.to_dict())
+    return create_response("Proton created succesfully!", proton.serialize(), 200)
 
 
 @atom_router.get("/proton")
@@ -74,9 +73,27 @@ async def add_neutron(
     """
     params = await parse(request)
     neutron = await Neutron.AddNew(session, params)
-    await session.close()
+    # await session.close()
 
-    return create_response("Neutron created succesfully!", neutron.to_dict(), 200)
+    return create_response("Neutron created succesfully!", 200, neutron.serialize())
+
+
+@atom_router.get("/neutron")
+@auth_decorator
+async def get_neutron(
+    request: Request,
+    session: AsyncSession = Depends(get_session),
+) -> ORJSONResponse:
+    """
+    Getting neutron based on params
+    """
+
+    params = await parse(request)
+    params["charge"] = float(params["charge"])
+    neutrons = await Neutron.GetByArgs(session, params)
+    neutrons = [neutron.serialize() for neutron in neutrons]
+
+    return create_response("Protons fetched!", 200, neutrons)
 
 
 @atom_router.post("/electron")
@@ -90,6 +107,24 @@ async def add_electron(
     """
     params = await parse(request)
     electron = await Electron.AddNew(session, params)
-    await session.close()
+    # await session.close()
 
-    return create_response("Electron created succesfully!", electron.to_dict(), 200)
+    return create_response("Electron created succesfully!", 200, electron.serialize())
+
+
+@atom_router.get("/electron")
+@auth_decorator
+async def get_electron(
+    request: Request,
+    session: AsyncSession = Depends(get_session),
+) -> ORJSONResponse:
+    """
+    Getting neutron based on params
+    """
+
+    params = await parse(request)
+    params["charge"] = float(params["charge"])
+    electrons = await Electron.GetByArgs(session, params)
+    electrons = [electron.serialize() for electron in electrons]
+
+    return create_response("Protons fetched!", 200, electrons)

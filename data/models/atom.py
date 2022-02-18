@@ -4,6 +4,8 @@ Atom class related models
 
 from sqlalchemy import Column, Float, Integer, ForeignKey
 from sqlalchemy.orm import relationship
+from sqlalchemy.orm import selectinload
+from sqlalchemy import select
 
 
 from data.models import ExtraBase, Base
@@ -23,6 +25,24 @@ class Atom(Base, ExtraBase):
     neutrons = relationship("Neutron")
     protons = relationship("Proton")
     electrons = relationship("Electron")
+
+    @classmethod
+    async def AddNew(cls, session, args):
+
+        obj = await super().AddNew(session, args)
+
+        result = await session.execute(
+            select(cls)
+            .filter(cls.id == obj.id)
+            .options(
+                selectinload(cls.neutrons),
+                selectinload(cls.electrons),
+                selectinload(cls.protons),
+            )
+        )
+        obj = result.scalars().first()
+
+        return obj
 
 
 class Proton(Base, ExtraBase):

@@ -1,5 +1,5 @@
 """
-module that crates atoms.json file
+Module that creates different files for manual testing
 """
 
 import json
@@ -28,3 +28,17 @@ for i in range(200000):
 with open("atoms.json", "w+", encoding="utf-8") as f:
 
     f.write(json.dumps(atoms))
+
+
+users = []
+for i in range(20000):
+
+    args = {}
+    args["email"] = "{}@{}{}".format(random_string(), random_string(), i)
+    args["username"] = random_string()
+    args["password"] = random_string()
+    users.append(args)
+
+with open("users.json", "w+", encoding="utf-8") as f:
+
+    f.write(json.dumps(users))

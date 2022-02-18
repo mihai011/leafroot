@@ -26,12 +26,9 @@ def auth_decorator(controller):
         token = request.headers["authorization"].split(" ")[-1]
 
         if not await authenthicate_user(token, session):
-            return create_response("Token expired! Please login again!", 401)
-
-        kwargs["session"] = session
+            return create_response("Token expired or invalid! Please login again!", 401)
 
         response = await controller(*args, **kwargs)
-
         return response
 
     return auth
@@ -77,7 +74,7 @@ def create_response(message: string, status: int, item=None) -> ORJSONResponse:
 
 async def create_bulk_users(users, session):
     """
-    creates a lot of bulk users
+    creates a lot of users
     """
 
     for _ in range(users):
@@ -87,5 +84,3 @@ async def create_bulk_users(users, session):
         args["username"] = random_string()
         args["hashed_pass"] = await get_password_hash(random_string())
         await User.AddNew(session, args)
-
-    return True
