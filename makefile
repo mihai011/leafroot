@@ -14,7 +14,7 @@ format:
 	black app/ controllers/ data/ tests/ scripts/ utils/
 
 coverage:
-	coverage run --concurrency=greenlet -m pytest tests/ 
+	coverage run  -m pytest -n 2 tests/ 
 	coverage report -m
 
 coverage_parallel:
