@@ -30,7 +30,7 @@
             "request": "launch",
             "module": "pytest",
             "args": [
-                "tests/test_atom_controllers.py"
+                "tests/test_base_controllers.py"
             ],
         },
         {

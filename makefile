@@ -1,33 +1,34 @@
+SOURCE_VENV=. venv/bin/activate
+
 typehint:
-	mypy app/ controllers/ data/ tests/ scripts/ utils/
+	$(SOURCE_VENV) && mypy app/ controllers/ data/ tests/ scripts/ utils/
 
-test_parallel:
-	pytest -n auto test/
+test_parallel: 
+	$(SOURCE_VENV) && pytest -n auto test/
 
-test_simple:
-	pytest tests/
+test_simple: 
+	$(SOURCE_VENV) && pytest tests/
 
-lint:
-	pylint app/ controllers/ data/ tests/ scripts/ utils/
+lint: 
+	$(SOURCE_VENV) && pylint app/ controllers/ data/ tests/ scripts/ utils/
 
-format:
-	black app/ controllers/ data/ tests/ scripts/ utils/
+format: 
+	$(SOURCE_VENV) && black app/ controllers/ data/ tests/ scripts/ utils/
 
-coverage:
-	coverage run -m pytest -n 2 tests/ 
-	coverage report -m
+coverage: 
+	$(SOURCE_VENV) && pytest --cov-report term-missing --cov=. tests/
 
-coverage_parallel:
-	pytest --cov=controllers --concurrency=greenlet -n 2 tests/
+coverage_parallel: 
+	$(SOURCE_VENV) && pytest --cov-report term-missing --cov=. -n 2 tests/
 
-start_production:
-	gunicorn app.app:app --workers 12 -k uvicorn.workers.UvicornH11Worker --bind 0.0.0.0 
+start_production: 
+	$(SOURCE_VENV) && gunicorn app.app:app --workers 12 -k uvicorn.workers.UvicornH11Worker --bind 0.0.0.0 
 
-start_development:
-	gunicorn app.app:app --workers 12 -k uvicorn.workers.UvicornH11Worker --bind 0.0.0.0 --reload
+start_development: 
+	$(SOURCE_VENV) && gunicorn app.app:app --workers 12 -k uvicorn.workers.UvicornH11Worker --bind 0.0.0.0 --reload
 
-start_local:
-	uvicorn app.app:app --reload
+start_local: 
+	$(SOURCE_VENV) && uvicorn app.app:app --reload
 
 soft_checklist: typehint coverage lint  
 hard_checklist: format lint typehint test coverage

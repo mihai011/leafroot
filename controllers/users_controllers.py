@@ -49,7 +49,7 @@ async def create_user(
     except Exception as e:
         return create_response(str(e), 400)
 
-    return create_response("User created!", 200, user.to_dict())
+    return create_response("User created!", 200, user.serialize())
 
 
 @user_router.get("/get_user/{id_user}")
@@ -60,12 +60,13 @@ async def get_user(
     """
     get user by id
     """
-    params = await parse(request)
-    if params:
-        return create_response("No params needed on this endpoint!", 400)
+    await parse(request)
     user = await User.GetById(id_user, session)
 
-    return create_response("User fetched!", 200, user.to_dict())
+    if not user:
+        return create_response("User not found!", 400)
+
+    return create_response("User fetched!", 200, user.serialize())
 
 
 @user_router.post("/login")
@@ -80,8 +81,6 @@ async def login(params: Dict[str, str], session: AsyncSession = Depends(get_sess
         return create_response("Password is required", 400)
 
     users = await User.GetByArgs(session, {"email": params["email"]})
-    if len(users) > 1:
-        return create_response("More than 1 user has the same email", 400)
 
     if not users:
         return create_response("No user with such email found", 400)
@@ -91,7 +90,7 @@ async def login(params: Dict[str, str], session: AsyncSession = Depends(get_sess
     if verify_password(params["password"], user.hashed_pass):
         token = create_access_token(params)
         return create_response(
-            "User logged in!", 200, {"token": token, "user": user.to_dict()}
+            "User logged in!", 200, {"token": token, "user": user.serialize()}
         )
 
     return create_response("Incorrect password!", 400)
@@ -121,4 +120,4 @@ async def sign_up(params: Dict[str, str], session: AsyncSession = Depends(get_se
     except Exception as user_error:
         return create_response(str(user_error), 400)
 
-    return create_response("User created!", 200, user.to_dict())
+    return create_response("User created!", 200, user.serialize())

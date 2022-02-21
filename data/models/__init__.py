@@ -54,9 +54,9 @@ Base = declarative_base()
 secret = '$QmB*R>Nq!$.YdzkKvt{fBX7<Bmgm4~gy")&IthT+AtkA>/C@BkDyL0vRTraG"g'
 
 
-async def get_session() -> AsyncSession:
+async def get_session() -> AsyncSession: # pragma: no cover
     """
-    Yields session
+    Yields an async session
     """
 
     async with async_session() as session:
@@ -67,7 +67,7 @@ async def get_session() -> AsyncSession:
 
 async def get_session_simple() -> AsyncSession:
     """
-    returns a session
+    returns an async session
     """
 
     async with async_session() as session:
@@ -107,7 +107,10 @@ class ExtraBase(SerializerMixin):
         Get all objects method
         """
 
-        return await session.query(cls).all()
+        def get_all(session):
+            return session.query(cls).all()
+
+        return await session.run_sync(get_all)
 
     @classmethod
     async def GetById(cls, object_id, session):
