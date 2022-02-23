@@ -120,11 +120,11 @@ class ExtraBase(SerializerMixin):
 
         query = select(cls).where(cls.id == object_id)
         result = await session.execute(query)
-        (obj,) = result.one()
-        if not obj:
+        objects = result.scalars().all()
+        if not objects:
             return None
 
-        return obj
+        return objects[0]
 
     @classmethod
     async def GetByArgs(cls, session, args):

@@ -134,7 +134,7 @@ async def test_initial_user_flow():
         )
         assert response.status_code == 200
         response_content = response.json()
-        assert response_content["status"] == 401
+        assert response_content["status"] == 400
 
         response = await client.post(
             "/users/create_users/{}".format(2), headers=headers, json={}
