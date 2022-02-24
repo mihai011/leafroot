@@ -30,7 +30,7 @@
             "request": "launch",
             "module": "pytest",
             "args": [
-                "tests/test_base_controllers.py"
+                "tests/test_user_controllers.py"
             ],
         },
         {

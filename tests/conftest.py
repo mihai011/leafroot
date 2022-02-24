@@ -56,18 +56,25 @@ def temp_db(test_function):
 
     async def func(SessionLocalGenerator, *args, **kwargs):
         # Sessionmaker instance to connect to test DB
-        #  (SessionLocal)From fixture
+        # (SessionLocal) From fixture
 
         async def override_get_db():
             async with SessionLocalGenerator() as session:
                 yield session
             await session.close()
 
+        async def override_get_db_simple():
+            async with SessionLocalGenerator() as session:
+                return session
+
+        kwargs['session'] = await override_get_db_simple()
+
         # get to use SessionLocalGenerator received from fixture_Force db change
         app.dependency_overrides[get_session] = override_get_db
         # Run tests
         await test_function(*args, **kwargs)
         # get_Undo db
+        await kwargs['session'].close()
         app.dependency_overrides[get_session] = get_session
 
     return func

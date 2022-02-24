@@ -14,7 +14,7 @@ nest_asyncio.apply()
 
 @pytest.mark.asyncio
 @temp_db
-async def test_particles():
+async def test_particles(session):
     """
     testing particles
     """
