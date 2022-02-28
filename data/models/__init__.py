@@ -54,7 +54,7 @@ Base = declarative_base()
 secret = '$QmB*R>Nq!$.YdzkKvt{fBX7<Bmgm4~gy")&IthT+AtkA>/C@BkDyL0vRTraG"g'
 
 
-async def get_session() -> AsyncSession: # pragma: no cover
+async def get_session() -> AsyncSession:  # pragma: no cover
     """
     Yields an async session
     """

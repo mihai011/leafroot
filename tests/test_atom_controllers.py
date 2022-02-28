@@ -60,3 +60,4 @@ async def test_particles(session):
             "/atoms/electron", params=payload_particle, headers=ds.headers
         )
         assert response.status_code == 200
+

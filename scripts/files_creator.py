@@ -34,7 +34,7 @@ users = []
 for i in range(20000):
 
     args = {}
-    args["email"] = "{}@{}{}".format(random_string(), random_string(), i)
+    args["email"] = "{}@{}{}".format(random_string(), random_string(), str(i))
     args["username"] = random_string()
     args["password"] = random_string()
     users.append(args)

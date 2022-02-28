@@ -77,7 +77,6 @@ async def test_signup_user(session):
     testing simple flow
     """
 
-    
     ds = DataSource()
 
     async with AsyncClient(app=app, base_url="http://test") as client:
@@ -199,5 +198,3 @@ async def test_create_user(session):
         await User.DeleteAll(session)
         users = await User.GetAll(session)
         assert len(users) == 0
-
-        
