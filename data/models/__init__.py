@@ -65,15 +65,6 @@ async def get_session() -> AsyncSession:  # pragma: no cover
     await session.close()
 
 
-async def get_session_simple() -> AsyncSession:
-    """
-    returns an async session
-    """
-
-    async with async_session() as session:
-        return session
-
-
 class ExtraBase(SerializerMixin):
     """
     Extra base class used for child models

@@ -35,8 +35,6 @@ async def test_login_user(session):
     testing simple flow
     """
 
-    ds = DataSource()
-
     async with AsyncClient(app=app, base_url="http://test") as client:
 
         user_login_data = {"password": "test", "email": "test@gmail.com"}

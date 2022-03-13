@@ -3,7 +3,6 @@ Datasource module for testing
 """
 from fastapi.testclient import TestClient
 from app.app import app
-from data.models import get_session_simple
 
 
 class DataSource:
