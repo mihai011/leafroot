@@ -5,23 +5,16 @@ and middleware used.
 """
 
 import time
-import graphene
 
-from starlette.graphql import GraphQLApp
 from fastapi import FastAPI, APIRouter, Request
 
 from controllers.users_controllers import user_router
 from controllers.base_controllers import base_router
 from controllers.atom_controllers import atom_router
-from data import QueryUser
 
 app = FastAPI()
 
 general_router = APIRouter()
-
-general_router.add_route(
-    "/graphql", GraphQLApp(schema=graphene.Schema(query=QueryUser))
-)
 
 app.include_router(user_router)
 app.include_router(atom_router)

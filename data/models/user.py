@@ -2,13 +2,9 @@
 Used module related data
 """
 
-import graphene
 from jose import jwt
 
 from sqlalchemy import Column, String
-from graphene_sqlalchemy import SQLAlchemyObjectType
-from graphene_sqlalchemy_filter import FilterSet
-
 from data.models import ExtraBase, Base
 from data.models import secret
 
@@ -63,69 +59,3 @@ class User(Base, ExtraBase):
 
     def __repr__(self):
         return "<User %r>" % self.username
-
-
-# classes necessary for graphql functionality,
-# pretty useless for now, and I don't recommend them
-
-
-class UserGraph(SQLAlchemyObjectType):
-    """
-    class for grtaphene to sqlalchemy
-    """
-
-    class Meta:
-        """
-        class meta
-        """
-
-        model = User
-
-
-class UserFilter(FilterSet):
-    """
-    class for filtering user
-    """
-
-    class Meta:
-        """
-        meta class for user filtering
-        """
-
-        model = User
-        fields = {"username": ["eq", "ne", "in", "ilike"]}
-
-    @staticmethod
-    def is_admin_filter(value):
-        """
-        method for fitlering admins
-        """
-        if value:
-            return User.username == "admin"
-
-        return User.username != "admin"
-
-
-class QueryUser(graphene.ObjectType):
-    """
-    Query user for User class
-    """
-
-    list_users = graphene.List(UserGraph)
-    get_user_id = graphene.Field(UserGraph, user_id=graphene.NonNull(graphene.Int))
-    all_users = graphene.List(UserGraph, filters=UserFilter())
-
-    def resolve_list_users(self, info):
-        """
-        method for resolving list of parameters
-        """
-        query = UserGraph.get_query(info)  # SQLAlchemy query
-
-        query = query.filter
-        return query.all()
-
-    def resolve_get_user_id(self, user_id, session):
-        """
-        getting a user id
-        """
-        return User.GetById(user_id, session)
