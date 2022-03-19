@@ -2,10 +2,8 @@
 base module for testing
 """
 import pytest
-from httpx import AsyncClient
 
 import nest_asyncio
-from app.app import app
 from data import User
 from tests import DataSource
 from tests.conftest import temp_db
@@ -23,7 +21,7 @@ async def test_greetings_controller(session):
     ds = DataSource()
     await ds.make_user()
 
-    response = await ds.client.get("/", headers=ds.headers['Test_user'])
+    response = await ds.client.get("/", headers=ds.headers["Test_user"])
     assert response.status_code == 200
     assert response.json()["message"] == "Hello World"
 
@@ -108,13 +106,15 @@ async def test_signup_user(session):
     assert response_content["status"] == 200
 
     user_id = 2
-    response = await ds.client.get("/users/get_user/{}".format(user_id), \
-        headers=ds.headers['Test_user'])
+    response = await ds.client.get(
+        "/users/get_user/{}".format(user_id), headers=ds.headers["Test_user"]
+    )
     assert response.status_code == 200
 
     user_id = 3
-    response = await ds.client.get("/users/get_user/{}".format(3), \
-        headers=ds.headers['Test_user'])
+    response = await ds.client.get(
+        "/users/get_user/{}".format(3), headers=ds.headers["Test_user"]
+    )
     assert response.status_code == 200
     response_content = response.json()
     assert response_content["status"] == 400
@@ -142,7 +142,7 @@ async def test_create_user(session):
     # test endpoint for creating users
     response = await ds.client.post(
         "/users/create_users/{}".format(100),
-        headers=ds.headers['Test_user'],
+        headers=ds.headers["Test_user"],
         json={"fake_content": "fake"},
     )
     response_content = response.json()
@@ -150,14 +150,14 @@ async def test_create_user(session):
     assert response_content["status"] == 400
 
     response = await ds.client.post(
-        "/users/create_users/{}".format(2), headers=ds.headers['Test_user'], json={}
+        "/users/create_users/{}".format(2), headers=ds.headers["Test_user"], json={}
     )
     assert response.status_code == 200
 
     # test endpoint for creating users
     response = await ds.client.post(
         "/users/create_user",
-        headers=ds.headers['Test_user'],
+        headers=ds.headers["Test_user"],
         json={
             "username": "user_test",
             "email": "email@gmail.com",
@@ -171,7 +171,7 @@ async def test_create_user(session):
     # test endpoint for creating users (duplicate)
     response = await ds.client.post(
         "/users/create_user",
-        headers=ds.headers['Test_user'],
+        headers=ds.headers["Test_user"],
         json={
             "username": "user_test",
             "email": "email@gmail.com",
@@ -183,7 +183,9 @@ async def test_create_user(session):
     assert response_content["status"] == 400
 
     # test endpoint for creating users
-    response = await ds.client.post("/users/create_user", headers=ds.headers['Test_user'], json={})
+    response = await ds.client.post(
+        "/users/create_user", headers=ds.headers["Test_user"], json={}
+    )
     response_content = response.json()
     assert response.status_code == 200
     assert response_content["status"] == 400

@@ -2,10 +2,8 @@
 Module for testing particles
 """
 import pytest
-from httpx import AsyncClient
 
 import nest_asyncio
-from app.app import app
 from tests import DataSource
 from tests.conftest import temp_db
 
@@ -26,36 +24,36 @@ async def test_particles(session):
     payload_atom = {"x": 1, "y": 1, "z": 1}
 
     response = await ds.client.post(
-        "/atoms/create_atom", headers=ds.headers['Test_user'], json=payload_atom
+        "/atoms/create_atom", headers=ds.headers["Test_user"], json=payload_atom
     )
     assert response.status_code == 200
 
     response = await ds.client.post(
-        "/atoms/proton", headers=ds.headers['Test_user'], json=payload_particle
+        "/atoms/proton", headers=ds.headers["Test_user"], json=payload_particle
     )
     assert response.status_code == 200
 
     response = await ds.client.get(
-        "/atoms/proton", params=payload_particle, headers=ds.headers['Test_user']
+        "/atoms/proton", params=payload_particle, headers=ds.headers["Test_user"]
     )
     assert response.status_code == 200
 
     response = await ds.client.post(
-        "/atoms/neutron", headers=ds.headers['Test_user'], json=payload_particle
+        "/atoms/neutron", headers=ds.headers["Test_user"], json=payload_particle
     )
     assert response.status_code == 200
 
     response = await ds.client.get(
-        "/atoms/neutron", params=payload_particle, headers=ds.headers['Test_user']
+        "/atoms/neutron", params=payload_particle, headers=ds.headers["Test_user"]
     )
     assert response.status_code == 200
 
     response = await ds.client.post(
-        "/atoms/electron", headers=ds.headers['Test_user'], json=payload_particle
+        "/atoms/electron", headers=ds.headers["Test_user"], json=payload_particle
     )
     assert response.status_code == 200
 
     response = await ds.client.get(
-        "/atoms/electron", params=payload_particle, headers=ds.headers['Test_user']
+        "/atoms/electron", params=payload_particle, headers=ds.headers["Test_user"]
     )
     assert response.status_code == 200
