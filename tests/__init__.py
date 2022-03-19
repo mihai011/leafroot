@@ -3,6 +3,7 @@ Datasource module for testing
 """
 from fastapi.testclient import TestClient
 from app.app import app
+from httpx import AsyncClient
 
 
 class DataSource:
@@ -12,19 +13,18 @@ class DataSource:
 
     def __init__(self):
 
-        self.client = TestClient(app)
-        args = {"username": "Test_user", "email": "test@gmail.com", "password": "test"}
+        self.client = AsyncClient(app=app, base_url="http://test")
+        self.headers = {}
 
-        response = self.client.post("users/sign-up", json=args)
+    async def make_user(self, received_args={}):
+
+        args = {"username": "Test_user", "email": "test@gmail.com", "password": "test"}
+        args.update(received_args)
+
+        response = await self.client.post("users/sign-up", json=args)
         assert response.status_code == 200
 
-        args = {
-            "username": "Test_user",
-            "password": "test",
-            "email": "test@gmail.com",
-        }
-
-        response = self.client.post("/users/login", json=args)
+        response = await self.client.post("/users/login", json=args)
         response = response.json()
 
-        self.headers = {"Authorization": "Bearer {}".format(response["item"]["token"])}
+        self.headers[args['username']] = {"Authorization": "Bearer {}".format(response["item"]["token"])}
