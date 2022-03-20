@@ -1,8 +1,10 @@
 """
 Datasource module for testing
 """
-from app.app import app
 from httpx import AsyncClient
+
+from app.app import app
+from data import User
 
 
 class DataSource:
@@ -10,10 +12,11 @@ class DataSource:
     class for creating data sources on tests
     """
 
-    def __init__(self):
+    def __init__(self, session):
 
         self.client = AsyncClient(app=app, base_url="http://test")
         self.headers = {}
+        self.session = session
 
     async def make_user(self, received_args=None):
         """
@@ -27,6 +30,9 @@ class DataSource:
 
         response = await self.client.post("users/sign-up", json=args)
         assert response.status_code == 200
+
+        user = await User.GetById(self.session, 1)
+        assert str(user) == "<User 'Test_user'>"
 
         response = await self.client.post("/users/login", json=args)
         response = response.json()

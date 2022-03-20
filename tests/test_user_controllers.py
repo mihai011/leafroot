@@ -3,12 +3,9 @@ base module for testing
 """
 import pytest
 
-import nest_asyncio
 from data import User
 from tests import DataSource
 from tests.conftest import temp_db
-
-nest_asyncio.apply()
 
 
 @pytest.mark.asyncio
@@ -18,7 +15,7 @@ async def test_greetings_controller(session):
     testing simple controller
     """
 
-    ds = DataSource()
+    ds = DataSource(session)
     await ds.make_user()
 
     response = await ds.client.get("/", headers=ds.headers["Test_user"])
@@ -33,7 +30,7 @@ async def test_login_user(session):
     testing simple flow
     """
 
-    ds = DataSource()
+    ds = DataSource(session)
     await ds.make_user({"email": "test@gmail.com"})
     user_login_data = {"password": "test"}
 
@@ -67,7 +64,6 @@ async def test_login_user(session):
     assert response_content["status"] == 400
     assert response_content["message"] == "Incorrect password!"
 
-
 @pytest.mark.asyncio
 @temp_db
 async def test_signup_user(session):
@@ -75,7 +71,7 @@ async def test_signup_user(session):
     testing simple flow
     """
 
-    ds = DataSource()
+    ds = DataSource(session)
     await ds.make_user()
     user_signup_data = {"username": "test"}
 
@@ -144,6 +140,16 @@ async def test_signup_user(session):
     assert response.status_code == 200
     assert response_content["status"] == 401
 
+    # test with malformed header
+    fake_headers = {}
+    fake_headers["header"] = "Bearer fake"
+    response = await ds.client.get(
+        "/users/get_user/{}".format(user_id), headers=fake_headers
+    )
+    response_content = response.json()
+    assert response.status_code == 200
+    assert response_content["status"] == 401
+
 
 @pytest.mark.asyncio
 @temp_db
@@ -151,7 +157,7 @@ async def test_create_user(session):
     """
     testing simple flow
     """
-    ds = DataSource()
+    ds = DataSource(session)
     await ds.make_user()
 
     # test endpoint for creating users

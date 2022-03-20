@@ -23,7 +23,11 @@ def auth_decorator(controller):
         """
         request = kwargs["request"]
         session = kwargs["session"]
-        token = request.headers["authorization"].split(" ")[-1]
+        if "authorization" not in request.headers:
+            return create_response("Authorization header not present!", 401)
+        else:
+            token = request.headers["authorization"].split(" ")[-1]
+        
 
         if not await authenthicate_user(token, session):
             return create_response("Token expired or invalid! Please login again!", 401)

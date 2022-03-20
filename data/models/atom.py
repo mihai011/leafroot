@@ -35,7 +35,7 @@ class Atom(Base, ExtraBase):
         obj = await cls.GetById(session, obj.id)
 
         return obj
-        
+
     @classmethod
     async def GetById(cls, session, obj_id):
 
@@ -45,7 +45,8 @@ class Atom(Base, ExtraBase):
                 selectinload(cls.neutrons),
                 selectinload(cls.electrons),
                 selectinload(cls.protons),
-            ).filter(cls.id == obj_id)
+            )
+            .filter(cls.id == obj_id)
         )
         obj = result.scalars().first()
 

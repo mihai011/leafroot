@@ -17,7 +17,7 @@ format:
 	$(SOURCE_VENV) && black  $(DIR_ARGS)
 
 coverage: 
-	$(SOURCE_VENV) && pytest --cov-report term-missing --cov=. tests/
+	$(SOURCE_VENV) && pytest --cov-report term-missing --cov=.  tests/
 
 coverage_parallel: 
 	$(SOURCE_VENV) && pytest --cov-report term-missing --cov=. -n 2 tests/

@@ -2,11 +2,10 @@
 Used module related data
 """
 
-from jose import jwt
 
 from sqlalchemy import Column, String
 from data.models import ExtraBase, Base
-from data.models import secret
+
 
 class User(Base, ExtraBase):
     """

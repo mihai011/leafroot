@@ -3,11 +3,8 @@ Module for testing particles controller
 """
 import pytest
 
-import nest_asyncio
 from tests import DataSource
 from tests.conftest import temp_db
-
-nest_asyncio.apply()
 
 
 @pytest.mark.asyncio
@@ -17,7 +14,7 @@ async def test_particles(session):
     testing particles
     """
 
-    ds = DataSource()
+    ds = DataSource(session)
     await ds.make_user()
     # make proton
     payload_particle = {"charge": 123.23}

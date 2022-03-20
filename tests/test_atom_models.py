@@ -13,6 +13,9 @@ nest_asyncio.apply()
 @pytest.mark.asyncio
 @temp_db
 async def test_atom_model(session):
+    """
+    simple test for Atom model
+    """
 
     atom_args = {"x": 1.0, "y": 1.0, "z": 1.0}
     atom_obj = await Atom.AddNew(session, atom_args)
@@ -25,6 +28,9 @@ async def test_atom_model(session):
 @pytest.mark.asyncio
 @temp_db
 async def test_sub_atomic_model(session):
+    """
+    test for subparticles of atom
+    """
 
     atom_args = {"x": 1.0, "y": 1.0, "z": 1.0}
     atom_obj = await Atom.AddNew(session, atom_args)
