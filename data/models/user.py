@@ -8,43 +8,6 @@ from sqlalchemy import Column, String
 from data.models import ExtraBase, Base
 from data.models import secret
 
-
-class Token(Base, ExtraBase):
-    """
-    Token user by user for authenthication
-    """
-
-    __tablename__ = "tokens"
-
-    token = Column(String)
-
-    @classmethod
-    async def AddNew(Cls, session, args):
-
-        token = jwt.encode(args, secret, algorithm="HS256")
-
-        obj = Cls(token=token)
-        session.add(obj)
-        await session.commit()
-
-        return obj
-
-    @classmethod
-    async def Search(Cls, session, args):
-        """
-        Searching for token in db
-        """
-
-        token = jwt.encode(args, secret, algorithm="HS256")
-
-        actual_token = await Cls.GetByArgs(session, {"token": token})
-
-        if actual_token:
-            return actual_token[0]
-
-        return None
-
-
 class User(Base, ExtraBase):
     """
     Class that resembles a user model

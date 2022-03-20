@@ -61,7 +61,7 @@ async def get_user(
     get user by id
     """
     await parse(request)
-    user = await User.GetById(id_user, session)
+    user = await User.GetById(session, id_user)
 
     if not user:
         return create_response("User not found!", 400)

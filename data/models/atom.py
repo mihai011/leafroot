@@ -26,19 +26,26 @@ class Atom(Base, ExtraBase):
     protons = relationship("Proton")
     electrons = relationship("Electron")
 
+    __mapper_args__ = {"eager_defaults": True}
+
     @classmethod
     async def AddNew(cls, session, args):
 
         obj = await super().AddNew(session, args)
+        obj = await cls.GetById(session, obj.id)
+
+        return obj
+        
+    @classmethod
+    async def GetById(cls, session, obj_id):
 
         result = await session.execute(
             select(cls)
-            .filter(cls.id == obj.id)
             .options(
                 selectinload(cls.neutrons),
                 selectinload(cls.electrons),
                 selectinload(cls.protons),
-            )
+            ).filter(cls.id == obj_id)
         )
         obj = result.scalars().first()
 

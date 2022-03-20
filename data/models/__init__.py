@@ -104,12 +104,12 @@ class ExtraBase(SerializerMixin):
         return await session.run_sync(get_all)
 
     @classmethod
-    async def GetById(cls, object_id, session):
+    async def GetById(cls, session, obj_id):
         """
         get object by his id
         """
 
-        query = select(cls).where(cls.id == object_id)
+        query = select(cls).where(cls.id == obj_id)
         result = await session.execute(query)
         objects = result.scalars().all()
         if not objects:

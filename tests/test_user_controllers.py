@@ -34,13 +34,14 @@ async def test_login_user(session):
     """
 
     ds = DataSource()
-
+    await ds.make_user({"email": "test@gmail.com"})
     user_login_data = {"password": "test"}
 
     response = await ds.client.post("users/login", json=user_login_data)
     response_content = response.json()
     assert response.status_code == 200
     assert response_content["status"] == 400
+    assert response_content["message"] == "Email is required"
 
     user_login_data = {"email": "test@gmail.com"}
 
@@ -48,6 +49,7 @@ async def test_login_user(session):
     response_content = response.json()
     assert response.status_code == 200
     assert response_content["status"] == 400
+    assert response_content["message"] == "Password is required"
 
     user_login_data = {"email": "no_such_user@gmail.com", "password": "test"}
 
@@ -55,6 +57,7 @@ async def test_login_user(session):
     response_content = response.json()
     assert response.status_code == 200
     assert response_content["status"] == 400
+    assert response_content["message"] == "No user with such email found"
 
     user_login_data = {"email": "test@gmail.com", "password": "fake_test"}
 
@@ -62,6 +65,7 @@ async def test_login_user(session):
     response_content = response.json()
     assert response.status_code == 200
     assert response_content["status"] == 400
+    assert response_content["message"] == "Incorrect password!"
 
 
 @pytest.mark.asyncio
@@ -104,6 +108,17 @@ async def test_signup_user(session):
     response_content = response.json()
     assert response.status_code == 200
     assert response_content["status"] == 200
+
+    user_signup_data = {
+        "username": "test_duplicate",
+        "email": "test_alternate@gmail.com",
+        "password": "some_password",
+    }
+
+    response = await ds.client.post("users/sign-up", json=user_signup_data)
+    response_content = response.json()
+    assert response.status_code == 200
+    assert response_content["status"] == 400
 
     user_id = 2
     response = await ds.client.get(

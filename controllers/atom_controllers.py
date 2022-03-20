@@ -73,7 +73,6 @@ async def add_neutron(
     """
     params = await parse(request)
     neutron = await Neutron.AddNew(session, params)
-    # await session.close()
 
     return create_response("Neutron created succesfully!", 200, neutron.serialize())
 

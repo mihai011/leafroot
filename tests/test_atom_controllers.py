@@ -1,5 +1,5 @@
 """
-Module for testing particles
+Module for testing particles controller
 """
 import pytest
 
