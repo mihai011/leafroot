@@ -30,7 +30,7 @@
             "request": "launch",
             "module": "pytest",
             "args": [
-                "tests/test_atom_models.py"
+                "tests/"
             ],
         },
         {
