@@ -9,6 +9,9 @@ from data import User
 
 @temp_db
 async def test_authenticate(session):
+    """
+    test authenthication
+    """
 
     user_args = {
         "username": "test_name",
@@ -25,6 +28,9 @@ async def test_authenticate(session):
 
 @temp_db
 async def test_fake_user(session):
+    """
+    test authenthication with fake creds
+    """
 
     user_args = {
         "username": "test_name",
@@ -34,4 +40,4 @@ async def test_fake_user(session):
     token = create_access_token(user_args, None)
     user_auth = await authenthicate_user(token, session)
 
-    assert user_auth == None
+    assert user_auth is None

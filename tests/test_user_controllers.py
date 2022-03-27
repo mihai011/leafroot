@@ -64,6 +64,7 @@ async def test_login_user(session):
     assert response_content["status"] == 400
     assert response_content["message"] == "Incorrect password!"
 
+
 @pytest.mark.asyncio
 @temp_db
 async def test_signup_user(session):
