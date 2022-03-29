@@ -30,7 +30,8 @@
             "request": "launch",
             "module": "pytest",
             "args": [
-                "tests/"
+                "-s",
+                "tests/test_external_api.py"
             ],
         },
         {

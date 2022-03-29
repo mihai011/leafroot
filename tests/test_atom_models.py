@@ -2,12 +2,10 @@
 Module for testing particles models
 """
 import pytest
-import nest_asyncio
 
 from tests.conftest import temp_db
 from data import Neutron, Proton, Electron, Atom
 
-nest_asyncio.apply()
 
 
 @pytest.mark.asyncio
