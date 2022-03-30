@@ -2,6 +2,8 @@
 Module for testing api controller
 """
 import pytest
+from aioresponses import aioresponses
+
 
 from tests import DataSource
 from tests.conftest import temp_db
@@ -18,10 +20,15 @@ async def test_api(session):
     await ds.make_user()
 
     payload_api = {
-        "name": "laguna",
+        "url": "http://fake_url.com",
+        "body": {},
         "method": "GET",
+        "params":{}
     }
-
-    response = await ds.client.post("/api/external", json=payload_api, headers=ds.headers["Test_user"])
+    with aioresponses() as mocked:
+        mocked.get(payload_api['url'], status=200, body="test1")
+        response = await ds.client.post(
+            "/api/external", json=payload_api, headers=ds.headers["Test_user"]
+        )
     assert response.status_code == 200
-    assert response.status_code
+    assert response.json() == {'message': 'api called', 'item': "test1", 'status': 200}

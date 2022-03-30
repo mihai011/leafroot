@@ -4,25 +4,38 @@ api controllers
 from fastapi import Request
 from fastapi import APIRouter, Depends
 from fastapi.responses import ORJSONResponse
-from sqlalchemy.ext.asyncio import AsyncSession
-
 
 from data import get_session
-from data import Atom, Electron, Neutron, Proton
+from external_api.utils import get_http_session, make_api_request
 from controllers import create_response, auth_decorator, parse
 
 api_router = APIRouter(prefix="/api", tags=["api"])
 
-
 @api_router.post("/external")
 @auth_decorator
 async def api_request(
-    request: Request, session: AsyncSession = Depends(get_session)
+    request: Request,
+    session = Depends(get_session),
+    http_session = Depends(get_http_session)
 ) -> ORJSONResponse:
     """
     make a http request to an external api
     """
 
-    params = await parse(request)
+    content = await parse(request)
+    if "url" not in content:
+        raise create_response("URL not found in payload!", 400)
+    if "method" not in content:
+        raise create_response("Method not found in payload!", 400)
+    if "body" not in content:
+        raise create_response("Body not found in payload!", 400)
+    if "params" not in content:
+        raise create_response("Body not found in payload!", 400)
 
-    return create_response("api called", 200)
+    response = await make_api_request(http_session,\
+        content['method'],\
+        content['url'],\
+        content['body'],\
+        content['params'])
+
+    return create_response("api called", 200, response)

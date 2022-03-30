@@ -7,7 +7,6 @@ from tests.conftest import temp_db
 from data import Neutron, Proton, Electron, Atom
 
 
-
 @pytest.mark.asyncio
 @temp_db
 async def test_atom_model(session):

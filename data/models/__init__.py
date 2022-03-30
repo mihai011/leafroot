@@ -1,7 +1,7 @@
 """
 models init file
 """
-
+from aiohttp import ClientSession
 from datetime import datetime
 
 from sqlalchemy_serializer import SerializerMixin
