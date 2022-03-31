@@ -16,6 +16,7 @@ async def test_get_request_external():
     """
     url_test = "http://fake_url.com"
 
+
     with aioresponses() as mocked:
         mocked.get(url_test, status=200, body="test1")
         session = aiohttp.ClientSession()
