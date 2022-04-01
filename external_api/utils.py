@@ -11,37 +11,46 @@ async def get_http_session():
 
     await session.close()
 
-async def make_api_request(session, method, url, body, params):
+async def make_api_request(session, content):
     """
     Constructs a http request to an external api and send it:
 
-    Parameters:
+    Parameters: 
     session (aiohttp client session): http client session
-    method (string): HTTP method used for the external api
-    url (string): string that represents the url
-    body (dict): content for the paylod in case of 
-                POST, PUT and PATCH methods
-    params (dict): query parameters for the url
+    content (dict) that contains the following 
+        
+        method (string): HTTP method used for the external api
+        url (string): string that represents the url
+        body (dict): content for the paylod in case of 
+                    POST, PUT and PATCH methods
+        params (dict): query parameters for the url
+        headers (dict): headers to be sent in request
 
     Returns:
     response from the external api in text form
     """
+
+    method = content.get('method', None)
+    url = content.get('url', None)
+    params = content.get('params', None)
+    body = content.get('body', None)
+    headers = content.get('headers', None)
         
     query_url ="{}{}".format(url, urllib.parse.urlencode(params))
 
     if method == "GET":
 
-        response = await make_get_request(session, query_url)
+        response = await make_get_request(session, query_url, headers)
 
     if method == "POST":
 
-        response = await make_post_request(session, query_url, body)
+        response = await make_post_request(session, query_url, body, headers)
 
     return response
 
 
 
-async def make_get_request(session, url):
+async def make_get_request(session, url, headers):
     """
     Makes a http request to an url with GET method
     
@@ -54,11 +63,11 @@ async def make_get_request(session, url):
 
     """
 
-    async with session.get(url) as response:
+    async with session.get(url, headers=headers) as response:
 
         return await response.text()
 
-async def make_post_request(session, url, body):
+async def make_post_request(session, url, body, headers):
     """
     Makes a http request to an url with POSt method
     
@@ -72,6 +81,6 @@ async def make_post_request(session, url, body):
 
     """
 
-    async with session.post(url, json=body) as response:
+    async with session.post(url, json=body, headers=headers) as response:
 
         return await response.text()
