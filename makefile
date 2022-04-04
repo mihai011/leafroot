@@ -1,11 +1,18 @@
 SOURCE_VENV=. venv/bin/activate
 DIR_ARGS = app/ controllers/ data/ tests/ scripts/ utils/
 
+venv: requirements.txt
+	python3 -m venv venv
+	$(SOURCE_VENV) && pip install -r requirements.txt
+
+clean:
+	rm -rf venv/
+
 typehint:
-	$(SOURCE_VENV) && mypy  $(DIR_ARGS)
+	$(SOURCE_VENV) && mypy $(DIR_ARGS)
 
 test_parallel: 
-	$(SOURCE_VENV) && pytest -n auto test/
+	$(SOURCE_VENV) && pytest -n auto tests/
 
 test_simple: 
 	$(SOURCE_VENV) && pytest tests/
