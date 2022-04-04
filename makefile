@@ -33,7 +33,7 @@ start_production:
 	$(SOURCE_VENV) && gunicorn app.app:app --workers 12 -k uvicorn.workers.UvicornH11Worker --bind 0.0.0.0 
 
 start_development: 
-	$(SOURCE_VENV) && gunicorn app.app:app --workers 12 -k uvicorn.workers.UvicornH11Worker --bind 0.0.0.0 --reload
+	$(SOURCE_VENV) && gunicorn app.app:app --workers 1 -k uvicorn.workers.UvicornH11Worker --bind 0.0.0.0 --reload
 
 start_local: 
 	$(SOURCE_VENV) && uvicorn app.app:app --reload

@@ -8,6 +8,7 @@ from aioresponses import aioresponses
 
 from external_api.utils import make_api_request, make_get_request, make_post_request
 
+
 @pytest.mark.asyncio
 async def test_make_get_request():
     """
@@ -20,6 +21,8 @@ async def test_make_get_request():
         mocked.get(url_test, status=200, body="test1")
         response = await make_get_request(session, url_test, headers)
         assert response == "test1"
+    await session.close()
+
 
 @pytest.mark.asyncio
 async def test_make_post_request():
@@ -34,6 +37,7 @@ async def test_make_post_request():
         mocked.post(url_test, status=200, body="test1")
         response = await make_post_request(session, url_test, body, headers)
         assert response == "test1"
+    await session.close()
 
 
 @pytest.mark.asyncio
@@ -47,7 +51,7 @@ async def test_get_request_external():
         "url": "http://fake_url.com",
         "body": {},
         "method": "GET",
-        "params":{},
+        "params": {},
         "headers": {},
     }
 
@@ -60,14 +64,14 @@ async def test_get_request_external():
 
     with aioresponses() as mocked:
         mocked.post(url_test, status=200, body="test2")
-        content['method'] = "POST"
+        content["method"] = "POST"
         response = await make_api_request(session, content)
         assert response == "test2"
 
     with aioresponses() as mocked:
         mocked.post(url_test, status=200, body="test3")
-        content['body'] = {"data": "test_data"}
-        content['method'] = "POST"
+        content["body"] = {"data": "test_data"}
+        content["method"] = "POST"
         response = await make_api_request(session, content)
         assert response == "test3"
 

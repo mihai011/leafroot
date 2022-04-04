@@ -11,12 +11,13 @@ from controllers import create_response, auth_decorator, parse
 
 api_router = APIRouter(prefix="/api", tags=["api"])
 
+
 @api_router.post("/external")
 @auth_decorator
 async def api_request(
     request: Request,
-    session = Depends(get_session),
-    http_session = Depends(get_http_session)
+    session=Depends(get_session),
+    http_session=Depends(get_http_session),
 ) -> ORJSONResponse:
     """
     make a http request to an external api
@@ -34,6 +35,6 @@ async def api_request(
     if "headers" not in content:
         return create_response("Headers not found in payload!", 400)
 
-    response = await make_api_request(http_session,content)
+    response = await make_api_request(http_session, content)
 
     return create_response("api called", 200, response)

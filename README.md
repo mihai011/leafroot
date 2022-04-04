@@ -23,38 +23,42 @@ new applications.
     2. Open it in vscode.
     3. Install Remote-Containers extension.
     4. Using Ctrl+Shift+P select Remote-Container:Open Folder in Container
-    5. Create the  python virtual envirorment: "make venv"
+    5. Create the  python virtual environment: "make venv"
     6. Run the tests: "make test_simple" or "make test_parallel" for parallel tests
+    7. Run the api server for production "make start_production" and "make start_development" for development purposes.
 
 ## Programming norms 
 
-```
-def add_binary(a, b):
-    '''
-    Returns the sum of two decimal numbers in binary digits.
+   1.Please add docstring on each new file, class, and functions to stipulate their purpose and functionality. 
 
-            Parameters:
-                    a (int): A decimal integer
-                    b (int): Another decimal integer
+        ```
+        def add_binary(a, b):
+            '''
+            Returns the sum of two decimal numbers in binary digits.
 
-            Returns:
-                    binary_sum (str): Binary string of the sum of a and b
-    '''
-    binary_sum = bin(a+b)[2:]
-    return binary_sum
+                    Parameters:
+                            a (int): A decimal integer
+                            b (int): Another decimal integer
+
+                    Returns:
+                            binary_sum (str): Binary string of the sum of a and b
+            '''
+            binary_sum = bin(a+b)[2:]
+            return binary_sum
 
 
-print(add_binary.__doc__)
-```
+        print(add_binary.__doc__)
+        ```
+    2. To check correctitude of the code format use "make lint" to get a score for your style on the project, Always push for a 10!
+    3. Use the following commands for some help:
+       1. "make format" - formats your code using the "black" functionality
+       2. "make typehint" - check for mis typing variables
+    4. Use the command "make coverage" or "make coverage_parallel" to 
+    verify what percentage of your code is checked, Push for 100%!
 
-# Start
-gunicorn app.app:app --workers <cores> -k uvicorn.workers.UvicornH11Worker --bind 0.0.0.0
-
-# Create migration and apply it:
+# Create migration and apply them:
 
 alembic revision --autogenerate -m "<migration_message>"
 alembic upgrade head
 
 
-# Test (pytest parallel for fast testing)
-pytest -n <cores>
