@@ -21,3 +21,14 @@ class User(Base, ExtraBase):
 
     def __repr__(self):
         return "<User %r>" % self.username
+
+    def serialize(self):
+        
+        serialization = super(User, self).serialize()
+
+        to_pop = ["hashed_pass", "permissions"]
+
+        for field in to_pop:
+            serialization.pop(field)
+
+        return serialization
