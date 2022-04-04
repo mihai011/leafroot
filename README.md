@@ -30,6 +30,7 @@ new applications.
 ## Programming norms 
 
    1.Please add docstring on each new file, class, and functions to stipulate their purpose and functionality. 
+   An example for one is down below:
 
         ```
         def add_binary(a, b):
