@@ -13,7 +13,7 @@ new applications.
         - asynchronous and parallel tests 
     2. Alembic made migrations for the database.
     3. Docker containers and local environment already set up.
-    4. TODO: github pipeline for fast deployment.
+    4. TODO: github pipeline for fast deployment to AWS.
     5. TODO: continue implement features of FAST-API to this project and exemplify them.
 
 ## Project environment set up (for vscode and docker users)
