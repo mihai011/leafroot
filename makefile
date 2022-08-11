@@ -1,13 +1,17 @@
 SOURCE_VENV=. venv/bin/activate
 DIR_ARGS = app/ controllers/ data/ tests/ scripts/ utils/
 
-venv: requirements.txt
+venv_create: requirements.txt
 	python3 -m venv venv
 	$(SOURCE_VENV) && pip install -r requirements.txt
 
-clean:
+venv_delete:
 	rm -rf venv/
 
+venv_update:
+	$(SOURCE_VENV) && pip3 list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1 | xargs -n1 pip3 install -U 
+	pip freeze > requirements.txt
+	
 typehint:
 	$(SOURCE_VENV) && mypy $(DIR_ARGS)
 
@@ -21,7 +25,7 @@ lint:
 	$(SOURCE_VENV) && pylint $(DIR_ARGS)
 
 format: 
-	$(SOURCE_VENV) && black  $(DIR_ARGS)
+	$(SOURCE_VENV) && black $(DIR_ARGS)
 
 coverage: 
 	$(SOURCE_VENV) && pytest --cov-report term-missing --cov=.  tests/
