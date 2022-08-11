@@ -31,7 +31,7 @@
             "module": "pytest",
             "args": [
                 "-s",
-                "tests/test_external_api.py"
+                "tests/test_api_controller.py"
             ],
         },
         {
