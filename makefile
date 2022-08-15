@@ -16,10 +16,10 @@ typehint:
 	$(SOURCE_VENV) && mypy $(DIR_ARGS)
 
 test_parallel: 
-	$(SOURCE_VENV) && pytest -n auto tests/
+	$(SOURCE_VENV) && ENV=dev pytest -n auto tests/
 
 test_simple: 
-	$(SOURCE_VENV) && pytest tests/
+	$(SOURCE_VENV) && ENV=dev pytest tests/
 
 lint: 
 	$(SOURCE_VENV) && pylint $(DIR_ARGS)
