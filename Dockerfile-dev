@@ -10,5 +10,5 @@ WORKDIR /workspace
 COPY . .
 
 RUN make venv_create
-CMD ["make", "start_production"]
+CMD ["make", "start_development"]
 EXPOSE 8000
