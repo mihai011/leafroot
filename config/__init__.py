@@ -40,6 +40,6 @@ for mandatory_field in mandatory_fields:
 
 if missing_fields:
     missing_fields = '\n'.join(missing_fields)
-    print(f"FATAL! The following environment "\
-        "variables are missing:\n{missing_fields}")
-    sys.exit(0)
+    print("FATAL! The following environment "\
+        "variables are missing:\n{}".format(missing_fields))
+    os._exit(1)
