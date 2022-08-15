@@ -8,6 +8,7 @@ RUN mkdir /workspace
 WORKDIR /workspace
 
 COPY . .
+RUN rm .env
 
 RUN make venv_create
 CMD ["make", "start_production"]
