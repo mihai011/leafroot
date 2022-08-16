@@ -3,6 +3,9 @@ DIR_ARGS = app/ controllers/ data/ tests/ scripts/ utils/
 
 CORES=`nproc`
 
+venv_activate:
+	$(SOURCE_VENV)
+
 venv_create: requirements.txt
 	python3 -m venv venv
 	$(SOURCE_VENV) && pip install -r requirements.txt

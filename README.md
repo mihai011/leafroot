@@ -67,3 +67,5 @@ alembic upgrade head
 
 MAC M1 observations:
  1. Makefile does not seem to resolve dependencies properly.
+ 2. User on the database is not created correctly.
+    (the passwiord must be added manually)
