@@ -65,3 +65,5 @@ alembic revision --autogenerate -m "<migration_message>"
 alembic upgrade head
 
 
+MAC M1 observations:
+ 1. Makefile does not seem to resolve dependencies properly.
