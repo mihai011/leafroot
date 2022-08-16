@@ -8,6 +8,7 @@ venv_create: requirements.txt
 	$(SOURCE_VENV) && pip install -r requirements.txt
 
 venv_delete:
+	deactivate
 	rm -rf venv/
 
 venv_update:$(SOURCE_VENV)
