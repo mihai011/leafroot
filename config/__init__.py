@@ -27,10 +27,20 @@ if os.environ['ENV'] == "prod":
     pass
 
 
-# check mandatory fields
+if os.environ.get("CIRCLECI", None):
+    # replace environment variables with OPENCI variables
+    for key, value in config.items():
+        if key.startswith("CI_"):
+            config[key.replace("CI_", "")] = value
 
-mandatory_fields = ["POSTGRES_DB","POSTGRES_USER","POSTGRES_PASSWORD",\
-    "ACCESS_TOKEN_EXPIRE_MINUTES","SECRET_KEY","ALGORITHM"]
+# check mandatory fields
+mandatory_fields = ["POSTGRES_DB",
+"POSTGRES_HOST",
+"POSTGRES_USER",
+"POSTGRES_PASSWORD",
+"ACCESS_TOKEN_EXPIRE_MINUTES",
+"SECRET_KEY",
+"ALGORITHM"]
 
 missing_fields = []
 
