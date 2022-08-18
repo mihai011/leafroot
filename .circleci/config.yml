@@ -12,7 +12,6 @@ jobs:
           POSTGRES_PASSWORD : $CI_POSTGRES_PASSWORD
     steps:
       - checkout
-      - run: sudo apt-get install postgresql-client-9.6
       - run:
           name: make venv
           command: make venv_create
