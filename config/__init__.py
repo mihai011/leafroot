@@ -36,7 +36,7 @@ mandatory_fields = ["POSTGRES_DB",
 
 # check up if environment dictates something else
 # with the values for the environment
-for key, value in os.environ.items:
+for key, value in os.environ.items():
     if key in mandatory_fields:
         config[key] = value
 
