@@ -12,7 +12,6 @@ jobs:
           POSTGRES_PASSWORD : $CI_POSTGRES_PASSWORD
     steps:
       - checkout
-      - run: sudo apt-get update
       - run: sudo apt-get install postgresql-client
       - run: whoami
       - run: |
