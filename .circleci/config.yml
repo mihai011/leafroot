@@ -6,20 +6,11 @@ jobs:
     docker:
       - image: cimg/python:3.10.2
       - image: cimg/postgres:14.2
-        environment:
-          POSTGRES_DB : $POSTGRES_DB
-          POSTGRES_USER : $POSTGRES_USER
-          POSTGRES_PASSWORD : $POSTGRES_PASSWORD
     steps:
       - checkout
       - run: whoami
       - run: |
           psql --version
-      - run: |
-          echo ${POSTGRES_DB}
-          echo ${POSTGRES_HOST}
-          echo ${POSTGRES_PASSWORD}
-          echo ${POSTGRES_USER}
       - run:
           name: make venv
           command: make venv_create
