@@ -2,7 +2,7 @@ ACTIVATE_VENV=. venv/bin/activate
 DIR_ARGS = app/ controllers/ data/ tests/ scripts/ utils/
 
 CORES=`nproc`
-
+MANUAL_CORES=4
 	
 
 venv_create: requirements.txt
@@ -20,7 +20,7 @@ typehint:
 	$(ACTIVATE_VENV) &&mypy $(DIR_ARGS)
 
 test_parallel: 
-	$(ACTIVATE_VENV) && ENV=dev pytest -n auto tests/
+	$(ACTIVATE_VENV) && ENV=dev pytest -n $(MANUAL_CORES) tests/
 
 test: 
 	$(ACTIVATE_VENV) && ENV=dev pytest tests/
