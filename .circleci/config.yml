@@ -8,10 +8,11 @@ jobs:
       - image: postgres:10-alpine
         environment:
           POSTGRES_DB : $CI_POSTGRES_DB
-          POSTGRES_USER: $CI_POSTGRES_USER
+          POSTGRES_USER : $CI_POSTGRES_USER
           POSTGRES_PASSWORD : $CI_POSTGRES_PASSWORD
     steps:
       - checkout
+      - run: sudo apt-get install postgresql-client-9.6
       - run:
           name: make venv
           command: make venv_create

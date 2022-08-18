@@ -44,7 +44,6 @@ SQLALCHEMY_DATABASE_URL_BASE_SYNC = "{}://{}:{}@{}/".format(
     config["POSTGRES_HOST"],
 )
 
-
 engine = create_async_engine(
     SQLALCHEMY_DATABASE_URL_ASYNC,
     echo=False,
