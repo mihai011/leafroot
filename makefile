@@ -43,5 +43,8 @@ start_production: venv_create
 start_development: 
 	$(ACTIVATE_VENV) && ENV=dev uvicorn app.app:app --host 0.0.0.0 --reload
 
+start_db:
+	docker-compose up -d db
+
 soft_checklist: typehint coverage lint  
 hard_checklist: format lint typehint test coverage
