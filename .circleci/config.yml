@@ -19,6 +19,9 @@ jobs:
           name: make venv
           command: make venv_create
       - run:
+          name: wait for db
+          command: dockerize -wait tcp://localhost:5432 -timeout 1m
+      - run:
           name: Run tests
           command: make test
 
