@@ -30,8 +30,8 @@ jobs:
     steps:
       - checkout
       - run:
-        name: make venv
-        command: make venv_create
+          name: make venv
+          command: make venv_create
       - run:
           name: Run tests
           # This assumes pytest is installed via the install-package step above
