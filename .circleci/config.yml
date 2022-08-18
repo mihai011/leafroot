@@ -23,7 +23,7 @@ jobs:
           command: dockerize -wait tcp://localhost:5432 -timeout 1m
       - run: 
           name: check roles
-          command: psql -d postgresql://postgres@localhost/app -c "SELECT * FROM pg_roles;"
+          command: psql -d postgresql://postgres@localhost/circle_test -c "SELECT * FROM pg_roles;"
       - run:
           name: Run tests
           command: make test
