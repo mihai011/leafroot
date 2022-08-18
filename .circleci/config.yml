@@ -12,12 +12,9 @@ jobs:
           POSTGRES_PASSWORD : $CI_POSTGRES_PASSWORD
     steps:
       - checkout
-      - run: sudo apt-get install postgresql-client
       - run: whoami
       - run: |
-          psql \
-          -U $POSTGRES_USER \
-          -c "\du "
+          psql --version
       - run:
           name: make venv
           command: make venv_create

@@ -25,6 +25,7 @@
             "console": "integratedTerminal"
         },
         {
+            "env": { "ENV": "dev"},
             "name": "Python: tests",
             "type": "python",
             "request": "launch",
