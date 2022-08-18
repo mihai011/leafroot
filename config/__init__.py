@@ -26,7 +26,7 @@ if os.environ['ENV'] == "prod":
     # retrieve secrets frome external api's here
     pass
 
-
+# check up if environment is CIRCLE CI
 if os.environ.get("CIRCLECI", None):
     # replace environment variables with OPENCI variables
     for key, value in config.items():
