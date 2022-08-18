@@ -26,14 +26,6 @@ if os.environ['ENV'] == "prod":
     # retrieve secrets frome external api's here
     pass
 
-# check up if environment is CIRCLE CI
-if os.environ.get("CIRCLECI", None):
-    # replace environment variables with OPENCI variables
-    for key, value in config.items():
-        if key.startswith("CI_"):
-            config[key.replace("CI_", "")] = value
-
-# check mandatory fields
 mandatory_fields = ["POSTGRES_DB",
 "POSTGRES_HOST",
 "POSTGRES_USER",
@@ -42,6 +34,13 @@ mandatory_fields = ["POSTGRES_DB",
 "SECRET_KEY",
 "ALGORITHM"]
 
+# check up if environment dictates something else
+# with the values for the environment
+for key, value in os.environ.items:
+    if key in mandatory_fields:
+        config[key] = value
+
+# check mandatory fields
 missing_fields = []
 
 for mandatory_field in mandatory_fields:
