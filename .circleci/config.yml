@@ -16,10 +16,10 @@ jobs:
       - run: |
           psql --version
       - run: |
-          echo $POSTGRES_DB
-          echo $POSTGRES_HOST
-          echo $POSTGRES_PASSWORD	
-          echo $POSTGRES_USER
+          echo ${POSTGRES_DB}
+          echo ${POSTGRES_HOST}
+          echo ${POSTGRES_PASSWORD}
+          echo ${POSTGRES_USER}
       - run:
           name: make venv
           command: make venv_create
