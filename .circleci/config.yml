@@ -20,7 +20,8 @@ jobs:
       - run: 
           command: | 
             echo ${TEST}
-            echo 'export TEST=overwritten' >> $BASH_ENV
+            echo 'export TEST2=overwritten' >> $BASH_ENV
+            echo ${TEST2}
             echo ${TEST}
           environment:
             TEST: environment_TEST
