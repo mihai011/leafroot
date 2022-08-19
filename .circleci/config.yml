@@ -17,11 +17,18 @@ jobs:
       - run:
           name: wait for db
           command: dockerize -wait tcp://localhost:5432 -timeout 1m
+      - run: 
+          command: | 
+            echo ${TEST}
+            echo 'export TEST=overwritten' >> $BASH_ENV
+            echo ${TEST}
+          environment:
+            TEST: environment_TEST
       - run:
           name: Run tests
           command: make test
 
 workflows:
-  sample: 
+  buld-and-test: 
     jobs:
       - build-and-test
