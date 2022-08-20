@@ -1,6 +1,8 @@
 import urllib
 from aiohttp import ClientSession
 
+from cache import testproof_cache
+
 async def get_http_session():
     """
     yields an async http session
@@ -49,7 +51,7 @@ async def make_api_request(session, content):
     return response
 
 
-
+@testproof_cache
 async def make_get_request(session, url, headers):
     """
     Makes a http request to an url with GET method
@@ -66,6 +68,7 @@ async def make_get_request(session, url, headers):
     async with session.get(url, headers=headers) as response:
 
         return await response.text()
+
 
 async def make_post_request(session, url, body, headers):
     """

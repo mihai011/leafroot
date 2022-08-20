@@ -20,7 +20,7 @@ if os.environ['ENV'] == "dev":
         print("FATAL! Environment file not present! Try a '.env' in the root of the project!")
         sys.exit(1)
 
-
+config['ENVIRONMENT'] = os.environ['ENV']
 # check up if environment is production
 if os.environ['ENV'] == "prod":
     # retrieve secrets frome external api's here

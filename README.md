@@ -13,10 +13,11 @@ new applications.
         - asynchronous and parallel tests 
     2. Alembic made migrations for the database.
     3. Docker containers and local environment already set up.
-    4. Circle CI config for testing implemented.
-    5. TODO: Circle CI pipeline for fast deployment to AWS, DETA and Heroku.
-    6. TODO: connect NO-SQL databases.
-    7. TODO: continue implement features of FAST-API to this project and exemplify them.
+    4. TODO: Add Redis, Mongo and other NO-SQLs and Apache Kafka to app.
+    5. Circle CI config for testing implemented.
+    6. TODO: Circle CI pipeline for fast deployment to AWS, DETA and Heroku.
+    7. TODO: connect NO-SQL databases.
+    8. TODO: continue implement features of FAST-API to this project and exemplify them.
     
 
 ## Project environment set up (for vscode and docker users)

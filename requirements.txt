@@ -73,3 +73,6 @@ watchgod
 websockets
 wrapt
 yarl
+aioredis
+fastapi-cache2[redis]
+fastapi-cache2[memcache]

@@ -30,6 +30,13 @@ services:
     networks:
       - shared_network
 
+  redis:
+    image: redis:latest
+    container_name: redis
+    hostname: ${REDIS_HOST}
+    networks:
+      - shared_network
+
   phppgadmin:
     image: docker.io/bitnami/phppgadmin
     ports:
