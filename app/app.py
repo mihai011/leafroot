@@ -27,7 +27,6 @@ app.include_router(api_router)
 initialize_cache()
 
 
-
 @app.middleware("http")
 async def add_time_headers(request: Request, call_next):
     """
@@ -39,4 +38,3 @@ async def add_time_headers(request: Request, call_next):
     process_time = time.time() - start_time
     response.headers["X-Process-Time"] = str(process_time)
     return response
-

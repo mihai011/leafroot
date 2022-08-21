@@ -26,7 +26,7 @@ test:
 	$(ACTIVATE_VENV) && ENV=dev pytest tests/
 
 lint: 
-	$(ACTIVATE_VENV) &&pylint $(DIR_ARGS)
+	$(ACTIVATE_VENV) && pylint $(DIR_ARGS)
 
 format: 
 	$(ACTIVATE_VENV) && black $(DIR_ARGS)
