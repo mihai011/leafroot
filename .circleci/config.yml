@@ -9,8 +9,6 @@ jobs:
     steps:
       - checkout
       - run: whoami
-      - run: |
-          psql --version
       - run:
           name: make venv
           command: make venv_create
