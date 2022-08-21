@@ -51,7 +51,7 @@ async def make_api_request(session, content):
     return response
 
 
-@testproof_cache
+@testproof_cache(expire=1)
 async def make_get_request(session, url, headers):
     """
     Makes a http request to an url with GET method
