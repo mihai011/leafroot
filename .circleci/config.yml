@@ -6,6 +6,7 @@ jobs:
     docker:
       - image: cimg/python:3.9.7
       - image: cimg/postgres:14.2
+      - image: cimg/redis:latest
     steps:
       - checkout
       - run: whoami

@@ -1,5 +1,5 @@
 ACTIVATE_VENV=. venv/bin/activate
-DIR_ARGS = app/ controllers/ data/ tests/ scripts/ utils/
+DIR_ARGS = app/ controllers/ data/ tests/ scripts/ utils/ cache/
 
 CORES=`nproc`
 MANUAL_CORES=4
@@ -7,17 +7,18 @@ MANUAL_CORES=4
 
 venv_create: requirements.txt
 	python3 -m venv venv
-	$(ACTIVATE_VENV) &&  pip install -r requirements.txt
+	$(ACTIVATE_VENV) && pip install --upgrade pip
+	$(ACTIVATE_VENV) && pip install --no-cache-dir -r requirements.txt
+	$(ACTIVATE_VENV) && pip freeze > current_packages_versions.txt
 
 venv_delete:
 	rm -rf venv/
 
-venv_update:
-	$(ACTIVATE_VENV) && pip3 list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1 | xargs -n1 pip3 install -U 
-	pip freeze > requirements.txt
+venv_update: venv_delete
+	make venv_create
 	
 typehint: 
-	$(ACTIVATE_VENV) &&mypy $(DIR_ARGS)
+	$(ACTIVATE_VENV) && mypy $(DIR_ARGS)
 
 test_parallel: 
 	$(ACTIVATE_VENV) && ENV=dev pytest -n $(MANUAL_CORES) tests/
