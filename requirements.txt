@@ -31,6 +31,7 @@ isort
 lazy-object-proxy
 mccabe
 multidict
+mypy
 mypy-extensions
 orjson
 packaging
@@ -76,3 +77,4 @@ yarl
 aioredis
 fastapi-cache2[redis]
 fastapi-cache2[memcache]
+pre-commit

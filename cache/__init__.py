@@ -6,6 +6,7 @@ from fastapi_cache.backends.redis import RedisBackend
 from fastapi_cache.backends.inmemory import InMemoryBackend
 from fastapi_cache.decorator import cache
 
+
 def initialize_cache():
     cache_backend = InMemoryBackend
     cache_source = None
@@ -24,16 +25,14 @@ def initialize_cache():
 
 
 def testproof_cache(*cache_args, **cache_kargs):
-
     def inner(function):
-
         def wrapper(*args, **kwargs):
 
-            if config['ENVIRONMENT'] == "dev":
+            if config["ENVIRONMENT"] == "dev":
                 return function(*args, **kwargs)
 
             return cache(*cache_args, **cache_kargs)(function)(*args, **kwargs)
-        
+
         return wrapper
 
     return inner
