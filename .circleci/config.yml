@@ -2,11 +2,11 @@ version: 2.1
 orbs:
   python: circleci/python@1.5.0
 jobs:
-  build-and-test: 
+  build-and-test:
     docker:
       - image: cimg/python:3.9.7
       - image: cimg/postgres:14.2
-      - image: cimg/redis:latest
+      - image: cimg/redis:6.2.6
     steps:
       - checkout
       - run: whoami
@@ -21,6 +21,6 @@ jobs:
           command: make test_parallel
 
 workflows:
-  buld-and-test: 
+  buld-and-test:
     jobs:
       - build-and-test
