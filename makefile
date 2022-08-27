@@ -21,10 +21,10 @@ venv_update: venv_delete
 typehint:
 	$(ACTIVATE_VENV) && mypy $(DIR_ARGS)
 
-test_parallel:
+test_parallel: start_celery_worker
 	$(ACTIVATE_VENV) && ENV=dev pytest -n $(MANUAL_CORES) tests/
 
-test:
+test: start_celery_worker
 	$(ACTIVATE_VENV) && ENV=dev pytest tests/
 
 lint:
@@ -46,7 +46,7 @@ start_development:
 	$(ACTIVATE_VENV) && ENV=dev uvicorn app.app:app --host 0.0.0.0 --reload
 
 start_celery_worker:
-	$(ACTIVATE_VENV) && ENV=dev celery -A celery_worker worker --loglevel=info
+	$(ACTIVATE_VENV) && ENV=dev celery -A celery_worker worker --loglevel=info --detach
 
 start_db:
 	docker-compose up -d db
