@@ -1,9 +1,11 @@
 version: "3.7"
 
 services:
+
   backend:
     build:
       context: .
+      dockerfile: Dockerfile-dev
     image: backend
     container_name: backend
     hostname: backend
@@ -16,6 +18,22 @@ services:
       sh -c "sleep infinity "
     networks:
       - shared_network
+
+  celery_worker:
+    build:
+      context: .
+      dockerfile: Dockerfile-dev
+    image: celery_worker
+    container_name: celery_worker
+    hostname: celery_worker
+    restart: on-failure
+    volumes:
+      - .:/workspace
+    command: >
+      sh -c "make start_celery_worker"
+    networks:
+      - shared_network
+
 
   db:
     image: postgres:10-alpine

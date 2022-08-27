@@ -45,6 +45,9 @@ start_production: venv_create
 start_development:
 	$(ACTIVATE_VENV) && ENV=dev uvicorn app.app:app --host 0.0.0.0 --reload
 
+start_celery_worker:
+	$(ACTIVATE_VENV) && ENV=dev celery -A celery_worker worker --loglevel=info
+
 start_db:
 	docker-compose up -d db
 
