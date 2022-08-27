@@ -21,6 +21,9 @@ jobs:
           name: make venv
           command: make venv_create
       - run:
+          name: make venv
+          command: apt install moreutils -y
+      - run:
           name: Run tests
           command: make test_parallel
 
