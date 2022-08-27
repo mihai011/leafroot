@@ -17,6 +17,9 @@ jobs:
           name: wait for db
           command: dockerize -wait tcp://localhost:5432 -timeout 1m
       - run:
+          name: wait for redis
+          command: dockerize -wait tcp://localhost:6379 -timeout 1m
+      - run:
           name: Run tests
           command: make test_parallel
 
