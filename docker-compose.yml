@@ -12,7 +12,7 @@ services:
       - '127.0.0.1:8000:8000'
     volumes:
       - .:/workspace
-    command: > 
+    command: >
       sh -c "sleep infinity "
     networks:
       - shared_network
@@ -37,14 +37,21 @@ services:
     networks:
       - shared_network
 
+  rabbitmq:
+    image: rabbitmq:latest
+    container_name: rabbitmq
+    hostname: ${RABBITMQ_HOST}
+    networks:
+      - shared_network
+
   phppgadmin:
     image: docker.io/bitnami/phppgadmin
     ports:
         - '127.0.0.1:8081:8080'
     volumes:
         - pgadmin:/var/lib/pgadmin
-    environment: 
-        - DATABASE_HOST=db
+    environment:
+        - DATABASE_HOST=${POSTGRES_HOST}
     depends_on:
         - db
     networks:
