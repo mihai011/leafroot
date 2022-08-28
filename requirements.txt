@@ -1,4 +1,5 @@
 aiohttp
+aioredis
 aioresponses
 aiosignal
 anyio
@@ -7,7 +8,9 @@ astroid
 async-timeout
 asyncpg
 attrs
+bandit
 black
+celery
 certifi
 cffi
 charset-normalizer
@@ -18,6 +21,9 @@ dill
 ecdsa
 execnet
 fastapi
+fastapi-cache2[memcache]
+fastapi-cache2[redis]
+flower
 frozenlist
 greenlet
 gunicorn
@@ -27,6 +33,7 @@ httptools
 httpx
 idna
 iniconfig
+ipython
 isort
 lazy-object-proxy
 mccabe
@@ -39,6 +46,7 @@ passlib
 pathspec
 platformdirs
 pluggy
+pre-commit
 psycopg2
 py
 pyasn1
@@ -74,10 +82,3 @@ watchgod
 websockets
 wrapt
 yarl
-aioredis
-fastapi-cache2[redis]
-fastapi-cache2[memcache]
-pre-commit
-celery
-ipython
-flower

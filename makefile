@@ -56,5 +56,8 @@ stop_celery_worker:
 start_db:
 	docker-compose up -d db
 
+bandit:
+	$(ACTIVATE_VENV) && bandit -r $(DIR_ARGS)
+
 soft_checklist: typehint coverage lint
 hard_checklist: format lint typehint test coverage
