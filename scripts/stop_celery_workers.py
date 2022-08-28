@@ -5,8 +5,7 @@ import subprocess
 
 
 def get_pids(command):
-    """
-    Return list of pids of process ids.
+    """Return list of pids of process ids.
 
     Params:
         command: os command that must return each pid on a line
@@ -21,8 +20,7 @@ def get_pids(command):
 
 
 def close_local_processes(pids):
-    """
-    Receives a list of pids and kills the processes.
+    """Receives a list of pids and kills the processes.
 
     Params:
         pids: list of pids

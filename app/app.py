@@ -5,7 +5,7 @@ Here you include the routers for the application and middleware used.
 
 import time
 
-from fastapi import FastAPI, APIRouter, Request
+from fastapi import FastAPI, Request
 
 from controllers.users_controllers import user_router
 from controllers.base_controllers import base_router
@@ -17,7 +17,6 @@ from cache import initialize_cache
 
 app = FastAPI()
 
-general_router = APIRouter()
 
 app.include_router(user_router)
 app.include_router(atom_router)
