@@ -4,7 +4,9 @@ import sys
 from dotenv import dotenv_values
 
 if "ENV" not in os.environ:
-    print("FATAL! Environment variable not set up! Helping values: 'prod' or 'dev'")
+    print(
+        "FATAL! Environment variable not set up! Helping values: 'prod' or 'dev'"
+    )
     sys.exit(1)
 
 if os.environ["ENV"] not in ["dev", "prod"]:
@@ -29,9 +31,6 @@ config["ENVIRONMENT"] = os.environ["ENV"]
 if os.environ["ENV"] == "prod":
     # retrieve secrets frome external api's here
     pass
-
-CELERY_BROKER_URL = "amqp://{}:5672".format(config["RABBITMQ_HOST"])
-CELERY_RESULT_BACKEND = "redis://{}:6379".format(config["REDIS_HOST"])
 
 mandatory_fields = [
     "POSTGRES_DB",
@@ -65,3 +64,6 @@ if missing_fields:
         "variables are missing:\n{}".format(missing_fields)
     )
     os._exit(1)
+
+CELERY_BROKER_URL = "amqp://{}:5672".format(config["RABBITMQ_HOST"])
+CELERY_RESULT_BACKEND = "redis://{}:6379".format(config["REDIS_HOST"])
