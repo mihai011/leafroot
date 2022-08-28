@@ -22,6 +22,11 @@ async def test_small_task(session):
     task_metadata = json.loads(response.text)
     task_id = task_metadata["item"]["task_id"]
     redis = aioredis.from_url(CELERY_RESULT_BACKEND)
-    value = await redis.get("celery-task-meta-" + task_id)
-    value = json.loads(value)["result"]
+    while True:
+        value = await redis.get("celery-task-meta-" + task_id)
+        if not value:
+            continue
+        value = json.loads(value)["result"]
+        break
+
     assert value == {"small_task": 1}
