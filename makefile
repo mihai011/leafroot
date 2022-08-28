@@ -38,9 +38,11 @@ format:
 
 coverage:
 	$(ACTIVATE_VENV) && ENV=dev pytest --cov-report term-missing --cov=.  tests/
+	make stop_celery_worker
 
 coverage_parallel:
-	$(ACTIVATE_VENV) && ENV=dev pytest --cov-report term-missing --cov=. -n $(CORES) tests/
+	$(ACTIVATE_VENV) && ENV=dev pytest --cov-report term-missing --cov=. -n $(MANUAL_CORES) tests/
+	make stop_celery_worker
 
 start_production: venv_create
 	$(ACTIVATE_VENV) && ENV=prod gunicorn app.app:app --workers $(CORES) -k uvicorn.workers.UvicornH11Worker --bind 0.0.0.0
