@@ -62,5 +62,8 @@ bandit:
 pydocstyle:
 	$(ACTIVATE_VENV) && pydocstyle  $(DIR_ARGS)
 
+doc8:
+	$(ACTIVATE_VENV) && doc8 $(DIR_ARGS)
+
 soft_checklist: typehint coverage lint
 hard_checklist: format lint typehint test coverage
