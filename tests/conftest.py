@@ -64,7 +64,7 @@ def temp_db(test_function):
 
         kwargs["session"] = await override_get_db_simple()
 
-        # get to use SessionLocalGenerator received from fixture_Force db change
+        # get to use SessionLocalGenerator received from fixture_Force db
         app.dependency_overrides[get_session] = override_get_db
         # Run tests
         await test_function(*args, **kwargs)

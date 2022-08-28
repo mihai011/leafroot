@@ -71,5 +71,11 @@ doc8:
 docformatter:
 	$(ACTIVATE_VENV) && docformatter --in-place -r $(DIR_ARGS)
 
+pycodestyle:
+	$(ACTIVATE_VENV) && pycodestyle -r $(DIR_ARGS)
+
+pydocstyle:
+	$(ACTIVATE_VENV) && pydocstyle --ignore-decorators='.*\.' $(DIR_ARGS)
+
 soft_checklist: typehint coverage lint
 hard_checklist: format lint typehint test coverage

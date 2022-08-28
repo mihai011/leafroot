@@ -77,12 +77,12 @@ class ExtraBase(SerializerMixin):
     updated_at = Column(DateTime, default=datetime.now())
 
     def serialize(self):
-        """base serializer method."""
+        """Base serializer method."""
         return self.to_dict()
 
     @classmethod
     async def AddNew(cls, session, args):
-        """add object method."""
+        """Add object method."""
 
         obj = cls(**args)
         session.add(obj)

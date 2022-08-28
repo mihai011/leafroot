@@ -2,8 +2,8 @@
 
 from celery import uuid
 from fastapi import APIRouter, Depends, Request
+from fastapi.responses import ORJSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
-
 
 from data import get_session
 from controllers import auth_decorator, create_response
@@ -18,8 +18,8 @@ task_router = APIRouter(prefix="/tasks", tags=["tasks"])
 async def add_simple_task(
     request: Request,
     session: AsyncSession = Depends(get_session),
-):
-    """executes simple task."""
+) -> ORJSONResponse:
+    """Execute simple task."""
     task_id = uuid()
     response = small_task.apply_async((), task_id=task_id)
 
