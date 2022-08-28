@@ -51,7 +51,7 @@ start_celery_worker:
 	$(ACTIVATE_VENV) && ENV=dev celery -A celery_worker worker --loglevel=info --detach
 
 stop_celery_worker:
-	ps auxww | grep 'celery_worker' | grep -v grep | awk '{print $$2}' | xargs kill -9
+	$(ACTIVATE_VENV) && python scripts/stop_celery_workers.py
 
 start_db:
 	docker-compose up -d db

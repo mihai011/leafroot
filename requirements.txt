@@ -79,3 +79,4 @@ fastapi-cache2[redis]
 fastapi-cache2[memcache]
 pre-commit
 celery
+ipython
