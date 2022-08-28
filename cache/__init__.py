@@ -1,13 +1,22 @@
+"""
+Modules that contains cache related functions.
+"""
+
+
 import aioredis
-from config import config
 
 from fastapi_cache import FastAPICache
 from fastapi_cache.backends.redis import RedisBackend
 from fastapi_cache.backends.inmemory import InMemoryBackend
 from fastapi_cache.decorator import cache
 
+from config import config
+
 
 def initialize_cache():
+    """
+    Initializes cache with an available backend.
+    """
     cache_backend = InMemoryBackend
     cache_source = None
 
@@ -25,6 +34,10 @@ def initialize_cache():
 
 
 def testproof_cache(*cache_args, **cache_kargs):
+    """
+    Test proof cache to avoid cache when testing.
+    """
+
     def inner(function):
         def wrapper(*args, **kwargs):
 

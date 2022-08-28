@@ -2,11 +2,7 @@
 Basic controllers for tasks
 """
 
-from typing import Dict
-import time
-
 from fastapi import APIRouter, Depends, Request
-from fastapi.responses import ORJSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from data import get_session
@@ -27,4 +23,5 @@ async def add_simple_task(
     executes simple task
     """
     small_task.delay()
+    await session.close()
     return create_response("Task put on Queue!", 200, True)

@@ -36,5 +36,6 @@ async def api_request(
         return create_response("Headers not found in payload!", 400)
 
     response = await make_api_request(http_session, content)
+    await session.close()
 
     return create_response("api called", 200, response)
