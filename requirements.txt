@@ -2,6 +2,7 @@ aiohttp
 aioredis
 aioresponses
 aiosignal
+alembic
 anyio
 asgiref
 astroid
@@ -54,7 +55,6 @@ py
 pyasn1
 pycparser
 pydantic
-pydocstyle
 pylint
 pyparsing
 pytest

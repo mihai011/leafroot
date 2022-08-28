@@ -29,11 +29,6 @@ repos:
             args: [-c, pyproject.toml]
             additional_dependencies: ['bandit[toml]']
 
-    # - repo: https://github.com/PyCQA/pydocstyle
-    #   rev: 6.1.1
-    #   hooks:
-    #       - id: pydocstyle
-
     - repo: https://github.com/syntaqx/git-hooks
       rev: v0.0.17
       hooks:

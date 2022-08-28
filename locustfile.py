@@ -1,6 +1,4 @@
-"""
-Some docstring
-"""
+"""Some docstring."""
 
 from locust import HttpUser, task
 
