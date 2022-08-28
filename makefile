@@ -59,5 +59,8 @@ start_db:
 bandit:
 	$(ACTIVATE_VENV) && bandit -r $(DIR_ARGS)
 
+pydocstyle:
+	$(ACTIVATE_VENV) && pydocstyle  $(DIR_ARGS)
+
 soft_checklist: typehint coverage lint
 hard_checklist: format lint typehint test coverage

@@ -18,6 +18,7 @@ click
 coverage
 cryptography
 dill
+doc8
 ecdsa
 execnet
 fastapi
@@ -52,6 +53,7 @@ py
 pyasn1
 pycparser
 pydantic
+pydocstyle
 pylint
 pyparsing
 pytest
