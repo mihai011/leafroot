@@ -26,6 +26,7 @@ async def create_atom(
     params = await parse(request)
     atom = await Atom.AddNew(session, params)
 
+    await session.close()
     return create_response("Atom created succesfully!", atom.serialize(), 200)
 
 
@@ -41,6 +42,7 @@ async def add_proton(
     params = await parse(request)
     proton = await Proton.AddNew(session, params)
 
+    await session.close()
     return create_response("Proton created succesfully!", proton.serialize(), 200)
 
 
@@ -59,6 +61,7 @@ async def get_proton(
     protons = await Proton.GetByArgs(session, params)
     protons = [proton.serialize() for proton in protons]
 
+    await session.close()
     return create_response("Protons fetched!", 200, protons)
 
 
@@ -74,6 +77,7 @@ async def add_neutron(
     params = await parse(request)
     neutron = await Neutron.AddNew(session, params)
 
+    await session.close()
     return create_response("Neutron created succesfully!", 200, neutron.serialize())
 
 
@@ -92,6 +96,7 @@ async def get_neutron(
     neutrons = await Neutron.GetByArgs(session, params)
     neutrons = [neutron.serialize() for neutron in neutrons]
 
+    await session.close()
     return create_response("Protons fetched!", 200, neutrons)
 
 
@@ -108,6 +113,7 @@ async def add_electron(
     electron = await Electron.AddNew(session, params)
     # await session.close()
 
+    await session.close()
     return create_response("Electron created succesfully!", 200, electron.serialize())
 
 
@@ -126,4 +132,5 @@ async def get_electron(
     electrons = await Electron.GetByArgs(session, params)
     electrons = [electron.serialize() for electron in electrons]
 
+    await session.close()
     return create_response("Protons fetched!", 200, electrons)

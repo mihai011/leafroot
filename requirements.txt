@@ -80,3 +80,4 @@ fastapi-cache2[memcache]
 pre-commit
 celery
 ipython
+flower

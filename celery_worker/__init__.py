@@ -1,13 +1,28 @@
-from celery import Celery
-from config import config
+"""
+Module for celery task queue related functionality
+"""
 
-CELERY_BROKER_URL = "amqp://{}:5672".format(config["RABBITMQ_HOST"])
-CELERY_RESULT_BACKEND = "redis://{}:6379".format(config["REDIS_HOST"])
+from uuid import UUID
+from celery import Celery
+from celery.result import AsyncResult
+from config import CELERY_RESULT_BACKEND, CELERY_BROKER_URL
+
 
 app = Celery(__name__, backend=CELERY_RESULT_BACKEND, broker=CELERY_BROKER_URL)
 
 
+def create_task_metadata(result: AsyncResult, task_id: UUID):
+    """
+    Generates metadata about the task
+    """
+
+    metadata = result._get_task_meta()
+    metadata["task_id"] = task_id
+
+    return metadata
+
+
 @app.task
 def small_task(name="small_task"):
-    print("Small Task")
+
     return {"small_task": 1}

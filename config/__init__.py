@@ -30,6 +30,9 @@ if os.environ["ENV"] == "prod":
     # retrieve secrets frome external api's here
     pass
 
+CELERY_BROKER_URL = "amqp://{}:5672".format(config["RABBITMQ_HOST"])
+CELERY_RESULT_BACKEND = "redis://{}:6379".format(config["REDIS_HOST"])
+
 mandatory_fields = [
     "POSTGRES_DB",
     "POSTGRES_HOST",

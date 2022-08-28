@@ -31,6 +31,8 @@ async def create_users(
     if params:
         return create_response("Do not send params for this endpoint!", 400)
     await create_bulk_users(quantity, session)
+
+    await session.close()
     return create_response("Users created succesfully!", 200)
 
 
@@ -49,6 +51,7 @@ async def create_user(
     except Exception as e:
         return create_response(str(e), 400)
 
+    await session.close()
     return create_response("User created!", 200, user.serialize())
 
 
@@ -66,6 +69,7 @@ async def get_user(
     if not user:
         return create_response("User not found!", 400)
 
+    await session.close()
     return create_response("User fetched!", 200, user.serialize())
 
 
@@ -93,6 +97,7 @@ async def login(params: Dict[str, str], session: AsyncSession = Depends(get_sess
             "User logged in!", 200, {"token": token, "user": user.serialize()}
         )
 
+    await session.close()
     return create_response("Incorrect password!", 400)
 
 
@@ -120,4 +125,5 @@ async def sign_up(params: Dict[str, str], session: AsyncSession = Depends(get_se
     except Exception as user_error:
         return create_response(str(user_error), 400)
 
+    await session.close()
     return create_response("User created!", 200, user.serialize())
