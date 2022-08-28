@@ -1,6 +1,4 @@
-"""
-Basic controllers for users
-"""
+"""Basic controllers for users."""
 
 from typing import Dict
 
@@ -24,9 +22,7 @@ async def create_users(
     request: Request,
     session: AsyncSession = Depends(get_session),
 ):
-    """
-    creates simple users in the database
-    """
+    """creates simple users in the database."""
     params = await parse(request)
     if params:
         return create_response("Do not send params for this endpoint!", 400)
@@ -42,9 +38,7 @@ async def create_user(
     request: Request,
     session: AsyncSession = Depends(get_session),
 ):
-    """
-    creating a simple user
-    """
+    """creating a simple user."""
     params = await parse(request)
     try:
         user = await User.AddNew(session, params)
@@ -60,9 +54,7 @@ async def create_user(
 async def get_user(
     id_user: int, request: Request, session: AsyncSession = Depends(get_session)
 ) -> ORJSONResponse:
-    """
-    get user by id
-    """
+    """get user by id."""
     await parse(request)
     user = await User.GetById(session, id_user)
 
@@ -75,9 +67,7 @@ async def get_user(
 
 @user_router.post("/login")
 async def login(params: Dict[str, str], session: AsyncSession = Depends(get_session)):
-    """
-    login controller for a user
-    """
+    """login controller for a user."""
 
     if "email" not in params:
         return create_response("Email is required", 400)
@@ -103,9 +93,7 @@ async def login(params: Dict[str, str], session: AsyncSession = Depends(get_sess
 
 @user_router.post("/sign-up")
 async def sign_up(params: Dict[str, str], session: AsyncSession = Depends(get_session)):
-    """
-    Sign-up controller for the user
-    """
+    """Sign-up controller for the user."""
 
     if "password" not in params:
         return create_response("Password is not present", 400)

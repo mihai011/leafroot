@@ -1,6 +1,4 @@
-"""
-Module for testing api controller
-"""
+"""Module for testing api controller."""
 import pytest
 from aioresponses import aioresponses
 
@@ -12,9 +10,7 @@ from tests.conftest import temp_db
 @pytest.mark.asyncio
 @temp_db
 async def test_api(session):
-    """
-    test api request controller
-    """
+    """test api request controller."""
 
     ds = DataSource(session)
     await ds.make_user()

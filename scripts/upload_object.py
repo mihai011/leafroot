@@ -1,9 +1,4 @@
-"""
-python3 upload_objects.py
-location_live.json
-https://api.develop.wisor.me/locations
-<token>
-"""
+"""Python3 upload_objects.py."""
 
 import json
 import sys
@@ -13,10 +8,7 @@ from tqdm.asyncio import tqdm
 
 
 async def upload_object(session, obj, link, headers):
-    """
-    upload object to url
-    """
-
+    """Upload object to url."""
     try:
         async with session.post(link, json=obj, headers=headers, timeout=2000) as r:
             if r.status != 200:
@@ -28,9 +20,7 @@ async def upload_object(session, obj, link, headers):
 
 
 async def upload_all(objects, link, headers):
-    """
-    upload asynchronously all objects in the list
-    """
+    """Upload asynchronously all objects in the list."""
     async with aiohttp.ClientSession() as session:
         while True:
             tasks = []

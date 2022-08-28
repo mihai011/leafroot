@@ -1,6 +1,4 @@
-"""
-Atom class related models
-"""
+"""Atom class related models."""
 
 from sqlalchemy import Column, Float, Integer, ForeignKey
 from sqlalchemy.orm import relationship
@@ -12,9 +10,7 @@ from data.models import ExtraBase, Base
 
 
 class Atom(Base, ExtraBase):
-    """
-    Atom class represents
-    """
+    """Atom class represents."""
 
     __tablename__ = "atoms"
 
@@ -54,9 +50,7 @@ class Atom(Base, ExtraBase):
 
 
 class Proton(Base, ExtraBase):
-    """
-    class that represents a proton
-    """
+    """class that represents a proton."""
 
     __tablename__ = "protons"
 
@@ -65,9 +59,7 @@ class Proton(Base, ExtraBase):
 
 
 class Neutron(Base, ExtraBase):
-    """
-    class that represents a neutron
-    """
+    """class that represents a neutron."""
 
     __tablename__ = "neutrons"
 
@@ -76,9 +68,7 @@ class Neutron(Base, ExtraBase):
 
 
 class Electron(Base, ExtraBase):
-    """
-    class that represents an electron
-    """
+    """class that represents an electron."""
 
     __tablename__ = "electrons"
 

@@ -17,11 +17,6 @@ repos:
       hooks:
           - id: black
 
-    - repo: https://github.com/asottile/dead
-      rev: v1.5.0
-      hooks:
-          - id: dead
-
     - repo: https://github.com/jumanjihouse/pre-commit-hook-yamlfmt
       rev: 0.2.1 # or other specific tag
       hooks:
@@ -31,16 +26,13 @@ repos:
       rev: 1.7.4
       hooks:
           - id: bandit
+            args: [-c, pyproject.toml]
+            additional_dependencies: ['bandit[toml]']
 
-    - repo: https://github.com/PyCQA/pydocstyle
-      rev: 6.1.1
-      hooks:
-          - id: pydocstyle
-
-    - repo: https://github.com/PyCQA/prospector
-      rev: 1.7.5   # The version of Prospector to use, if not 'master' for latest
-      hooks:
-          - id: prospector
+    # - repo: https://github.com/PyCQA/pydocstyle
+    #   rev: 6.1.1
+    #   hooks:
+    #       - id: pydocstyle
 
     - repo: https://github.com/syntaqx/git-hooks
       rev: v0.0.17

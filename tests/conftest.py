@@ -1,8 +1,5 @@
-"""
-Configuration module for testing
-"""
-import random
-import string
+"""Configuration module for testing."""
+from uuid import uuid4
 
 import pytest
 
@@ -19,11 +16,8 @@ from app.app import app
 
 @pytest.fixture
 def SessionLocalGenerator() -> None:
-    """
-    settings of test database
-    """
-    letters = string.ascii_lowercase
-    name = "".join(random.choice(letters) for i in range(10))
+    """Set of test database."""
+    name = uuid4()
     DB_URL_BASE_SYNC = "{}{}".format(SQLALCHEMY_DATABASE_URL_BASE_SYNC, name)
     DB_URL_BASE_ASYNC = "{}{}".format(SQLALCHEMY_DATABASE_URL_BASE_ASYNC, name)
     engine_sync = create_engine(DB_URL_BASE_SYNC)
@@ -50,9 +44,7 @@ def SessionLocalGenerator() -> None:
 
 
 def temp_db(test_function):
-    """
-    pytest fixture to create a temp date
-    """
+    """Pytest fixture to create a temp date."""
 
     async def func(SessionLocalGenerator, *args, **kwargs):
         # Sessionmaker instance to connect to test DB

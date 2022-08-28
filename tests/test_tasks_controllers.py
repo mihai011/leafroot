@@ -1,6 +1,4 @@
-"""
-tests for util functions
-"""
+"""tests for util functions."""
 
 import json
 import aioredis
@@ -12,9 +10,7 @@ from config import CELERY_RESULT_BACKEND
 
 @temp_db
 async def test_small_task(session):
-    """
-    test authenthication
-    """
+    """test authenthication."""
 
     ds = DataSource(session)
     await ds.make_user()

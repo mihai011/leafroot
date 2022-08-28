@@ -1,6 +1,4 @@
-"""
-Datasource module for testing
-"""
+"""Datasource module for testing."""
 from httpx import AsyncClient
 
 from app.app import app
@@ -8,21 +6,16 @@ from data import User
 
 
 class DataSource:
-    """
-    class for creating data sources on tests
-    """
+    """Class for creating data sources on tests."""
 
     def __init__(self, session):
-
+        """Datasource class constructor."""
         self.client = AsyncClient(app=app, base_url="http://test")
         self.headers = {}
         self.session = session
 
     async def make_user(self, received_args=None):
-        """
-        makes a default user
-        """
-
+        """Make a default user."""
         args = {"username": "Test_user", "email": "test@gmail.com", "password": "test"}
 
         if received_args:

@@ -1,6 +1,4 @@
-"""
-Used module related data
-"""
+"""Used module related data."""
 
 
 from sqlalchemy import Column, String
@@ -8,9 +6,7 @@ from data.models import ExtraBase, Base
 
 
 class User(Base, ExtraBase):
-    """
-    Class that resembles a user model
-    """
+    """Class that resembles a user model."""
 
     __tablename__ = "users"
 

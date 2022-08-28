@@ -1,30 +1,31 @@
+---
 version: 2.1
 orbs:
-  python: circleci/python@1.5.0
+    python: circleci/python@1.5.0
 jobs:
-  build-and-test:
-    docker:
-      - image: cimg/python:3.9.7
-      - image: cimg/postgres:14.2
-      - image: cimg/redis:6.2.6
-      - image: rabbitmq:latest
-    steps:
-      - checkout
-      - run: whoami
-      - run:
-          name: wait for db
-          command: dockerize -wait tcp://localhost:5432 -timeout 1m
-      - run:
-          name: wait for redis
-          command: dockerize -wait tcp://localhost:6379 -timeout 1m
-      - run:
-          name: make venv
-          command: make venv_create
-      - run:
-          name: Run tests
-          command: make test_parallel
+    build-and-test:
+        docker:
+            - image: cimg/python:3.9.7
+            - image: cimg/postgres:14.2
+            - image: cimg/redis:6.2.6
+            - image: rabbitmq:latest
+        steps:
+            - checkout
+            - run: whoami
+            - run:
+                  name: wait for db
+                  command: dockerize -wait tcp://localhost:5432 -timeout 1m
+            - run:
+                  name: wait for redis
+                  command: dockerize -wait tcp://localhost:6379 -timeout 1m
+            - run:
+                  name: make venv
+                  command: make venv_create
+            - run:
+                  name: Run tests
+                  command: make test_parallel
 
 workflows:
-  buld-and-test:
-    jobs:
-      - build-and-test
+    buld-and-test:
+        jobs:
+            - build-and-test

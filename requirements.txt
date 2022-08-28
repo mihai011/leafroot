@@ -19,6 +19,7 @@ coverage
 cryptography
 dill
 doc8
+docformatter
 ecdsa
 execnet
 fastapi
@@ -74,6 +75,7 @@ SQLAlchemy
 SQLAlchemy-serializer
 SQLAlchemy-Utils
 starlette
+toml
 tomli
 tomlkit
 tqdm

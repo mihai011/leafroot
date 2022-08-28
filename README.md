@@ -5,12 +5,12 @@ new applications.
 
 ## Features
 
-    1. Everything is asynchronous. Since pretty much all web applications are at their core I/O bound, this project makes 
-    it easier for new developers to read, understand and write 
+    1. Everything is asynchronous. Since pretty much all web applications are at their core I/O bound, this project makes
+    it easier for new developers to read, understand and write
     asynchronous code. And by "everything" I mean everything:
         - asynchronous controllers
         - asynchronous connections to a postgresql database
-        - asynchronous and parallel tests 
+        - asynchronous and parallel tests
     2. Alembic made migrations for the database.
     3. Docker containers and local environment already set up.
     4. TODO: Add Redis, Mongo and other NO-SQLs and Apache Kafka to app.
@@ -18,10 +18,10 @@ new applications.
     6. TODO: Circle CI pipeline for fast deployment to AWS, DETA and Heroku.
     7. TODO: connect NO-SQL databases.
     8. TODO: continue implement features of FAST-API to this project and exemplify them.
-    
+
 
 ## Project environment set up (for vscode and docker users)
-    
+
 
     1. Clone this repo in a directory..
     2. Open it in vscode.
@@ -31,9 +31,9 @@ new applications.
     6. Run the tests: "make test_simple" or "make test_parallel" for parallel tests
     7. Run the api server for production "make start_production" and "make start_development" for development purposes.
 
-## Programming norms 
+## Programming norms
 
-   1.Please add docstring on each new file, class, and functions to stipulate their purpose and functionality. 
+   1.Please add docstring on each new file, class, and functions to stipulate their purpose and functionality.
    An example for one is down below:
 
         ```
@@ -58,7 +58,7 @@ new applications.
     3. Use the following commands for some help:
        1. "make format" - formats your code using the "black" functionality
        2. "make typehint" - check for mis typing variables
-    4. Use the command "make coverage" or "make coverage_parallel" to 
+    4. Use the command "make coverage" or "make coverage_parallel" to
     verify what percentage of your code is checked, Push for 100%!
 
 # Create migration and apply them:

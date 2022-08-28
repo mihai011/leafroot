@@ -1,26 +1,20 @@
-"""
-Start of the controller module
-"""
-import random
+"""Start of the controller module."""
+
 import string
 from functools import wraps
 
 from fastapi.responses import ORJSONResponse
 
 from data import User
-from utils import get_password_hash, authenthicate_user
+from utils import get_password_hash, authenthicate_user, random_string
 
 
 def auth_decorator(controller):
-    """
-    authenthication decorator, query and payload parser
-    """
+    """Authenthication decorator, query and payload parser."""
 
     @wraps(controller)
     async def auth(*args, **kwargs):
-        """
-        function that gets token and adds session to the controller
-        """
+        """Function that gets token and adds session to the controller."""
         request = kwargs["request"]
         session = kwargs["session"]
 
@@ -38,21 +32,8 @@ def auth_decorator(controller):
     return auth
 
 
-def random_string():
-    """
-    makes a random string
-    """
-
-    return "".join(
-        random.choice(string.ascii_uppercase + string.digits) for _ in range(10)
-    )
-
-
 async def parse(request):
-    """
-    simple parser for request
-    """
-
+    """simple parser for request."""
     if request.method == "GET":
         args = request.query_params._dict
 
@@ -63,12 +44,8 @@ async def parse(request):
 
 
 def create_response(message: string, status: int, item=None) -> ORJSONResponse:
-    """
-    Receives a message parameter from which a reponse is created
-    and item from wich a dictionay is ORJSONResponse object
-    is made as response
-    """
-
+    """Receive a message parameter from which a reponse is created and item
+    from wich a dictionay is ORJSONResponse object is made as response."""
     data = {}
     data["message"] = message
     data["item"] = item
@@ -77,10 +54,7 @@ def create_response(message: string, status: int, item=None) -> ORJSONResponse:
 
 
 async def create_bulk_users(users, session):
-    """
-    creates a lot of users
-    """
-
+    """Creates a lot of users."""
     for _ in range(users):
 
         args = {}

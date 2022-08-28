@@ -1,6 +1,4 @@
-"""
-Basic controllers for tasks
-"""
+"""Basic controllers for tasks."""
 
 from celery import uuid
 from fastapi import APIRouter, Depends, Request
@@ -21,9 +19,7 @@ async def add_simple_task(
     request: Request,
     session: AsyncSession = Depends(get_session),
 ):
-    """
-    executes simple task
-    """
+    """executes simple task."""
     task_id = uuid()
     response = small_task.apply_async((), task_id=task_id)
 

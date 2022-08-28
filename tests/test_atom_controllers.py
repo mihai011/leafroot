@@ -1,6 +1,4 @@
-"""
-Module for testing particles controller
-"""
+"""Module for testing particles controller."""
 import pytest
 
 from tests import DataSource
@@ -10,9 +8,7 @@ from tests.conftest import temp_db
 @pytest.mark.asyncio
 @temp_db
 async def test_particles(session):
-    """
-    testing particles
-    """
+    """testing particles."""
 
     ds = DataSource(session)
     await ds.make_user()

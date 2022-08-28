@@ -1,6 +1,4 @@
-"""
-Module that creates different files for manual testing
-"""
+"""Module that creates different files for manual testing."""
 
 import json
 import random
@@ -8,9 +6,7 @@ import string
 
 
 def random_string():
-    """
-    generate random string
-    """
+    """Generate random string."""
     return "".join(
         random.choice(string.ascii_uppercase + string.digits) for _ in range(10)
     )

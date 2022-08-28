@@ -1,6 +1,4 @@
-"""
-api controllers
-"""
+"""api controllers."""
 from fastapi import Request
 from fastapi import APIRouter, Depends
 from fastapi.responses import ORJSONResponse
@@ -19,10 +17,7 @@ async def api_request(
     session=Depends(get_session),
     http_session=Depends(get_http_session),
 ) -> ORJSONResponse:
-    """
-    make a http request to an external api
-    """
-
+    """Make a http request to an external api."""
     content = await parse(request)
     if "url" not in content:
         return create_response("Url not found in payload!", 400)

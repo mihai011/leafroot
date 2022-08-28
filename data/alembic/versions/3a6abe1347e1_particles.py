@@ -1,9 +1,8 @@
-"""particles
+"""particles.
 
 Revision ID: 3a6abe1347e1
 Revises: f0447f3df18e
 Create Date: 2022-01-23 17:53:42.717637
-
 """
 from alembic import op
 import sqlalchemy as sa

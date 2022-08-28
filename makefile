@@ -1,5 +1,6 @@
 ACTIVATE_VENV=. venv/bin/activate
 DIR_ARGS = app/ controllers/ data/ tests/ scripts/ utils/ cache/
+DIR_NO_TESTS = app/ controllers/ data/ scripts/ utils/ cache/
 
 CORES=`nproc`
 MANUAL_CORES=4
@@ -57,13 +58,16 @@ start_db:
 	docker-compose up -d db
 
 bandit:
-	$(ACTIVATE_VENV) && bandit -r $(DIR_ARGS)
+	$(ACTIVATE_VENV) && bandit -c pyproject.toml -r $(DIR_NO_TESTS)
 
 pydocstyle:
 	$(ACTIVATE_VENV) && pydocstyle  $(DIR_ARGS)
 
 doc8:
 	$(ACTIVATE_VENV) && doc8 $(DIR_ARGS)
+
+docformatter:
+	$(ACTIVATE_VENV) && docformatter --in-place -r $(DIR_ARGS)
 
 soft_checklist: typehint coverage lint
 hard_checklist: format lint typehint test coverage

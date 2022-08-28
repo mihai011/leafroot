@@ -23,6 +23,6 @@ def create_task_metadata(result: AsyncResult, task_id: UUID):
 
 
 @app.task
-def small_task(name="small_task"):
+def small_task():
 
     return {"small_task": 1}

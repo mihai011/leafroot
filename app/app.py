@@ -1,7 +1,6 @@
-"""
-Main module imported in the project.
-Here you include the routers for the application
-and middleware used.
+"""Main module imported in the project.
+
+Here you include the routers for the application and middleware used.
 """
 
 import time
@@ -31,10 +30,7 @@ initialize_cache()
 
 @app.middleware("http")
 async def add_time_headers(request: Request, call_next):
-    """
-    Adds time headers to check the time spent on the particular request
-    """
-
+    """Add time headers to check the time spent on the particular request."""
     start_time = time.time()
     response = await call_next(request)
     process_time = time.time() - start_time

@@ -1,6 +1,4 @@
-"""
-atom controllers
-"""
+"""atom controllers."""
 from fastapi import Request
 from fastapi import APIRouter, Depends
 from fastapi.responses import ORJSONResponse
@@ -20,9 +18,7 @@ async def create_atom(
     request: Request,
     session: AsyncSession = Depends(get_session),
 ) -> ORJSONResponse:
-    """
-    Create atom here
-    """
+    """Create atom here."""
     params = await parse(request)
     atom = await Atom.AddNew(session, params)
 
@@ -36,9 +32,8 @@ async def add_proton(
     request: Request,
     session: AsyncSession = Depends(get_session),
 ) -> ORJSONResponse:
-    """
-    This controller creates a proton with the params received in the body
-    """
+    """This controller creates a proton with the params received in the
+    body."""
     params = await parse(request)
     proton = await Proton.AddNew(session, params)
 
@@ -52,9 +47,7 @@ async def get_proton(
     request: Request,
     session: AsyncSession = Depends(get_session),
 ) -> ORJSONResponse:
-    """
-    Getting protons based on params
-    """
+    """Getting protons based on params."""
 
     params = await parse(request)
     params["charge"] = float(params["charge"])
@@ -71,9 +64,8 @@ async def add_neutron(
     request: Request,
     session: AsyncSession = Depends(get_session),
 ) -> ORJSONResponse:
-    """
-    This controller creates a neutron with the params received in the body
-    """
+    """This controller creates a neutron with the params received in the
+    body."""
     params = await parse(request)
     neutron = await Neutron.AddNew(session, params)
 
@@ -87,9 +79,7 @@ async def get_neutron(
     request: Request,
     session: AsyncSession = Depends(get_session),
 ) -> ORJSONResponse:
-    """
-    Getting neutron based on params
-    """
+    """Getting neutron based on params."""
 
     params = await parse(request)
     params["charge"] = float(params["charge"])
@@ -106,9 +96,8 @@ async def add_electron(
     request: Request,
     session: AsyncSession = Depends(get_session),
 ):
-    """
-    This controller creates a electron with the params received in the body
-    """
+    """This controller creates a electron with the params received in the
+    body."""
     params = await parse(request)
     electron = await Electron.AddNew(session, params)
     # await session.close()
@@ -123,9 +112,7 @@ async def get_electron(
     request: Request,
     session: AsyncSession = Depends(get_session),
 ) -> ORJSONResponse:
-    """
-    Getting neutron based on params
-    """
+    """Getting neutron based on params."""
 
     params = await parse(request)
     params["charge"] = float(params["charge"])

@@ -1,6 +1,4 @@
-"""
-Scripts
-"""
+"""Scripts."""
 
 import os
 import subprocess
@@ -8,11 +6,11 @@ import subprocess
 
 def get_pids(command):
     """
-    Returns list of pids of
+    Return list of pids of process ids.
+
     Params:
         command: os command that must return each pid on a line
     """
-
     if not command:
         return []
 
@@ -24,11 +22,11 @@ def get_pids(command):
 
 def close_local_processes(pids):
     """
-    Receives a list of pids and kills the processes
+    Receives a list of pids and kills the processes.
+
     Params:
         pids: list of pids
     """
-
     if not pids:
         return False
 

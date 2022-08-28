@@ -1,6 +1,4 @@
-"""
-models init file
-"""
+"""models init file."""
 from datetime import datetime
 
 from sqlalchemy_serializer import SerializerMixin
@@ -57,13 +55,11 @@ engine = create_async_engine(
 async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 
 Base = declarative_base()
-secret = '$QmB*R>Nq!$.YdzkKvt{fBX7<Bmgm4~gy")&IthT+AtkA>/C@BkDyL0vRTraG"g'
+secret = config["SECRET"]
 
 
 async def get_session() -> AsyncSession:  # pragma: no cover
-    """
-    Yields an async session
-    """
+    """Yields an async session."""
 
     async with async_session() as session:
         yield session
@@ -72,25 +68,19 @@ async def get_session() -> AsyncSession:  # pragma: no cover
 
 
 class ExtraBase(SerializerMixin):
-    """
-    Extra base class used for child models
-    """
+    """Extra base class used for child models."""
 
     id = Column(Integer, primary_key=True)
     created_at = Column(DateTime, default=datetime.now())
     updated_at = Column(DateTime, default=datetime.now())
 
     def serialize(self):
-        """
-        base serializer method
-        """
+        """base serializer method."""
         return self.to_dict()
 
     @classmethod
     async def AddNew(cls, session, args):
-        """
-        add object method
-        """
+        """add object method."""
 
         obj = cls(**args)
         session.add(obj)
@@ -100,9 +90,7 @@ class ExtraBase(SerializerMixin):
 
     @classmethod
     async def GetAll(cls, session):
-        """
-        Get all objects method
-        """
+        """Get all objects method."""
 
         def get_all(session):
             return session.query(cls).all()
@@ -111,9 +99,7 @@ class ExtraBase(SerializerMixin):
 
     @classmethod
     async def GetById(cls, session, obj_id):
-        """
-        get object by his id
-        """
+        """Get object by his id."""
 
         query = select(cls).where(cls.id == obj_id)
         result = await session.execute(query)
@@ -125,9 +111,7 @@ class ExtraBase(SerializerMixin):
 
     @classmethod
     async def GetByArgs(cls, session, args):
-        """
-        get obejct by args
-        """
+        """Get obejct by args."""
 
         def filter_sync(session):
             query = session.query(cls)
@@ -143,9 +127,7 @@ class ExtraBase(SerializerMixin):
 
     @classmethod
     async def DeleteAll(Cls, session):
-        """
-        Delete all objects method
-        """
+        """Delete all objects method."""
 
         def delete(session):
             session.query(Cls).delete()

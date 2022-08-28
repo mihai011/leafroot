@@ -1,6 +1,4 @@
-"""
-Modules that contains cache related functions.
-"""
+"""Modules that contains cache related functions."""
 
 
 import aioredis
@@ -14,9 +12,7 @@ from config import config
 
 
 def initialize_cache():
-    """
-    Initializes cache with an available backend.
-    """
+    """Initialize cache with an available backend."""
     cache_backend = InMemoryBackend
     cache_source = None
 
@@ -34,9 +30,7 @@ def initialize_cache():
 
 
 def testproof_cache(*cache_args, **cache_kargs):
-    """
-    Test proof cache to avoid cache when testing.
-    """
+    """Test proof cache to avoid cache when testing."""
 
     def inner(function):
         def wrapper(*args, **kwargs):

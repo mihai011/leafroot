@@ -1,6 +1,4 @@
-"""
-base controller for stage
-"""
+"""base controller for stage."""
 
 from fastapi import APIRouter
 
@@ -13,8 +11,6 @@ base_router = APIRouter(prefix="", tags=["base"])
     "/",
 )
 async def greeting():
-    """
-    just a simple greeting
-    """
+    """just a simple greeting."""
 
     return create_response("Hello World", 200)

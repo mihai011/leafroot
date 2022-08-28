@@ -1,6 +1,4 @@
-"""
-tests for util functions
-"""
+"""tests for util functions."""
 
 from tests.conftest import temp_db
 from utils import create_access_token, authenthicate_user
@@ -9,9 +7,7 @@ from data import User
 
 @temp_db
 async def test_authenticate(session):
-    """
-    test authenthication
-    """
+    """test authenthication."""
 
     user_args = {
         "username": "test_name",
@@ -28,9 +24,7 @@ async def test_authenticate(session):
 
 @temp_db
 async def test_fake_user(session):
-    """
-    test authenthication with fake creds
-    """
+    """test authenthication with fake creds."""
 
     user_args = {
         "username": "test_name",

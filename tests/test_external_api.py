@@ -1,6 +1,4 @@
-"""
-tests for external call functions
-"""
+"""tests for external call functions."""
 import aiohttp
 import pytest
 from aioresponses import aioresponses
@@ -11,9 +9,7 @@ from external_api.utils import make_api_request, make_get_request, make_post_req
 
 @pytest.mark.asyncio
 async def test_make_get_request():
-    """
-    tests for a make-get_request
-    """
+    """tests for a make-get_request."""
     url_test = "http://fake_url.com"
     session = aiohttp.ClientSession()
     headers = {}
@@ -26,9 +22,7 @@ async def test_make_get_request():
 
 @pytest.mark.asyncio
 async def test_make_post_request():
-    """
-    tests for a make-get_request
-    """
+    """tests for a make-get_request."""
     url_test = "http://fake_url.com"
     session = aiohttp.ClientSession()
     headers = {}
@@ -42,9 +36,7 @@ async def test_make_post_request():
 
 @pytest.mark.asyncio
 async def test_get_request_external():
-    """
-    test a simple request to a fake api service
-    """
+    """test a simple request to a fake api service."""
     url_test = "http://fake_url.com"
 
     content = {
