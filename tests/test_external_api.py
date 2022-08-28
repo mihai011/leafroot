@@ -4,7 +4,11 @@ import pytest
 from aioresponses import aioresponses
 
 
-from external_api.utils import make_api_request, make_get_request, make_post_request
+from external_api.utils import (
+    make_api_request,
+    make_get_request,
+    make_post_request,
+)
 
 
 @pytest.mark.asyncio

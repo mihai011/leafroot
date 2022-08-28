@@ -3,6 +3,7 @@
 from datetime import datetime, timedelta
 from typing import Optional
 import random
+import string
 
 from passlib.context import CryptContext
 from fastapi.security import OAuth2PasswordBearer
@@ -11,8 +12,6 @@ from jose import jwt
 
 from config import config
 from data import User
-
-import string
 
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -65,5 +64,6 @@ async def authenthicate_user(token, session):
 def random_string():
     """Make a random string."""
     return "".join(
-        random.choice(string.ascii_uppercase + string.digits) for _ in range(10)
+        random.choice(string.ascii_uppercase + string.digits)
+        for _ in range(10)
     )

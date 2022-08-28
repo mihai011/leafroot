@@ -8,7 +8,12 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from data import User, get_session
 
-from controllers import create_bulk_users, auth_decorator, create_response, parse
+from controllers import (
+    create_bulk_users,
+    auth_decorator,
+    create_response,
+    parse,
+)
 from utils import create_access_token, get_password_hash, verify_password
 
 
@@ -52,7 +57,9 @@ async def create_user(
 @user_router.get("/get_user/{id_user}")
 @auth_decorator
 async def get_user(
-    id_user: int, request: Request, session: AsyncSession = Depends(get_session)
+    id_user: int,
+    request: Request,
+    session: AsyncSession = Depends(get_session),
 ) -> ORJSONResponse:
     """get user by id."""
     await parse(request)
@@ -66,7 +73,9 @@ async def get_user(
 
 
 @user_router.post("/login")
-async def login(params: Dict[str, str], session: AsyncSession = Depends(get_session)):
+async def login(
+    params: Dict[str, str], session: AsyncSession = Depends(get_session)
+):
     """login controller for a user."""
 
     if "email" not in params:
@@ -92,7 +101,9 @@ async def login(params: Dict[str, str], session: AsyncSession = Depends(get_sess
 
 
 @user_router.post("/sign-up")
-async def sign_up(params: Dict[str, str], session: AsyncSession = Depends(get_session)):
+async def sign_up(
+    params: Dict[str, str], session: AsyncSession = Depends(get_session)
+):
     """Sign-up controller for the user."""
 
     if "password" not in params:

@@ -16,7 +16,11 @@ class DataSource:
 
     async def make_user(self, received_args=None):
         """Make a default user."""
-        args = {"username": "Test_user", "email": "test@gmail.com", "password": "test"}
+        args = {
+            "username": "Test_user",
+            "email": "test@gmail.com",
+            "password": "test",
+        }
 
         if received_args:
             args.update(received_args)

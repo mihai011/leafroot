@@ -11,6 +11,7 @@ asyncpg
 attrs
 bandit
 black
+blacken-docs
 celery
 certifi
 cffi

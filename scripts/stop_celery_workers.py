@@ -36,7 +36,9 @@ def close_local_processes(pids):
 
 if __name__ == "__main__":
 
-    command = "ps auxww | pgrep 'celery_worker' | grep -v grep | awk '{print $2}'"
+    command = (
+        "ps auxww | pgrep 'celery_worker' | grep -v grep | awk '{print $2}'"
+    )
 
     pids = get_pids(command)
 

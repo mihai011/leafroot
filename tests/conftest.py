@@ -9,7 +9,10 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy_utils import drop_database, create_database
 
 from data import Base, get_session
-from data import SQLALCHEMY_DATABASE_URL_BASE_SYNC, SQLALCHEMY_DATABASE_URL_BASE_ASYNC
+from data import (
+    SQLALCHEMY_DATABASE_URL_BASE_SYNC,
+    SQLALCHEMY_DATABASE_URL_BASE_ASYNC,
+)
 
 from app.app import app
 

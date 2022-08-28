@@ -38,7 +38,9 @@ async def add_proton(
     proton = await Proton.AddNew(session, params)
 
     await session.close()
-    return create_response("Proton created succesfully!", proton.serialize(), 200)
+    return create_response(
+        "Proton created succesfully!", proton.serialize(), 200
+    )
 
 
 @atom_router.get("/proton")
@@ -70,7 +72,9 @@ async def add_neutron(
     neutron = await Neutron.AddNew(session, params)
 
     await session.close()
-    return create_response("Neutron created succesfully!", 200, neutron.serialize())
+    return create_response(
+        "Neutron created succesfully!", 200, neutron.serialize()
+    )
 
 
 @atom_router.get("/neutron")
@@ -103,7 +107,9 @@ async def add_electron(
     # await session.close()
 
     await session.close()
-    return create_response("Electron created succesfully!", 200, electron.serialize())
+    return create_response(
+        "Electron created succesfully!", 200, electron.serialize()
+    )
 
 
 @atom_router.get("/electron")

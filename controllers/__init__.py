@@ -24,7 +24,9 @@ def auth_decorator(controller):
         token = request.headers["authorization"].split(" ")[-1]
 
         if not await authenthicate_user(token, session):
-            return create_response("Token expired or invalid! Please login again!", 401)
+            return create_response(
+                "Token expired or invalid! Please login again!", 401
+            )
 
         response = await controller(*args, **kwargs)
         return response

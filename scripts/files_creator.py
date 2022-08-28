@@ -8,7 +8,8 @@ import string
 def random_string():
     """Generate random string."""
     return "".join(
-        random.choice(string.ascii_uppercase + string.digits) for _ in range(10)
+        random.choice(string.ascii_uppercase + string.digits)
+        for _ in range(10)
     )
 
 

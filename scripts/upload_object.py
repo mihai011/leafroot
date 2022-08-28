@@ -10,7 +10,9 @@ from tqdm.asyncio import tqdm
 async def upload_object(session, obj, link, headers):
     """Upload object to url."""
     try:
-        async with session.post(link, json=obj, headers=headers, timeout=2000) as r:
+        async with session.post(
+            link, json=obj, headers=headers, timeout=2000
+        ) as r:
             if r.status != 200:
                 return object
             # await asyncio.sleep(5)

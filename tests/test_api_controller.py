@@ -28,7 +28,11 @@ async def test_api(session):
             "/api/external", json=payload_api, headers=ds.headers["Test_user"]
         )
     assert response.status_code == 200
-    assert response.json() == {"message": "api called", "item": "test1", "status": 200}
+    assert response.json() == {
+        "message": "api called",
+        "item": "test1",
+        "status": 200,
+    }
 
     key_and_missing = {
         "url": "Url",

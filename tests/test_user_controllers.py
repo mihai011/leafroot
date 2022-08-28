@@ -162,7 +162,9 @@ async def test_create_user(session):
     assert response_content["status"] == 400
 
     response = await ds.client.post(
-        "/users/create_users/{}".format(2), headers=ds.headers["Test_user"], json={}
+        "/users/create_users/{}".format(2),
+        headers=ds.headers["Test_user"],
+        json={},
     )
     assert response.status_code == 200
 
