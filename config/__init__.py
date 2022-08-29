@@ -3,32 +3,29 @@ import sys
 
 from dotenv import dotenv_values
 
-if "ENV" not in os.environ:
+if "ENV_FILE" not in os.environ:
     print(
-        "FATAL! Environment variable not set up! Helping values: 'prod' or 'dev'"
+        "FATAL! Environment ENV_FILE variable not set up! Path of a env fiel needed."
     )
     sys.exit(1)
 
-if os.environ["ENV"] not in ["dev", "prod"]:
+env_path = os.environ["ENV_FILE"]
+config = {}
+if os.path.exists(env_path):
+    config = dotenv_values(".env")
+else:
+    print(
+        "FATAL! Environment file not present! Try a '.env' in the root of the project!"
+    )
+    sys.exit(1)
+
+if config["ENV"] not in ["dev", "prod"]:
     print(
         "FATAL! Environment variable not set up correctly! Helping values: 'prod' or 'dev'"
     )
-    sys.exit(1)
 
-config = {}
 # check up if environment is production
-if os.environ["ENV"] == "dev":
-    if os.path.exists(".env"):
-        config = dotenv_values(".env")
-    else:
-        print(
-            "FATAL! Environment file not present! Try a '.env' in the root of the project!"
-        )
-        sys.exit(1)
-
-config["ENVIRONMENT"] = os.environ["ENV"]
-# check up if environment is production
-if os.environ["ENV"] == "prod":
+if config["ENV"] == "prod":
     # retrieve secrets frome external api's here
     pass
 
@@ -43,6 +40,11 @@ mandatory_fields = [
     "REDIS_HOST",
     "RABBITMQ_HOST",
 ]
+
+if config["INTERFACE"]:
+    config["REDIS_HOST"] = config["INTERFACE"]
+    config["RABBITMQ_HOST"] = config["INTERFACE"]
+    config["POSTGRES_HOST"] = config["INTERFACE"]
 
 # check up if environment dictates something else
 # with the values for the environment

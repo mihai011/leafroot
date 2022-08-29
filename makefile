@@ -5,6 +5,9 @@ DIR_NO_TESTS = app/ controllers/ data/ scripts/ utils/ cache/
 CORES=`nproc`
 MANUAL_CORES=4
 
+ENV_FILE_DEV=config/config_files/.env_dev
+ENV_FILE_PROD=config/config_files/.env_prod
+ENV_FILE_USER=.env
 
 venv_create: venv_delete requirements.txt
 	python3 -m venv venv
@@ -23,11 +26,11 @@ typehint:
 	$(ACTIVATE_VENV) && mypy $(DIR_ARGS)
 
 test_parallel: start_celery_worker
-	$(ACTIVATE_VENV) && ENV=dev pytest -n $(MANUAL_CORES) tests/
+	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_USER) pytest -n $(MANUAL_CORES) tests/
 	make stop_celery_worker
 
 test: start_celery_worker
-	$(ACTIVATE_VENV) && ENV=dev pytest tests/
+	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_USER) pytest tests/
 	make stop_celery_worker
 
 lint:
@@ -37,24 +40,24 @@ format:
 	$(ACTIVATE_VENV) && black $(DIR_ARGS)
 
 coverage:
-	$(ACTIVATE_VENV) && ENV=dev pytest --cov-report term-missing --cov=.  tests/
+	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_USER) pytest --cov-report term-missing --cov=.  tests/
 	make stop_celery_worker
 
 coverage_parallel:
-	$(ACTIVATE_VENV) && ENV=dev pytest --cov-report term-missing --cov=. -n $(MANUAL_CORES) tests/
+	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_USER) pytest --cov-report term-missing --cov=. -n $(MANUAL_CORES) tests/
 	make stop_celery_worker
 
 start_production: venv_create
-	$(ACTIVATE_VENV) && ENV=prod gunicorn app.app:app --workers $(CORES) -k uvicorn.workers.UvicornH11Worker --bind 0.0.0.0
+	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_PROD) gunicorn app.app:app --workers $(CORES) -k uvicorn.workers.UvicornH11Worker --bind 0.0.0.0
 
 start_development:
-	$(ACTIVATE_VENV) && ENV=dev uvicorn app.app:app --host 0.0.0.0 --reload
+	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_USER) uvicorn app.app:app --host 0.0.0.0 --reload
 
 start_celery_worker:
-	$(ACTIVATE_VENV) && ENV=dev celery -A celery_worker worker --loglevel=info --detach
+	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_USER) celery -A celery_worker worker --loglevel=info --detach
 
 stop_celery_worker:
-	$(ACTIVATE_VENV) && python scripts/stop_celery_workers.py
+	$(ACTIVATE_VENV) && python3 scripts/stop_celery_workers.py
 
 start_db:
 	docker-compose up -d db
@@ -73,7 +76,6 @@ docformatter:
 
 pycodestyle:
 	$(ACTIVATE_VENV) && pycodestyle -r $(DIR_ARGS)
-
 
 soft_checklist: typehint coverage lint
 hard_checklist: format lint typehint test coverage

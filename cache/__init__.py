@@ -24,7 +24,7 @@ def initialize_cache():
             decode_responses=True,
         )
         FastAPICache.init(cache_backend(cache_source), prefix="fastapi-cache")
-        return
+        return None
 
     FastAPICache.init(cache_backend(), prefix="fastapi-cache")
 
@@ -35,7 +35,7 @@ def testproof_cache(*cache_args, **cache_kargs):
     def inner(function):
         def wrapper(*args, **kwargs):
 
-            if config["ENVIRONMENT"] == "dev":
+            if config["ENV"] == "dev":
                 return function(*args, **kwargs)
 
             return cache(*cache_args, **cache_kargs)(function)(*args, **kwargs)

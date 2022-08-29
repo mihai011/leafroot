@@ -36,7 +36,7 @@
             ],
         },
         {
-            "env": { "ENV": "dev" },
+            "env": { "ENV_FILE": ".env" },
             "name": "Python: FastAPI",
             "type": "python",
             "request": "launch",

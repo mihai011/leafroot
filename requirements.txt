@@ -10,6 +10,7 @@ async-timeout
 asyncpg
 attrs
 bandit
+bcrypt
 black
 blacken-docs
 celery
