@@ -25,14 +25,14 @@
             "console": "integratedTerminal"
         },
         {
-            "env": { "ENV": "dev"},
+            "env": { "ENV_FILE": ".env"},
             "name": "Python: tests",
             "type": "python",
             "request": "launch",
             "module": "pytest",
             "args": [
                 "-s",
-                "tests/test_tasks_controllers.py"
+                "tests/test_web_sockets.py"
             ],
         },
         {

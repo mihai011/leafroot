@@ -39,18 +39,22 @@ mandatory_fields = [
     "ALGORITHM",
     "REDIS_HOST",
     "RABBITMQ_HOST",
+    "INTERFACE",
 ]
 
-if config["INTERFACE"]:
-    config["REDIS_HOST"] = config["INTERFACE"]
-    config["RABBITMQ_HOST"] = config["INTERFACE"]
-    config["POSTGRES_HOST"] = config["INTERFACE"]
 
 # check up if environment dictates something else
 # with the values for the environment
 for key, value in os.environ.items():
     if key in mandatory_fields:
         config[key] = value
+
+# only if interface is set we overwrite the external services
+if config["INTERFACE"]:
+    config["REDIS_HOST"] = config["INTERFACE"]
+    config["RABBITMQ_HOST"] = config["INTERFACE"]
+    config["POSTGRES_HOST"] = config["INTERFACE"]
+
 
 # check mandatory fields
 missing_fields = []

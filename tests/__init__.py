@@ -1,5 +1,6 @@
 """Datasource module for testing."""
 from httpx import AsyncClient
+from fastapi.testclient import TestClient
 
 from app.app import app
 from data import User
@@ -11,6 +12,7 @@ class DataSource:
     def __init__(self, session):
         """Datasource class constructor."""
         self.client = AsyncClient(app=app, base_url="http://test")
+        self.test_client = TestClient(app=app, base_url="http://test")
         self.headers = {}
         self.session = session
 
