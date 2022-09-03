@@ -4,7 +4,7 @@ DIR_NO_TESTS = app/ controllers/ data/ scripts/ utils/ cache/
 SERVICES = celery_worker db redis rabbitmq phppgadmin
 
 CORES=`nproc`
-MANUAL_CORES=4
+MANUAL_CORES=8
 
 ENV_FILE_DEV=config/config_files/.env_dev
 ENV_FILE_PROD=config/config_files/.env_prod
