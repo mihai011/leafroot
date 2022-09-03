@@ -22,8 +22,11 @@ jobs:
                   name: make venv
                   command: make venv_create
             - run:
+                  name: make env_file
+                  command: make env_file
+            - run:
                   name: Run tests
-                  command: INTERFACE=localhost make test_parallel
+                  command: make test_parallel
 
 workflows:
     buld-and-test:
