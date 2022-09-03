@@ -85,10 +85,17 @@ sr_services:
 	docker-compose stop $(SERVICES)
 	docker-compose rm -f $(SERVICES)
 
+docker_clean:
+	docker system prune -af
+
+docker_update:
+	docker-compose pull
+	make start_services
+
 env_file:
 	cp config/config_files/.env_dev $(ENV_FILE_USER)
 
-bare_bones: env_file venv_create start_services test_parallel sr_services
+bare_bones: env_file venv_create start_services test_parallel sr_services docker_clean
 
 
 soft_checklist: typehint coverage lint
