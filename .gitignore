@@ -142,3 +142,6 @@ dmypy.json
 
 # docker files
 .dockerignore
+
+# local_env_file
+.env_user

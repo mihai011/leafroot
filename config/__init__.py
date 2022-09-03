@@ -12,7 +12,7 @@ if "ENV_FILE" not in os.environ:
 env_path = os.environ["ENV_FILE"]
 config = {}
 if os.path.exists(env_path):
-    config = dotenv_values(".env")
+    config = dotenv_values(env_path)
 else:
     print(
         "FATAL! Environment file not present! Try a '.env' in the root of the project!"
@@ -23,6 +23,7 @@ if config["ENV"] not in ["dev", "prod"]:
     print(
         "FATAL! Environment variable not set up correctly! Helping values: 'prod' or 'dev'"
     )
+    sys.exit(1)
 
 # check up if environment is production
 if config["ENV"] == "prod":
