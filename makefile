@@ -1,6 +1,7 @@
 ACTIVATE_VENV=. venv/bin/activate
 DIR_ARGS = app/ controllers/ data/ tests/ scripts/ utils/ cache/
 DIR_NO_TESTS = app/ controllers/ data/ scripts/ utils/ cache/
+SERVICES = celery_worker db redis rabbitmq phppgadmin
 
 CORES=`nproc`
 MANUAL_CORES=4
@@ -76,6 +77,14 @@ docformatter:
 
 pycodestyle:
 	$(ACTIVATE_VENV) && pycodestyle -r $(DIR_ARGS)
+
+start_services:
+	docker-compose --env-file $(ENV_FILE_USER) up -d $(SERVICES)
+
+sr_services:
+	docker-compose stop $(SERVICES)
+	docker-compose rm -f $(SERVICES)
+
 
 soft_checklist: typehint coverage lint
 hard_checklist: format lint typehint test coverage
