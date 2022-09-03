@@ -10,7 +10,7 @@ ENV_FILE_DEV=config/config_files/.env_dev
 ENV_FILE_PROD=config/config_files/.env_prod
 ENV_FILE_USER=.env_user
 
-venv_create: venv_delete requirements.txt
+venv_create: venv_delete stable_packages_versions.txt
 	python3 -m venv venv
 	$(ACTIVATE_VENV) && pip install --upgrade pip
 	$(ACTIVATE_VENV) && pip install --no-cache-dir -r requirements.txt
@@ -95,8 +95,7 @@ docker_update:
 env_file:
 	cp config/config_files/.env_dev $(ENV_FILE_USER)
 
-bare_bones: env_file venv_create start_services test_parallel sr_services docker_clean
-
+bare_bones: env_file venv_create start_services test_parallel sr_services
 
 soft_checklist: typehint coverage lint
 hard_checklist: format lint typehint test coverage
