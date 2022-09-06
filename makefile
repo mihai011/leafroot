@@ -1,5 +1,5 @@
 ACTIVATE_VENV=. venv/bin/activate
-DIR_ARGS = app/ controllers/ data/ tests/ scripts/ utils/ cache/
+DIR_ARGS = app/ controllers/ data/ tests/ scripts/ utils/ cache/ config/
 DIR_NO_TESTS = app/ controllers/ data/ scripts/ utils/ cache/
 SERVICES = celery_worker db redis rabbitmq phppgadmin
 

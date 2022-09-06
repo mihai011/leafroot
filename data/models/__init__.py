@@ -11,39 +11,8 @@ from sqlalchemy import Column, Integer, DateTime
 from app import config
 
 
-# SQLALCHEMY_DATABASE_URL = "sqlite:///./sql_app.db"
-SQLALCHEMY_DATABASE_URL_ASYNC = "{}://{}:{}@{}/{}".format(
-    "postgresql+asyncpg",
-    config["POSTGRES_USER"],
-    config["POSTGRES_PASSWORD"],
-    config["POSTGRES_HOST"],
-    config["POSTGRES_DB"],
-)
-
-SQLALCHEMY_DATABASE_URL_BASE_ASYNC = "{}://{}:{}@{}/".format(
-    "postgresql+asyncpg",
-    config["POSTGRES_USER"],
-    config["POSTGRES_PASSWORD"],
-    config["POSTGRES_HOST"],
-)
-
-SQLALCHEMY_DATABASE_URL_SYNC = "{}://{}:{}@{}/{}".format(
-    "postgresql",
-    config["POSTGRES_USER"],
-    config["POSTGRES_PASSWORD"],
-    config["POSTGRES_HOST"],
-    config["POSTGRES_DB"],
-)
-
-SQLALCHEMY_DATABASE_URL_BASE_SYNC = "{}://{}:{}@{}/".format(
-    "postgresql",
-    config["POSTGRES_USER"],
-    config["POSTGRES_PASSWORD"],
-    config["POSTGRES_HOST"],
-)
-
 engine = create_async_engine(
-    SQLALCHEMY_DATABASE_URL_ASYNC,
+    config.sqlalchemy_database_url_async,
     echo=False,
     future=True,
     pool_size=0,
