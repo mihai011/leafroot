@@ -22,16 +22,17 @@ class Settings(BaseSettings):
 
     interface: Optional[str]
 
-    celery_broker_url = Optional[AmqpDsn]
-    redis_url = Optional[RedisDsn]
-    sqlalchemy_database_url_async = Optional[PostgresDsn]
-    sqlalchemy_database_url_base_async = Optional[PostgresDsn]
-    sqlalchemy_database_url_sync = Optional[PostgresDsn]
-    sqlalchemy_database_url_base_sync = Optional[PostgresDsn]
+    celery_broker_url: Optional[AmqpDsn]
+    redis_url: Optional[RedisDsn]
+    sqlalchemy_database_url_async: Optional[PostgresDsn]
+    sqlalchemy_database_url_base_async: Optional[PostgresDsn]
+    sqlalchemy_database_url_sync: Optional[PostgresDsn]
+    sqlalchemy_database_url_base_sync: Optional[PostgresDsn]
 
     class Config:
         env_file = ".env_user"
         env_file_encoding = "utf-8"
+        validate_assignment = True
 
     def __init__(self):
 
