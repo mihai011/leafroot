@@ -16,10 +16,10 @@ def initialize_cache():
     cache_backend = InMemoryBackend
     cache_source = None
 
-    if "REDIS_HOST" in config:
+    if getattr(config, "redis_url") is not None:
         cache_backend = RedisBackend
         cache_source = aioredis.from_url(
-            "redis://{}".format(config["REDIS_HOST"]),
+            config.redis_url,
             encoding="utf8",
             decode_responses=True,
         )

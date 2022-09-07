@@ -1,4 +1,5 @@
-import os
+"""module that contains application settings"""
+
 from typing import Literal
 
 from pydantic import BaseSettings, RedisDsn, PostgresDsn, AmqpDsn
@@ -6,6 +7,12 @@ from pydantic.typing import Optional
 
 
 class Settings(BaseSettings):
+    """class responsible for loading up and generating settings
+
+    Args:
+        BaseSettings (_type_): _description_
+    """
+
     app_name: str = "Fast Full API"
     env: Literal["dev", "prod"]
     postgres_db: str
@@ -35,6 +42,8 @@ class Settings(BaseSettings):
     sqlalchemy_database_url_base_sync: Optional[PostgresDsn]
 
     class Config:
+        """class config"""
+
         env_file = ".env_user"
         env_file_encoding = "utf-8"
         validate_assignment = True
@@ -46,19 +55,20 @@ class Settings(BaseSettings):
         self.create_celery_result_backend()
         self.create_database_urls()
 
-    def create_celery_broker_url(self) -> str:
-
+    def create_celery_broker_url(self):
+        """Create the url for the celery broker."""
         host = self.interface or self.rabbitmq_host
         self.celery_broker_url = "{}://{}:5672".format(
             self.rabbitmq_protocol, host
         )
 
-    def create_celery_result_backend(self) -> str:
-
+    def create_celery_result_backend(self):
+        """Create the url for the celery backend."""
         host = self.interface or self.redis_host
         self.redis_url = "{}://{}:6379".format(self.redis_protocol, host)
 
     def create_database_urls(self):
+        """Create the database urls."""
         host = self.interface or self.postgres_host
         self.sqlalchemy_database_url_async = "{}://{}:{}@{}/{}".format(
             "postgresql+asyncpg",

@@ -44,7 +44,7 @@ coverage:
 	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_USER) pytest --cov-report term-missing --cov=.  tests/
 	make stop_celery_worker
 
-coverage_parallel:
+coverage_parallel: start_celery_worker
 	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_USER) pytest --cov-report term-missing --cov=. -n $(MANUAL_CORES) tests/
 	make stop_celery_worker
 
