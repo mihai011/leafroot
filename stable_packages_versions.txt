@@ -59,6 +59,7 @@ iniconfig==1.1.1
 ipython==8.5.0
 isort==5.10.1
 jedi==0.18.1
+Jinja2==3.1.2
 kombu==5.2.4
 lazy-object-proxy==1.7.1
 Mako==1.2.2

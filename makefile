@@ -2,7 +2,7 @@ ACTIVATE_BASH=source ~/.bashrc
 ACTIVATE_VENV=. venv/bin/activate
 DIR_ARGS = app/ controllers/ data/ tests/ scripts/ utils/ cache/ config/
 DIR_NO_TESTS = app/ controllers/ data/ scripts/ utils/ cache/
-SERVICES = celery_worker db redis rabbitmq phppgadmin
+SERVICES = db redis rabbitmq phppgadmin
 
 CORES=`nproc`
 MANUAL_CORES=8

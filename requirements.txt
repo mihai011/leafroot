@@ -32,6 +32,7 @@ flower
 frozenlist
 greenlet
 gunicorn
+gunicorn
 h11
 httpcore
 httptools
@@ -85,6 +86,7 @@ tomli
 tomlkit
 tqdm
 typing_extensions
+uvicorn
 uvicorn
 uvloop
 watchgod

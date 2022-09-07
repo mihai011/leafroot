@@ -8,6 +8,7 @@ services:
             context: .
             dockerfile: Dockerfile
         container_name: backend
+        image: fast-api-full
         hostname: backend
         restart: on-failure
         ports:
@@ -15,21 +16,7 @@ services:
         volumes:
             - .:/workspace
         command: >
-            sh -c "sleep infinity "
-        networks:
-            - shared_network
-
-    celery_worker:
-        build:
-            context: .
-            dockerfile: Dockerfile
-        container_name: celery_worker
-        hostname: celery_worker
-        restart: on-failure
-        volumes:
-            - .:/workspace
-        command: >
-            sh -c "make start_celery_worker"
+            sh -c "sleep infinity"
         networks:
             - shared_network
 
