@@ -16,7 +16,7 @@ async def test_greetings_controller(session):
 
     response = await ds.client.get("/", headers=ds.headers["Test_user"])
     assert response.status_code == 200
-    assert response.json()["message"] == "Hello World"
+    assert "<html>" in response.text
 
 
 @pytest.mark.asyncio

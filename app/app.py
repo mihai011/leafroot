@@ -14,9 +14,13 @@ from controllers.api_controllers import api_router
 from controllers.task_controllers import task_router
 from controllers.ws_controllers import ws_router
 
+from fastapi.staticfiles import StaticFiles
+
 from cache import initialize_cache
 
 app = FastAPI()
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
 app.include_router(user_router)
