@@ -8,7 +8,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.future import select
 from sqlalchemy import Column, Integer, DateTime
 
-from app import config
+from config import config
 
 
 engine = create_async_engine(
