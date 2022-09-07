@@ -26,7 +26,7 @@ async_session = sessionmaker(
 )
 
 Base = declarative_base()
-secret = config["SECRET"]
+secret = config.secret
 
 
 async def get_session() -> AsyncSession:  # pragma: no cover

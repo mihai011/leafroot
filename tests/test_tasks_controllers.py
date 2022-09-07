@@ -5,7 +5,7 @@ import aioredis
 
 from tests import DataSource
 from tests.conftest import temp_db
-from config import CELERY_RESULT_BACKEND
+from config import config
 
 
 @temp_db
@@ -21,7 +21,7 @@ async def test_small_task(session):
     assert response.status_code == 200
     task_metadata = json.loads(response.text)
     task_id = task_metadata["item"]["task_id"]
-    redis = aioredis.from_url(CELERY_RESULT_BACKEND)
+    redis = aioredis.from_url(config.redis_url)
     while True:
         value = await redis.get("celery-task-meta-" + task_id)
         if not value:

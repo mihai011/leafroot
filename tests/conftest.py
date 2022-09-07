@@ -9,10 +9,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy_utils import drop_database, create_database
 
 from data import Base, get_session
-from data import (
-    SQLALCHEMY_DATABASE_URL_BASE_SYNC,
-    SQLALCHEMY_DATABASE_URL_BASE_ASYNC,
-)
+from config import config
 
 from app.app import app
 
@@ -21,8 +18,12 @@ from app.app import app
 def SessionLocalGenerator() -> None:
     """Set of test database."""
     name = uuid4()
-    DB_URL_BASE_SYNC = "{}{}".format(SQLALCHEMY_DATABASE_URL_BASE_SYNC, name)
-    DB_URL_BASE_ASYNC = "{}{}".format(SQLALCHEMY_DATABASE_URL_BASE_ASYNC, name)
+    DB_URL_BASE_SYNC = "{}{}".format(
+        config.sqlalchemy_database_url_base_sync, name
+    )
+    DB_URL_BASE_ASYNC = "{}{}".format(
+        config.sqlalchemy_database_url_base_async, name
+    )
     engine_sync = create_engine(DB_URL_BASE_SYNC)
 
     # assert not database_exists(TEST_SQLALCHEMY_DATABASE_URL),

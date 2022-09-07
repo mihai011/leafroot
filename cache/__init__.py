@@ -35,7 +35,7 @@ def testproof_cache(*cache_args, **cache_kargs):
     def inner(function):
         def wrapper(*args, **kwargs):
 
-            if config["ENV"] == "dev":
+            if config.env == "dev":
                 return function(*args, **kwargs)
 
             return cache(*cache_args, **cache_kargs)(function)(*args, **kwargs)

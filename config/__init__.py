@@ -14,7 +14,11 @@ class Settings(BaseSettings):
     postgres_host: str
 
     redis_host: str
+    redis_protocol: Literal["redis", "rediss"]
+
     rabbitmq_host: str
+    rabbitmq_protocol: Literal["amqp", "amqps"]
+
     access_token_expire_minutes: str
     secret_key: str
     algorithm: str
@@ -24,6 +28,7 @@ class Settings(BaseSettings):
 
     celery_broker_url: Optional[AmqpDsn]
     redis_url: Optional[RedisDsn]
+
     sqlalchemy_database_url_async: Optional[PostgresDsn]
     sqlalchemy_database_url_base_async: Optional[PostgresDsn]
     sqlalchemy_database_url_sync: Optional[PostgresDsn]
@@ -44,12 +49,14 @@ class Settings(BaseSettings):
     def create_celery_broker_url(self) -> str:
 
         host = self.interface or self.rabbitmq_host
-        self.celery_broker_url = "amqp://{}:5672".format(host)
+        self.celery_broker_url = "{}://{}:5672".format(
+            self.rabbitmq_protocol, host
+        )
 
     def create_celery_result_backend(self) -> str:
 
         host = self.interface or self.redis_host
-        self.redis_url = "redis://{}:6379".format(host)
+        self.redis_url = "{}://{}:6379".format(self.redis_protocol, host)
 
     def create_database_urls(self):
         host = self.interface or self.postgres_host
