@@ -16,8 +16,8 @@ new applications.
     4. TODO: Add Redis, Mongo and other NO-SQLs and Apache Kafka to app.
     5. Circle CI config for testing implemented.
     6. TODO: Circle CI pipeline for fast deployment to AWS, DETA and Heroku.
-    7. TODO: connect NO-SQL databases.
-    8. TODO: continue implement features of FAST-API to this project and exemplify them.
+    7. TODO: Connect NO-SQL databases.
+    8. TODO: Continue implement features of FAST-API to this project and exemplify them.
 
 
 ## Project environment set up (for vscode and docker users)
@@ -71,3 +71,5 @@ MAC M1 observations:
  1. Makefile does not seem to resolve dependencies properly.
  2. User on the database is not created correctly.
     (the passwiord must be added manually)
+
+Best use practices
