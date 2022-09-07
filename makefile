@@ -1,3 +1,4 @@
+ACTIVATE_BASH=source ~/.bashrc
 ACTIVATE_VENV=. venv/bin/activate
 DIR_ARGS = app/ controllers/ data/ tests/ scripts/ utils/ cache/ config/
 DIR_NO_TESTS = app/ controllers/ data/ scripts/ utils/ cache/
@@ -81,6 +82,9 @@ pycodestyle:
 start_services:
 	docker-compose --env-file $(ENV_FILE_USER) up -d $(SERVICES)
 
+stop_services:
+	docker-compose --env-file $(ENV_FILE_USER) stop
+
 sr_services:
 	docker-compose stop $(SERVICES)
 	docker-compose rm -f $(SERVICES)
@@ -102,3 +106,6 @@ hard_checklist: format lint typehint test coverage
 
 install_rust:
 	curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | bash -s -- -y
+
+rust_workers:
+	$(ACTIVATE_VENV) && cd celery_rust_workers && maturin develop

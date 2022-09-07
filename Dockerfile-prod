@@ -11,6 +11,9 @@ WORKDIR /workspace
 COPY . .
 RUN rm .env
 
+RUN make install_rust
 RUN make venv_create
+RUN make rust_workers
+
 CMD ["make", "start_production"]
 EXPOSE 8000
