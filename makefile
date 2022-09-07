@@ -56,10 +56,10 @@ start_development:
 	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_USER) uvicorn app.app:app --host 0.0.0.0 --reload
 
 start_celery_worker:
-	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_USER) celery -A celery_worker worker --loglevel=info --detach
+	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_USER) celery -A celery_worker worker --concurrency=10 --loglevel=info --detach
 
 stop_celery_worker:
-	$(ACTIVATE_VENV) && python3 scripts/stop_celery_workers.py
+	pkill -9 -f 'celery_worker'
 
 start_db:
 	docker-compose up -d db
