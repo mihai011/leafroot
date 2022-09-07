@@ -6,7 +6,7 @@ services:
     backend:
         build:
             context: .
-            dockerfile: Dockerfile-dev
+            dockerfile: Dockerfile
         container_name: backend
         hostname: backend
         restart: on-failure
@@ -22,7 +22,7 @@ services:
     celery_worker:
         build:
             context: .
-            dockerfile: Dockerfile-dev
+            dockerfile: Dockerfile
         container_name: celery_worker
         hostname: celery_worker
         restart: on-failure

@@ -10,4 +10,8 @@ WORKDIR /workspace
 
 COPY . .
 
+RUN make install_rust
+RUN make venv_create
+
+
 # RUN pip install --upgrade pip -r requirements.txt

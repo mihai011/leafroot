@@ -41,6 +41,7 @@ iniconfig
 ipython
 isort
 lazy-object-proxy
+maturin
 mccabe
 multidict
 mypy

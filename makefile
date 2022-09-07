@@ -40,7 +40,7 @@ lint:
 format:
 	$(ACTIVATE_VENV) && black $(DIR_ARGS)
 
-coverage:
+coverage: start_celery_worker
 	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_USER) pytest --cov-report term-missing --cov=.  tests/
 	make stop_celery_worker
 
@@ -99,3 +99,6 @@ bare_bones: env_file venv_create start_services test_parallel sr_services
 
 soft_checklist: typehint coverage lint
 hard_checklist: format lint typehint test coverage
+
+install_rust:
+	curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | bash -s -- -y
