@@ -15,15 +15,17 @@ ENV_FILE_USER=.env_user
 venv_create: venv_delete stable_packages_versions.txt
 	python3 -m venv venv
 	$(ACTIVATE_VENV) && pip install --upgrade pip
-	$(ACTIVATE_VENV) && pip install --no-cache-dir -r requirements.txt
-	$(ACTIVATE_VENV) && pip freeze > stable_packages_versions.txt
+	$(ACTIVATE_VENV) && pip install --no-cache-dir -r stable_packages_versions.txt
 	$(ACTIVATE_VENV) && pre-commit install
 
 venv_delete:
 	rm -rf venv/
 
-venv_update: venv_delete
-	make venv_create
+venv_update: venv_delete requirements.txt
+	python3 -m venv venv
+	$(ACTIVATE_VENV) && pip install --upgrade pip
+	$(ACTIVATE_VENV) && pip install --no-cache-dir -r requirements.txt
+	$(ACTIVATE_VENV) && pip freeze > stable_packages_versions.txt
 
 typehint:
 	$(ACTIVATE_VENV) && mypy $(DIR_ARGS)
@@ -32,7 +34,7 @@ test_parallel: start_celery_workers
 	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_USER) pytest -n $(MANUAL_CORES) tests/
 	make stop_celery_worker
 
-test: start_celery_workers
+test: start_services start_celery_workers rust_workers
 	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_USER) pytest tests/
 	make stop_celery_worker
 
