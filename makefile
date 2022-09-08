@@ -3,6 +3,7 @@ ACTIVATE_VENV=. venv/bin/activate
 DIR_ARGS = app/ controllers/ data/ tests/ scripts/ utils/ cache/ config/
 DIR_NO_TESTS = app/ controllers/ data/ scripts/ utils/ cache/
 SERVICES = db redis rabbitmq phppgadmin
+PORT=8000
 
 CORES=`nproc`
 MANUAL_CORES=8
@@ -27,11 +28,11 @@ venv_update: venv_delete
 typehint:
 	$(ACTIVATE_VENV) && mypy $(DIR_ARGS)
 
-test_parallel: start_celery_worker
+test_parallel: start_celery_workers
 	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_USER) pytest -n $(MANUAL_CORES) tests/
 	make stop_celery_worker
 
-test: start_celery_worker
+test: start_celery_workers
 	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_USER) pytest tests/
 	make stop_celery_worker
 
@@ -53,7 +54,11 @@ start_production: venv_create
 	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_PROD) gunicorn app.app:app --workers $(CORES) -k uvicorn.workers.UvicornH11Worker --bind 0.0.0.0
 
 start_development: start_services rust_workers start_celery_workers
-	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_USER) uvicorn app.app:app --host 0.0.0.0 --reload
+	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_USER) uvicorn app.app:app --host 0.0.0.0 --port $(PORT) --reload
+
+# make sure to login to ngrok so it can server html responses
+make ngrok: start_development
+	ngrok http $(PORT)
 
 start_celery_workers:
 	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_USER) celery -A celery_worker worker --concurrency=10 --loglevel=info --detach
@@ -93,7 +98,7 @@ docker_clean:
 	docker system prune -af
 
 docker_update:
-	docker-compose pull
+	docker-compose --env-file $(ENV_FILE_USER) pull
 	make start_services
 
 env_file:

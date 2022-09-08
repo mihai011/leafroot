@@ -8,7 +8,6 @@ services:
             context: .
             dockerfile: Dockerfile
         container_name: backend
-        image: fast-api-full
         hostname: backend
         restart: on-failure
         ports:
