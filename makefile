@@ -41,21 +41,21 @@ lint:
 format:
 	$(ACTIVATE_VENV) && black $(DIR_ARGS)
 
-coverage: start_celery_worker
+coverage: start_celery_workers
 	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_USER) pytest --cov-report term-missing --cov=.  tests/
 	make stop_celery_worker
 
-coverage_parallel: start_celery_worker
+coverage_parallel: start_celery_workers
 	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_USER) pytest --cov-report term-missing --cov=. -n $(MANUAL_CORES) tests/
 	make stop_celery_worker
 
 start_production: venv_create
 	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_PROD) gunicorn app.app:app --workers $(CORES) -k uvicorn.workers.UvicornH11Worker --bind 0.0.0.0
 
-start_development:
+start_development: start_services rust_workers start_celery_workers
 	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_USER) uvicorn app.app:app --host 0.0.0.0 --reload
 
-start_celery_worker:
+start_celery_workers:
 	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_USER) celery -A celery_worker worker --concurrency=10 --loglevel=info --detach
 
 stop_celery_worker:
