@@ -5,7 +5,7 @@ DIR_NO_TESTS = app/ controllers/ data/ scripts/ utils/ cache/
 SERVICES = db redis rabbitmq phppgadmin
 PORT=8000
 
-CORES=`nproc`
+CORES := $(shell nproc)
 MANUAL_CORES=8
 
 ENV_FILE_DEV=config/config_files/.env_dev
@@ -52,18 +52,18 @@ coverage_parallel: start_celery_workers
 	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_USER) pytest --cov-report term-missing --cov=. -n $(MANUAL_CORES) tests/
 	make stop_celery_worker
 
-start_production: venv_create
-	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_PROD) gunicorn app.app:app --workers $(CORES) -k uvicorn.workers.UvicornH11Worker --bind 0.0.0.0
+start_production: start_services start_celery_workers rust_workers
+	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_PROD) gunicorn app.app:app --workers $(CORES) -k uvicorn.workers.UvicornH11Worker --bind 0.0.0.0 -p $(PORT)
 
 start_development: start_services rust_workers start_celery_workers
 	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_USER) uvicorn app.app:app --host 0.0.0.0 --port $(PORT) --reload
 
 # make sure to login to ngrok so it can server html responses
-make ngrok: start_development
+make ngrok:
 	ngrok http $(PORT)
 
 start_celery_workers:
-	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_USER) celery -A celery_worker worker --concurrency=10 --loglevel=info --detach
+	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_USER) celery -A celery_worker worker --concurrency=$(CORES) --loglevel=info --detach
 
 stop_celery_worker:
 	pkill -9 -f 'celery_worker'
