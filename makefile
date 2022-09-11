@@ -5,6 +5,7 @@ DIR_NO_TESTS = app/ controllers/ data/ scripts/ utils/ cache/
 SERVICES = db redis rabbitmq phppgadmin
 PORT=8000
 
+# for mac os install coreutils
 CORES := $(shell nproc)
 MANUAL_CORES=8
 
