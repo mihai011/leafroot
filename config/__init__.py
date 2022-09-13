@@ -41,8 +41,17 @@ class Settings(BaseSettings):
     sqlalchemy_database_url_sync: Optional[PostgresDsn]
     sqlalchemy_database_url_base_sync: Optional[PostgresDsn]
 
+    LOG_DIR: Optional[str] = "logs"
+
+    INFO_LOG_FILE: Optional[str] = "info.log"
+    WARN_LOG_FILE: Optional[str] = "warn.log"
+    WARNING_LOG_FILE: Optional[str] = "warning.log"
+    ERROR_LOG_FILE: Optional[str] = "error.log"
+    DEBUG_LOG_FILE: Optional[str] = "debug.log"
+    CRITICAL_LOG_FILE: Optional[str] = "critical.log"
+
     class Config:
-        """class config"""
+        """Config class"""
 
         env_file = ".env_user"
         env_file_encoding = "utf-8"

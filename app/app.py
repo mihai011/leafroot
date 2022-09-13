@@ -16,7 +16,9 @@ from controllers.ws_controllers import ws_router
 
 from fastapi.staticfiles import StaticFiles
 
+from config import config
 from cache import initialize_cache
+from logger import initialize_loggers
 
 app = FastAPI()
 
@@ -31,6 +33,7 @@ app.include_router(task_router)
 app.include_router(ws_router)
 
 initialize_cache()
+initialize_loggers(config)
 
 
 @app.middleware("http")
