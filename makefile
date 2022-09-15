@@ -26,6 +26,8 @@ venv_update: venv_delete requirements.txt
 	python3 -m venv venv
 	$(ACTIVATE_VENV) && pip install --upgrade pip
 	$(ACTIVATE_VENV) && pip install --no-cache-dir -r requirements.txt
+
+stable_req:
 	$(ACTIVATE_VENV) && pip freeze > stable_packages_versions.txt
 
 typehint:

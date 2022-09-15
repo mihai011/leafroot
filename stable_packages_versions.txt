@@ -20,6 +20,7 @@ billiard==3.6.4.0
 black==22.8.0
 blacken-docs==1.12.1
 celery==5.2.7
+celery_rust_workers @ file:///var/folders/rt/rhb6xgwx4jqbp5v52jxn26hw0000gn/T/.tmpleZDkh/celery_rust_workers-0.1.0-cp310-cp310-macosx_11_0_arm64.whl
 certifi==2022.6.15
 cffi==1.15.1
 cfgv==3.3.1
@@ -122,6 +123,7 @@ SQLAlchemy-serializer==1.4.1
 SQLAlchemy-Utils==0.38.3
 stack-data==0.5.0
 starlette==0.19.1
+starlette-context==0.3.4
 stevedore==4.0.0
 toml==0.10.2
 tomli==2.0.1
