@@ -6,6 +6,10 @@ Here you include the routers for the application and middleware used.
 import time
 
 from fastapi import FastAPI, Request
+from fastapi.staticfiles import StaticFiles
+from starlette.middleware import Middleware
+from starlette_context import context, plugins
+from starlette_context.middleware import RawContextMiddleware
 
 from controllers.users_controllers import user_router
 from controllers.base_controllers import base_router
@@ -14,13 +18,19 @@ from controllers.api_controllers import api_router
 from controllers.task_controllers import task_router
 from controllers.ws_controllers import ws_router
 
-from fastapi.staticfiles import StaticFiles
-
 from config import config
 from cache import initialize_cache
-from logger import initialize_loggers
+from logger import initialize_logger
 
-app = FastAPI()
+middleware = [
+    Middleware(
+        RawContextMiddleware,
+        plugins=(plugins.RequestIdPlugin(), plugins.CorrelationIdPlugin()),
+    )
+]
+
+
+app = FastAPI(middleware=middleware)
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
@@ -33,7 +43,7 @@ app.include_router(task_router)
 app.include_router(ws_router)
 
 initialize_cache()
-initialize_loggers(config)
+initialize_logger(config)
 
 
 @app.middleware("http")

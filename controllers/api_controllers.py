@@ -1,4 +1,6 @@
 """api controllers."""
+import logging
+
 from fastapi import Request
 from fastapi import APIRouter, Depends
 from fastapi.responses import ORJSONResponse
@@ -19,6 +21,10 @@ async def api_request(
 ) -> ORJSONResponse:
     """Make a http request to an external api."""
     content = await parse(request)
+    logging.info(
+        "External api controller called with data: {}".format(content)
+    )
+
     if "url" not in content:
         return create_response("Url not found in payload!", 400)
     if "method" not in content:
@@ -33,4 +39,5 @@ async def api_request(
     response = await make_api_request(http_session, content)
 
     await session.close()
+
     return create_response("api called", 200, response)

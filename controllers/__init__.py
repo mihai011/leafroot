@@ -4,6 +4,7 @@ import string
 from functools import wraps
 
 from fastapi.responses import ORJSONResponse
+import logging
 
 from data import User
 from utils import get_password_hash, authenthicate_user, random_string
@@ -52,6 +53,8 @@ def create_response(message: string, status: int, item=None) -> ORJSONResponse:
     data["message"] = message
     data["item"] = item
     data["status"] = status
+
+    logging.info("Creating response with data:{}".format(data))
     return ORJSONResponse(content=data)
 
 
