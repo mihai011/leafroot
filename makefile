@@ -18,6 +18,7 @@ venv_create: venv_delete stable_packages_versions.txt
 	$(ACTIVATE_VENV) && pip install --upgrade pip
 	$(ACTIVATE_VENV) && pip install --no-cache-dir -r stable_packages_versions.txt
 	$(ACTIVATE_VENV) && pre-commit install
+	make rust_workers
 
 venv_delete:
 	rm -rf venv/
@@ -26,18 +27,20 @@ venv_update: venv_delete requirements.txt
 	python3 -m venv venv
 	$(ACTIVATE_VENV) && pip install --upgrade pip
 	$(ACTIVATE_VENV) && pip install --no-cache-dir -r requirements.txt
+	make rust_workers
 
 stable_req:
 	$(ACTIVATE_VENV) && pip freeze > stable_packages_versions.txt
+	grep -v "celery_rust_workers" stable_packages_versions.txt > tmpfile && mv tmpfile stable_packages_versions.txt
 
 typehint:
 	$(ACTIVATE_VENV) && mypy $(DIR_ARGS)
 
-test_parallel: start_celery_workers
+test_parallel: rust_workers start_celery_workers
 	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_USER) pytest -n $(MANUAL_CORES) tests/
 	make stop_celery_worker
 
-test: start_services start_celery_workers rust_workers
+test: rust_workers start_celery_workers
 	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_USER) pytest tests/
 	make stop_celery_worker
 

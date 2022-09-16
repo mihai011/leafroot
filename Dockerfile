@@ -14,4 +14,3 @@ RUN make install_rust
 ENV PATH="/root/.cargo/bin:${PATH}"
 
 RUN make venv_create
-RUN make rust_workers
