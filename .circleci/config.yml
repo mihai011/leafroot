@@ -6,7 +6,7 @@ orbs:
 jobs:
     build-and-test:
         docker:
-            - image: postgres:10-alpine
+            - image: cimg/postgres:14.2
             - image: cimg/redis:6.2.6
             - image: rabbitmq:latest
         steps:
