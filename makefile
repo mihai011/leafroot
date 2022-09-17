@@ -4,7 +4,7 @@ DIR_ARGS = app/ controllers/ data/ tests/ scripts/ utils/ cache/ config/
 DIR_NO_TESTS = app/ controllers/ data/ scripts/ utils/ cache/
 SERVICES = db redis rabbitmq phppgadmin
 PORT=8000
-
+USER=$(shell whoami)
 # for mac os install coreutils ot get nproc
 CORES := $(shell nproc)
 MANUAL_CORES=8
@@ -119,6 +119,7 @@ hard_checklist: format lint typehint test coverage
 
 install_rust:
 	curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | bash -s -- -y
+	source "$(HOME)/.cargo/env"
 
 rust_workers:
 	$(ACTIVATE_VENV) && cd celery_rust_workers && maturin develop
