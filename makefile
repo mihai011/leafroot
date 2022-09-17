@@ -119,7 +119,7 @@ hard_checklist: format lint typehint test coverage
 
 install_rust:
 	curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | bash -s -- -y
-	source "$(HOME)/.cargo/env"
+	export PATH="$(HOME)/.cargo/bin:$(PATH)"
 
 rust_workers:
 	$(ACTIVATE_VENV) && cd celery_rust_workers && maturin develop
