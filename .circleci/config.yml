@@ -12,6 +12,7 @@ jobs:
         steps:
             - checkout
             - run: whoami
+            - run: pkill
             - run:
                   name: wait for db
                   command: dockerize -wait tcp://localhost:5432 -timeout 1m
