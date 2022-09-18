@@ -6,7 +6,7 @@ orbs:
 jobs:
     build-and-test:
         docker:
-            - image: cimg/base:2022.09
+            - image: cimg/python:3.10.7
             - image: cimg/postgres:14.2
             - image: cimg/redis:6.2.6
             - image: rabbitmq:latest
@@ -24,7 +24,7 @@ jobs:
                   command: dockerize -wait tcp://localhost:5672 -timeout 1m
             - run:
                   name: make venv
-                  command: sudo apt-get install python3-virtualenv && make venv_create
+                  command: make venv_create
             - run:
                   name: make env_file
                   command: make env_file
