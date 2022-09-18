@@ -122,4 +122,4 @@ install_rust:
 	export PATH="$(HOME)/.cargo/bin:$(PATH)"
 
 rust_workers:
-	$(ACTIVATE_VENV) && cd celery_rust_workers && maturin develop
+	PATH="$(HOME)/.cargo/bin:$(PATH)" $(ACTIVATE_VENV) && cd celery_rust_workers && maturin develop
