@@ -2,7 +2,6 @@
 version: 2.1
 orbs:
     python: circleci/python@1.5.0
-    rust: circleci/rust@1.6.0
 jobs:
     build-and-test:
         docker:
@@ -25,6 +24,9 @@ jobs:
             - run:
                   name: make venv
                   command: make venv_create
+            - run:
+                  name: install rust
+                  command: make install_rust
             - run:
                   name: make env_file
                   command: make env_file
