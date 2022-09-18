@@ -22,11 +22,11 @@ jobs:
                   name: wait for rabbitmq
                   command: dockerize -wait tcp://localhost:5672 -timeout 1m
             - run:
-                  name: make venv
-                  command: make venv_create
-            - run:
                   name: install rust
                   command: make install_rust
+            - run:
+                  name: make venv
+                  command: make venv_create
             - run:
                   name: make env_file
                   command: make env_file
