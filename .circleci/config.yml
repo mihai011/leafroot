@@ -32,9 +32,6 @@ jobs:
                   name: make env_file
                   command: make env_file
             - run:
-                  name: make rust workers
-                  command: make rust_workers
-            - run:
                   name: Run tests
                   command: make test_parallel
 
