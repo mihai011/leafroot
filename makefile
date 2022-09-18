@@ -72,7 +72,7 @@ start_celery_workers:
 	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_USER) celery -A celery_worker worker --concurrency=$(CORES) --loglevel=info --detach
 
 stop_celery_worker:
-	pkill -9 -f 'celery_worker'
+	pkill -9 -f 'celery_worker' || true
 
 start_db:
 	docker-compose up -d db
