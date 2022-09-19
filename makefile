@@ -100,11 +100,11 @@ start_services:
 	docker-compose --env-file $(ENV_FILE_USER) up -d $(SERVICES)
 
 stop_services:
-	docker-compose --env-file $(ENV_FILE_USER) stop
+	docker-compose --env-file $(ENV_FILE_USER) stop $(SERVICES)
 
 sr_services:
-	docker-compose stop $(SERVICES)
-	docker-compose rm -f $(SERVICES)
+	docker-compose --env-file $(ENV_FILE_USER) stop $(SERVICES)
+	docker-compose --env-file $(ENV_FILE_USER) rm -f $(SERVICES)
 
 docker_clean:
 	docker system prune -af
