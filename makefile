@@ -40,9 +40,9 @@ test_parallel: rust_workers start_celery_workers
 	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_USER) pytest -n $(MANUAL_CORES) tests/
 	make stop_celery_workers
 
-circle_ci_test:rust_workers start_celery_workers
+circle_ci_test: rust_workers start_celery_workers
 	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_USER) pytest -n $(MANUAL_CORES) tests/
-
+	make stop_celery_workers
 
 test: rust_workers start_celery_workers
 	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_USER) pytest tests/
@@ -54,11 +54,11 @@ lint:
 format:
 	$(ACTIVATE_VENV) && black $(DIR_ARGS)
 
-coverage: start_celery_workers
+coverage: rust_workers start_celery_workers
 	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_USER) pytest --cov-report term-missing --cov=.  tests/
 	make stop_celery_worker
 
-coverage_parallel: start_celery_workers
+coverage_parallel: rust_workers start_celery_workers
 	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_USER) pytest --cov-report term-missing --cov=. -n $(MANUAL_CORES) tests/
 	make stop_celery_worker
 
@@ -76,7 +76,7 @@ start_celery_workers:
 	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_USER) celery -A celery_worker worker --concurrency=$(CORES) --loglevel=info --detach
 
 stop_celery_workers:
-	pkill -SIGQUIT -f celery_worker
+	pkill -f celery_worker
 
 start_db:
 	docker-compose up -d db
