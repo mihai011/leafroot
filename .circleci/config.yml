@@ -33,7 +33,7 @@ jobs:
                   command: make env_file
             - run:
                   name: Run tests
-                  command: make circle_ci_test
+                  command: make test_parallel
 
 workflows:
     buld-and-test:
