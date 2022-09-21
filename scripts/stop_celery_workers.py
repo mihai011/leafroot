@@ -20,7 +20,7 @@ def get_pids(command):
 
 
 def close_local_processes(pids):
-    """Receives a list of pids and kills the processes.
+    """Receives a list of pids and kills the processes for those pids.
 
     Params:
         pids: list of pids
@@ -36,10 +36,8 @@ def close_local_processes(pids):
 
 if __name__ == "__main__":
 
-    command = (
-        "ps auxww | pgrep 'celery_worker' | grep -v grep | awk '{print $2}'"
-    )
+    command = "pgrep -f celery_worker"
 
     pids = get_pids(command)
-
+    print(pids)
     close_local_processes(pids)

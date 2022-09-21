@@ -42,7 +42,6 @@ test_parallel: rust_workers start_celery_workers
 
 circle_ci_test: rust_workers start_celery_workers
 	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_USER) pytest -n $(MANUAL_CORES) tests/
-	make stop_celery_workers
 
 test: rust_workers start_celery_workers
 	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_USER) pytest tests/
@@ -76,7 +75,7 @@ start_celery_workers:
 	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_USER) celery -A celery_worker worker --concurrency=$(CORES) --loglevel=info --detach
 
 stop_celery_workers:
-	pkill -f celery_worker
+	$(ACTIVATE_VENV) && python scripts/stop_celery_workers.py
 
 start_db:
 	docker-compose up -d db
