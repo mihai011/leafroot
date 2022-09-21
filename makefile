@@ -13,6 +13,8 @@ ENV_FILE_DEV=config/config_files/.env_dev
 ENV_FILE_PROD=config/config_files/.env_prod
 ENV_FILE_USER=.env_user
 
+default: start_celery_workers
+
 venv_create: venv_delete stable_packages_versions.txt
 	python3 -m venv venv
 	$(ACTIVATE_VENV) && pip install --upgrade pip
@@ -36,30 +38,31 @@ stable_req:
 typehint:
 	$(ACTIVATE_VENV) && mypy $(DIR_ARGS)
 
-test_parallel: rust_workers start_celery_workers
-	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_USER) pytest -n $(MANUAL_CORES) tests/
-	make stop_celery_workers
-
-circle_ci_test: rust_workers start_celery_workers
-	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_USER) pytest -n $(MANUAL_CORES) tests/
-
-test: rust_workers start_celery_workers
-	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_USER) pytest tests/
-	make stop_celery_workers
-
 lint:
 	$(ACTIVATE_VENV) && pylint $(DIR_ARGS)
 
 format:
 	$(ACTIVATE_VENV) && black $(DIR_ARGS)
 
+test_parallel: rust_workers  start_celery_workers
+	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_USER) pytest -n $(MANUAL_CORES) tests/
+	-make stop_celery_workers
+
+circle_ci_test: rust_workers
+	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_USER) pytest -n $(MANUAL_CORES) tests/
+	-make stop_celery_workers
+
+test: rust_workers start_celery_workers
+	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_USER) pytest tests/
+	-make stop_celery_workers
+
 coverage: rust_workers start_celery_workers
 	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_USER) pytest --cov-report term-missing --cov=.  tests/
-	make stop_celery_worker
+	make stop_celery_workers
 
 coverage_parallel: rust_workers start_celery_workers
 	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_USER) pytest --cov-report term-missing --cov=. -n $(MANUAL_CORES) tests/
-	make stop_celery_worker
+	make stop_celery_workers
 
 start_production: start_services start_celery_workers rust_workers
 	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_PROD) gunicorn app.app:app --workers $(CORES) -k uvicorn.workers.UvicornH11Worker --bind 0.0.0.0 -p $(PORT)
@@ -72,13 +75,10 @@ make ngrok:
 	ngrok http $(PORT)
 
 start_celery_workers:
-	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_USER) celery -A celery_worker worker --concurrency=$(CORES) --loglevel=info --detach
+	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_USER) celery -A celery_worker worker --loglevel=info --detach
 
 stop_celery_workers:
-	$(ACTIVATE_VENV) && python scripts/stop_celery_workers.py
-
-start_db:
-	docker-compose up -d db
+	pkill -f celery_worker
 
 bandit:
 	$(ACTIVATE_VENV) && bandit -c pyproject.toml -r $(DIR_NO_TESTS)
