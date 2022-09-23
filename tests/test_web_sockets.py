@@ -14,5 +14,8 @@ async def test_web_sockets(session):
     ds = DataSource(session)
 
     with ds.test_client.websocket_connect("/ws") as websocket:
-        data = websocket.receive_json()
-        assert data == {"msg": "Hello WebSocket"}
+        data = websocket.receive_text()
+        assert data == "Connected!"
+        websocket.send_text("Stop!")
+        data = websocket.receive_text()
+        assert data == "Closed!"

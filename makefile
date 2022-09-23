@@ -3,7 +3,7 @@ ACTIVATE_VENV=. venv/bin/activate
 DIR_ARGS = app/ controllers/ data/ tests/ scripts/ utils/ cache/ config/
 DIR_NO_TESTS = app/ controllers/ data/ scripts/ utils/ cache/
 SERVICES = db redis rabbitmq phppgadmin
-PORT=8000
+PORT=80
 USER=$(shell whoami)
 # for mac os install coreutils ot get nproc
 CORES := $(shell nproc)

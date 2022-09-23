@@ -1,6 +1,6 @@
 """web sockets controller"""
 
-from fastapi import APIRouter
+from fastapi import APIRouter, WebSocketDisconnect
 from fastapi.websockets import WebSocket
 
 ws_router = APIRouter(prefix="/ws", tags=["ws"])
@@ -14,5 +14,14 @@ async def websocket(websocket: WebSocket):
         websocket (WebSocket): websocket object
     """
     await websocket.accept()
-    await websocket.send_json({"msg": "Hello WebSocket"})
-    await websocket.close()
+    try:
+        await websocket.send_text("Connected!")
+        while True:
+            data = await websocket.receive_text()
+            if data == "Stop!":
+                await websocket.send_text("Closed!")
+                await websocket.close()
+                break
+            await websocket.send_text(data)
+    except WebSocketDisconnect:
+        await websocket.close()

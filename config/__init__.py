@@ -10,7 +10,7 @@ class Settings(BaseSettings):
     """class responsible for loading up and generating settings
 
     Args:
-        BaseSettings (_type_): _description_
+        BaseSettings (_type_): Base settings class.
     """
 
     app_name: str = "Fast Full API"
