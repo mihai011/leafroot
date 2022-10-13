@@ -18,6 +18,7 @@ new applications.
     6. TODO: Circle CI pipeline for fast deployment to AWS, DETA and Heroku.
     7. TODO: Connect NO-SQL databases.
     8. TODO: Continue implement features of FAST-API to this project and exemplify them.
+    9. TODO: Add chat integration using socketio
 
 
 ## Project environment set up (for vscode and docker users)
