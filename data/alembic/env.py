@@ -1,10 +1,10 @@
 from logging.config import fileConfig
 
 from sqlalchemy import create_engine
-
 from alembic import context
 
-from data import SQLALCHEMY_DATABASE_URL_SYNC, Base
+from data import Base
+from config import config as app_config
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -37,7 +37,7 @@ def run_migrations_offline():
     Calls to context.execute() here emit the given string to the
     script output.
     """
-    url = SQLALCHEMY_DATABASE_URL_SYNC
+    url = app_config.sqlalchemy_database_url_sync
     context.configure(
         url=url,
         target_metadata=target_metadata,
@@ -56,7 +56,7 @@ def run_migrations_online():
     connection with the context.
     """
 
-    connectable = create_engine(SQLALCHEMY_DATABASE_URL_SYNC)
+    connectable = create_engine(app_config.sqlalchemy_database_url_sync)
     with connectable.connect() as connection:
         context.configure(
             connection=connection,

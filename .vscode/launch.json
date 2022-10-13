@@ -32,19 +32,23 @@
             "module": "pytest",
             "args": [
                 "-s",
-                "tests/test_user_controllers.py"
+                "tests/test_web_sockets.py"
             ],
         },
         {
-            "env": { "ENV_FILE": ".env_user" },
+            "env": { "ENV_FILE": ".env_user"},
             "name": "Python: FastAPI",
             "type": "python",
             "request": "launch",
             "module": "uvicorn",
             "cwd": "${workspaceFolder}",
             "args": [
-                "app.app:app",
-                "--reload"
+                "app.app:app", 
+                "--host",
+                "0.0.0.0",
+                "--port",
+                "80",
+                "--reload",
             ],
             "jinja": true
         }
