@@ -31,11 +31,11 @@ secret = config.secret
 
 async def get_session() -> AsyncSession:  # pragma: no cover
     """Yields an async session."""
-
-    async with async_session() as session:
-        yield session
-
-    await session.close()
+    try:
+        async with async_session() as session:
+            yield session
+    finally:
+        await session.close()
 
 
 class ExtraBase(SerializerMixin):
