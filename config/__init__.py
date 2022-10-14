@@ -41,6 +41,10 @@ class Settings(BaseSettings):
     sqlalchemy_database_url_sync: Optional[PostgresDsn]
     sqlalchemy_database_url_base_sync: Optional[PostgresDsn]
 
+    user_name: Optional[str]
+    user_email: Optional[str]
+    user_password: Optional[str]
+
     LOG_DIR: Optional[str] = "logs"
 
     INFO_LOG_FILE: Optional[str] = "info.log"

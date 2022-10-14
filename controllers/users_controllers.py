@@ -1,8 +1,9 @@
 """Basic controllers for users."""
 
-from typing import Dict
+from ctypes import Union
+from typing import Dict, Optional
 
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends, Request, Form
 from fastapi.responses import ORJSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -74,9 +75,10 @@ async def get_user(
 
 @user_router.post("/login")
 async def login(
-    params: Dict[str, str], session: AsyncSession = Depends(get_session)
+    params: Optional[Dict[str, str]],
+    session: AsyncSession = Depends(get_session),
 ):
-    """login controller for a user."""
+    """Login controller for a user."""
 
     if "email" not in params:
         return create_response("Email is required", 400)
