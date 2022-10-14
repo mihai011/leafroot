@@ -4,6 +4,7 @@ import logging
 from fastapi import Request
 from fastapi import APIRouter, Depends
 from fastapi.responses import ORJSONResponse
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from data import get_session
 from external_api.utils import get_http_session, make_api_request
@@ -16,7 +17,7 @@ api_router = APIRouter(prefix="/api", tags=["api"])
 @auth_decorator
 async def api_request(
     request: Request,
-    session=Depends(get_session),
+    session: AsyncSession = Depends(get_session),
     http_session=Depends(get_http_session),
 ) -> ORJSONResponse:
     """Make a http request to an external api."""

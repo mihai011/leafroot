@@ -16,7 +16,16 @@
 
     // Define what happens on successful data submission
     XHR.addEventListener("load", (event) => {
-      alert(event.target.responseText);
+        var response_json = JSON.parse(event.target.responseText);
+        if(response_json["status"] === 200)
+        {
+            const login_xhr = new XMLHttpRequest();
+            login_xhr.open("GET", window.location.href+"main");
+            login_xhr.setRequestHeader("authenthication","Bearer "+response_json["item"]["token"]);
+            login_xhr.send();
+            return login_xhr.responseText;
+
+        }
     });
 
     // Define what happens in case of error

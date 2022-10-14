@@ -3,6 +3,7 @@
 from fastapi import APIRouter, Request, Depends
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from controllers import auth_decorator
 from data import get_session
@@ -20,7 +21,7 @@ async def login(request: Request):
 
 @base_router.get("/main", response_class=HTMLResponse)
 @auth_decorator
-async def main(request: Request):
+async def main(request: Request, session: AsyncSession = Depends(get_session)):
     """Simple main page"""
 
     return templates.TemplateResponse("main.html", {"request": request})
