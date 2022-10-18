@@ -5,6 +5,7 @@ from typing import Dict, Optional
 
 from fastapi import APIRouter, Depends, Request, Form
 from fastapi.responses import ORJSONResponse
+from fastapi.templating import Jinja2Templates
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from data import User, get_session
@@ -19,6 +20,7 @@ from utils import create_access_token, get_password_hash, verify_password
 
 
 user_router = APIRouter(prefix="/users", tags=["users"])
+templates = Jinja2Templates(directory="templates")
 
 
 @user_router.post("/create_users/{quantity}")
@@ -99,6 +101,33 @@ async def login(
         )
 
     await session.close()
+    return create_response("Incorrect password!", 400)
+
+
+@user_router.post("/login_form")
+async def login(
+    request: Request,
+    email: str = Form(),
+    password: str = Form(),
+    session: AsyncSession = Depends(get_session),
+):
+    """Login controller for a user."""
+
+    params = {"email": email, "password": password}
+
+    users = await User.GetByArgs(session, {"email": params["email"]})
+
+    if not users:
+        return create_response("No user with such email found", 400)
+
+    user = users[0]
+
+    if verify_password(params["password"], user.hashed_pass):
+        token = create_access_token(params)
+        return templates.TemplateResponse(
+            "main.html", {"token": token, "request": request}
+        )
+
     return create_response("Incorrect password!", 400)
 
 
