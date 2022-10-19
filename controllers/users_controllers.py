@@ -1,9 +1,8 @@
 """Basic controllers for users."""
 
-from ctypes import Union
 from typing import Dict, Optional
 
-from fastapi import APIRouter, Depends, Request, Form
+from fastapi import APIRouter, Depends, Request
 from fastapi.responses import ORJSONResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -17,6 +16,7 @@ from controllers import (
     parse,
 )
 from utils import create_access_token, get_password_hash, verify_password
+from utils.requests_parser import request_body_extraction
 
 
 user_router = APIRouter(prefix="/users", tags=["users"])
@@ -77,10 +77,12 @@ async def get_user(
 
 @user_router.post("/login")
 async def login(
-    params: Optional[Dict[str, str]],
+    request: Request,
     session: AsyncSession = Depends(get_session),
 ):
     """Login controller for a user."""
+
+    params = await request_body_extraction(request)
 
     if "email" not in params:
         return create_response("Email is required", 400)
@@ -101,33 +103,6 @@ async def login(
         )
 
     await session.close()
-    return create_response("Incorrect password!", 400)
-
-
-@user_router.post("/login_form")
-async def login(
-    request: Request,
-    email: str = Form(),
-    password: str = Form(),
-    session: AsyncSession = Depends(get_session),
-):
-    """Login controller for a user."""
-
-    params = {"email": email, "password": password}
-
-    users = await User.GetByArgs(session, {"email": params["email"]})
-
-    if not users:
-        return create_response("No user with such email found", 400)
-
-    user = users[0]
-
-    if verify_password(params["password"], user.hashed_pass):
-        token = create_access_token(params)
-        return templates.TemplateResponse(
-            "main.html", {"token": token, "request": request}
-        )
-
     return create_response("Incorrect password!", 400)
 
 
