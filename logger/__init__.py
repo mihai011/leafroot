@@ -9,6 +9,9 @@ FORMAT = "%(asctime)s - %(module)s - %(funcName)s - line:%(lineno)d - %(levelnam
 def initialize_logger(config):
     """Initiliaze loggers."""
     logging.basicConfig(
-        filename="app.log", filemode="w", level=logging.INFO, format=FORMAT
+        filename="logger/logs/app_info.log",
+        filemode="a",
+        level=logging.INFO,
+        format=FORMAT,
     )
     logging.info("Logging Initialized")
