@@ -22,7 +22,7 @@ async def test_greetings_controller(session):
 @pytest.mark.asyncio
 @temp_db
 async def test_login_user(session):
-    """testing simple flow."""
+    """Testing simple flow."""
 
     ds = DataSource(session)
     await ds.make_user({"email": "test@gmail.com"})

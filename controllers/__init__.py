@@ -65,5 +65,5 @@ async def create_bulk_users(users, session):
         args = {}
         args["email"] = "{}@{}".format(random_string(), random_string())
         args["username"] = random_string()
-        args["hashed_pass"] = await get_password_hash(random_string())
+        args["hashed_pass"] = get_password_hash(random_string())
         await User.AddNew(session, args)

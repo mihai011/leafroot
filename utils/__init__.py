@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from typing import Optional
 import random
 import string
-import logging
+from logger import log, async_log
 
 from passlib.context import CryptContext
 from fastapi.security import OAuth2PasswordBearer
@@ -19,16 +19,19 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
+@log
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """Verify if a hashed password is identical to another hashed password."""
     return pwd_context.verify(plain_password, hashed_password)
 
 
-async def get_password_hash(password: str) -> str:
+@log
+def get_password_hash(password: str) -> str:
     """Produce the hash of a password."""
     return pwd_context.hash(password)
 
 
+@log
 def create_access_token(
     data: dict,
     expires_delta: Optional[int] = int(config.access_token_expire_minutes),
@@ -43,32 +46,27 @@ def create_access_token(
     encoded_jwt = jwt.encode(
         to_encode, config.secret_key, algorithm=config.algorithm
     )
-    logging.info("Created acces token for data: {}".format(data))
     return encoded_jwt
 
 
+@async_log
 async def authenthicate_user(token: str, session):
     """Authenticate users given a token."""
-    try:
-        payload = jwt.decode(
-            token, config.secret_key, algorithms=[config.algorithm]
-        )
-    except Exception as e:
-        logging.error("Error on user authenthication")
-        return None
+
+    payload = jwt.decode(
+        token, config.secret_key, algorithms=[config.algorithm]
+    )
 
     users = await User.GetByArgs(session, {"email": payload["email"]})
     if not users:
-        logging.critical("User not found on authenthication")
-        return None
+        raise Exception("User not found on authenthication")
 
     user = users[0]
-
-    logging.info("User with name: {} authenthicated".format(user.username))
 
     return user
 
 
+@log
 def random_string():
     """Make a random string."""
     return "".join(

@@ -32,7 +32,7 @@
             "module": "pytest",
             "args": [
                 "-s",
-                "tests/test_web_sockets.py"
+                "tests/test_user_controllers.py"
             ],
         },
         {

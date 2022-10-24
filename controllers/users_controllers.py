@@ -108,7 +108,9 @@ async def login(
 
 @user_router.post("/sign-up")
 async def sign_up(
-    params: Dict[str, str], session: AsyncSession = Depends(get_session)
+    request: Request,
+    params: Dict[str, str],
+    session: AsyncSession = Depends(get_session),
 ):
     """Sign-up controller for the user."""
 
@@ -122,7 +124,7 @@ async def sign_up(
         return create_response("Username is not present", 400)
 
     password = params.pop("password")
-    hashed_pass = await get_password_hash(password)
+    hashed_pass = get_password_hash(password)
     params["hashed_pass"] = hashed_pass
 
     try:
