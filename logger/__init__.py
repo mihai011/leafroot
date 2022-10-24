@@ -1,9 +1,12 @@
 """Loggers and configuration for loggers."""
 
+import time
 import logging
 import functools
+import asyncio
 from starlette_context import context
 from starlette_context.errors import ContextDoesNotExistError
+from contextlib import contextmanager
 
 
 FORMAT = "%(asctime)s - %(module)s - %(funcName)s - line:%(lineno)d - %(levelname)s - %(message)s"
@@ -24,6 +27,24 @@ def initialize_logger(config):
     logging.exception("Exception here")
 
 
+@contextmanager
+def wrapping_logic(func, request_id):
+    try:
+        start_ts = time.time()
+        logging.info(
+            f"Request {request_id} entering  function {func.__name__}"
+        )
+        yield
+        dur = time.time() - start_ts
+        logging.info(
+            f"Request {request_id} exiting function {func.__name__} total time {dur}"
+        )
+    except Exception as e:
+        logging.exception(
+            f"Exception  {request_id} raised in {func.__name__}. exception: {str(e)}"
+        )
+
+
 def log(func):
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
@@ -32,43 +53,20 @@ def log(func):
             request_id = context["X-Request-ID"]
         except ContextDoesNotExistError as e:
             pass
-        logging.info(
-            f"Request {request_id} entering  function {func.__name__}"
-        )
-        try:
-            result = func(*args, **kwargs)
-            logging.info(
-                f"Request {request_id} exiting function {func.__name__}"
-            )
-            return result
-        except Exception as e:
-            logging.exception(
-                f"Exception  {request_id} raised in {func.__name__}. exception: {str(e)}"
-            )
 
-    return wrapper
+        result = None
+        if not asyncio.iscoroutinefunction(func):
+            with wrapping_logic(func, request_id):
+                result = func(*args, **kwargs)
+        else:
 
+            async def tmp():
+                result = None
+                with wrapping_logic(func, request_id):
+                    result = await func(*args, **kwargs)
+                return result
 
-def async_log(func):
-    @functools.wraps(func)
-    async def wrapper(*args, **kwargs):
-        request_id = None
-        try:
-            request_id = context["X-Request-ID"]
-        except ContextDoesNotExistError as e:
-            pass
-        logging.info(
-            f"Request {request_id} entering  function {func.__name__}"
-        )
-        try:
-            result = await func(*args, **kwargs)
-            logging.info(
-                f"Request {request_id} exiting function {func.__name__}"
-            )
-            return result
-        except Exception as e:
-            logging.exception(
-                f"Exception  {request_id} raised in {func.__name__}. exception: {str(e)}"
-            )
+            result = tmp()
+        return result
 
     return wrapper

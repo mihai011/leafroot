@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 from typing import Optional
 import random
 import string
-from logger import log, async_log
+from logger import log
 
 from passlib.context import CryptContext
 from fastapi.security import OAuth2PasswordBearer
@@ -49,7 +49,7 @@ def create_access_token(
     return encoded_jwt
 
 
-@async_log
+@log
 async def authenthicate_user(token: str, session):
     """Authenticate users given a token."""
 
