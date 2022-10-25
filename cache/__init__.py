@@ -16,7 +16,7 @@ def initialize_cache():
     cache_backend = InMemoryBackend
     cache_source = None
 
-    if getattr(config, "redis_url") is not None:
+    if getattr(config, "redis_url") is not None and config.env is not "dev":
         cache_backend = RedisBackend
         cache_source = aioredis.from_url(
             config.redis_url,
@@ -35,7 +35,7 @@ def testproof_cache(*cache_args, **cache_kargs):
     def inner(function):
         def wrapper(*args, **kwargs):
 
-            if config.env == "dev":
+            if config.env is "dev":
                 return function(*args, **kwargs)
 
             return cache(*cache_args, **cache_kargs)(function)(*args, **kwargs)
