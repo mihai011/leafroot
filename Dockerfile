@@ -11,5 +11,4 @@ COPY . .
 
 RUN make install_rust
 ENV PATH="/root/.cargo/bin:${PATH}"
-
 RUN make venv_create
