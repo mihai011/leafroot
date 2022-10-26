@@ -13,6 +13,5 @@ RUN make install_rust
 ENV PATH="/root/.cargo/bin:${PATH}"
 RUN make venv_create
 
-
 CMD ["make", "start_development"]
 EXPOSE 8000

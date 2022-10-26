@@ -4,7 +4,6 @@ FROM python:3.10
 RUN apt -y update
 RUN apt -y upgrade
 
-
 RUN mkdir /workspace
 WORKDIR /workspace
 
