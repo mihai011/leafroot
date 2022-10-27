@@ -13,6 +13,7 @@ from jose import jwt
 
 from config import config
 from data import User
+from cache import testproof_cache
 
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -50,6 +51,7 @@ def create_access_token(
 
 
 @log
+@testproof_cache(expire=3600)
 async def authenthicate_user(token: str, session):
     """Authenticate users given a token."""
 
