@@ -1,0 +1,6 @@
+2022-11-02 21:56:42,475 - __init__ - initialize_logger - line:23 - INFO - Logging Initialized
+2022-11-02 21:56:42,476 - __init__ - initialize_logger - line:24 - DEBUG - Logging debug
+2022-11-02 21:56:42,477 - __init__ - initialize_logger - line:25 - WARNING - Logging warning
+2022-11-02 21:56:42,477 - __init__ - initialize_logger - line:26 - ERROR - Error here
+2022-11-02 21:56:42,479 - __init__ - initialize_logger - line:27 - ERROR - Exception here
+NoneType: None

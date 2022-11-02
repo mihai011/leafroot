@@ -72,7 +72,6 @@ pytest-xdist
 python-dotenv
 python-jose
 python-multipart
-python-multipart
 PyYAML
 requests
 rfc3986
