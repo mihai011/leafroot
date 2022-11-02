@@ -1,6 +1,6 @@
 """Basic controllers for users."""
 
-from typing import Dict, Optional
+from typing import Dict
 
 from fastapi import APIRouter, Depends, Request
 from fastapi.responses import ORJSONResponse
@@ -108,7 +108,7 @@ async def login(
 
 @user_router.post("/sign-up")
 async def sign_up(
-    request: Request,
+    request: Request,  # pylint: disable=W0613
     params: Dict[str, str],
     session: AsyncSession = Depends(get_session),
 ):

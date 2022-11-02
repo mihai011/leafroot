@@ -21,7 +21,10 @@ async def login(request: Request):
 
 @base_router.get("/main", response_class=HTMLResponse)
 @auth_decorator
-async def main(request: Request, session: AsyncSession = Depends(get_session)):
+async def main(
+    request: Request,
+    session: AsyncSession = Depends(get_session),  # pylint: disable=W0613
+):
     """Simple main page"""
 
     return templates.TemplateResponse("main.html", {"request": request})

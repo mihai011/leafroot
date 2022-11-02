@@ -1,10 +1,10 @@
 """Module for testing api controller."""
-import pytest
-from aioresponses import aioresponses
 
+import pytest  # pylint: disable=R0801
+from aioresponses import aioresponses  # pylint: disable=R0801
 
-from tests import DataSource
-from tests.conftest import temp_db
+from tests import DataSource  # pylint: disable=R0801
+from tests.conftest import temp_db  # pylint: disable=R0801
 
 
 @pytest.mark.asyncio

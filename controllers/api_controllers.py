@@ -1,8 +1,7 @@
 """api controllers."""
 import logging
 
-from fastapi import Request
-from fastapi import APIRouter, Depends
+from fastapi import Request, APIRouter, Depends
 from fastapi.responses import ORJSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -22,9 +21,7 @@ async def api_request(
 ) -> ORJSONResponse:
     """Make a http request to an external api."""
     content = await parse(request)
-    logging.info(
-        "External api controller called with data: {}".format(content)
-    )
+    logging.info("External api controller called with data: %s", str(content))
 
     if "url" not in content:
         return create_response("Url not found in payload!", 400)

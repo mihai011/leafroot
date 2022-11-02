@@ -4,16 +4,15 @@ from datetime import datetime, timedelta
 from typing import Optional
 import random
 import string
-from logger import log
 
 from passlib.context import CryptContext
 from fastapi.security import OAuth2PasswordBearer
-
 from jose import jwt
 
 from config import config
 from data import User
 from cache import testproof_cache
+from logger import log
 
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")

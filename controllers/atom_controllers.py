@@ -1,9 +1,7 @@
 """atom controllers."""
-from fastapi import Request
-from fastapi import APIRouter, Depends
+from fastapi import Request, APIRouter, Depends
 from fastapi.responses import ORJSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
-
 
 from data import get_session
 from data import Atom, Electron, Neutron, Proton

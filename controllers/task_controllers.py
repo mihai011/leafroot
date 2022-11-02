@@ -16,7 +16,7 @@ task_router = APIRouter(prefix="/tasks", tags=["tasks"])
 @task_router.post("/create_task")
 @auth_decorator
 async def add_simple_task(
-    request: Request,
+    request: Request,  # pylint: disable=W0613
     session: AsyncSession = Depends(get_session),
 ) -> ORJSONResponse:
     """Execute simple task."""

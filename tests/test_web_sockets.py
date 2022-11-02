@@ -1,9 +1,9 @@
 """Module for testing web sockets."""
 
-import pytest
+import pytest  # pylint: disable=R0801
 
-from tests import DataSource
-from tests.conftest import temp_db
+from tests import DataSource  # pylint: disable=R0801
+from tests.conftest import temp_db  # pylint: disable=R0801
 
 
 @pytest.mark.asyncio

@@ -44,10 +44,10 @@ async def test_get_request_external():
     url_test = "http://fake_url.com"
 
     content = {
-        "url": "http://fake_url.com",
-        "body": {},
+        "url": "http://fake.com",
+        "body": {"fake": "fake"},
         "method": "GET",
-        "params": {},
+        "params": {"fake": "fake"},
         "headers": {},
     }
 
