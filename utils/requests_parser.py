@@ -5,7 +5,7 @@ from fastapi import Request
 from logger import log
 
 
-@log
+@log()
 async def request_body_extraction(request: Request):
     """Extract the data from the request Body
 

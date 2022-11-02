@@ -20,19 +20,19 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
-@log
+@log()
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     """Verify if a hashed password is identical to another hashed password."""
     return pwd_context.verify(plain_password, hashed_password)
 
 
-@log
+@log()
 def get_password_hash(password: str) -> str:
     """Produce the hash of a password."""
     return pwd_context.hash(password)
 
 
-@log
+@log()
 def create_access_token(
     data: dict,
     expires_delta: Optional[int] = int(config.access_token_expire_minutes),
@@ -50,8 +50,8 @@ def create_access_token(
     return encoded_jwt
 
 
-@log
 @testproof_cache(expire=3600)
+@log()
 async def authenthicate_user(token: str, session):
     """Authenticate users given a token."""
 
@@ -68,7 +68,7 @@ async def authenthicate_user(token: str, session):
     return user
 
 
-@log
+@log()
 def random_string():
     """Make a random string."""
     return "".join(

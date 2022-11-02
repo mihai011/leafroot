@@ -45,28 +45,33 @@ def wrapping_logic(func, request_id):
         )
 
 
-def log(func):
-    @functools.wraps(func)
-    def wrapper(*args, **kwargs):
-        request_id = None
-        try:
-            request_id = context["X-Request-ID"]
-        except ContextDoesNotExistError as e:
-            pass
+def log(*log_args, **log_kwargs):
+    def inner(func):
+        def wrapper(*args, **kwargs):
+            request_id = None
+            try:
+                request_id = context["X-Request-ID"]
+            except ContextDoesNotExistError as e:
+                pass
 
-        result = None
-        if not asyncio.iscoroutinefunction(func):
-            with wrapping_logic(func, request_id):
-                result = func(*args, **kwargs)
-        else:
+            result = None
 
-            async def tmp():
-                result = None
+            if not asyncio.iscoroutinefunction(func):
                 with wrapping_logic(func, request_id):
-                    result = await func(*args, **kwargs)
-                return result
+                    result = func(*args, **kwargs)
 
-            result = tmp()
-        return result
+            else:
 
-    return wrapper
+                async def tmp():
+                    result = None
+                    with wrapping_logic(func, request_id):
+                        result = await func(*args, **kwargs)
+                    return result
+
+                result = tmp()
+
+            return result
+
+        return wrapper
+
+    return inner
