@@ -18,6 +18,7 @@ from controllers.atom_controllers import atom_router
 from controllers.api_controllers import api_router
 from controllers.task_controllers import task_router
 from controllers.ws_controllers import ws_router
+from controllers.utils_controllers import utils_router
 from data import async_session, User
 from config import config
 from cache import initialize_cache
@@ -43,6 +44,7 @@ app.include_router(base_router)
 app.include_router(api_router)
 app.include_router(task_router)
 app.include_router(ws_router)
+app.include_router(utils_router)
 
 initialize_cache()
 initialize_logger(config)

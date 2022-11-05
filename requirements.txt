@@ -52,6 +52,7 @@ orjson
 packaging
 passlib
 pathspec
+pika
 platformdirs
 pluggy
 pre-commit

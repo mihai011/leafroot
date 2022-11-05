@@ -1,5 +1,7 @@
 """tests for util functions."""
 
+import pytest
+
 import json
 import aioredis
 
@@ -8,9 +10,10 @@ from tests.conftest import temp_db
 from config import config
 
 
+@pytest.mark.asyncio
 @temp_db
 async def test_small_task(session):
-    """test authenthication."""
+    """Test authenthication."""
 
     ds = DataSource(session)
     await ds.make_user()

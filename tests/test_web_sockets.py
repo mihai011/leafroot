@@ -9,10 +9,9 @@ from tests.conftest import temp_db  # pylint: disable=R0801
 @pytest.mark.asyncio
 @temp_db
 async def test_web_sockets(session):
-    """testing web sockets"""
+    """Testing web sockets"""
 
     ds = DataSource(session)
-
     with ds.test_client.websocket_connect("/ws") as websocket:
         data = websocket.receive_text()
         assert data == "Connected!"

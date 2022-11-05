@@ -1,4 +1,4 @@
-"""tests for util functions."""
+"""Tests for util functions."""
 
 from tests.conftest import temp_db
 from utils import create_access_token, authenthicate_user

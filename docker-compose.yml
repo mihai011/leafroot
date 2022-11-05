@@ -49,6 +49,9 @@ services:
         image: rabbitmq:latest
         container_name: rabbitmq
         hostname: ${RABBITMQ_HOST}
+        environment:
+            - RABBITMQ_USER=${RABBITMQ_USER}
+            - RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
         ports:
             - 127.0.0.1:5672:5672
         networks:

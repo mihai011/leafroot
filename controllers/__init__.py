@@ -8,8 +8,10 @@ from fastapi.responses import ORJSONResponse
 
 from data import User
 from utils import get_password_hash, authenthicate_user, random_string
+from logger import log
 
 
+@log()
 def auth_decorator(controller):
     """Authenthication decorator, query and payload parser."""
 
@@ -35,6 +37,7 @@ def auth_decorator(controller):
     return auth
 
 
+@log()
 async def parse(request):
     """simple parser for request."""
     if request.method == "GET":
@@ -46,6 +49,7 @@ async def parse(request):
     return args
 
 
+@log()
 def create_response(message: string, status: int, item=None) -> ORJSONResponse:
     """Receive a message parameter from which a reponse is created and item
     from wich a dictionay is ORJSONResponse object is made as response."""

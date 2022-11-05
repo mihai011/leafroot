@@ -7,10 +7,10 @@ from pydantic.typing import Optional
 
 
 class Settings(BaseSettings):
-    """class responsible for loading up and generating settings
+    """Class responsible for loading up and generating settings
 
     Args:
-        BaseSettings (_type_): Base settings class.
+        BaseSettings (class): Base settings class.
     """
 
     app_name: str = "Fast Full API"
