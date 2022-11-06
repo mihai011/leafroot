@@ -1,4 +1,4 @@
-"""api controllers."""
+"""Api controllers."""
 import logging
 
 from fastapi import Request, APIRouter, Depends

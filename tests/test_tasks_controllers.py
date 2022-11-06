@@ -3,7 +3,7 @@
 import pytest
 
 import json
-import aioredis
+import redis
 
 from tests import DataSource
 from tests.conftest import temp_db
@@ -24,9 +24,9 @@ async def test_small_task(session):
     assert response.status_code == 200
     task_metadata = json.loads(response.text)
     task_id = task_metadata["item"]["task_id"]
-    redis = aioredis.from_url(config.redis_url)
+    redis_connection = redis.from_url(config.redis_url)
     while True:
-        value = await redis.get("celery-task-meta-" + task_id)
+        value = redis_connection.get("celery-task-meta-" + task_id)
         if not value:
             continue
         value = json.loads(value)["result"]

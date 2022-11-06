@@ -1,10 +1,8 @@
 from logger import log
 from config import config
-import socket
 
 from sqlalchemy import create_engine
-from celery import Celery
-import aioredis
+import redis
 import pika
 
 
@@ -38,9 +36,9 @@ async def check_postgressql():
 async def check_redis():
     """Check redis connection"""
 
-    redis = aioredis.from_url(config.redis_url)
+    redis_connection = redis.from_url(config.redis_url)
     try:
-        await redis.set("test", "test")
+        redis_connection.set("test", "test")
         return True
     except Exception as e:
         return str(e)

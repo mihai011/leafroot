@@ -1,5 +1,4 @@
 aiohttp
-aioredis
 aioresponses
 aiosignal
 alembic
@@ -74,6 +73,7 @@ python-dotenv
 python-jose
 python-multipart
 PyYAML
+redis
 requests
 rfc3986
 rsa

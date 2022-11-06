@@ -1,7 +1,7 @@
 """Modules that contains cache related functions."""
 
 
-import aioredis
+import redis
 
 from fastapi_cache import FastAPICache
 from fastapi_cache.backends.redis import RedisBackend
@@ -18,7 +18,7 @@ def initialize_cache():
 
     if getattr(config, "redis_url") is not None and config.env != "dev":
         cache_backend = RedisBackend
-        cache_source = aioredis.from_url(
+        cache_source = redis.from_url(
             config.redis_url,
             encoding="utf8",
             decode_responses=True,
