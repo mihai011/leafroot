@@ -1,12 +1,16 @@
 """Modules that contains cache related functions."""
 
+from typing import Optional
 
-import redis
-
+from aiohttp import ClientSession
+from fastapi import Request, Response
 from fastapi_cache import FastAPICache
 from fastapi_cache.backends.redis import RedisBackend
 from fastapi_cache.backends.inmemory import InMemoryBackend
 from fastapi_cache.decorator import cache
+import redis.asyncio as redis
+from sqlalchemy.ext.asyncio import AsyncSession
+
 
 from config import config
 
@@ -28,6 +32,41 @@ def initialize_cache():
 
     FastAPICache.init(cache_backend(), prefix="fastapi-cache")
     return None
+
+
+def my_key_builder(
+    func,
+    namespace: Optional[str] = "",
+    request: Request = None,
+    response: Response = None,
+    *args,
+    **kwargs,
+):
+    """! Key builder for cache
+
+    @param func (function):function to be cached
+    @param namespace (Optional[str], optional): _description_. Defaults to "".
+    @param request (Request, optional): Request object. Defaults to None.
+    @param response (Response, optional): Response Object. Defaults to None.
+
+    @returns (str): cache key
+    """
+    prefix = FastAPICache.get_prefix()
+    new_args = []
+    ignored = [AsyncSession, ClientSession]
+    for arg in kwargs["args"]:
+        to_be_ignored = False
+        for ignore in ignored:
+            if isinstance(arg, ignore):
+                to_be_ignored = True
+                break
+        if not to_be_ignored:
+            new_args.append(arg)
+
+    cache_key = (
+        f"{prefix}:{namespace}:{func.__module__}:{func.__name__}:{new_args}"
+    )
+    return cache_key
 
 
 def testproof_cache(*cache_args, **cache_kargs):

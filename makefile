@@ -61,7 +61,7 @@ coverage_parallel: rust_workers start_celery_workers
 	make stop_celery_workers
 
 start_production: start_services start_celery_workers rust_workers
-	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_PROD) gunicorn app.app:app --workers $(CORES) -k uvicorn.workers.UvicornH11Worker --bind 0.0.0.0 -p $(PORT)
+	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_PROD) gunicorn app.app:app --workers $(CORES) -k uvicorn.workers.UvicornH11Worker --bind 0.0.0.0:$(PORT)
 
 start_development: start_services rust_workers start_celery_workers
 	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_USER) uvicorn app.app:app --host 0.0.0.0 --port $(PORT) --reload

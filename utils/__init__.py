@@ -11,7 +11,7 @@ from jose import jwt
 
 from config import config
 from data import User
-from cache import testproof_cache
+from cache import testproof_cache, my_key_builder
 from logger import log
 
 
@@ -49,7 +49,9 @@ def create_access_token(
     return encoded_jwt
 
 
-@testproof_cache(expire=3600)
+@testproof_cache(
+    expire=int(config.access_token_expire_minutes), key_builder=my_key_builder
+)
 @log()
 async def authenthicate_user(token: str, session):
     """Authenticate users given a token."""
@@ -58,13 +60,14 @@ async def authenthicate_user(token: str, session):
         token, config.secret_key, algorithms=[config.algorithm]
     )
 
-    users = await User.GetByArgs(session, {"email": payload["email"]})
-    if not users:
-        raise Exception("User not found on authenthication")
+    if "email" in payload:
+        users = await User.GetByArgs(session, {"email": payload["email"]})
+        if not users:
+            raise Exception("User not found on authenthication!")
 
-    user = users[0]
+        return users[0]
 
-    return user
+    return None
 
 
 @log()

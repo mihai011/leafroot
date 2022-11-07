@@ -1,6 +1,7 @@
 """module that contains application settings"""
 
 from typing import Literal
+import os
 
 from pydantic import BaseSettings, RedisDsn, PostgresDsn, AmqpDsn
 from pydantic.typing import Optional
@@ -57,7 +58,7 @@ class Settings(BaseSettings):
     class Config:
         """Config class"""
 
-        env_file = ".env_user"
+        env_file = os.getenv("ENV_FILE")
         env_file_encoding = "utf-8"
         validate_assignment = True
 
