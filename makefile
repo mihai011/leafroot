@@ -45,7 +45,7 @@ format:
 	$(ACTIVATE_VENV) && black $(DIR_ARGS)
 
 test_parallel: rust_workers  start_celery_workers
-	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_USER) pytest -n $(MANUAL_CORES) tests/
+	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_USER) pytest -n $(CORES) tests/
 	-make stop_celery_workers
 
 test: start_services rust_workers start_celery_workers

@@ -97,7 +97,7 @@ async def login(
     user = users[0]
 
     if verify_password(params["password"], user.hashed_pass):
-        token = create_access_token(params)
+        token = await create_access_token(params)
         return create_response(
             "User logged in!", 200, {"token": token, "user": user.serialize()}
         )

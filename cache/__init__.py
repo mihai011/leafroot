@@ -2,6 +2,7 @@
 
 from typing import Optional
 
+import asyncio
 from aiohttp import ClientSession
 from fastapi import Request, Response
 from fastapi_cache import FastAPICache
@@ -72,13 +73,15 @@ def my_key_builder(
 def testproof_cache(*cache_args, **cache_kargs):
     """Test proof cache to avoid cache when testing."""
 
-    def inner(function):
+    def inner(func):
         def wrapper(*args, **kwargs):
 
             if config.env == "dev":
-                return function(*args, **kwargs)
+                return func(*args, **kwargs)
 
-            return cache(*cache_args, **cache_kargs)(function)(*args, **kwargs)
+            result = cache(*cache_args, **cache_kargs)(func)(*args, **kwargs)
+
+            return result
 
         return wrapper
 

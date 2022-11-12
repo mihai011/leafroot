@@ -31,8 +31,11 @@ def get_password_hash(password: str) -> str:
     return pwd_context.hash(password)
 
 
+@testproof_cache(
+    expire=int(config.access_token_expire_minutes), key_builder=my_key_builder
+)
 @log()
-def create_access_token(
+async def create_access_token(
     data: dict,
     expires_delta: Optional[int] = int(config.access_token_expire_minutes),
 ):
