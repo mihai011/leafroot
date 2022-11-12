@@ -76,7 +76,7 @@ async def user_on_startup(session: AsyncSession = async_session()):
 
         user = await User.GetByArgs(session, params)
         if not user:
-            hashed_pass = await get_password_hash(config.user_password)
+            hashed_pass = get_password_hash(config.user_password)
             params["hashed_pass"] = hashed_pass
             user = await User.AddNew(session, params)
             await session.close()
