@@ -16,7 +16,7 @@ async def get_http_session():
     await session.close()
 
 
-async def make_api_request(session, content):
+async def make_api_request(session, args):
     """
     Constructs a http request to an external api and send it:
 
@@ -35,11 +35,11 @@ async def make_api_request(session, content):
     response from the external api in text form
     """
 
-    method = content.get("method", None)
-    url = content.get("url", None)
-    params = content.get("params", None)
-    body = content.get("body", None)
-    headers = content.get("headers", None)
+    method = args.get("method", None)
+    url = args.get("url", None)
+    params = args.get("params", None)
+    body = args.get("body", None)
+    headers = args.get("headers", None)
 
     query_url = "{}{}".format(url, urllib.parse.urlencode(params))
 

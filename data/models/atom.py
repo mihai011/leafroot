@@ -10,7 +10,7 @@ from data.models import ExtraBase, Base
 
 
 class Atom(Base, ExtraBase):
-    """Atom class represents."""
+    """Atom class."""
 
     __tablename__ = "atoms"
 

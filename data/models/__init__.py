@@ -4,9 +4,11 @@ from datetime import datetime
 from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.sql.expression import func
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.future import select
 from sqlalchemy import Column, Integer, DateTime
+
 
 from config import config
 
@@ -106,3 +108,12 @@ class ExtraBase(SerializerMixin):
         await session.run_sync(delete)
         await session.commit()
         return True
+
+    @classmethod
+    async def GetRandom(Cls, session):
+        """Get random object."""
+
+        def get_random(session):
+            return session.query(Cls).order_by(func.random()).first()
+
+        return await session.run_sync(get_random)
