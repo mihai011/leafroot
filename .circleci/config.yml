@@ -6,26 +6,18 @@ jobs:
     build-and-test:
         docker:
             - image: cimg/python:3.10.7
-            - image: cimg/postgres:14.2
-            - image: cimg/redis:6.2.6
-            - image: rabbitmq:latest
-            - image: mongo:latest
         steps:
             - checkout
             - run: whoami
             - run: pkill --help
             - run:
-                  name: wait for db
-                  command: dockerize -wait tcp://localhost:5432 -timeout 1m
-            - run:
-                  name: wait for redis
-                  command: dockerize -wait tcp://localhost:6379 -timeout 1m
-            - run:
-                  name: wait for rabbitmq
-                  command: dockerize -wait tcp://localhost:5672 -timeout 1m
-            - run:
-                  name: wait for mongo
-                  command: dockerize -wait tcp://localhost:27017 -timeout 1m
+                  name: Install Docker Compose
+                  environment:
+                      COMPOSE_VERSION: 1.29.2
+                  command: |
+                      curl -L "https://github.com/docker/compose/releases/download/${COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o ~/docker-compose
+                      chmod +x ~/docker-compose
+                      sudo mv ~/docker-compose /usr/local/bin/docker-compose
             - run:
                   name: install rust
                   command: make install_rust
@@ -35,6 +27,9 @@ jobs:
             - run:
                   name: make env_file
                   command: make env_file
+            - run:
+                  name: Start services
+                  command: make start_services
             - run:
                   name: Run tests
                   command: make test_parallel
