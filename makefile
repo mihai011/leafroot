@@ -3,6 +3,7 @@ ACTIVATE_VENV=. venv/bin/activate
 DIR_ARGS = app/ controllers/ data/ tests/ scripts/ utils/ cache/ config/
 DIR_NO_TESTS = app/ controllers/ data/ scripts/ utils/ cache/
 SERVICES = db redis rabbitmq phppgadmin mongo
+FULL_SERVICES = db redis rabbitmq phppgadmin mongo backend
 PORT=80
 USER=$(shell whoami)
 # for mac os install coreutils ot get nproc
@@ -46,6 +47,10 @@ format:
 
 test_parallel: rust_workers  start_celery_workers
 	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_USER) pytest -n $(CORES) tests/
+	-make stop_celery_workers
+
+test_circleci: venv_create install_rust rust_workers  start_celery_workers
+	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_USER) pytest -n $(MANUAL_CORES) tests/
 	-make stop_celery_workers
 
 test: start_services rust_workers start_celery_workers
@@ -93,6 +98,9 @@ pycodestyle:
 
 start_services:
 	docker-compose --env-file $(ENV_FILE_USER) up -d $(SERVICES)
+
+start_full_services:
+	docker-compose --env-file $(ENV_FILE_USER) up -d $(FULL_SERVICES)
 
 stop_services:
 	docker-compose --env-file $(ENV_FILE_USER) stop $(SERVICES)

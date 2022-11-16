@@ -20,20 +20,11 @@ jobs:
                       sudo mv ~/docker-compose /usr/local/bin/docker-compose
             - setup_remote_docker
             - run:
-                  name: install rust
-                  command: make install_rust
-            - run:
-                  name: make venv
-                  command: make venv_create
-            - run:
-                  name: make env_file
-                  command: make env_file
-            - run:
                   name: Start services
-                  command: make start_services
+                  command: make start_full_services
             - run:
                   name: Run tests
-                  command: make test_parallel
+                  command: docker exec -it backend make test_circleci
 
 workflows:
     buld-and-test:
