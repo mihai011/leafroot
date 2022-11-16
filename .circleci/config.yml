@@ -9,6 +9,7 @@ jobs:
             - image: cimg/postgres:14.2
             - image: cimg/redis:6.2.6
             - image: rabbitmq:latest
+            - image: mongo:latest
         steps:
             - checkout
             - run: whoami
@@ -22,6 +23,9 @@ jobs:
             - run:
                   name: wait for rabbitmq
                   command: dockerize -wait tcp://localhost:5672 -timeout 1m
+            - run:
+                  name: wait for mongo
+                  command: dockerize -wait tcp://localhost:27017 -timeout 1m
             - run:
                   name: install rust
                   command: make install_rust
