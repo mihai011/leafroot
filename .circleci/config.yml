@@ -20,6 +20,9 @@ jobs:
                       sudo mv ~/docker-compose /usr/local/bin/docker-compose
             - setup_remote_docker
             - run:
+                  name: Make env file
+                  command: make env_file
+            - run:
                   name: Start services
                   command: make start_full_services
             - run:
