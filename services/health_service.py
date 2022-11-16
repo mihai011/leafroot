@@ -4,6 +4,7 @@ from config import config
 from sqlalchemy import create_engine
 import redis
 import pika
+import motor.motor_asyncio
 
 
 async def health_check():
@@ -17,7 +18,23 @@ async def health_check():
     status["postgressql"] = await check_postgressql()
     status["redis"] = await check_redis()
     status["rabbitmq"] = await check_rabbitmq()
+    status["mongo"] = await check_mongodb()
+
     return status
+
+
+@log()
+async def check_mongodb():
+
+    # set a 5-second connection timeout
+    client = motor.motor_asyncio.AsyncIOMotorClient(
+        config.mongo_url, serverSelectionTimeoutMS=1000
+    )
+    try:
+        await client.server_info()
+        return True
+    except Exception as e:
+        return str(e)
 
 
 @log()

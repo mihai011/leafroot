@@ -44,6 +44,7 @@ jinja2
 lazy-object-proxy
 maturin
 mccabe
+motor
 multidict
 mypy
 mypy-extensions

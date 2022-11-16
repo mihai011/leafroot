@@ -21,7 +21,12 @@ async def test_health_status(session):
 
     assert response.status_code == 200
     response_data = json.loads(response.text)
-    health_check_ok = {"postgressql": True, "redis": True, "rabbitmq": True}
+    health_check_ok = {
+        "postgressql": True,
+        "redis": True,
+        "rabbitmq": True,
+        "mongo": True,
+    }
     assert response_data["item"] == health_check_ok
 
 
