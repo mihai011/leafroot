@@ -27,7 +27,7 @@ jobs:
                   command: make start_full_services
             - run:
                   name: Run tests
-                  command: docker exec -it backend make test_circleci
+                  command: docker exec -it backend make test_parallel
 
 workflows:
     buld-and-test:
