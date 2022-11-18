@@ -6,28 +6,26 @@ jobs:
     build-and-test:
         docker:
             - image: cimg/python:3.10.7
+            - image: cimg/postgres:14.2
+            - image: cimg/redis:6.2.6
+            - image: rabbitmq:latest
+            - image: mongo:latest
         steps:
             - checkout
             - run: whoami
             - run: pkill --help
             - run:
-                  name: Install Docker Compose
-                  environment:
-                      COMPOSE_VERSION: 2.12.1
-                  command: |
-                      curl -L "https://github.com/docker/compose/releases/download/${COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o ~/docker-compose
-                      chmod +x ~/docker-compose
-                      sudo mv ~/docker-compose /usr/local/bin/docker-compose
-            - setup_remote_docker
-            - run:
                   name: Make env file
                   command: make env_file
             - run:
-                  name: Start services
-                  command: make start_full_services
+                  name: Install Rust
+                  command: make install_rust
+            - run:
+                  name: Create environment
+                  command: make venv_create
             - run:
                   name: Run tests
-                  command: docker exec -it backend make test_parallel
+                  command: make test_parallel
 
 workflows:
     buld-and-test:

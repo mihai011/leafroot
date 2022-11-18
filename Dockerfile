@@ -10,7 +10,6 @@ WORKDIR /workspace
 COPY . .
 
 CMD sleep infinity
-# RUN make install_rust
-# ENV PATH="/root/.cargo/bin:${PATH}"
-# RUN make venv_create
-# RUN
+RUN make install_rust
+ENV PATH="/root/.cargo/bin:${PATH}"
+RUN make venv_create
