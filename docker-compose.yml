@@ -22,8 +22,6 @@ services:
     db:
         image: postgres:10-alpine
         container_name: db
-        env_file:
-            - .env_user
         hostname: ${POSTGRES_HOST}
         ports:
             - 127.0.0.1:5432:5432
@@ -39,8 +37,6 @@ services:
     mongo:
         image: mongo:latest
         container_name: mongo
-        env_file:
-            - .env_user
         hostname: ${MONGO_HOST}
         environment:
             - MONGO_INITDB_ROOT_USERNAME=${MONGO_USER}
@@ -74,8 +70,6 @@ services:
 
     phppgadmin:
         image: docker.io/bitnami/phppgadmin
-        env_file:
-            - .env_user
         ports:
             - 127.0.0.1:8081:8080
         volumes:

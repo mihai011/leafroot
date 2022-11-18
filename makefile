@@ -112,7 +112,7 @@ docker_update:
 	make start_services
 
 env_file:
-	cp config/config_files/.env_dev $(ENV_FILE_USER)
+	cp $(ENV_FILE_DEV) $(ENV_FILE_USER)
 
 bare_bones: env_file venv_create start_services test_parallel sr_services
 
