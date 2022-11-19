@@ -9,7 +9,7 @@ jobs:
             - image: cimg/postgres:14.2
             - image: cimg/redis:6.2.6
             - image: rabbitmq:latest
-            - image: cimg/mongo:latest
+            - image: cimg/mongo
         steps:
             - checkout
             - run: whoami
