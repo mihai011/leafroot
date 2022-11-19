@@ -19,7 +19,7 @@ from controllers.api_controllers import api_router
 from controllers.task_controllers import task_router
 from controllers.ws_controllers import ws_router
 from controllers.utils_controllers import utils_router
-from data import async_session, User
+from data import async_session, User, create_database_app
 from config import config
 from cache import initialize_cache
 from logger import initialize_logger
@@ -48,6 +48,7 @@ app.include_router(utils_router)
 
 initialize_cache()
 initialize_logger(config)
+create_database_app(config.postgres_db)
 
 
 @app.middleware("http")

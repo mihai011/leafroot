@@ -1,6 +1,24 @@
-"""module for related data."""
+"""Module for related data."""
+
+from sqlalchemy_utils import database_exists, create_database
 
 from data.models.user import User, Base
 from data.models.atom import Atom, Electron, Neutron, Proton
-
 from data.models import get_session, async_session
+from config import config
+from logger import log
+
+
+@log()
+def create_database_app(db_name):
+    """Create database with db_name."""
+
+    DB_URL_BASE_SYNC = "{}{}".format(
+        config.sqlalchemy_database_url_base_sync, db_name
+    )
+
+    if not database_exists(DB_URL_BASE_SYNC):
+        create_database(DB_URL_BASE_SYNC)
+        return True
+
+    return False
