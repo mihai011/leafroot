@@ -48,8 +48,8 @@ class Settings(BaseSettings):
     user_password: Optional[str]
 
     mongo_host: Optional[str]
-    mongo_user: Optional[str]
-    mongo_pass: Optional[str]
+    mongo_initdb_root_username: Optional[str]
+    mongo_initdb_root_password: Optional[str]
 
     LOG_DIR: Optional[str] = "logs"
 
@@ -80,7 +80,9 @@ class Settings(BaseSettings):
         host = self.interface or self.mongo_host
 
         self.mongo_url = "mongodb://{}:{}@{}:27017".format(
-            self.mongo_user, self.mongo_pass, host
+            self.mongo_initdb_root_username,
+            self.mongo_initdb_root_password,
+            host,
         )
 
     def create_celery_broker_url(self):
