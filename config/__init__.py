@@ -81,14 +81,15 @@ class Settings(BaseSettings):
         """Create the connection url for mongo."""
         host = self.interface or self.mongo_host
 
-        self.mongo_url_auth = "mongodb://{}:{}@{}:27017".format(
+        self.mongo_url_auth = "mongodb://{}:{}@{}:{}".format(
             self.mongo_initdb_root_username,
             self.mongo_initdb_root_password,
             host,
+            self.mongo_port,
         )
 
-        self.mongo_url_not_auth = "mongodb://{}:27017".format(
-            host,
+        self.mongo_url_not_auth = "mongodb://{}:{}".format(
+            host, self.mongo_port
         )
 
     def create_celery_broker_url(self):
