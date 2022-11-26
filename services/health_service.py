@@ -27,14 +27,27 @@ async def health_check():
 async def check_mongodb():
 
     # set a 5-second connection timeout
-    client = motor.motor_asyncio.AsyncIOMotorClient(
-        config.mongo_url, serverSelectionTimeoutMS=1000
+    client_auth = motor.motor_asyncio.AsyncIOMotorClient(
+        config.mongo_url_auth, serverSelectionTimeoutMS=1000
     )
+    client_no_auth = motor.motor_asyncio.AsyncIOMotorClient(
+        config.mongo_url_not_auth, serverSelectionTimeoutMS=1000
+    )
+
+    error = None
     try:
-        await client.server_info()
+        await client_auth.server_info()
         return True
     except Exception as e:
-        return str(e)
+        error = e
+
+    try:
+        await client_no_auth.server_info()
+        return True
+    except Exception as e:
+        error = e
+
+    return error
 
 
 @log()

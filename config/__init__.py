@@ -36,7 +36,8 @@ class Settings(BaseSettings):
 
     celery_broker_url: Optional[AmqpDsn]
     redis_url: Optional[RedisDsn]
-    mongo_url: Optional[MongoDsn]
+    mongo_url_auth: Optional[MongoDsn]
+    mongo_url_not_auth: Optional[MongoDsn]
 
     sqlalchemy_database_url_async: Optional[PostgresDsn]
     sqlalchemy_database_url_base_async: Optional[PostgresDsn]
@@ -48,6 +49,7 @@ class Settings(BaseSettings):
     user_password: Optional[str]
 
     mongo_host: Optional[str]
+    mongo_port: Optional[str]
     mongo_initdb_root_username: Optional[str]
     mongo_initdb_root_password: Optional[str]
 
@@ -79,9 +81,13 @@ class Settings(BaseSettings):
         """Create the connection url for mongo."""
         host = self.interface or self.mongo_host
 
-        self.mongo_url = "mongodb://{}:{}@{}:27017".format(
+        self.mongo_url_auth = "mongodb://{}:{}@{}:27017".format(
             self.mongo_initdb_root_username,
             self.mongo_initdb_root_password,
+            host,
+        )
+
+        self.mongo_url_not_auth = "mongodb://{}:27017".format(
             host,
         )
 
