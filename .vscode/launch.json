@@ -25,18 +25,18 @@
             "console": "integratedTerminal"
         },
         {
-            "env": { "ENV_FILE": ".env_user"},
+            "env": { "ENV_FILE": "config/config_files/.env_user"},
             "name": "Python: tests",
             "type": "python",
             "request": "launch",
             "module": "pytest",
             "args": [
                 "-s",
-                "tests/test_utils_controllers.py"
+                "tests/test_external_api.py"
             ],
         },
         {
-            "env": { "ENV_FILE": ".env_user"},
+            "env": { "ENV_FILE": "config/config_files/.env_dev"},
             "name": "Python: FastAPI",
             "type": "python",
             "request": "launch",
