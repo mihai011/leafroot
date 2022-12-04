@@ -74,6 +74,9 @@ docs/_build/
 # PyBuilder
 target/
 
+# mac
+.DS_store
+
 # Jupyter Notebook
 .ipynb_checkpoints
 
