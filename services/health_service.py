@@ -25,8 +25,9 @@ async def health_check():
 
 @log()
 async def check_mongodb():
+    """Checks mongo service."""
 
-    # set a 5-second connection timeout
+    # set a 1-second connection timeout
     client_auth = motor.motor_asyncio.AsyncIOMotorClient(
         config.mongo_url_auth, serverSelectionTimeoutMS=1000
     )

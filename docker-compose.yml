@@ -20,7 +20,7 @@ services:
             - shared_network
 
     db:
-        image: postgres:10-alpine
+        image: postgres:14-alpine
         container_name: db
         hostname: ${POSTGRES_HOST}
         ports:

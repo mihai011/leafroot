@@ -7,6 +7,10 @@ class HelloWorldUser(HttpUser):
     @task
     def login(self):
         self.client.post(
-            "http://localhost:8001/users/login",
-            json={"email": "a@gmail.com", "username": "mika", "password": "control"},
+            "http://localhost:80/users/login",
+            json={
+                "email": "a@gmail.com",
+                "username": "mika",
+                "password": "control",
+            },
         )

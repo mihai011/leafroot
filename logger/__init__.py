@@ -2,7 +2,6 @@
 
 import time
 import logging
-import functools
 import asyncio
 from starlette_context import context
 from starlette_context.errors import ContextDoesNotExistError
