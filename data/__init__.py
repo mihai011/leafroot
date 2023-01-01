@@ -10,11 +10,11 @@ from logger import log
 
 
 @log()
-def create_database_app(db_name):
+def create_database_app():
     """Create database with db_name."""
 
     DB_URL_BASE_SYNC = "{}{}".format(
-        config.sqlalchemy_database_url_base_sync, db_name
+        config.sqlalchemy_database_url_base_sync, config.postgres_db
     )
 
     if not database_exists(DB_URL_BASE_SYNC):

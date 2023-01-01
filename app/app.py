@@ -3,9 +3,8 @@
 Here you include the routers for the application and middleware used.
 """
 
-import time
 
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware import Middleware
 from starlette_context import plugins
@@ -24,20 +23,23 @@ from config import config
 from cache import initialize_cache
 from logger import initialize_logger
 from utils import get_password_hash
+from middleware import TimeRequestMiddleware
 
 middleware = [
     Middleware(
         RawContextMiddleware,
         plugins=(plugins.RequestIdPlugin(), plugins.CorrelationIdPlugin()),
-    )
+    ),
+    Middleware(TimeRequestMiddleware),
 ]
 
 
 app = FastAPI(middleware=middleware)
 
+
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-
+# include routes
 app.include_router(user_router)
 app.include_router(atom_router)
 app.include_router(base_router)
@@ -46,19 +48,10 @@ app.include_router(task_router)
 app.include_router(ws_router)
 app.include_router(utils_router)
 
+# function to run on initialization
 initialize_cache()
-initialize_logger(config)
-create_database_app(config.postgres_db)
-
-
-@app.middleware("http")
-async def add_time_headers(request: Request, call_next):
-    """Add time headers to check the time spent on the particular request."""
-    start_time = time.time()
-    response = await call_next(request)
-    process_time = time.time() - start_time
-    response.headers["X-Process-Time"] = str(process_time)
-    return response
+initialize_logger()
+create_database_app()
 
 
 @app.on_event("startup")

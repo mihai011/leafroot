@@ -11,7 +11,7 @@ from contextlib import contextmanager
 FORMAT = "%(asctime)s - %(module)s - %(funcName)s - line:%(lineno)d - %(levelname)s - %(message)s"
 
 
-def initialize_logger(config):
+def initialize_logger():
     """Initiliaze loggers."""
     logging.basicConfig(
         filename="logger/logs/app.log",
@@ -61,13 +61,13 @@ def log(*log_args, **log_kwargs):
 
             else:
 
-                async def tmp():
+                async def wrap():
                     result = None
                     with wrapping_logic(func, request_id):
                         result = await func(*args, **kwargs)
                     return result
 
-                result = tmp()
+                result = wrap()
 
             return result
 
