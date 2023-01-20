@@ -1,4 +1,4 @@
-FROM python:3.10
+FROM python:3.10 AS base
 
 # update and upgrade
 # RUN apt -y update
@@ -9,7 +9,12 @@ WORKDIR /workspace
 
 COPY . .
 
-CMD sleep infinity
 RUN make install_rust
 ENV PATH="/root/.cargo/bin:${PATH}"
 RUN make venv_create
+
+FROM base AS dev
+CMD sleep infinity
+
+FROM base AS prod
+CMD make start_production

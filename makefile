@@ -17,6 +17,7 @@ ENV_FILE_USER=.env_user
 default: start_celery_workers
 
 venv_create: venv_delete stable_packages_versions.txt
+	pwd
 	python3 -m venv venv
 	$(ACTIVATE_VENV) && pip install --upgrade pip
 	$(ACTIVATE_VENV) && pip install --no-cache-dir -r stable_packages_versions.txt
