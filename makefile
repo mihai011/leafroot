@@ -2,8 +2,8 @@ ACTIVATE_BASH=source ~/.bashrc
 ACTIVATE_VENV=. venv/bin/activate
 DIR_ARGS = app/ controllers/ data/ tests/ scripts/ utils/ cache/ config/
 DIR_NO_TESTS = app/ controllers/ data/ scripts/ utils/ cache/
-SERVICES = db redis rabbitmq phppgadmin mongo
-FULL_SERVICES = db redis rabbitmq phppgadmin mongo backend
+SERVICES = db redis rabbitmq pgadmin mongo
+FULL_SERVICES = db redis rabbitmq pgadmin mongo backend
 PORT=80
 USER=$(shell whoami)
 # for mac os install coreutils ot get nproc
@@ -54,7 +54,7 @@ test: start_services rust_workers start_celery_workers
 	-make stop_celery_workers
 
 coverage: rust_workers start_celery_workers
-	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_USER) pytest --cov-report term-missing --cov=.  tests/
+	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_USER) pytest --cov-report term-missing --cov=. --cov-report html tests/
 	make stop_celery_workers
 
 coverage_parallel: rust_workers start_celery_workers
@@ -62,7 +62,7 @@ coverage_parallel: rust_workers start_celery_workers
 	make stop_celery_workers
 
 start_production: start_services start_celery_workers rust_workers
-	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_PROD) gunicorn app.app:app --workers $(CORES) -k uvicorn.workers.UvicornH11Worker --bind 0.0.0.0:$(PORT)
+	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_PROD) gunicorn app.app:app --workers $(CORES) --preload -k uvicorn.workers.UvicornH11Worker --bind 0.0.0.0:$(PORT)
 
 start_development: start_services rust_workers start_celery_workers
 	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_USER) uvicorn app.app:app --host 0.0.0.0 --port $(PORT) --reload

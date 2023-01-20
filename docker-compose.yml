@@ -68,18 +68,20 @@ services:
         networks:
             - shared_network
 
-    phppgadmin:
-        image: docker.io/bitnami/phppgadmin
-        ports:
-            - 127.0.0.1:8081:8080
-        volumes:
-            - pgadmin:/var/lib/pgadmin
+    pgadmin:
+        container_name: pgadmin4_container
+        image: dpage/pgadmin4
+        restart: always
         environment:
-            - DATABASE_HOST=${POSTGRES_HOST}
+            PGADMIN_DEFAULT_EMAIL: admin@admin.com
+            PGADMIN_DEFAULT_PASSWORD: root
         depends_on:
             - db
         networks:
             - shared_network
+        ports:
+            - 5050:80
+
 
 volumes:
     postgres-data:

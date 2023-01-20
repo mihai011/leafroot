@@ -1,7 +1,10 @@
 """base controller for stage."""
 
+import requests
+import aiohttp
+
 from fastapi import APIRouter, Request, Depends
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -28,3 +31,27 @@ async def main(
     """Simple main page"""
 
     return templates.TemplateResponse("main.html", {"request": request})
+
+
+@base_router.get("/sync_controller", response_class=JSONResponse)
+def sync(request: Request):
+    """! Simple sync controller
+
+    @param request (Request): Request object
+    """
+
+    requests.get("http://google.com")
+
+    return {"status": 200}
+
+
+@base_router.get("/async_controller", response_class=JSONResponse)
+async def control(request: Request):
+    """! Simple async controller
+
+    @param request (Request): Request object
+    """
+    async with aiohttp.ClientSession() as session:
+        await session.get("http://google.com")
+
+    return {"status": 200}

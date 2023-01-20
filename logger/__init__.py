@@ -15,9 +15,10 @@ def initialize_logger():
     """Initiliaze loggers."""
     logging.basicConfig(
         filename="logger/logs/app.log",
-        filemode="w",
+        filemode="w+",
         level=logging.DEBUG,
         format=FORMAT,
+        force=True,
     )
     logging.info("Logging Initialized")
     logging.debug("Logging debug")

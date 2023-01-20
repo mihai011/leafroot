@@ -2,7 +2,7 @@
 
 Here you include the routers for the application and middleware used.
 """
-
+import logging
 
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
@@ -10,6 +10,7 @@ from starlette.middleware import Middleware
 from starlette_context import plugins
 from starlette_context.middleware import RawContextMiddleware
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.exc import IntegrityError
 
 from controllers.users_controllers import user_router
 from controllers.base_controllers import base_router
@@ -48,19 +49,18 @@ app.include_router(task_router)
 app.include_router(ws_router)
 app.include_router(utils_router)
 
-# function to run on initialization
-initialize_cache()
-initialize_logger()
-create_database_app()
-
 
 @app.on_event("startup")
 async def user_on_startup(session: AsyncSession = async_session()):
-    """Creates a user at startup
+    """Creates a user at startup.
 
     Args:
         session (AsyncSession, optional): _description_. Defaults to Depends(get_session).
     """
+
+    initialize_cache()
+    initialize_logger()
+    create_database_app()
 
     if config.user_name and config.user_email and config.user_password:
         params = {
@@ -68,9 +68,10 @@ async def user_on_startup(session: AsyncSession = async_session()):
             "email": config.user_email,
         }
 
-        user = await User.GetByArgs(session, params)
-        if not user:
+        try:
             hashed_pass = get_password_hash(config.user_password)
             params["hashed_pass"] = hashed_pass
-            user = await User.AddNew(session, params)
+            await User.AddNew(session, params)
             await session.close()
+        except IntegrityError:
+            logging.warning("Init User already created!")
