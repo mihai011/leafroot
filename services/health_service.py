@@ -36,6 +36,7 @@ async def check_mongodb():
     )
 
     error = None
+
     try:
         await client_auth.server_info()
         return True
@@ -48,7 +49,7 @@ async def check_mongodb():
     except Exception as e:
         error = e
 
-    return error
+    return str(error)
 
 
 @log()
