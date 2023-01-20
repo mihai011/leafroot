@@ -68,6 +68,9 @@ start_production: start_services start_celery_workers rust_workers
 start_development: start_services rust_workers start_celery_workers
 	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_USER) uvicorn app.app:app --host 0.0.0.0 --port $(PORT) --reload
 
+start_production_docker:
+	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_PROD) gunicorn app.app:app --workers $(CORES) --preload -k uvicorn.workers.UvicornH11Worker --bind 0.0.0.0:$(PORT)
+
 # make sure to login to ngrok so it can server html responses
 make ngrok:
 	ngrok http $(PORT)
