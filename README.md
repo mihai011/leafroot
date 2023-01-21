@@ -31,19 +31,25 @@ new applications.
     3. Install Dev-Containers extension.
     4. Create a local .env file from examples situated in config/config_files directory.
 
-    There are 2 scenarios for development:
-        1. Inside the container:
-            1. Set the "INTERFACE" variable to empty.
-            2. Set "ENV" variable to "dev".
-            3. Export ENV_FILE to the path of your env file.
-            4. Execute "make start_full_services"
-            5. Attach your vscode instance to the "backend" container.
-        2. Inside the container:
-            1. Set the "INTERFACE" variable to "localhost".
-            2. Set "ENV" variable to "dev".
-            3. Export ENV_FILE to the path of your env file.
-            4. Execute "make start_services"
-            5. Create venv environment: "make venv_create".
+    There are 2 scenarios for development both of which require the following:
+        1. Set "ENV" variable to "dev".
+        2.  Set an environment variable "ENV_FILE" to the path of your env file.
+            1. Inside the container (Recommended):
+                1. Set the "INTERFACE" variable to empty.
+                2. Execute "make start_full_services"
+                3. Attach your vscode instance to the "backend" container.
+            2. Outside the container:
+                1. Set the "INTERFACE" variable to "localhost".
+                2. Export all the variables from your env-file.
+                3. Execute "make start_services"
+                4. Create venv environment: "make venv_create".
+
+        In both of these cases, at then end you should be able to execute tests:
+            ```
+            make tests
+            ```
+
+
 
 ## Programming norms
 
