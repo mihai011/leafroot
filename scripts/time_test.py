@@ -1,4 +1,4 @@
-"""Python3 time test controllers"""
+"""Python3 time test controllers."""
 
 import json
 import sys

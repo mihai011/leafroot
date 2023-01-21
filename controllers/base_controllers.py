@@ -17,7 +17,7 @@ templates = Jinja2Templates(directory="templates")
 
 @base_router.get("/", response_class=HTMLResponse)
 async def login(request: Request):
-    """Simple login page"""
+    """Simple login page."""
 
     return templates.TemplateResponse("login.html", {"request": request})
 
@@ -28,14 +28,14 @@ async def main(
     request: Request,
     session: AsyncSession = Depends(get_session),  # pylint: disable=W0613
 ):
-    """Simple main page"""
+    """Simple main page."""
 
     return templates.TemplateResponse("main.html", {"request": request})
 
 
 @base_router.get("/sync_controller", response_class=JSONResponse)
 def sync(request: Request):
-    """! Simple sync controller
+    """! Simple sync controller.
 
     @param request (Request): Request object
     """
@@ -47,7 +47,7 @@ def sync(request: Request):
 
 @base_router.get("/async_controller", response_class=JSONResponse)
 async def control(request: Request):
-    """! Simple async controller
+    """! Simple async controller.
 
     @param request (Request): Request object
     """

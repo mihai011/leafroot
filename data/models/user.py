@@ -19,7 +19,6 @@ class User(Base, ExtraBase):
         return "<User %r>" % self.username
 
     def serialize(self):
-
         serialization = super().serialize()
 
         to_pop = ["hashed_pass", "permissions"]

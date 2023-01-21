@@ -43,7 +43,7 @@ def my_key_builder(
     *args,
     **kwargs,
 ):
-    """! Key builder for cache
+    """! Key builder for cache.
 
     @param func (function):function to be cached
     @param namespace (Optional[str], optional): _description_. Defaults to "".
@@ -75,7 +75,6 @@ def testproof_cache(*cache_args, **cache_kargs):
 
     def inner(func):
         def wrapper(*args, **kwargs):
-
             if config.env == "dev":
                 return func(*args, **kwargs)
 

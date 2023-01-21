@@ -11,8 +11,7 @@ MANUAL_CORES=8
 
 default: start_celery_workers
 
-venv_create: venv_delete stable_packages_versions.txt
-	pwd
+venv_create: stable_packages_versions.txt
 	python3 -m venv venv
 	$(ACTIVATE_VENV) && pip install --upgrade pip
 	$(ACTIVATE_VENV) && pip install --no-cache-dir -r stable_packages_versions.txt
@@ -22,7 +21,7 @@ venv_create: venv_delete stable_packages_versions.txt
 venv_delete:
 	rm -rf venv/
 
-venv_update: venv_delete requirements.txt
+venv_update: requirements.txt
 	python3 -m venv venv
 	$(ACTIVATE_VENV) && pip install --upgrade pip
 	$(ACTIVATE_VENV) && pip install --no-cache-dir -r requirements.txt

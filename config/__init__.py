@@ -1,4 +1,4 @@
-"""module that contains application settings"""
+"""Module that contains application settings."""
 
 from typing import Literal
 import os
@@ -15,7 +15,7 @@ from pydantic.typing import Optional
 
 
 class Settings(BaseSettings):
-    """Class responsible for loading up and generating settings
+    """Class responsible for loading up and generating settings.
 
     Args:
         BaseSettings (class): Base settings class.
@@ -71,12 +71,11 @@ class Settings(BaseSettings):
     CRITICAL_LOG_FILE: Optional[str] = "critical.log"
 
     class Config:
-        """Config class"""
+        """Config class."""
 
         validate_assignment = True
 
     def __init__(self):
-
         super().__init__()
         self.create_celery_broker_url()
         self.create_celery_result_backend()

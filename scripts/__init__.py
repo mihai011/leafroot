@@ -1,1 +1,4 @@
-"""Scripts module. Simple scripts for common use."""
+"""Scripts module.
+
+Simple scripts for common use.
+"""
