@@ -7,16 +7,17 @@ services:
         build:
             context: .
             dockerfile: Dockerfile
-            target: dev
+            target: ${ENV}
+        env_file:
+            - ${ENV_FILE}
         container_name: backend
         hostname: backend
         restart: on-failure
         ports:
-            - 127.0.0.1:8000:8000
+            - ${PORT}:${PORT}
         volumes:
             - .:/workspace
-        command: >
-            sh -c "sleep infinity"
+            - /workspace/venv/
         networks:
             - shared_network
 

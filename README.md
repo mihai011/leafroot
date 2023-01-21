@@ -28,11 +28,22 @@ new applications.
 
     1. Clone this repo in a directory..
     2. Open it in vscode.
-    3. Install Remote-Containers extension.
-    4. Using Ctrl+Shift+P select Remote-Container:Open Folder in Container
-    5. Create the  python virtual environment: "make venv"
-    6. Run the tests: "make test_simple" or "make test_parallel" for parallel tests
-    7. Run the api server for production "make start_production" and "make start_development" for development purposes.
+    3. Install Dev-Containers extension.
+    4. Create a local .env file from examples situated in config/config_files directory.
+
+    There are 2 scenarios for development:
+        1. Inside the container:
+            1. Set the "INTERFACE" variable to empty.
+            2. Set "ENV" variable to "dev".
+            3. Export ENV_FILE to the path of your env file.
+            4. Execute "make start_full_services"
+            5. Attach your vscode instance to the "backend" container.
+        2. Inside the container:
+            1. Set the "INTERFACE" variable to "localhost".
+            2. Set "ENV" variable to "dev".
+            3. Export ENV_FILE to the path of your env file.
+            4. Execute "make start_services"
+            5. Create venv environment: "make venv_create".
 
 ## Programming norms
 

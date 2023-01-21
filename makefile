@@ -4,15 +4,10 @@ DIR_ARGS = app/ controllers/ data/ tests/ scripts/ utils/ cache/ config/
 DIR_NO_TESTS = app/ controllers/ data/ scripts/ utils/ cache/
 SERVICES = db redis rabbitmq pgadmin mongo
 FULL_SERVICES = db redis rabbitmq pgadmin mongo backend
-PORT=80
 USER=$(shell whoami)
 # for mac os install coreutils ot get nproc
 CORES := $(shell nproc)
 MANUAL_CORES=8
-
-ENV_FILE_DEV=config/config_files/.env_dev
-ENV_FILE_PROD=config/config_files/.env_prod
-ENV_FILE_USER=.env_user
 
 default: start_celery_workers
 
@@ -47,36 +42,37 @@ format:
 	$(ACTIVATE_VENV) && black $(DIR_ARGS)
 
 test_parallel: rust_workers  start_celery_workers
-	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_USER) pytest -n $(MANUAL_CORES) tests/
+	$(ACTIVATE_VENV) &&  pytest -n $(MANUAL_CORES) tests/
 	-make stop_celery_workers
 
 test: rust_workers start_celery_workers
-	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_USER) pytest tests/
+	$(ACTIVATE_VENV) &&  pytest tests/
 	-make stop_celery_workers
 
 coverage: rust_workers start_celery_workers
-	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_USER) pytest --cov-report term-missing --cov=. --cov-report html tests/
+	$(ACTIVATE_VENV) && pytest --cov-report term-missing --cov=. --cov-report html tests/
 	make stop_celery_workers
 
 coverage_parallel: rust_workers start_celery_workers
-	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_USER) pytest --cov-report term-missing --cov=. -n $(MANUAL_CORES) tests/
+	$(ACTIVATE_VENV) &&  pytest --cov-report term-missing --cov=. -n $(MANUAL_CORES) tests/
 	make stop_celery_workers
 
 start_production: start_services start_celery_workers rust_workers
-	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_PROD) gunicorn app.app:app --workers $(CORES) --preload -k uvicorn.workers.UvicornH11Worker --bind 0.0.0.0:$(PORT)
+	$(ACTIVATE_VENV) &&  gunicorn app.app:app --workers $(CORES) --preload -k uvicorn.workers.UvicornH11Worker --bind 0.0.0.0:$(PORT)
 
 start_development: start_services rust_workers start_celery_workers
-	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_USER) uvicorn app.app:app --host 0.0.0.0 --port $(PORT) --reload
+	$(ACTIVATE_VENV) &&  uvicorn app.app:app --host 0.0.0.0 --port $(PORT) --reload
 
 start_production_docker:
-	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_PROD) gunicorn app.app:app --workers $(CORES) --preload -k uvicorn.workers.UvicornH11Worker --bind 0.0.0.0:$(PORT)
+	$(ACTIVATE_VENV) &&  alembic upgrade head
+	$(ACTIVATE_VENV) &&  gunicorn app.app:app --workers $(CORES) --preload -k uvicorn.workers.UvicornH11Worker --bind 0.0.0.0:$(PORT)
 
 # make sure to login to ngrok so it can server html responses
 make ngrok:
 	ngrok http $(PORT)
 
 start_celery_workers:
-	$(ACTIVATE_VENV) && ENV_FILE=$(ENV_FILE_USER) celery -A celery_worker worker --loglevel=info --detach
+	$(ACTIVATE_VENV) &&  celery -A celery_worker worker --loglevel=info --detach
 
 stop_celery_workers:
 	pkill -f celery_worker
@@ -97,26 +93,24 @@ pycodestyle:
 	$(ACTIVATE_VENV) && pycodestyle -r $(DIR_ARGS)
 
 start_services:
-	docker compose --env-file $(ENV_FILE_USER) up -d $(SERVICES)
+	docker compose --env-file $(ENV_FILE) up -d $(SERVICES)
 
 start_full_services:
-	docker compose --env-file $(ENV_FILE_USER) up -d $(FULL_SERVICES)
+	docker compose --env-file $(ENV_FILE) up -d $(FULL_SERVICES)
 
 stop_services:
-	docker compose --env-file $(ENV_FILE_USER) stop $(SERVICES)
+	docker compose --env-file $(ENV_FILE) stop $(SERVICES)
 
 sr_services:
-	docker compose --env-file $(ENV_FILE_USER) down
+	docker compose --env-file $(ENV_FILE) down
 
 docker_clean:
 	docker system prune -af
 
 docker_update:
-	docker compose --env-file $(ENV_FILE_USER) pull
+	docker compose --env-file $(ENV_FILE) pull
 	make start_services
 
-env_file:
-	cp $(ENV_FILE_DEV) $(ENV_FILE_USER)
 
 bare_bones: env_file venv_create start_services test_parallel sr_services
 

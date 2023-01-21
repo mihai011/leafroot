@@ -3,7 +3,14 @@
 from typing import Literal
 import os
 
-from pydantic import BaseSettings, RedisDsn, PostgresDsn, AmqpDsn, MongoDsn
+from pydantic import (
+    BaseSettings,
+    RedisDsn,
+    PostgresDsn,
+    AmqpDsn,
+    MongoDsn,
+    Field,
+)
 from pydantic.typing import Optional
 
 
@@ -33,6 +40,7 @@ class Settings(BaseSettings):
     secret: str
 
     interface: Optional[str]
+    port: Optional[int] = Field(..., ge=1024, le=65536)
 
     celery_broker_url: Optional[AmqpDsn]
     redis_url: Optional[RedisDsn]
@@ -65,8 +73,6 @@ class Settings(BaseSettings):
     class Config:
         """Config class"""
 
-        env_file = os.getenv("ENV_FILE")
-        env_file_encoding = "utf-8"
         validate_assignment = True
 
     def __init__(self):
