@@ -7,10 +7,9 @@ class HelloWorldUser(HttpUser):
     @task
     def login(self):
         self.client.post(
-            "http://localhost:80/users/login",
+            "https://181b-3-68-197-147.eu.ngrok.io/users/login",
             json={
-                "email": "a@gmail.com",
-                "username": "mika",
-                "password": "control",
+                "email": "admin@email.com",
+                "password": "pass",
             },
         )

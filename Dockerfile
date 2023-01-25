@@ -1,4 +1,4 @@
-FROM python:3.10 AS base
+FROM python:3.11 AS base
 
 # update and upgrade
 # RUN apt -y update
@@ -17,4 +17,4 @@ FROM base AS dev
 CMD sleep infinity
 
 FROM base AS prod
-CMD make start_production_docker
+CMD make start_development_docker

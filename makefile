@@ -62,7 +62,11 @@ start_production: start_services start_celery_workers rust_workers
 start_development: start_services rust_workers start_celery_workers
 	$(ACTIVATE_VENV) &&  uvicorn app.app:app --host 0.0.0.0 --port $(PORT) --reload
 
-start_production_docker:
+start_development_docker: start_celery_workers
+	$(ACTIVATE_VENV) &&  alembic upgrade head
+	$(ACTIVATE_VENV) &&  uvicorn app.app:app --host 0.0.0.0 --port $(PORT) --reload
+
+start_production_docker: start_celery_workers
 	$(ACTIVATE_VENV) &&  alembic upgrade head
 	$(ACTIVATE_VENV) &&  gunicorn app.app:app --workers $(CORES) --preload -k uvicorn.workers.UvicornH11Worker --bind 0.0.0.0:$(PORT)
 

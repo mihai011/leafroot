@@ -31,10 +31,10 @@ def get_password_hash(password: str) -> str:
     return pwd_context.hash(password)
 
 
+@log()
 @testproof_cache(
     expire=int(config.access_token_expire_minutes), key_builder=my_key_builder
 )
-@log()
 async def create_access_token(
     data: dict,
     expires_delta: Optional[int] = int(config.access_token_expire_minutes),
@@ -52,12 +52,15 @@ async def create_access_token(
     return encoded_jwt
 
 
+@log()
 @testproof_cache(
     expire=int(config.access_token_expire_minutes), key_builder=my_key_builder
 )
-@log()
 async def authenthicate_user(token: str, session):
     """Authenticate users given a token."""
+
+    if len(token.split(".")) != 3:
+        return None
 
     payload = jwt.decode(
         token, config.secret_key, algorithms=[config.algorithm]
@@ -66,7 +69,7 @@ async def authenthicate_user(token: str, session):
     if "email" in payload:
         users = await User.GetByArgs(session, {"email": payload["email"]})
         if not users:
-            raise Exception("User not found on authenthication!")
+            return None
 
         return users[0]
 
