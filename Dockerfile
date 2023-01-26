@@ -17,4 +17,4 @@ FROM base AS dev
 CMD sleep infinity
 
 FROM base AS prod
-CMD make start_development_docker
+CMD make start_production_docker
