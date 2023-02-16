@@ -18,3 +18,7 @@ CMD sleep infinity
 
 FROM base AS prod
 CMD make start_production_docker
+
+FROM base as worker
+RUN make rust_workers
+CMD make start_celery_workers

@@ -1,4 +1,4 @@
-from data.models.quote import Quote
+from data.models.postgresql.quote import Quote
 
 
 async def get_random_quote(session):

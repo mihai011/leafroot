@@ -6,7 +6,7 @@ from sqlalchemy.orm import selectinload
 from sqlalchemy import select
 
 
-from data.models import ExtraBase, Base
+from data.models.postgresql import ExtraBase, Base
 
 
 class Atom(Base, ExtraBase):

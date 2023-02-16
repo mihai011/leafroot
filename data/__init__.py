@@ -2,9 +2,10 @@
 
 from sqlalchemy_utils import database_exists, create_database
 
-from data.models.user import User, Base
-from data.models.atom import Atom, Electron, Neutron, Proton
-from data.models import get_session, async_session
+from data.models.postgresql import Base
+from data.models.postgresql.user import User
+from data.models.postgresql.atom import Atom, Electron, Neutron, Proton
+from data.models.postgresql import get_session, async_session
 from config import config
 from logger import log
 
@@ -22,3 +23,8 @@ def create_database_app():
         return True
 
     return False
+
+
+@log()
+def create_mongodb_schemas():
+    """Create MongoDB databases."""

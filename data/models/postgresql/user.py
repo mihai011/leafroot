@@ -2,7 +2,7 @@
 
 
 from sqlalchemy import Column, String
-from data.models import ExtraBase, Base
+from data.models.postgresql import ExtraBase, Base
 
 
 class User(Base, ExtraBase):

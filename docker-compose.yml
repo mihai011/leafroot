@@ -21,6 +21,22 @@ services:
         networks:
             - shared_network
 
+    worker:
+        build:
+            context: .
+            dockerfile: Dockerfile
+            target: worker
+        env_file:
+            - ${ENV_FILE}
+        container_name: worker
+        hostname: worker
+        restart: on-failure
+        volumes:
+            - .:/workspace
+            - /workspace/venv/
+        networks:
+            - shared_network
+
     db:
         image: postgres:14-alpine
         container_name: db

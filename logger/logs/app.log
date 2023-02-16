@@ -1,13 +1,13 @@
-2023-01-25 20:18:58,361 - __init__ - initialize_logger - line:23 - INFO - Logging Initialized
-2023-01-25 20:18:58,362 - __init__ - initialize_logger - line:24 - DEBUG - Logging debug
-2023-01-25 20:18:58,364 - __init__ - initialize_logger - line:25 - WARNING - Logging warning
-2023-01-25 20:18:58,364 - __init__ - initialize_logger - line:26 - ERROR - Error here
-2023-01-25 20:18:58,364 - __init__ - initialize_logger - line:27 - ERROR - Exception here
+2023-02-09 12:33:57,291 - __init__ - initialize_logger - line:23 - INFO - Logging Initialized
+2023-02-09 12:33:57,292 - __init__ - initialize_logger - line:24 - DEBUG - Logging debug
+2023-02-09 12:33:57,298 - __init__ - initialize_logger - line:25 - WARNING - Logging warning
+2023-02-09 12:33:57,304 - __init__ - initialize_logger - line:26 - ERROR - Error here
+2023-02-09 12:33:57,305 - __init__ - initialize_logger - line:27 - ERROR - Exception here
 NoneType: None
-2023-01-25 20:18:58,365 - __init__ - wrapping_logic - line:34 - INFO - Request None entering  function create_database_app
-2023-01-25 20:18:58,382 - __init__ - wrapping_logic - line:39 - INFO - Request None exiting function create_database_app total time 0.01650524139404297
-2023-01-25 20:18:58,382 - __init__ - wrapping_logic - line:34 - INFO - Request None entering  function get_password_hash
-2023-01-25 20:18:58,384 - bcrypt - _load_backend_mixin - line:625 - DEBUG - detected 'bcrypt' backend, version '4.0.1'
-2023-01-25 20:18:58,384 - bcrypt - _finalize_backend_mixin - line:406 - DEBUG - 'bcrypt' backend lacks $2$ support, enabling workaround
-2023-01-25 20:18:58,759 - __init__ - wrapping_logic - line:39 - INFO - Request None exiting function get_password_hash total time 0.3768789768218994
-2023-01-25 20:18:58,817 - app - user_on_startup - line:77 - WARNING - Init User already created!
+2023-02-09 12:33:57,306 - __init__ - wrapping_logic - line:34 - INFO - Request None entering  function create_database_app
+2023-02-09 12:33:57,329 - __init__ - wrapping_logic - line:39 - INFO - Request None exiting function create_database_app total time 0.02278423309326172
+2023-02-09 12:33:57,330 - __init__ - wrapping_logic - line:34 - INFO - Request None entering  function get_password_hash
+2023-02-09 12:33:57,331 - bcrypt - _load_backend_mixin - line:625 - DEBUG - detected 'bcrypt' backend, version '4.0.1'
+2023-02-09 12:33:57,332 - bcrypt - _finalize_backend_mixin - line:406 - DEBUG - 'bcrypt' backend lacks $2$ support, enabling workaround
+2023-02-09 12:33:57,878 - __init__ - wrapping_logic - line:39 - INFO - Request None exiting function get_password_hash total time 0.5993907451629639
+2023-02-09 12:33:57,931 - app - user_on_startup - line:77 - WARNING - Init User already created!

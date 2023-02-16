@@ -18,8 +18,10 @@ jobs:
             - run: whoami
             - run: pkill --help
             - run:
-                  name: Make env file
-                  command: make env_file
+                  name: Create environment variables
+                  command: |
+                      echo 'export $(grep -v '^#' .env_user | xargs)' >> "$BASH_ENV"
+                      source "$BASH_ENV"
             - run:
                   name: Install Rust
                   command: make install_rust

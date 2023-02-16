@@ -32,4 +32,4 @@ async def test_small_task(session):
         value = json.loads(value)["result"]
         break
 
-    assert value == {"small_task": 1}
+    assert value == {"small_task": 2}

@@ -2,8 +2,8 @@ ACTIVATE_BASH=source ~/.bashrc
 ACTIVATE_VENV=. venv/bin/activate
 DIR_ARGS = app/ controllers/ data/ tests/ scripts/ utils/ cache/ config/
 DIR_NO_TESTS = app/ controllers/ data/ scripts/ utils/ cache/
-SERVICES = db redis rabbitmq pgadmin mongo
-FULL_SERVICES = db redis rabbitmq pgadmin mongo backend
+SERVICES = db redis rabbitmq backend mongo worker
+FULL_SERVICES = $(SERVICES) pgadmin
 USER=$(shell whoami)
 # for mac os install coreutils ot get nproc
 CORES := $(shell nproc)
@@ -40,33 +40,33 @@ lint:
 format:
 	$(ACTIVATE_VENV) && black $(DIR_ARGS)
 
-test_parallel: rust_workers  start_celery_workers
+test_parallel:
 	$(ACTIVATE_VENV) &&  pytest -n $(MANUAL_CORES) tests/
 	-make stop_celery_workers
 
-test: rust_workers start_celery_workers
+test:
 	$(ACTIVATE_VENV) &&  pytest tests/
 	-make stop_celery_workers
 
-coverage: rust_workers start_celery_workers
+coverage:
 	$(ACTIVATE_VENV) && pytest --cov-report term-missing --cov=. --cov-report html tests/
 	make stop_celery_workers
 
-coverage_parallel: rust_workers start_celery_workers
+coverage_parallel:
 	$(ACTIVATE_VENV) &&  pytest --cov-report term-missing --cov=. -n $(MANUAL_CORES) tests/
 	make stop_celery_workers
 
-start_production: start_services start_celery_workers rust_workers
+start_production: start_services
 	$(ACTIVATE_VENV) &&  gunicorn app.app:app --workers $(CORES) --preload -k uvicorn.workers.UvicornH11Worker --bind 0.0.0.0:$(PORT)
 
-start_development: start_services rust_workers start_celery_workers
+start_development: start_services
 	$(ACTIVATE_VENV) &&  uvicorn app.app:app --host 0.0.0.0 --port $(PORT) --reload
 
-start_development_docker: start_celery_workers
+start_development_docker:
 	$(ACTIVATE_VENV) &&  alembic upgrade head
 	$(ACTIVATE_VENV) &&  uvicorn app.app:app --host 0.0.0.0 --port $(PORT) --reload
 
-start_production_docker: start_celery_workers
+start_production_docker:
 	$(ACTIVATE_VENV) &&  alembic upgrade head
 	$(ACTIVATE_VENV) &&  gunicorn app.app:app --workers $(CORES) --preload -k uvicorn.workers.UvicornH11Worker --bind 0.0.0.0:$(PORT)
 
@@ -75,7 +75,10 @@ make ngrok:
 	ngrok http $(PORT)
 
 start_celery_workers:
-	$(ACTIVATE_VENV) &&  celery -A celery_worker worker --loglevel=info --detach
+	$(ACTIVATE_VENV) && celery -A celery_worker worker --loglevel=info
+
+start_celery_workers_detached:
+	$(ACTIVATE_VENV) && celery -A celery_worker worker --loglevel=info --detach
 
 stop_celery_workers:
 	pkill -f celery_worker
@@ -109,6 +112,9 @@ sr_services:
 
 docker_clean:
 	docker system prune -af
+
+build:
+	docker build -t test --target prod -f
 
 docker_update:
 	docker compose --env-file $(ENV_FILE) pull

@@ -19,7 +19,12 @@ from controllers.api_controllers import api_router
 from controllers.task_controllers import task_router
 from controllers.ws_controllers import ws_router
 from controllers.utils_controllers import utils_router
-from data import async_session, User, create_database_app
+from data import (
+    async_session,
+    User,
+    create_database_app,
+    create_mongodb_schemas,
+)
 from config import config
 from cache import initialize_cache
 from logger import initialize_logger
@@ -61,6 +66,7 @@ async def user_on_startup(session: AsyncSession = async_session()):
     initialize_cache()
     initialize_logger()
     create_database_app()
+    create_mongodb_schemas()
 
     if config.user_name and config.user_email and config.user_password:
         params = {

@@ -6,7 +6,7 @@ from fastapi.responses import ORJSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from data import get_session
-from data.models.quote import Quote
+from data.models.postgresql.quote import Quote
 from controllers import create_response, auth_decorator, parse
 from services.health_service import health_check
 from services.quote_service import get_random_quote
