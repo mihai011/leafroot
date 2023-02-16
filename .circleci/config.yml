@@ -30,10 +30,13 @@ jobs:
                   name: Create environment
                   command: make venv_create
             - run:
+                  name: Start celery workers
+                  command: make start_celery_workers_detached
+            - run:
                   name: Run tests
                   command: make test_parallel
 
 workflows:
-    buld-and-test:
+    build-and-test:
         jobs:
             - build-and-test
