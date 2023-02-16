@@ -1,8 +1,10 @@
 """Loggers and configuration for loggers."""
 
+import os
 import time
 import logging
 import asyncio
+
 from starlette_context import context
 from starlette_context.errors import ContextDoesNotExistError
 from contextlib import contextmanager
@@ -13,8 +15,9 @@ FORMAT = "%(asctime)s - %(module)s - %(funcName)s - line:%(lineno)d - %(levelnam
 
 def initialize_logger():
     """Initiliaze loggers."""
+    pid = os.getpid()
     logging.basicConfig(
-        filename="logger/logs/app.log",
+        filename=f"logger/logs/app-{pid}.log",
         filemode="w+",
         level=logging.DEBUG,
         format=FORMAT,

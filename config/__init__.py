@@ -34,7 +34,7 @@ class Settings(BaseSettings):
     rabbitmq_host: str
     rabbitmq_protocol: Literal["amqp", "amqps"]
 
-    access_token_expire_minutes: str
+    access_token_expire_seconds: int
     secret_key: str
     algorithm: str
     secret: str

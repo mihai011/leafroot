@@ -33,11 +33,11 @@ def get_password_hash(password: str) -> str:
 
 @log()
 @testproof_cache(
-    expire=int(config.access_token_expire_minutes), key_builder=my_key_builder
+    expire=int(config.access_token_expire_seconds), key_builder=my_key_builder
 )
 async def create_access_token(
     data: dict,
-    expires_delta: Optional[int] = int(config.access_token_expire_minutes),
+    expires_delta: Optional[int] = int(config.access_token_expire_seconds),
 ):
     """Create the access token hash for data."""
     to_encode = data.copy()
@@ -54,7 +54,7 @@ async def create_access_token(
 
 @log()
 @testproof_cache(
-    expire=int(config.access_token_expire_minutes), key_builder=my_key_builder
+    expire=config.access_token_expire_seconds, key_builder=my_key_builder
 )
 async def authenthicate_user(token: str, session):
     """Authenticate users given a token."""

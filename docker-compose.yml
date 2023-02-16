@@ -37,6 +37,15 @@ services:
         networks:
             - shared_network
 
+    cassandra:
+        image: cassandra:4.1.0
+        ports:
+            - 127.0.0.1:9042:9042
+        container_name: cassandra
+        hostname: ${CASSANDRA_HOST}
+        networks:
+            - shared_network
+
     db:
         image: postgres:14-alpine
         container_name: db

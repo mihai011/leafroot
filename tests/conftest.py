@@ -26,8 +26,6 @@ def SessionLocalGenerator() -> None:
     )
     engine_sync = create_engine(DB_URL_BASE_SYNC)
 
-    # assert not database_exists(TEST_SQLALCHEMY_DATABASE_URL),
-    # "Test database already exists. Aborting tests."
     try:
         create_database(DB_URL_BASE_SYNC)
     except Exception:

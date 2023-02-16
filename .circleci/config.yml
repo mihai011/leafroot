@@ -20,7 +20,7 @@ jobs:
             - run:
                   name: Create environment variables
                   command: |
-                      echo 'export $(grep -v '^#' .env_user | xargs)' >> "$BASH_ENV"
+                      echo 'export $(grep -v '^#' .circleci/.env_circleci | xargs)' >> "$BASH_ENV"
                       echo 'export INTERFACE=localhost' >> "$BASH_ENV"
                       source "$BASH_ENV"
             - run:

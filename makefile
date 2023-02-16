@@ -2,7 +2,7 @@ ACTIVATE_BASH=source ~/.bashrc
 ACTIVATE_VENV=. venv/bin/activate
 DIR_ARGS = app/ controllers/ data/ tests/ scripts/ utils/ cache/ config/
 DIR_NO_TESTS = app/ controllers/ data/ scripts/ utils/ cache/
-SERVICES = db redis rabbitmq backend mongo worker
+SERVICES = db redis rabbitmq backend mongo worker cassandra
 FULL_SERVICES = $(SERVICES) pgadmin
 USER=$(shell whoami)
 # for mac os install coreutils ot get nproc
@@ -56,10 +56,10 @@ coverage_parallel:
 	$(ACTIVATE_VENV) &&  pytest --cov-report term-missing --cov=. -n $(MANUAL_CORES) tests/
 	make stop_celery_workers
 
-start_production: start_services
+start_production:
 	$(ACTIVATE_VENV) &&  gunicorn app.app:app --workers $(CORES) --preload -k uvicorn.workers.UvicornH11Worker --bind 0.0.0.0:$(PORT)
 
-start_development: start_services
+start_development:
 	$(ACTIVATE_VENV) &&  uvicorn app.app:app --host 0.0.0.0 --port $(PORT) --reload
 
 start_development_docker:
@@ -120,8 +120,13 @@ docker_update:
 	docker compose --env-file $(ENV_FILE) pull
 	make start_services
 
+# this does not work
+env_export:
+	unset $(grep -v '^#' $ENV_FILE | sed -E 's/(.*)=.*/\1/' | xargs)
+	export $(grep -v '^#' $ENV_FILE | xargs)
 
-bare_bones: env_file venv_create start_services test_parallel sr_services
+
+bare_bones: venv_create start_services test_parallel sr_services
 
 soft_checklist: typehint coverage lint
 hard_checklist: format lint typehint test coverage
