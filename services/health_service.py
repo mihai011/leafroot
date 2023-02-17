@@ -2,7 +2,7 @@ from logger import log
 from config import config
 
 from sqlalchemy import create_engine
-import redis
+import redis.asyncio as redis
 import pika
 import motor.motor_asyncio
 
@@ -68,9 +68,9 @@ async def check_postgressql():
 async def check_redis():
     """Check redis connection"""
 
-    redis_connection = redis.from_url(config.redis_url)
+    redis_connection = await redis.from_url(config.redis_url)
     try:
-        redis_connection.set("test", "test")
+        await redis_connection.set("test", "test")
         return True
     except Exception as e:
         return str(e)

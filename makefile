@@ -120,7 +120,7 @@ docker_update:
 	docker compose --env-file $(ENV_FILE) pull
 	make start_services
 
-# this does not work
+# this does not work, do not use
 env_export:
 	unset $(grep -v '^#' $ENV_FILE | sed -E 's/(.*)=.*/\1/' | xargs)
 	export $(grep -v '^#' $ENV_FILE | xargs)
