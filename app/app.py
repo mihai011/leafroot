@@ -19,6 +19,7 @@ from controllers.api_controllers import api_router
 from controllers.task_controllers import task_router
 from controllers.ws_controllers import ws_router
 from controllers.utils_controllers import utils_router
+from controllers.redis_controllers import redis_router
 from data import (
     async_session,
     User,
@@ -53,6 +54,7 @@ app.include_router(api_router)
 app.include_router(task_router)
 app.include_router(ws_router)
 app.include_router(utils_router)
+app.include_router(redis_router)
 
 
 @app.on_event("startup")
@@ -67,6 +69,7 @@ async def user_on_startup(session: AsyncSession = async_session()):
     initialize_logger()
     create_database_app()
     create_mongodb_schemas()
+    create_redis_schemas()
 
     if config.user_name and config.user_email and config.user_password:
         params = {

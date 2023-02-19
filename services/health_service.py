@@ -70,7 +70,7 @@ async def check_redis():
 
     redis_connection = await redis.from_url(config.redis_url)
     try:
-        await redis_connection.set("test", "test")
+        await redis_connection.ping()
         return True
     except Exception as e:
         return str(e)

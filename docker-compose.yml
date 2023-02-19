@@ -77,7 +77,7 @@ services:
 
 
     redis:
-        image: redis:latest
+        image: redis/redis-stack-server
         container_name: redis
         hostname: ${REDIS_HOST}
         ports:
