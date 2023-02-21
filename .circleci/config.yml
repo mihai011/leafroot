@@ -7,7 +7,7 @@ jobs:
         docker:
             - image: cimg/python:3.10.7
             - image: cimg/postgres:14.2
-            - image: cimg/redis:6.2.6
+            - image: redis/redis-stack-server
             - image: rabbitmq:latest
             - image: mongo:latest
         environment:
