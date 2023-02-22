@@ -46,6 +46,8 @@ def wrapping_logic(func, request_id):
         logging.exception(
             f"Exception  {request_id} raised in {func.__name__}. exception: {str(e)}"
         )
+        # TODO: parse the exception and return a proper one
+        raise e
 
 
 def log(*log_args, **log_kwargs):

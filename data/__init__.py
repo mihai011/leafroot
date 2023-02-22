@@ -6,7 +6,12 @@ from data.models.postgresql import Base
 from data.models.postgresql.user import User
 from data.models.postgresql.atom import Atom, Electron, Neutron, Proton
 from data.models.postgresql import get_session, async_session
-from data.models.redis_db import get_redis_connection, RedisGraph, RedisNode
+from data.models.redis_db import (
+    get_redis_connection,
+    RedisGraph,
+    RedisNode,
+    RedisEdge,
+)
 from config import config
 from logger import log
 
