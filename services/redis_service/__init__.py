@@ -32,7 +32,6 @@ class RedisService:
         graph = self.graphs[name]
         dummy_node = Node(label="DUMMY", properties={})
         graph.add_node(dummy_node)
-        graph.commit()
 
         return self.get_graph_metadata(name)
 
@@ -43,7 +42,6 @@ class RedisService:
         graph = self.graphs[node.graph]
         n = Node(label=node.label, properties=node.properties)
         graph.add_node(n)
-        graph.commit()
 
         return {"alias": n.alias}
 
@@ -58,7 +56,6 @@ class RedisService:
 
         e = Edge(source_node, relation, destination_node)
         graph.add_edge(e)
-        graph.commit()
 
         return True
 
@@ -72,6 +69,20 @@ class RedisService:
         metadata["edges"] = len(graph.edges)
 
         return metadata
+
+    @log()
+    def graph_commit(self, graph):
+
+        graph = self.graphs[graph.name]
+        graph.commit()
+
+        return True
+
+    @log()
+    def delete_graph(self, name):
+
+        graph = self.graphs.pop(name)
+        graph.delete()
 
 
 redis_service = RedisService(next(get_redis_connection()))

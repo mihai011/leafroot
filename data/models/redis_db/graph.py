@@ -44,6 +44,7 @@ class RedisEdge(BaseModel):
     source: str
     destination: str
     relation: str
+    properties: Optional[Dict[str, Any]]
 
     class Config:
         allow_population_by_field_name = True

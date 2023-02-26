@@ -23,14 +23,40 @@ redis_router = APIRouter(prefix="/redis-graph", tags=["redis"])
 @redis_router.get("/graph/{graph_name}")
 @auth_decorator
 async def get_redis_graph(
-    request: Request,
     graph_name: str,
+    request: Request,
     session: AsyncSession = Depends(get_session),
 ) -> ORJSONResponse:
     """Make a graph into redis with a single dummy node."""
 
     graph = redis_service.get_graph_metadata(graph_name)
     return create_response("Graph created!", 200, graph)
+
+
+@redis_router.delete("/graph/{graph_name}")
+@auth_decorator
+async def delete_redis_graph(
+    graph_name: str,
+    request: Request,
+    session: AsyncSession = Depends(get_session),
+) -> ORJSONResponse:
+    """Delete a graph."""
+
+    redis_service.delete_graph(graph_name)
+    return create_response("Graph deleted!", 200)
+
+
+@redis_router.post("/graph/commit")
+@auth_decorator
+async def commit_redis_graph(
+    request: Request,
+    session: AsyncSession = Depends(get_session),
+    graph: RedisGraph = Body(...),
+) -> ORJSONResponse:
+    """Commit contents of a graph to Redis."""
+
+    graph = redis_service.graph_commit(graph)
+    return create_response("Graph commited!", 200)
 
 
 @redis_router.post("/graph")

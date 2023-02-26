@@ -79,7 +79,10 @@ async def authenthicate_user(token: str, session):
 @log()
 def random_string():
     """Make a random string."""
-    return "".join(
+    init_salt = "R"
+    r_string = "".join(
         random.choice(string.ascii_uppercase + string.digits)
         for _ in range(10)
     )
+
+    return init_salt + r_string
