@@ -8,13 +8,11 @@ from tqdm.asyncio import tqdm
 
 
 async def make_call(session, url):
-
     async with session.get(url) as r:
         return r
 
 
 async def async_calls(url, reqs):
-
     async with aiohttp.ClientSession() as session:
         tasks = []
         for _ in range(reqs):
@@ -24,7 +22,6 @@ async def async_calls(url, reqs):
 
 
 if __name__ == "__main__":
-
     reqs = int(sys.argv[1])
 
     url_sync = "http://localhost/sync_controller"

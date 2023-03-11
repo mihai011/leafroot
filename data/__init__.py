@@ -11,6 +11,7 @@ from data.models.redis_db import (
     RedisGraph,
     RedisNode,
     RedisEdge,
+    RedisGraphQuery,
 )
 from config import config
 from logger import log

@@ -45,7 +45,6 @@ async def upload_all(objects, link, headers):
 
 
 if __name__ == "__main__":
-
     file_json = sys.argv[1]
     url = sys.argv[2]
     token = sys.argv[3]

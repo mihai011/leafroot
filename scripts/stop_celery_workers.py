@@ -35,7 +35,6 @@ def close_local_processes(pids):
 
 
 if __name__ == "__main__":
-
     command = "pgrep -f celery_worker"
 
     pids = get_pids(command)

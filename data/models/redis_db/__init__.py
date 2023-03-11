@@ -2,7 +2,7 @@
 Models and utils functions for redsi
 """
 from config import config
-from .graph import RedisGraph, RedisNode, RedisEdge
+from .graph import RedisGraph, RedisNode, RedisEdge, RedisGraphQuery
 from logger import log
 
 import redis

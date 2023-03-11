@@ -68,7 +68,7 @@ start_development_docker:
 
 start_production_docker:
 	$(ACTIVATE_VENV) &&  alembic upgrade head
-	$(ACTIVATE_VENV) &&  gunicorn app.app:app --workers $(CORES) --preload -k uvicorn.workers.UvicornH11Worker --bind 0.0.0.0:$(PORT)
+	make start_production
 
 # make sure to login to ngrok so it can server html responses
 make ngrok:
@@ -119,11 +119,6 @@ build:
 docker_update:
 	docker compose --env-file $(ENV_FILE) pull
 	make start_services
-
-# this does not work, do not use
-env_export:
-	unset $(grep -v '^#' $ENV_FILE | sed -E 's/(.*)=.*/\1/' | xargs)
-	export $(grep -v '^#' $ENV_FILE | xargs)
 
 
 bare_bones: venv_create start_services test_parallel sr_services

@@ -15,7 +15,6 @@ def random_string():
 
 atoms = []
 for i in range(200000):
-
     args = {}
     args["x"] = random.random()
     args["y"] = random.random()
@@ -23,13 +22,11 @@ for i in range(200000):
     atoms.append(args)
 
 with open("atoms.json", "w+", encoding="utf-8") as f:
-
     f.write(json.dumps(atoms))
 
 
 users = []
 for i in range(20000):
-
     args = {}
     args["email"] = "{}@{}{}".format(random_string(), random_string(), str(i))
     args["username"] = random_string()
@@ -37,5 +34,4 @@ for i in range(20000):
     users.append(args)
 
 with open("users.json", "w+", encoding="utf-8") as f:
-
     f.write(json.dumps(users))

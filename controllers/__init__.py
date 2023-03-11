@@ -65,7 +65,6 @@ def create_response(message: string, status: int, item=None) -> ORJSONResponse:
 async def create_bulk_users(users, session):
     """Creates a lot of users."""
     for _ in range(users):
-
         args = {}
         args["email"] = "{}@{}".format(random_string(), random_string())
         args["username"] = random_string()

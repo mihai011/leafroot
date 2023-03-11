@@ -9,7 +9,7 @@ import random
 from tests import DataSource
 from tests.conftest import temp_db
 from config import config
-from data import RedisGraph, RedisNode, RedisEdge
+from data import RedisGraph, RedisNode, RedisEdge, RedisGraphQuery
 from data import get_redis_connection
 from utils import random_string
 
@@ -48,7 +48,7 @@ async def test_graph_controller(session):
     assert len(graph_data["nodes"]) == 1
 
     response = await ds.client.post(
-        "/redis-graph/graph/commit",
+        "/redis-graph/graph/flush",
         headers=ds.headers["Test_user"],
         data=graph.json(),
     )
@@ -99,7 +99,7 @@ async def test_graph_add_nodes(session):
     assert len(graph["nodes"]) == 2
 
     response = await ds.client.post(
-        "/redis-graph/graph/commit",
+        "/redis-graph/graph/flush",
         headers=ds.headers["Test_user"],
         data=graph_pyd.json(),
     )
@@ -173,7 +173,7 @@ async def test_graph_add_edge(session):
     assert graph["edges"] == 1
 
     response = await ds.client.post(
-        "/redis-graph/graph/commit",
+        "/redis-graph/graph/flush",
         headers=ds.headers["Test_user"],
         data=graph_pyd.json(),
     )
@@ -189,7 +189,6 @@ async def test_graph_add_edge(session):
 @pytest.mark.asyncio
 @temp_db
 async def test_graph_redis(session):
-
     ds = DataSource(session)
     await ds.make_user()
     graph_name = "DenseGraph"
@@ -208,7 +207,6 @@ async def test_graph_redis(session):
     graph_labels = ["location", "person", "act", "consequence"]
 
     for _ in range(nodes):
-
         node = RedisNode(
             graph=graph_name,
             label=random.choice(graph_labels),
@@ -235,7 +233,6 @@ async def test_graph_redis(session):
     relation_types = ["relation", "control", "visit", "enemy"]
 
     for _ in range(edges):
-
         src = random.choice(graph["nodes"])
         dst = random.choice(graph["nodes"])
 
@@ -261,11 +258,26 @@ async def test_graph_redis(session):
     assert graph["edges"] == edges
 
     response = await ds.client.post(
-        "/redis-graph/graph/commit",
+        "/redis-graph/graph/flush",
         headers=ds.headers["Test_user"],
         data=graph_pyd.json(),
     )
     assert response.status_code == 200
+
+    redis_query = RedisGraphQuery(
+        graph=graph_name, query="MATCH (n:location) RETURN n"
+    )
+
+    response = await ds.client.post(
+        "redis-graph/graph/query",
+        headers=ds.headers["Test_user"],
+        data=redis_query.json(),
+    )
+
+    assert response.status_code == 200
+    assert all(
+        [t[0]["labels"][0] == "location" for t in response.json()["item"]]
+    )
 
     response = await ds.client.delete(
         f"/redis-graph/graph/{graph_name}",

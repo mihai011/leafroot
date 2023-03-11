@@ -43,7 +43,6 @@ async def test_api(session):
     }
 
     for item in key_and_missing.items():
-
         value = payload_api.pop(item[0])
 
         response = await ds.client.post(

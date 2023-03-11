@@ -21,7 +21,7 @@ class RedisService:
 
     @log()
     def add_graph(self, graph):
-        """Add graph"""
+        """Add graph."""
 
         name = graph.name
 
@@ -71,10 +71,10 @@ class RedisService:
         return metadata
 
     @log()
-    def graph_commit(self, graph):
+    def graph_flush(self, graph):
 
         graph = self.graphs[graph.name]
-        graph.commit()
+        graph.flush()
 
         return True
 
@@ -83,6 +83,13 @@ class RedisService:
 
         graph = self.graphs.pop(name)
         graph.delete()
+
+    @log()
+    def graph_query(self, query):
+
+        graph = self.graphs[query.graph]
+        result = graph.query(query.query)
+        return [[n.__dict__ for n in r] for r in result.result_set]
 
 
 redis_service = RedisService(next(get_redis_connection()))

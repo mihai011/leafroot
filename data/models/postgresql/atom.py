@@ -26,7 +26,6 @@ class Atom(Base, ExtraBase):
 
     @classmethod
     async def AddNew(cls, session, args):
-
         obj = await super().AddNew(session, args)
         obj = await cls.GetById(session, obj.id)
 
@@ -34,7 +33,6 @@ class Atom(Base, ExtraBase):
 
     @classmethod
     async def GetById(cls, session, obj_id):
-
         result = await session.execute(
             select(cls)
             .options(

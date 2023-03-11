@@ -11,6 +11,7 @@ from data import (
     RedisGraph,
     RedisNode,
     RedisEdge,
+    RedisGraphQuery,
 )
 from external_api.utils import get_http_session, make_api_request
 from controllers import create_response, auth_decorator, parse
@@ -46,17 +47,17 @@ async def delete_redis_graph(
     return create_response("Graph deleted!", 200)
 
 
-@redis_router.post("/graph/commit")
+@redis_router.post("/graph/flush")
 @auth_decorator
-async def commit_redis_graph(
+async def flush_redis_graph(
     request: Request,
     session: AsyncSession = Depends(get_session),
     graph: RedisGraph = Body(...),
 ) -> ORJSONResponse:
-    """Commit contents of a graph to Redis."""
+    """Flush contents of a graph to Redis."""
 
-    graph = redis_service.graph_commit(graph)
-    return create_response("Graph commited!", 200)
+    graph = redis_service.graph_flush(graph)
+    return create_response("Graph flushed!", 200)
 
 
 @redis_router.post("/graph")
@@ -90,10 +91,22 @@ async def redis_node(
 async def redis_node(
     request: Request,
     session: AsyncSession = Depends(get_session),
-    redis_client=Depends(get_redis_connection),
     edge: RedisEdge = Body(...),
 ) -> ORJSONResponse:
     """Add an edge to a graph."""
 
     edge = redis_service.add_edge_to_graph(edge)
     return create_response("Node created and added!", 200, edge)
+
+
+@redis_router.post("/graph/query")
+@auth_decorator
+async def redis_graph_query(
+    request: Request,
+    session: AsyncSession = Depends(get_session),
+    query: RedisGraphQuery = Body(...),
+) -> ORJSONResponse:
+    """Makes a query to redis graph."""
+
+    result = redis_service.graph_query(query)
+    return create_response("Redis Query made!", 200, result)
