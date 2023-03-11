@@ -8,6 +8,7 @@ import asyncio
 from starlette_context import context
 from starlette_context.errors import ContextDoesNotExistError
 from contextlib import contextmanager
+from fastapi import HTTPException
 
 
 FORMAT = "%(asctime)s - %(module)s - %(funcName)s - line:%(lineno)d - %(levelname)s - %(message)s"
@@ -47,7 +48,7 @@ def wrapping_logic(func, request_id):
             f"Exception  {request_id} raised in {func.__name__}. exception: {str(e)}"
         )
         # TODO: parse the exception and return a proper one
-        raise e
+        raise HTTPException(status_code=404, detail="Test")
 
 
 def log(*log_args, **log_kwargs):

@@ -69,7 +69,6 @@ async def user_on_startup(session: AsyncSession = async_session()):
     initialize_logger()
     create_database_app()
     create_mongodb_schemas()
-    create_redis_schemas()
 
     if config.user_name and config.user_email and config.user_password:
         params = {
