@@ -1,8 +1,7 @@
 """tests for util functions."""
+import json
 
 import pytest
-
-import json
 import redis
 
 from tests import DataSource

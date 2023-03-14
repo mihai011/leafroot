@@ -1,5 +1,4 @@
 """Health controller."""
-import logging
 
 from fastapi import Request, APIRouter, Depends
 from fastapi.responses import ORJSONResponse

@@ -1,3 +1,5 @@
+# pylint: disable-all
+
 """Python3 time test controllers."""
 
 import json
@@ -8,17 +10,19 @@ from tqdm.asyncio import tqdm
 
 
 async def make_call(session, url):
+    """Makea a GET request to a URL."""
     async with session.get(url) as r:
         return r
 
 
 async def async_calls(url, reqs):
+    """Make a set of async request to a urls."""
     async with aiohttp.ClientSession() as session:
         tasks = []
         for _ in range(reqs):
             tasks.append(make_call(session, url))
         for task in tqdm(asyncio.as_completed(tasks), total=len(tasks)):
-            res = await task
+            await task
 
 
 if __name__ == "__main__":

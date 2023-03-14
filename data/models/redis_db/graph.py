@@ -3,11 +3,13 @@ Redis graph models."""
 
 import uuid
 from typing import Optional
-from pydantic import BaseModel, Field, UUID4
+from pydantic import BaseModel, Field
 from pydantic.typing import Any, Dict
 
 
 class RedisGraph(BaseModel):
+    """Graph class for Redis"""
+
     id: str = Field(default_factory=uuid.uuid4, alias="_id")
     name: str = Field(...)
 
@@ -22,6 +24,8 @@ class RedisGraph(BaseModel):
 
 
 class RedisNode(BaseModel):
+    """Node class for redis graph."""
+
     id: str = Field(default_factory=uuid.uuid4, alias="_id")
     graph: str
     label: str
@@ -39,6 +43,8 @@ class RedisNode(BaseModel):
 
 
 class RedisEdge(BaseModel):
+    """Redis edge class for graph."""
+
     id: str = Field(default_factory=uuid.uuid4, alias="_id")
     graph: str
     source: str

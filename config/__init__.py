@@ -1,7 +1,6 @@
 """Module that contains application settings."""
 
 from typing import Literal
-import os
 
 from pydantic import (
     BaseSettings,
@@ -15,11 +14,7 @@ from pydantic.typing import Optional
 
 
 class Settings(BaseSettings):
-    """Class responsible for loading up and generating settings.
-
-    Args:
-        BaseSettings (class): Base settings class.
-    """
+    """Class responsible for loading up and generating settings."""
 
     app_name: str = "Fast Full API"
     env: Literal["dev", "prod"]

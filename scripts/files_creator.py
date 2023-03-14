@@ -1,3 +1,4 @@
+# pylint: disable-all
 """Module that creates different files for manual testing."""
 
 import json

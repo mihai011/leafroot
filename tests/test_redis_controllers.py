@@ -1,16 +1,13 @@
 """Testing redis controllers."""
 
-import pytest
-
 import json
-import redis
 import random
+
+import pytest
 
 from tests import DataSource
 from tests.conftest import temp_db
-from config import config
 from data import RedisGraph, RedisNode, RedisEdge, RedisGraphQuery
-from data import get_redis_connection
 from utils import random_string
 
 
@@ -21,7 +18,6 @@ async def test_graph_controller(session):
 
     ds = DataSource(session)
     await ds.make_user()
-    redis_client = next(get_redis_connection())
     graph_name = "test"
 
     graph = RedisGraph(name=graph_name)
@@ -69,7 +65,6 @@ async def test_graph_add_nodes(session):
     graph_name = "Locations2"
     ds = DataSource(session)
     await ds.make_user()
-    redis_client = next(get_redis_connection())
 
     graph_pyd = RedisGraph(name=graph_name)
     node = RedisNode(
@@ -119,7 +114,6 @@ async def test_graph_add_edge(session):
 
     ds = DataSource(session)
     await ds.make_user()
-    redis_client = next(get_redis_connection())
     graph_name = "Locations"
 
     graph_pyd = RedisGraph(name=graph_name)
@@ -189,6 +183,7 @@ async def test_graph_add_edge(session):
 @pytest.mark.asyncio
 @temp_db
 async def test_graph_redis(session):
+    """Test redis graph."""
     ds = DataSource(session)
     await ds.make_user()
     graph_name = "DenseGraph"
@@ -276,7 +271,7 @@ async def test_graph_redis(session):
 
     assert response.status_code == 200
     assert all(
-        [t[0]["labels"][0] == "location" for t in response.json()["item"]]
+        t[0]["labels"][0] == "location" for t in response.json()["item"]
     )
 
     response = await ds.client.delete(

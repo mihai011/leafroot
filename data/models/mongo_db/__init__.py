@@ -8,12 +8,16 @@ from pydantic import BaseModel, Field
 
 
 class Book(BaseModel):
+    """Book class model for mongodb."""
+
     id: str = Field(default_factory=uuid.uuid4, alias="_id")
     title: str = Field(...)
     author: str = Field(...)
     synopsis: str = Field(...)
 
     class Config:
+        """Config class."""
+
         allow_population_by_field_name = True
         schema_extra = {
             "example": {
@@ -26,11 +30,15 @@ class Book(BaseModel):
 
 
 class BookUpdate(BaseModel):
+    """Book class model update for mongodb."""
+
     title: Optional[str]
     author: Optional[str]
     synopsis: Optional[str]
 
     class Config:
+        """Config class."""
+
         schema_extra = {
             "example": {
                 "title": "Don Quixote",

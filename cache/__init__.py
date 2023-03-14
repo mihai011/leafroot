@@ -2,7 +2,6 @@
 
 from typing import Optional
 
-import asyncio
 from aiohttp import ClientSession
 from fastapi import Request, Response
 from fastapi_cache import FastAPICache

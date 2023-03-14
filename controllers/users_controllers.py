@@ -79,7 +79,7 @@ async def get_user(
 async def login(
     request: Request,
     session: AsyncSession = Depends(get_session),
-):
+) -> ORJSONResponse:
     """Login controller for a user."""
 
     params = await request_body_extraction(request)
@@ -111,7 +111,7 @@ async def sign_up(
     request: Request,  # pylint: disable=W0613
     params: Dict[str, str],
     session: AsyncSession = Depends(get_session),
-):
+) -> ORJSONResponse:
     """Sign-up controller for the user."""
 
     if "password" not in params:

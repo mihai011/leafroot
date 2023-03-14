@@ -1,5 +1,4 @@
 """Redis controllers."""
-import logging
 
 from fastapi import Request, APIRouter, Depends, Body
 from fastapi.responses import ORJSONResponse
@@ -7,14 +6,12 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from data import (
     get_session,
-    get_redis_connection,
     RedisGraph,
     RedisNode,
     RedisEdge,
     RedisGraphQuery,
 )
-from external_api.utils import get_http_session, make_api_request
-from controllers import create_response, auth_decorator, parse
+from controllers import create_response, auth_decorator
 
 from services.redis_service import redis_service
 
@@ -88,7 +85,7 @@ async def redis_node(
 
 @redis_router.post("/edge")
 @auth_decorator
-async def redis_node(
+async def redis_edge(
     request: Request,
     session: AsyncSession = Depends(get_session),
     edge: RedisEdge = Body(...),
@@ -96,7 +93,7 @@ async def redis_node(
     """Add an edge to a graph."""
 
     edge = redis_service.add_edge_to_graph(edge)
-    return create_response("Node created and added!", 200, edge)
+    return create_response("Edge created and added!", 200, edge)
 
 
 @redis_router.post("/graph/query")

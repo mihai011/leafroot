@@ -1,3 +1,5 @@
+# pylint: disable-all
+
 """Python3 upload_objects.py."""
 
 import json

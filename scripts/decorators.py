@@ -1,3 +1,4 @@
+# pylint: disable-all
 def star(*args_start, **kargs_start):
     def wrapper(func):
         def inner(*args, **kwargs):

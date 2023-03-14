@@ -1,7 +1,8 @@
 """Testing the health check."""
 
-import pytest
 import json
+
+import pytest
 
 from tests import DataSource
 from tests.conftest import temp_db
