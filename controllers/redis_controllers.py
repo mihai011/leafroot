@@ -5,13 +5,12 @@ from fastapi.responses import ORJSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from data import (
-    get_session,
     RedisGraph,
     RedisNode,
     RedisEdge,
     RedisGraphQuery,
 )
-from controllers import create_response, auth_decorator
+from controllers import create_response, auth
 
 from services.redis_service import redis_service
 
@@ -19,11 +18,10 @@ redis_router = APIRouter(prefix="/redis-graph", tags=["redis"])
 
 
 @redis_router.get("/graph/{graph_name}")
-@auth_decorator
 async def get_redis_graph(
     graph_name: str,
     request: Request,
-    session: AsyncSession = Depends(get_session),
+    payload: dict = Depends(auth),
 ) -> ORJSONResponse:
     """Make a graph into redis with a single dummy node."""
 
@@ -32,11 +30,10 @@ async def get_redis_graph(
 
 
 @redis_router.delete("/graph/{graph_name}")
-@auth_decorator
 async def delete_redis_graph(
     graph_name: str,
     request: Request,
-    session: AsyncSession = Depends(get_session),
+    payload: dict = Depends(auth),
 ) -> ORJSONResponse:
     """Delete a graph."""
 
@@ -45,10 +42,9 @@ async def delete_redis_graph(
 
 
 @redis_router.post("/graph/flush")
-@auth_decorator
 async def flush_redis_graph(
     request: Request,
-    session: AsyncSession = Depends(get_session),
+    payload: dict = Depends(auth),
     graph: RedisGraph = Body(...),
 ) -> ORJSONResponse:
     """Flush contents of a graph to Redis."""
@@ -58,10 +54,9 @@ async def flush_redis_graph(
 
 
 @redis_router.post("/graph")
-@auth_decorator
 async def redis_graph(
     request: Request,
-    session: AsyncSession = Depends(get_session),
+    payload: dict = Depends(auth),
     graph: RedisGraph = Body(...),
 ) -> ORJSONResponse:
     """Make a graph into redis with a single dummy node."""
@@ -71,10 +66,9 @@ async def redis_graph(
 
 
 @redis_router.post("/node")
-@auth_decorator
 async def redis_node(
     request: Request,
-    session: AsyncSession = Depends(get_session),
+    payload: dict = Depends(auth),
     node: RedisNode = Body(...),
 ) -> ORJSONResponse:
     """Add a node to a graph."""
@@ -84,10 +78,9 @@ async def redis_node(
 
 
 @redis_router.post("/edge")
-@auth_decorator
 async def redis_edge(
     request: Request,
-    session: AsyncSession = Depends(get_session),
+    payload: dict = Depends(auth),
     edge: RedisEdge = Body(...),
 ) -> ORJSONResponse:
     """Add an edge to a graph."""
@@ -97,10 +90,9 @@ async def redis_edge(
 
 
 @redis_router.post("/graph/query")
-@auth_decorator
 async def redis_graph_query(
     request: Request,
-    session: AsyncSession = Depends(get_session),
+    payload: dict = Depends(auth),
     query: RedisGraphQuery = Body(...),
 ) -> ORJSONResponse:
     """Makes a query to redis graph."""

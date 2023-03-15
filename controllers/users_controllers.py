@@ -9,13 +9,12 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from data import User, get_session
 
-from controllers import (
-    create_bulk_users,
-    auth_decorator,
-    create_response,
-    parse,
+from controllers import create_response, parse, auth
+from utils import (
+    create_access_token,
+    get_password_hash,
+    verify_password,
 )
-from utils import create_access_token, get_password_hash, verify_password
 from utils.requests_parser import request_body_extraction
 
 
@@ -23,28 +22,11 @@ user_router = APIRouter(prefix="/users", tags=["users"])
 templates = Jinja2Templates(directory="templates")
 
 
-@user_router.post("/create_users/{quantity}")
-@auth_decorator
-async def create_users(
-    quantity: int,
-    request: Request,
-    session: AsyncSession = Depends(get_session),
-):
-    """creates simple users in the database."""
-    params = await parse(request)
-    if params:
-        return create_response("Do not send params for this endpoint!", 400)
-    await create_bulk_users(quantity, session)
-
-    await session.close()
-    return create_response("Users created succesfully!", 200)
-
-
 @user_router.post("/create_user")
-@auth_decorator
 async def create_user(
     request: Request,
     session: AsyncSession = Depends(get_session),
+    payload: dict = Depends(auth),
 ):
     """creating a simple user."""
     params = await parse(request)
@@ -58,11 +40,11 @@ async def create_user(
 
 
 @user_router.get("/get_user/{id_user}")
-@auth_decorator
 async def get_user(
     id_user: int,
     request: Request,
     session: AsyncSession = Depends(get_session),
+    payload: dict = Depends(auth),
 ) -> ORJSONResponse:
     """get user by id."""
     await parse(request)
@@ -97,7 +79,8 @@ async def login(
     user = users[0]
 
     if verify_password(params["password"], user.hashed_pass):
-        token = await create_access_token(params)
+        params.pop("password")
+        token = create_access_token(params)
         return create_response(
             "User logged in!", 200, {"token": token, "user": user.serialize()}
         )
@@ -108,7 +91,6 @@ async def login(
 
 @user_router.post("/sign-up")
 async def sign_up(
-    request: Request,  # pylint: disable=W0613
     params: Dict[str, str],
     session: AsyncSession = Depends(get_session),
 ) -> ORJSONResponse:

@@ -2,39 +2,18 @@
 
 import string
 import logging
-from functools import wraps
 
 from fastapi.responses import ORJSONResponse
+from fastapi import Header
 
-from data import User
-from utils import get_password_hash, authenthicate_user, random_string
+from utils import authenthicate_user
 from logger import log
 
 
 @log()
-def auth_decorator(controller):
-    """Authenthication decorator, query and payload parser."""
-
-    @wraps(controller)
-    async def auth(*args, **kwargs):
-        """Function that gets token and adds session to the controller."""
-        request = kwargs["request"]
-        session = kwargs["session"]
-
-        if "authorization" not in request.headers:
-            return create_response("Authorization header not present!", 401)
-
-        token = request.headers["authorization"].split(" ")[-1]
-
-        if not await authenthicate_user(token, session):
-            return create_response(
-                "Token expired or invalid! Please login again!", 401
-            )
-
-        response = await controller(*args, **kwargs)
-        return response
-
-    return auth
+def auth(authorization: str = Header()):
+    token = authorization.split(" ")[-1]
+    return authenthicate_user(token)
 
 
 @log()
@@ -60,13 +39,3 @@ def create_response(message: string, status: int, item=None) -> ORJSONResponse:
 
     logging.info("Creating response with data:%s", str(data))
     return ORJSONResponse(content=data)
-
-
-async def create_bulk_users(users, session):
-    """Creates a lot of users."""
-    for _ in range(users):
-        args = {}
-        args["email"] = "{}@{}".format(random_string(), random_string())
-        args["username"] = random_string()
-        args["hashed_pass"] = get_password_hash(random_string())
-        await User.AddNew(session, args)

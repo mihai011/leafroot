@@ -1,7 +1,6 @@
 """General util module."""
 
-from datetime import datetime, timedelta
-from typing import Optional
+
 import random
 import string
 
@@ -9,8 +8,8 @@ from passlib.context import CryptContext
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt
 
+
 from config import config
-from data import User
 from cache import testproof_cache, my_key_builder
 from logger import log
 
@@ -35,19 +34,13 @@ def get_password_hash(password: str) -> str:
 @testproof_cache(
     expire=int(config.access_token_expire_seconds), key_builder=my_key_builder
 )
-async def create_access_token(
+def create_access_token(
     data: dict,
-    expires_delta: Optional[int] = int(config.access_token_expire_seconds),
 ):
     """Create the access token hash for data."""
-    to_encode = data.copy()
-    if expires_delta:
-        expire = datetime.utcnow() + timedelta(minutes=expires_delta)
-    else:
-        expire = datetime.utcnow() + timedelta(minutes=15)
-    to_encode.update({"exp": expire})
+
     encoded_jwt = jwt.encode(
-        to_encode, config.secret_key, algorithm=config.algorithm
+        data, config.secret_key, algorithm=config.algorithm
     )
     return encoded_jwt
 
@@ -56,33 +49,23 @@ async def create_access_token(
 @testproof_cache(
     expire=config.access_token_expire_seconds, key_builder=my_key_builder
 )
-async def authenthicate_user(token: str, session):
-    """Authenticate users given a token."""
-
-    if len(token.split(".")) != 3:
-        return None
+def authenthicate_user(token: str):
+    """Authenticate a token."""
 
     payload = jwt.decode(
         token, config.secret_key, algorithms=[config.algorithm]
     )
 
-    if "email" in payload:
-        users = await User.GetByArgs(session, {"email": payload["email"]})
-        if not users:
-            return None
-
-        return users[0]
-
-    return None
+    return payload
 
 
 @log()
 def random_string():
     """Make a random string."""
-    init_salt = "R"
+    init_pepper = "R"
     r_string = "".join(
         random.choice(string.ascii_uppercase + string.digits)
-        for _ in range(10)
+        for _ in range(100)
     )
 
-    return init_salt + r_string
+    return init_pepper + r_string

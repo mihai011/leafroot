@@ -17,10 +17,13 @@ new applications.
     6. Implemented health check.
     7. TODO: Add Mongo and other NO-SQLs and Apache Kafka to app.
     8. TODO: Circle CI pipeline for fast deployment to AWS, ETA and Heroku.
-    9. TODO: Add chat integration using socketio
-    10. Implement healthcheck. (done)
+    9. TODO: Add chat integration using socketio.
+    10. Implement healthcheck.
     11. TODO: Implement stress test.
     12. TODO: Mock mongo database for test
+    13. TODO: Implement Exception processing.
+    14. TODO: Implement Super User.
+    15. Implement salts for passwords.
 
 
 ## Project environment set up (for vscode and docker users)

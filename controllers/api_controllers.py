@@ -7,16 +7,15 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from data import get_session
 from external_api.utils import get_http_session, make_api_request
-from controllers import create_response, auth_decorator, parse
+from controllers import create_response, parse, auth
 
 api_router = APIRouter(prefix="/api", tags=["api"])
 
 
 @api_router.post("/external")
-@auth_decorator
 async def api_request(
     request: Request,
-    session: AsyncSession = Depends(get_session),
+    payload: dict = Depends(auth),
     http_session=Depends(get_http_session),
 ) -> ORJSONResponse:
     """Make a http request to an external api."""
@@ -35,7 +34,5 @@ async def api_request(
         return create_response("Headers not found in payload!", 400)
 
     response = await make_api_request(http_session, content)
-
-    await session.close()
 
     return create_response("api called", 200, response)

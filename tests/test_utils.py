@@ -16,10 +16,10 @@ async def test_authenticate(session):
     }
 
     user_orig = await User.AddNew(session, user_args)
-    token = await create_access_token(user_orig.serialize(), None)
-    user_auth = await authenthicate_user(token, session)
+    token = create_access_token(user_orig.serialize())
+    user_auth = authenthicate_user(token)
 
-    assert user_orig == user_auth
+    assert user_orig.serialize() == user_auth
 
 
 @temp_db
@@ -31,7 +31,7 @@ async def test_fake_user(session):
         "email": "test@gmail.com",
         "hashed_pass": "fake_pass",
     }
-    token = await create_access_token(user_args, None)
-    user_auth = await authenthicate_user(token, session)
+    token = create_access_token(user_args)
+    user_auth = authenthicate_user(token)
 
-    assert user_auth is None
+    assert user_auth == user_args

@@ -4,6 +4,7 @@ import os
 import time
 import logging
 import asyncio
+from functools import wraps
 
 from starlette_context import context
 from starlette_context.errors import ContextDoesNotExistError
@@ -31,6 +32,11 @@ def initialize_logger():
     logging.exception("Exception here")
 
 
+def parse_exception(e: Exception):
+
+    return HTTPException(400, str(e))
+
+
 @contextmanager
 def wrapping_logic(func, request_id):
     try:
@@ -48,19 +54,19 @@ def wrapping_logic(func, request_id):
             f"Exception  {request_id} raised in {func.__name__}. exception: {str(e)}"
         )
         # TODO: parse the exception and return a proper one
-        raise HTTPException(status_code=404, detail="Test")
+        raise parse_exception(e)
 
 
-def log(*log_args, **log_kwargs):
+def log():
     def inner(func):
+        @wraps(func)
         def wrapper(*args, **kwargs):
             request_id = None
+            result = None
             try:
                 request_id = context["X-Request-ID"]
             except ContextDoesNotExistError as e:
                 pass
-
-            result = None
 
             if not asyncio.iscoroutinefunction(func):
                 with wrapping_logic(func, request_id):
@@ -69,10 +75,8 @@ def log(*log_args, **log_kwargs):
             else:
 
                 async def wrap():
-                    result = None
                     with wrapping_logic(func, request_id):
-                        result = await func(*args, **kwargs)
-                    return result
+                        return await func(*args, **kwargs)
 
                 result = wrap()
 

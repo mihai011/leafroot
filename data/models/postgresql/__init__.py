@@ -8,7 +8,7 @@ from sqlalchemy.sql.expression import func
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.future import select
 from sqlalchemy import Column, Integer, DateTime
-
+import asyncio
 
 from config import config
 
@@ -37,7 +37,7 @@ async def get_session() -> AsyncSession:  # pragma: no cover
         async with async_session() as session:
             yield session
     finally:
-        await session.close()
+        await asyncio.shield(session.close())
 
 
 async def get_return_session() -> AsyncSession:  # pragma: no cover

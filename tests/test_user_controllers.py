@@ -130,18 +130,17 @@ async def test_signup_user(session):
         "/users/get_user/{}".format(user_id), headers=fake_headers
     )
     response_content = response.json()
-    assert response.status_code == 200
-    assert response_content["status"] == 401
+    assert response.status_code == 400
+    assert response_content["detail"] == "(400, 'Not enough segments')"
 
-    # test with malformed header
+    # test with no correct header
     fake_headers = {}
     fake_headers["header"] = "Bearer fake"
     response = await ds.client.get(
         "/users/get_user/{}".format(user_id), headers=fake_headers
     )
     response_content = response.json()
-    assert response.status_code == 200
-    assert response_content["status"] == 401
+    assert response.status_code == 422
 
 
 @pytest.mark.asyncio
@@ -151,24 +150,7 @@ async def test_create_user(session):
     ds = DataSource(session)
     await ds.make_user()
 
-    # test endpoint for creating users
-    response = await ds.client.post(
-        "/users/create_users/{}".format(100),
-        headers=ds.headers["Test_user"],
-        json={"fake_content": "fake"},
-    )
-    response_content = response.json()
-    assert response.status_code == 200
-    assert response_content["status"] == 400
-
-    response = await ds.client.post(
-        "/users/create_users/{}".format(2),
-        headers=ds.headers["Test_user"],
-        json={},
-    )
-    assert response.status_code == 200
-
-    # test endpoint for creating users
+    # test endpoint for creating user
     response = await ds.client.post(
         "/users/create_user",
         headers=ds.headers["Test_user"],
@@ -205,7 +187,7 @@ async def test_create_user(session):
     assert response_content["status"] == 400
 
     users = await User.GetAll(session)
-    assert len(users) == 4
+    assert len(users) == 2
 
     await User.DeleteAll(session)
     users = await User.GetAll(session)

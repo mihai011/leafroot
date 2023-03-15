@@ -8,8 +8,7 @@ from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from controllers import auth_decorator
-from data import get_session
+from controllers import auth
 
 base_router = APIRouter(prefix="", tags=["base"])
 templates = Jinja2Templates(directory="templates")
@@ -23,18 +22,14 @@ async def login(request: Request):
 
 
 @base_router.get("/main", response_class=HTMLResponse)
-@auth_decorator
-async def main(
-    request: Request,
-    session: AsyncSession = Depends(get_session),  # pylint: disable=W0613
-):
+async def main(request: Request, payload: dict = Depends(auth)):
     """Simple main page."""
 
     return templates.TemplateResponse("main.html", {"request": request})
 
 
 @base_router.get("/sync_controller", response_class=JSONResponse)
-def sync():
+def sync(request: Request):
     """Simple sync controller."""
 
     requests.get("http://google.com", timeout=1)
@@ -43,7 +38,7 @@ def sync():
 
 
 @base_router.get("/async_controller", response_class=JSONResponse)
-async def control(request: Request):
+async def async_func(request: Request):
     """Simple async controller."""
     async with aiohttp.ClientSession() as session:
         await session.get("http://google.com", timeout=1)

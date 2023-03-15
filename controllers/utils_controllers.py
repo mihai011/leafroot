@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from data import get_session
 from data.models.postgresql.quote import Quote
-from controllers import create_response, auth_decorator, parse
+from controllers import create_response, parse, auth
 from services.health_service import health_check
 from services.quote_service import get_random_quote
 
@@ -14,10 +14,7 @@ utils_router = APIRouter(prefix="/utils", tags=["utils"])
 
 
 @utils_router.get("/health_check")
-@auth_decorator
-async def get_health_check(
-    request: Request, session: AsyncSession = Depends(get_session)
-):
+async def get_health_check(request: Request, payload: dict = Depends(auth)):
     """Returns the health state of the system."""
 
     status = await health_check()
@@ -26,9 +23,10 @@ async def get_health_check(
 
 
 @utils_router.get("/quote")
-@auth_decorator
 async def get_quote(
-    request: Request, session: AsyncSession = Depends(get_session)
+    request: Request,
+    session: AsyncSession = Depends(get_session),
+    payload: dict = Depends(auth),
 ):
     """Returns a random quote from the database."""
 
@@ -38,9 +36,10 @@ async def get_quote(
 
 
 @utils_router.post("/quote")
-@auth_decorator
 async def create_quote(
-    request: Request, session: AsyncSession = Depends(get_session)
+    request: Request,
+    session: AsyncSession = Depends(get_session),
+    payload: dict = Depends(auth),
 ) -> ORJSONResponse:
     """Creates a quote object."""
 
