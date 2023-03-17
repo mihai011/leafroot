@@ -1,8 +1,7 @@
 """Redis controllers."""
 
-from fastapi import Request, APIRouter, Depends, Body
+from fastapi import APIRouter, Depends, Body
 from fastapi.responses import ORJSONResponse
-from sqlalchemy.ext.asyncio import AsyncSession
 
 from data import (
     RedisGraph,
@@ -20,7 +19,6 @@ redis_router = APIRouter(prefix="/redis-graph", tags=["redis"])
 @redis_router.get("/graph/{graph_name}")
 async def get_redis_graph(
     graph_name: str,
-    request: Request,
     payload: dict = Depends(auth),
 ) -> ORJSONResponse:
     """Make a graph into redis with a single dummy node."""
@@ -32,7 +30,6 @@ async def get_redis_graph(
 @redis_router.delete("/graph/{graph_name}")
 async def delete_redis_graph(
     graph_name: str,
-    request: Request,
     payload: dict = Depends(auth),
 ) -> ORJSONResponse:
     """Delete a graph."""
@@ -43,7 +40,6 @@ async def delete_redis_graph(
 
 @redis_router.post("/graph/flush")
 async def flush_redis_graph(
-    request: Request,
     payload: dict = Depends(auth),
     graph: RedisGraph = Body(...),
 ) -> ORJSONResponse:
@@ -55,7 +51,6 @@ async def flush_redis_graph(
 
 @redis_router.post("/graph")
 async def redis_graph(
-    request: Request,
     payload: dict = Depends(auth),
     graph: RedisGraph = Body(...),
 ) -> ORJSONResponse:
@@ -67,7 +62,6 @@ async def redis_graph(
 
 @redis_router.post("/node")
 async def redis_node(
-    request: Request,
     payload: dict = Depends(auth),
     node: RedisNode = Body(...),
 ) -> ORJSONResponse:
@@ -79,7 +73,6 @@ async def redis_node(
 
 @redis_router.post("/edge")
 async def redis_edge(
-    request: Request,
     payload: dict = Depends(auth),
     edge: RedisEdge = Body(...),
 ) -> ORJSONResponse:
@@ -91,7 +84,6 @@ async def redis_edge(
 
 @redis_router.post("/graph/query")
 async def redis_graph_query(
-    request: Request,
     payload: dict = Depends(auth),
     query: RedisGraphQuery = Body(...),
 ) -> ORJSONResponse:

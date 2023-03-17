@@ -3,6 +3,7 @@
 import pytest  # pylint: disable=R0801
 from aioresponses import aioresponses  # pylint: disable=R0801
 
+from data import HttpRequest
 from tests import DataSource  # pylint: disable=R0801
 from tests.conftest import temp_db  # pylint: disable=R0801
 
@@ -15,17 +16,19 @@ async def test_api(session):
     ds = DataSource(session)
     await ds.make_user()
 
-    payload_api = {
-        "url": "http://fake_url.com",
-        "body": {},
-        "method": "GET",
-        "params": {},
-        "headers": {},
-    }
+    payload_api = HttpRequest(
+        url="http://fake_url.com",
+        body="request body",
+        method="GET",
+        params=dict(),
+        headers=dict(),
+    )
     with aioresponses() as mocked:
-        mocked.get(payload_api["url"], status=200, body="test1")
+        mocked.get(payload_api.url, status=200, body="test1")
         response = await ds.client.post(
-            "/api/external", json=payload_api, headers=ds.headers["Test_user"]
+            "/api/external",
+            data=payload_api.json(),
+            headers=ds.headers["Test_user"],
         )
     assert response.status_code == 200
     assert response.json() == {
@@ -41,18 +44,3 @@ async def test_api(session):
         "params": "Params",
         "headers": "Headers",
     }
-
-    for item in key_and_missing.items():
-        value = payload_api.pop(item[0])
-
-        response = await ds.client.post(
-            "/api/external", json=payload_api, headers=ds.headers["Test_user"]
-        )
-        assert response.status_code == 200
-        assert response.json() == {
-            "message": "{} not found in payload!".format(item[1]),
-            "item": None,
-            "status": 400,
-        }
-
-        payload_api[item[0]] = value

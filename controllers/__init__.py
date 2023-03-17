@@ -12,6 +12,7 @@ from logger import log
 
 @log()
 def auth(authorization: str = Header()):
+    """Auth function based on header"""
     token = authorization.split(" ")[-1]
     return authenthicate_user(token)
 

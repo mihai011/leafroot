@@ -1,13 +1,13 @@
 """
 Models and utils functions for redsi
 """
-from config import config
-
-from .graph import RedisGraph, RedisNode, RedisEdge, RedisGraphQuery
-from logger import log
 
 import redis
 from redis import Redis
+
+from config import config
+from logger import log
+from .graph import RedisGraph, RedisNode, RedisEdge, RedisGraphQuery
 
 
 @log()

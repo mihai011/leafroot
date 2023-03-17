@@ -1,7 +1,5 @@
-from functools import wraps
-
-
-def log(*largs, **lkwargs):
+# pylint: disable-all
+def log():
     def wrapper(func):
         def inner(*args, **kwargs):
             print("log")

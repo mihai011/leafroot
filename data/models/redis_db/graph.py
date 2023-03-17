@@ -14,7 +14,8 @@ class RedisGraph(BaseModel):
     name: str = Field(...)
 
     class Config:
-        allow_population_by_field_name = True
+        """Class Config for Redis Graph"""
+
         schema_extra = {
             "example": {
                 "_id": "066de609-b04a-4b30-b46c-32537c7f1f6e",
@@ -32,7 +33,8 @@ class RedisNode(BaseModel):
     properties: Dict[str, Any]
 
     class Config:
-        allow_population_by_field_name = True
+        """Class Config for Redis Node"""
+
         schema_extra = {
             "example": {
                 "_id": "066de609-b04a-4b30-b46c-32537c7f1f6e",
@@ -53,7 +55,8 @@ class RedisEdge(BaseModel):
     properties: Optional[Dict[str, Any]]
 
     class Config:
-        allow_population_by_field_name = True
+        """Class Config for Redis Edge"""
+
         schema_extra = {
             "example": {
                 "_id": "066de609-b04a-4b30-b46c-32537c7f1f6e",
@@ -66,11 +69,14 @@ class RedisEdge(BaseModel):
 
 
 class RedisGraphQuery(BaseModel):
+    """Redis Pydantic Graph Class"""
+
     graph: str
     query: str
 
     class Config:
-        allow_population_by_field_name = True
+        """Class Config for Redis Query"""
+
         schema_extra = {
             "example": {
                 "_id": "066de609-b04a-4b30-b46c-32537c7f1f6e",

@@ -1,11 +1,9 @@
 """Basic controllers for tasks."""
 
 from celery import uuid
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends
 from fastapi.responses import ORJSONResponse
-from sqlalchemy.ext.asyncio import AsyncSession
 
-from data import get_session
 from controllers import create_response, auth
 from celery_worker import small_task, create_task_metadata
 

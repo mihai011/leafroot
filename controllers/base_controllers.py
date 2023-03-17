@@ -6,7 +6,6 @@ import aiohttp
 from fastapi import APIRouter, Request, Depends
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
-from sqlalchemy.ext.asyncio import AsyncSession
 
 from controllers import auth
 
@@ -29,7 +28,7 @@ async def main(request: Request, payload: dict = Depends(auth)):
 
 
 @base_router.get("/sync_controller", response_class=JSONResponse)
-def sync(request: Request):
+def sync():
     """Simple sync controller."""
 
     requests.get("http://google.com", timeout=1)
@@ -38,7 +37,7 @@ def sync(request: Request):
 
 
 @base_router.get("/async_controller", response_class=JSONResponse)
-async def async_func(request: Request):
+async def async_func():
     """Simple async controller."""
     async with aiohttp.ClientSession() as session:
         await session.get("http://google.com", timeout=1)

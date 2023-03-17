@@ -1,6 +1,7 @@
 """models init file."""
 from datetime import datetime
 
+import asyncio
 from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.ext.declarative import declarative_base
@@ -8,7 +9,6 @@ from sqlalchemy.sql.expression import func
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.future import select
 from sqlalchemy import Column, Integer, DateTime
-import asyncio
 
 from config import config
 

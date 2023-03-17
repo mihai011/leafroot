@@ -2,7 +2,7 @@
 import aiohttp
 import pytest
 from aioresponses import aioresponses
-
+from data import HttpRequest
 
 from external_api.utils import (
     make_api_request,
@@ -43,13 +43,13 @@ async def test_get_request_external():
     """test a simple request to a fake api service."""
     url_test = "http://fake_url.com"
 
-    content = {
-        "url": "http://fake_url.com",
-        "body": {},
-        "method": "GET",
-        "params": {},
-        "headers": {},
-    }
+    content = HttpRequest(
+        url="http://fake_url.com",
+        body="",
+        method="GET",
+        params={},
+        headers={},
+    )
 
     session = aiohttp.ClientSession()
 
@@ -60,14 +60,14 @@ async def test_get_request_external():
 
     with aioresponses() as mocked:
         mocked.post(url_test, status=200, body="test2")
-        content["method"] = "POST"
+        content.method = "POST"
         response = await make_api_request(session, content)
         assert response == "test2"
 
     with aioresponses() as mocked:
         mocked.post(url_test, status=200, body="test3")
-        content["body"] = {"data": "test_data"}
-        content["method"] = "POST"
+        content.body = "{'data': 'test_data'}"
+        content.method = "POST"
         response = await make_api_request(session, content)
         assert response == "test3"
 

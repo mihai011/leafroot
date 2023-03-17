@@ -1,6 +1,7 @@
 import urllib
 from aiohttp import ClientSession
 
+from data import HttpRequest
 from cache import testproof_cache, my_key_builder
 from logger import log
 
@@ -16,30 +17,16 @@ async def get_http_session():
     await session.close()
 
 
-async def make_api_request(session, args):
+async def make_api_request(session, request: HttpRequest):
     """
-    Constructs a http request to an external api and send it:
-
-    Parameters:
-    session (aiohttp client session): http client session
-    content (dict) that contains the following
-
-        method (string): HTTP method used for the external api
-        url (string): string that represents the url
-        body (dict): content for the paylod in case of
-                    POST, PUT and PATCH methods
-        params (dict): query parameters for the url
-        headers (dict): headers to be sent in request
-
-    Returns:
-    response from the external api in text form
+    Constructs a http request to an external api and sends it.
     """
 
-    method = args.get("method", None)
-    url = args.get("url", None)
-    params = args.get("params", None)
-    body = args.get("body", None)
-    headers = args.get("headers", None)
+    method = request.method
+    url = request.url
+    params = request.params
+    body = request.body
+    headers = request.headers
 
     query_url = "{}{}".format(url, urllib.parse.urlencode(params))
 

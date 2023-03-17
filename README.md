@@ -15,15 +15,16 @@ new applications.
     3. Docker containers and local environment already set up.
     4. Circle CI config for testing implemented.
     6. Implemented health check.
-    7. TODO: Add Mongo and other NO-SQLs and Apache Kafka to app.
+    7. TODO: Add Mongo and other NO-SQLs.
     8. TODO: Circle CI pipeline for fast deployment to AWS, ETA and Heroku.
     9. TODO: Add chat integration using socketio.
     10. Implement healthcheck.
     11. TODO: Implement stress test.
-    12. TODO: Mock mongo database for test
+    12. TODO: Mock mongo database for test.
     13. TODO: Implement Exception processing.
     14. TODO: Implement Super User.
-    15. Implement salts for passwords.
+    15. TODO: Implement salts for passwords.
+    16. TODO: Experiment with Apache Family.
 
 
 ## Project environment set up (for vscode and docker users)

@@ -14,7 +14,7 @@ utils_router = APIRouter(prefix="/utils", tags=["utils"])
 
 
 @utils_router.get("/health_check")
-async def get_health_check(request: Request, payload: dict = Depends(auth)):
+async def get_health_check(payload: dict = Depends(auth)):
     """Returns the health state of the system."""
 
     status = await health_check()
@@ -24,7 +24,6 @@ async def get_health_check(request: Request, payload: dict = Depends(auth)):
 
 @utils_router.get("/quote")
 async def get_quote(
-    request: Request,
     session: AsyncSession = Depends(get_session),
     payload: dict = Depends(auth),
 ):
