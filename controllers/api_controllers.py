@@ -1,7 +1,5 @@
 """Api controllers."""
-import logging
-
-from fastapi import APIRouter, Depends, Body
+from fastapi import APIRouter, Depends
 from fastapi.responses import ORJSONResponse
 
 from controllers import create_response, auth

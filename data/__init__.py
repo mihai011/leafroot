@@ -1,9 +1,9 @@
 """Module for related data."""
 
+from enum import Enum
 from sqlalchemy_utils import database_exists, create_database
 from pydantic import BaseModel, HttpUrl
-from pydantic.typing import Dict, Any
-from enum import Enum
+from pydantic.typing import Dict
 
 from data.models.postgresql import Base
 from data.models.postgresql.user import User
@@ -41,6 +41,8 @@ def create_mongodb_schemas():
 
 
 class HttpMethodsModel(str, Enum):
+    """Enum class for http methods."""
+
     GET = "GET"
     POST = "POST"
     PUT = "PUT"
