@@ -2,7 +2,7 @@
 from fastapi import APIRouter, Depends
 from fastapi.responses import ORJSONResponse
 
-from controllers import create_response, auth
+from controllers import create_response, CurrentUser
 from data import HttpRequest
 from external_api.utils import get_http_session, make_api_request
 from logger import log
@@ -14,7 +14,7 @@ api_router = APIRouter(prefix="/api", tags=["api"])
 @api_router.post("/external")
 async def api_request(
     http_request: HttpRequest,
-    payload: dict = Depends(auth),
+    payload: CurrentUser,
     http_session=Depends(get_http_session),
 ) -> ORJSONResponse:
     """Make a http request to an external api."""

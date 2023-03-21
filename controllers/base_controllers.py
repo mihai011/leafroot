@@ -3,11 +3,11 @@
 import requests
 import aiohttp
 
-from fastapi import APIRouter, Request, Depends
+from fastapi import APIRouter, Request
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 
-from controllers import auth
+from controllers import CurrentUser
 
 base_router = APIRouter(prefix="", tags=["base"])
 templates = Jinja2Templates(directory="templates")
@@ -21,7 +21,7 @@ async def login(request: Request):
 
 
 @base_router.get("/main", response_class=HTMLResponse)
-async def main(request: Request, payload: dict = Depends(auth)):
+async def main(request: Request, user: CurrentUser):
     """Simple main page."""
 
     return templates.TemplateResponse("main.html", {"request": request})

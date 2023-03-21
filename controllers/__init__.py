@@ -2,19 +2,24 @@
 
 import string
 import logging
+from typing import Annotated
 
 from fastapi.responses import ORJSONResponse
-from fastapi import Header
+from fastapi import Header, Depends
+from sqlalchemy.orm import Session
 
 from utils import authenthicate_user
 from logger import log
+from data import User, get_sync_session
 
 
 @log()
-def auth(authorization: str = Header()):
+def auth(
+    authorization: str = Header(), session: Session = Depends(get_sync_session)
+):
     """Auth function based on header"""
     token = authorization.split(" ")[-1]
-    return authenthicate_user(token)
+    return authenthicate_user(token, session)
 
 
 @log()
@@ -40,3 +45,6 @@ def create_response(message: string, status: int, item=None) -> ORJSONResponse:
 
     logging.info("Creating response with data:%s", str(data))
     return ORJSONResponse(content=data)
+
+
+CurrentUser = Annotated[User, Depends(auth)]

@@ -1,12 +1,15 @@
 """Tests for util functions."""
 
+import pytest
+from fastapi import HTTPException
+
 from tests.conftest import temp_db
 from utils import create_access_token, authenthicate_user
 from data import User
 
 
-@temp_db
-async def test_authenticate(session):
+@temp_db("both")
+async def test_authenticate(async_session, sync_session):
     """test authenthication."""
 
     user_args = {
@@ -15,16 +18,20 @@ async def test_authenticate(session):
         "hashed_pass": "fake_pass",
     }
 
-    user_orig = await User.AddNew(session, user_args)
-    token = create_access_token(user_orig.serialize())
-    user_auth = authenthicate_user(token)
+    user_orig = await User.AddNew(async_session, user_args)
+    data = user_orig.serialize()
+    data.pop("id")
+    data.pop("created_at")
+    data.pop("updated_at")
+    token = create_access_token(data)
+    user_auth = authenthicate_user(token, sync_session)
 
-    assert user_orig.serialize() == user_auth
+    assert user_orig.id == user_auth.id
 
 
-@temp_db
+@temp_db("sync_session")
 async def test_fake_user(session):
-    """test authenthication with fake creds."""
+    """Test authenthication with fake creds."""
 
     user_args = {
         "username": "test_name",
@@ -32,6 +39,6 @@ async def test_fake_user(session):
         "hashed_pass": "fake_pass",
     }
     token = create_access_token(user_args)
-    user_auth = authenthicate_user(token)
 
-    assert user_auth == user_args
+    with pytest.raises(HTTPException):
+        authenthicate_user(token, session)

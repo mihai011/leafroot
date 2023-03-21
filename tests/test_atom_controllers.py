@@ -6,7 +6,7 @@ from tests.conftest import temp_db
 
 
 @pytest.mark.asyncio
-@temp_db
+@temp_db("async_session")
 async def test_particles(session):
     """testing particles."""
 

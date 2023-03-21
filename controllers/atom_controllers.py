@@ -3,9 +3,9 @@ from fastapi import Request, APIRouter, Depends
 from fastapi.responses import ORJSONResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from data import get_session
+from data import get_async_session
 from data import Atom, Electron, Neutron, Proton
-from controllers import create_response, parse, auth
+from controllers import create_response, parse, CurrentUser
 
 atom_router = APIRouter(prefix="/atoms", tags=["atoms"])
 
@@ -13,8 +13,8 @@ atom_router = APIRouter(prefix="/atoms", tags=["atoms"])
 @atom_router.post("/create_atom")
 async def create_atom(
     request: Request,
-    session: AsyncSession = Depends(get_session),
-    payload: dict = Depends(auth),
+    user: CurrentUser,
+    session: AsyncSession = Depends(get_async_session),
 ) -> ORJSONResponse:
     """Create atom here."""
     params = await parse(request)
@@ -27,8 +27,8 @@ async def create_atom(
 @atom_router.post("/proton")
 async def add_proton(
     request: Request,
-    session: AsyncSession = Depends(get_session),
-    payload: dict = Depends(auth),
+    user: CurrentUser,
+    session: AsyncSession = Depends(get_async_session),
 ) -> ORJSONResponse:
     """This controller creates a proton with the params received in the
     body."""
@@ -44,8 +44,8 @@ async def add_proton(
 @atom_router.get("/proton")
 async def get_proton(
     request: Request,
-    session: AsyncSession = Depends(get_session),
-    payload: dict = Depends(auth),
+    user: CurrentUser,
+    session: AsyncSession = Depends(get_async_session),
 ) -> ORJSONResponse:
     """Getting protons based on params."""
 
@@ -61,8 +61,8 @@ async def get_proton(
 @atom_router.post("/neutron")
 async def add_neutron(
     request: Request,
-    session: AsyncSession = Depends(get_session),
-    payload: dict = Depends(auth),
+    user: CurrentUser,
+    session: AsyncSession = Depends(get_async_session),
 ) -> ORJSONResponse:
     """This controller creates a neutron with the params received in the
     body."""
@@ -78,8 +78,8 @@ async def add_neutron(
 @atom_router.get("/neutron")
 async def get_neutron(
     request: Request,
-    session: AsyncSession = Depends(get_session),
-    payload: dict = Depends(auth),
+    user: CurrentUser,
+    session: AsyncSession = Depends(get_async_session),
 ) -> ORJSONResponse:
     """Getting neutron based on params."""
 
@@ -95,8 +95,8 @@ async def get_neutron(
 @atom_router.post("/electron")
 async def add_electron(
     request: Request,
-    session: AsyncSession = Depends(get_session),
-    payload: dict = Depends(auth),
+    user: CurrentUser,
+    session: AsyncSession = Depends(get_async_session),
 ):
     """This controller creates a electron with the params received in the
     body."""
@@ -113,8 +113,8 @@ async def add_electron(
 @atom_router.get("/electron")
 async def get_electron(
     request: Request,
-    session: AsyncSession = Depends(get_session),
-    payload: dict = Depends(auth),
+    user: CurrentUser,
+    session: AsyncSession = Depends(get_async_session),
 ) -> ORJSONResponse:
     """Getting neutron based on params."""
 

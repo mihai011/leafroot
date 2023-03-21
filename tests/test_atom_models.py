@@ -6,7 +6,7 @@ from data import Neutron, Proton, Electron, Atom
 
 
 @pytest.mark.asyncio
-@temp_db
+@temp_db("async_session")
 async def test_atom_model(session):
     """simple test for Atom model."""
 
@@ -19,7 +19,7 @@ async def test_atom_model(session):
 
 
 @pytest.mark.asyncio
-@temp_db
+@temp_db("async_session")
 async def test_sub_atomic_model(session):
     """test for subparticles of atom."""
 

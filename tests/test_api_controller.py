@@ -9,7 +9,7 @@ from tests.conftest import temp_db  # pylint: disable=R0801
 
 
 @pytest.mark.asyncio
-@temp_db
+@temp_db("async_session")
 async def test_api(session):
     """test api request controller."""
 

@@ -62,7 +62,7 @@ async def user_on_startup(session: AsyncSession = async_session()):
     """Creates a user at startup.
 
     Args:
-        session (AsyncSession, optional): _description_. Defaults to Depends(get_session).
+        session (AsyncSession, optional): _description_. Defaults to Depends(get_async_session).
     """
 
     initialize_cache()

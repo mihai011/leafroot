@@ -9,7 +9,7 @@ from tests.conftest import temp_db
 
 
 @pytest.mark.asyncio
-@temp_db
+@temp_db("async_session")
 async def test_health_status(session):
     """Verifying the health check."""
 
@@ -32,7 +32,7 @@ async def test_health_status(session):
 
 
 @pytest.mark.asyncio
-@temp_db
+@temp_db("async_session")
 async def test_quotes(session):
     """Verifying the quotes endpoint."""
 

@@ -12,7 +12,7 @@ from utils import random_string
 
 
 @pytest.mark.asyncio
-@temp_db
+@temp_db("async_session")
 async def test_graph_controller(session):
     """Test redis graph creation"""
 
@@ -58,7 +58,7 @@ async def test_graph_controller(session):
 
 
 @pytest.mark.asyncio
-@temp_db
+@temp_db("async_session")
 async def test_graph_add_nodes(session):
     """Test node adding to graph."""
 
@@ -108,7 +108,7 @@ async def test_graph_add_nodes(session):
 
 
 @pytest.mark.asyncio
-@temp_db
+@temp_db("async_session")
 async def test_graph_add_edge(session):
     """Test add edge to graph."""
 
@@ -181,7 +181,7 @@ async def test_graph_add_edge(session):
 
 
 @pytest.mark.asyncio
-@temp_db
+@temp_db("async_session")
 async def test_graph_redis(session):
     """Test redis graph."""
     ds = DataSource(session)

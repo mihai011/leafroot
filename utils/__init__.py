@@ -7,10 +7,12 @@ import string
 from passlib.context import CryptContext
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt
+from sqlalchemy.orm import Session
 
 
 from config import config
 from cache import testproof_cache, my_key_builder
+from data import User
 from logger import log
 
 
@@ -49,14 +51,21 @@ def create_access_token(
 @testproof_cache(
     expire=config.access_token_expire_seconds, key_builder=my_key_builder
 )
-def authenthicate_user(token: str):
+def authenthicate_user(token: str, session: Session) -> User:
     """Authenticate a token."""
 
     payload = jwt.decode(
         token, config.secret_key, algorithms=[config.algorithm]
     )
 
-    return payload
+    users = User.GetByArgsSync(session, payload)
+
+    if len(users) == 0:
+        raise Exception("No user found!")
+
+    user = users[0]
+
+    return user
 
 
 @log()

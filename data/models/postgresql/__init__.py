@@ -4,16 +4,16 @@ from datetime import datetime
 import asyncio
 from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import create_engine
 from sqlalchemy.sql.expression import func
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, Session, declarative_base
 from sqlalchemy.future import select
 from sqlalchemy import Column, Integer, DateTime
 
 from config import config
 
 
-engine = create_async_engine(
+async_engine = create_async_engine(
     config.sqlalchemy_database_url_async,
     echo=False,
     future=True,
@@ -23,15 +23,27 @@ engine = create_async_engine(
     pool_pre_ping=True,
 )
 
+sync_engine = create_engine(
+    config.sqlalchemy_database_url_sync,
+    echo=False,
+    future=True,
+    pool_size=0,
+    max_overflow=100,
+    pool_pre_ping=True,
+)
+
 async_session = sessionmaker(
-    engine, class_=AsyncSession, expire_on_commit=False
+    async_engine, class_=AsyncSession, expire_on_commit=False
+)
+sync_session = sessionmaker(
+    sync_engine, class_=Session, expire_on_commit=False
 )
 
 Base = declarative_base()
 secret = config.secret
 
 
-async def get_session() -> AsyncSession:  # pragma: no cover
+async def get_async_session() -> AsyncSession:  # pragma: no cover
     """Yields an async session."""
     try:
         async with async_session() as session:
@@ -40,11 +52,13 @@ async def get_session() -> AsyncSession:  # pragma: no cover
         await asyncio.shield(session.close())
 
 
-async def get_return_session() -> AsyncSession:  # pragma: no cover
-    """Returns an async session."""
-
-    session = async_session()
-    return session
+async def get_sync_session() -> Session:  # pragma: no cover
+    """Yields an sync session."""
+    try:
+        with sync_session() as session:
+            yield session
+    finally:
+        session.close()
 
 
 class ExtraBase(SerializerMixin):
@@ -91,7 +105,7 @@ class ExtraBase(SerializerMixin):
 
     @classmethod
     async def GetByArgs(cls, session, args):
-        """Get obejct by args."""
+        """Get object by args."""
 
         def filter_sync(session):
             query = session.query(cls)
@@ -104,6 +118,15 @@ class ExtraBase(SerializerMixin):
         await session.close()
 
         return results
+
+    @classmethod
+    def GetByArgsSync(cls, session, args):
+        """Get object by args in a sync way."""
+
+        query = session.query(cls)
+        for attr, value in args.items():
+            query = query.filter(getattr(cls, attr) == value)
+        return query.all()
 
     @classmethod
     async def DeleteAll(Cls, session):

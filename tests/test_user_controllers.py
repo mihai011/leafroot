@@ -7,7 +7,7 @@ from tests.conftest import temp_db
 
 
 @pytest.mark.asyncio
-@temp_db
+@temp_db("async_session")
 async def test_greetings_controller(session):
     """testing simple controller."""
 
@@ -20,7 +20,7 @@ async def test_greetings_controller(session):
 
 
 @pytest.mark.asyncio
-@temp_db
+@temp_db("async_session")
 async def test_login_user(session):
     """Testing simple flow."""
 
@@ -60,7 +60,7 @@ async def test_login_user(session):
 
 
 @pytest.mark.asyncio
-@temp_db
+@temp_db("async_session")
 async def test_signup_user(session):
     """testing simple flow."""
 
@@ -144,7 +144,7 @@ async def test_signup_user(session):
 
 
 @pytest.mark.asyncio
-@temp_db
+@temp_db("async_session")
 async def test_create_user(session):
     """testing simple flow."""
     ds = DataSource(session)

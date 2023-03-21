@@ -10,7 +10,7 @@ from config import config
 
 
 @pytest.mark.asyncio
-@temp_db
+@temp_db("async_session")
 async def test_small_task(session):
     """Test authenthication."""
 

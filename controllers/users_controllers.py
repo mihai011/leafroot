@@ -7,9 +7,9 @@ from fastapi.responses import ORJSONResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from data import User, get_session
+from data import User, get_async_session
 
-from controllers import create_response, parse, auth
+from controllers import create_response, parse, CurrentUser
 from utils import (
     create_access_token,
     get_password_hash,
@@ -25,8 +25,8 @@ templates = Jinja2Templates(directory="templates")
 @user_router.post("/create_user")
 async def create_user(
     request: Request,
-    session: AsyncSession = Depends(get_session),
-    payload: dict = Depends(auth),
+    user: CurrentUser,
+    session: AsyncSession = Depends(get_async_session),
 ):
     """Creating a simple user."""
     params = await parse(request)
@@ -42,10 +42,10 @@ async def create_user(
 async def get_user(
     id_user: int,
     request: Request,
-    session: AsyncSession = Depends(get_session),
-    payload: dict = Depends(auth),
+    user: CurrentUser,
+    session: AsyncSession = Depends(get_async_session),
 ) -> ORJSONResponse:
-    """get user by id."""
+    """Get user by id."""
     await parse(request)
     user = await User.GetById(session, id_user)
 
@@ -58,7 +58,7 @@ async def get_user(
 @user_router.post("/login")
 async def login(
     request: Request,
-    session: AsyncSession = Depends(get_session),
+    session: AsyncSession = Depends(get_async_session),
 ) -> ORJSONResponse:
     """Login controller for a user."""
 
@@ -77,7 +77,11 @@ async def login(
     user = users[0]
 
     if verify_password(params["password"], user.hashed_pass):
-        token = create_access_token(user.serialize())
+        data = user.serialize()
+        data.pop("id")
+        data.pop("created_at")
+        data.pop("updated_at")
+        token = create_access_token(data)
         return create_response(
             "User logged in!", 200, {"token": token, "user": user.serialize()}
         )
@@ -88,7 +92,7 @@ async def login(
 @user_router.post("/sign-up")
 async def sign_up(
     params: Dict[str, str],
-    session: AsyncSession = Depends(get_session),
+    session: AsyncSession = Depends(get_async_session),
 ) -> ORJSONResponse:
     """Sign-up controller for the user."""
 

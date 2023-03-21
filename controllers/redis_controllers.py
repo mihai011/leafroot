@@ -1,6 +1,6 @@
 """Redis controllers."""
 
-from fastapi import APIRouter, Depends, Body
+from fastapi import APIRouter
 from fastapi.responses import ORJSONResponse
 
 from data import (
@@ -9,7 +9,7 @@ from data import (
     RedisEdge,
     RedisGraphQuery,
 )
-from controllers import create_response, auth
+from controllers import create_response, CurrentUser
 
 from services.redis_service import redis_service
 
@@ -19,7 +19,7 @@ redis_router = APIRouter(prefix="/redis-graph", tags=["redis"])
 @redis_router.get("/graph/{graph_name}")
 async def get_redis_graph(
     graph_name: str,
-    payload: dict = Depends(auth),
+    user: CurrentUser,
 ) -> ORJSONResponse:
     """Make a graph into redis with a single dummy node."""
 
@@ -30,7 +30,7 @@ async def get_redis_graph(
 @redis_router.delete("/graph/{graph_name}")
 async def delete_redis_graph(
     graph_name: str,
-    payload: dict = Depends(auth),
+    user: CurrentUser,
 ) -> ORJSONResponse:
     """Delete a graph."""
 
@@ -40,8 +40,7 @@ async def delete_redis_graph(
 
 @redis_router.post("/graph/flush")
 async def flush_redis_graph(
-    payload: dict = Depends(auth),
-    graph: RedisGraph = Body(...),
+    user: CurrentUser, graph: RedisGraph
 ) -> ORJSONResponse:
     """Flush contents of a graph to Redis."""
 
@@ -51,8 +50,8 @@ async def flush_redis_graph(
 
 @redis_router.post("/graph")
 async def redis_graph(
-    payload: dict = Depends(auth),
-    graph: RedisGraph = Body(...),
+    user: CurrentUser,
+    graph: RedisGraph,
 ) -> ORJSONResponse:
     """Make a graph into redis with a single dummy node."""
 
@@ -62,8 +61,8 @@ async def redis_graph(
 
 @redis_router.post("/node")
 async def redis_node(
-    payload: dict = Depends(auth),
-    node: RedisNode = Body(...),
+    user: CurrentUser,
+    node: RedisNode,
 ) -> ORJSONResponse:
     """Add a node to a graph."""
 
@@ -73,8 +72,8 @@ async def redis_node(
 
 @redis_router.post("/edge")
 async def redis_edge(
-    payload: dict = Depends(auth),
-    edge: RedisEdge = Body(...),
+    user: CurrentUser,
+    edge: RedisEdge,
 ) -> ORJSONResponse:
     """Add an edge to a graph."""
 
@@ -84,8 +83,8 @@ async def redis_edge(
 
 @redis_router.post("/graph/query")
 async def redis_graph_query(
-    payload: dict = Depends(auth),
-    query: RedisGraphQuery = Body(...),
+    user: CurrentUser,
+    query: RedisGraphQuery,
 ) -> ORJSONResponse:
     """Makes a query to redis graph."""
 
