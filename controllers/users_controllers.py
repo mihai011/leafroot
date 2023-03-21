@@ -28,14 +28,13 @@ async def create_user(
     session: AsyncSession = Depends(get_session),
     payload: dict = Depends(auth),
 ):
-    """creating a simple user."""
+    """Creating a simple user."""
     params = await parse(request)
     try:
         user = await User.AddNew(session, params)
     except Exception as e:
         return create_response(str(e), 400)
 
-    await session.close()
     return create_response("User created!", 200, user.serialize())
 
 
@@ -53,7 +52,6 @@ async def get_user(
     if not user:
         return create_response("User not found!", 400)
 
-    await session.close()
     return create_response("User fetched!", 200, user.serialize())
 
 
@@ -84,7 +82,6 @@ async def login(
             "User logged in!", 200, {"token": token, "user": user.serialize()}
         )
 
-    await session.close()
     return create_response("Incorrect password!", 400)
 
 
@@ -113,5 +110,4 @@ async def sign_up(
     except Exception as user_error:
         return create_response(str(user_error), 400)
 
-    await session.close()
     return create_response("User created!", 200, user.serialize())
