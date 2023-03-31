@@ -1,12 +1,10 @@
 """Health controller."""
 
-from fastapi import Request, APIRouter, Depends
+from fastapi import Request, APIRouter
 from fastapi.responses import ORJSONResponse
-from sqlalchemy.ext.asyncio import AsyncSession
 
-from data import get_async_session
 from data.models.postgresql.quote import Quote
-from controllers import create_response, parse, CurrentUser
+from controllers import create_response, parse, CurrentUser, CurrentSession
 from services.health_service import health_check
 from services.quote_service import get_random_quote
 
@@ -25,9 +23,7 @@ async def get_health_check(
 
 
 @utils_router.get("/quote")
-async def get_quote(
-    user: CurrentUser, session: AsyncSession = Depends(get_async_session)
-):
+async def get_quote(user: CurrentUser, session: CurrentSession):
     """Returns a random quote from the database."""
 
     quote = await get_random_quote(session)
@@ -39,7 +35,7 @@ async def get_quote(
 async def create_quote(
     request: Request,
     user: CurrentUser,
-    session: AsyncSession = Depends(get_async_session),
+    session: CurrentSession,
 ) -> ORJSONResponse:
     """Creates a quote object."""
 

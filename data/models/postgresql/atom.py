@@ -5,7 +5,6 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.orm import selectinload
 from sqlalchemy import select
 
-
 from data.models.postgresql import ExtraBase, Base
 
 

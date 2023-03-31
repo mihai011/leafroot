@@ -92,18 +92,20 @@ def temp_db(*test_args, **test_kwargs):
             ] = override_async_session
             app.dependency_overrides[get_sync_session] = override_sync_session
             # Run tests
-            await test_function(*args, **kwargs)
-            # get_Undo db
-            if "async_session" in test_args:
-                await kwargs["session"].close()
-            if "sync_session" in test_args:
-                kwargs["session"].close()
-            if "both" in test_args:
-                await kwargs["async_session"].close()
-                kwargs["sync_session"].close()
+            try:
+                await test_function(*args, **kwargs)
+            finally:
+                # get_Undo db
+                if "async_session" in test_args:
+                    await kwargs["session"].close()
+                if "sync_session" in test_args:
+                    kwargs["session"].close()
+                if "both" in test_args:
+                    await kwargs["async_session"].close()
+                    kwargs["sync_session"].close()
 
-            app.dependency_overrides[get_async_session] = get_async_session
-            app.dependency_overrides[get_sync_session] = get_sync_session
+                app.dependency_overrides[get_async_session] = get_async_session
+                app.dependency_overrides[get_sync_session] = get_sync_session
 
         return func
 

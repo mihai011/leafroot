@@ -113,6 +113,9 @@ class ExtraBase(SerializerMixin):
                 query = query.filter(getattr(cls, attr) == value)
             return query.all()
 
+        if not args:
+            return []
+
         results = await session.run_sync(filter_sync)
 
         await session.close()

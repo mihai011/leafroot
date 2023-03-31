@@ -28,7 +28,8 @@ class DataSource:
             args.update(received_args)
 
         response = await self.client.post("users/sign-up", json=args)
-        assert response.status_code == 200
+        response = response.json()
+        assert response["status"] == 200
 
         user = await User.GetById(self.session, 1)
         assert str(user) == "<User 'Test_user'>"

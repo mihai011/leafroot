@@ -7,10 +7,11 @@ from typing import Annotated
 from fastapi.responses import ORJSONResponse
 from fastapi import Header, Depends
 from sqlalchemy.orm import Session
+from sqlalchemy.ext.asyncio import AsyncSession
 
+from data import User, get_async_session, get_sync_session
 from utils import authenthicate_user
 from logger import log
-from data import User, get_sync_session
 
 
 @log()
@@ -48,3 +49,4 @@ def create_response(message: string, status: int, item=None) -> ORJSONResponse:
 
 
 CurrentUser = Annotated[User, Depends(auth)]
+CurrentSession = Annotated[AsyncSession, Depends(get_async_session)]

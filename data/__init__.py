@@ -8,6 +8,13 @@ from pydantic.typing import Dict
 from data.models.postgresql import Base
 from data.models.postgresql.user import User
 from data.models.postgresql.atom import Atom, Electron, Neutron, Proton
+from data.models.postgresql.glovo import (
+    Product,
+    Curier,
+    Restaurant,
+    Order,
+    OrderItem,
+)
 from data.models.postgresql import (
     get_async_session,
     async_session,
@@ -20,6 +27,13 @@ from data.models.redis_db import (
     RedisEdge,
     RedisGraphQuery,
 )
+from data.models.particles import (
+    PydanticAtom,
+    PydanticElectron,
+    PydanticNeutron,
+    PydanticProton,
+)
+from data.models.users import PydanticUser, PydanticUserSignUp
 from config import config
 from logger import log
 
