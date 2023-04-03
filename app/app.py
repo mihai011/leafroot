@@ -24,7 +24,6 @@ from data import (
     async_session,
     User,
     create_database_app,
-    create_mongodb_schemas,
 )
 from config import config
 from cache import initialize_cache
@@ -68,7 +67,6 @@ async def user_on_startup(session: AsyncSession = async_session()):
     initialize_cache()
     initialize_logger()
     create_database_app()
-    create_mongodb_schemas()
 
     if config.user_name and config.user_email and config.user_password:
         params = {

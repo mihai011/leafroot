@@ -2,47 +2,35 @@
 Models for mongodb database
 """
 
-import uuid
-from typing import Optional
-from pydantic import BaseModel, Field
+import motor.motor_asyncio
+
+from config import config
 
 
-class Book(BaseModel):
-    """Book class model for mongodb."""
+def get_mongo_client():
+    """Creates mongo client"""
+    client = motor.motor_asyncio.AsyncIOMotorClient(config.mongo_url_auth)
 
-    id: str = Field(default_factory=uuid.uuid4, alias="_id")
-    title: str = Field(...)
-    author: str = Field(...)
-    synopsis: str = Field(...)
-
-    class Config:
-        """Config class."""
-
-        allow_population_by_field_name = True
-        schema_extra = {
-            "example": {
-                "_id": "066de609-b04a-4b30-b46c-32537c7f1f6e",
-                "title": "Don Quixote",
-                "author": "Miguel de Cervantes",
-                "synopsis": "...",
-            }
-        }
+    yield client
 
 
-class BookUpdate(BaseModel):
-    """Book class model update for mongodb."""
+class BaseMongo:
+    """Base class for mongo models"""
 
-    title: Optional[str]
-    author: Optional[str]
-    synopsis: Optional[str]
+    collection__name = "base"
 
-    class Config:
-        """Config class."""
+    @classmethod
+    async def GetItemById(cls, db, item_id):
+        """Get Item by id  field"""
+        collection = db[cls.collection__name]
+        res = await collection.find_one({"id": item_id})
+        return res
 
-        schema_extra = {
-            "example": {
-                "title": "Don Quixote",
-                "author": "Miguel de Cervantes",
-                "synopsis": "Don Quixote is a Spanish novel by Miguel de Cervantes...",
-            }
-        }
+    @classmethod
+    async def AddItem(cls, db, item) -> bool:
+        """Add a book to library"""
+        collection = db[cls.collection__name]
+        data = item.dict()
+        data["id"] = str(data["id"])
+        res = await collection.insert_one(data)
+        return res.acknowledged

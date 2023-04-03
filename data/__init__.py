@@ -33,6 +33,9 @@ from data.models.particles import (
     PydanticNeutron,
     PydanticProton,
 )
+from data.models.mongo_db.library import Library, Book, BookUpdate
+from data.models.mongo_db import get_mongo_client
+
 from data.models.users import PydanticUser, PydanticUserSignUp
 from config import config
 from logger import log
@@ -51,11 +54,6 @@ def create_database_app():
         return True
 
     return False
-
-
-@log()
-def create_mongodb_schemas():
-    """Create MongoDB databases."""
 
 
 class HttpMethodsModel(str, Enum):
