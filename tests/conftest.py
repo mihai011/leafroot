@@ -73,6 +73,9 @@ def temp_db(*test_args, **test_kwargs):
                 async with async_generator() as async_session:
                     return async_session
 
+            async def override_mongo_client():
+                yield DatabasesObjects[2]
+
             def override_sync_session():
                 sync_generator = DatabasesObjects[1]
                 with sync_generator() as sync_session:
@@ -86,9 +89,6 @@ def temp_db(*test_args, **test_kwargs):
 
             def override_return_mongo_client():
                 return DatabasesObjects[2]
-
-            def override_mongo_client():
-                yield DatabasesObjects[2]
 
             if "async_session" in test_args:
                 kwargs["session"] = await override_return_async_session()

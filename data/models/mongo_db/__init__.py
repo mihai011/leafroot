@@ -7,11 +7,18 @@ import motor.motor_asyncio
 from config import config
 
 
-def get_mongo_client():
+async def get_mongo_client():
     """Creates mongo client"""
-    client = motor.motor_asyncio.AsyncIOMotorClient(config.mongo_url_auth)
+    client_auth = motor.motor_asyncio.AsyncIOMotorClient(config.mongo_url_auth)
+    client_not_auth = motor.motor_asyncio.AsyncIOMotorClient(
+        config.mongo_url_not_auth
+    )
 
-    yield client
+    try:
+        await client_auth.server_info()
+        yield client_auth
+    except:
+        yield client_not_auth
 
 
 class BaseMongo:
