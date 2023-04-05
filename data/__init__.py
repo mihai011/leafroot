@@ -34,7 +34,7 @@ from data.models.particles import (
     PydanticProton,
 )
 from data.models.mongo_db.library import Library, Book, BookUpdate
-from data.models.mongo_db import get_mongo_client
+from data.models.mongo_db import get_mongo_database, get_mongo_client
 
 from data.models.users import PydanticUser, PydanticUserSignUp
 from config import config

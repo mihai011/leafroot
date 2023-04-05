@@ -55,6 +55,7 @@ class Settings(BaseSettings):
     mongo_port: Optional[str]
     mongo_initdb_root_username: Optional[str]
     mongo_initdb_root_password: Optional[str]
+    mongo_db: Optional[str]
 
     LOG_DIR: Optional[str] = "logs"
 

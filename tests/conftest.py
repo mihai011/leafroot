@@ -7,15 +7,20 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy_utils import drop_database, create_database
-import motor.motor_asyncio
 
 from app.app import app
-from data import Base, get_async_session, get_sync_session, get_mongo_client
+from data import (
+    Base,
+    get_async_session,
+    get_sync_session,
+    get_mongo_database,
+    get_mongo_client,
+)
 from config import config
 
 
 @pytest.fixture
-def DatabasesObjects() -> None:
+async def DatabasesObjects() -> None:
     """Set of test database."""
     database_name = uuid4()
     DB_URL_BASE_SYNC = "{}{}".format(
@@ -41,13 +46,11 @@ def DatabasesObjects() -> None:
         engine_sync, class_=Session, expire_on_commit=False
     )
 
-    mongo_client = motor.motor_asyncio.AsyncIOMotorClient(
-        config.mongo_url_auth
-    )
-    mongo_test_db = mongo_client[str(database_name)]
+    mongo_client = await anext(get_mongo_client())
+    mongo_db = mongo_client[str(database_name)]
 
     # Run the tests
-    yield (given_async_session_maker, given_sync_session_maker, mongo_test_db)
+    yield (given_async_session_maker, given_sync_session_maker, mongo_db)
 
     # Drop the test database
     drop_database(DB_URL_BASE_SYNC)
@@ -73,7 +76,7 @@ def temp_db(*test_args, **test_kwargs):
                 async with async_generator() as async_session:
                     return async_session
 
-            async def override_mongo_client():
+            async def override_mongo_db():
                 yield DatabasesObjects[2]
 
             def override_sync_session():
@@ -87,7 +90,7 @@ def temp_db(*test_args, **test_kwargs):
                 with sync_generator() as sync_session:
                     return sync_session
 
-            def override_return_mongo_client():
+            def override_return_mongo_db():
                 return DatabasesObjects[2]
 
             if "async_session" in test_args:
@@ -95,7 +98,7 @@ def temp_db(*test_args, **test_kwargs):
             if "sync_session" in test_args:
                 kwargs["session"] = override_return_sync_session()
             if "mongo_db" in test_args:
-                kwargs["mongo_db"] = override_return_mongo_client()
+                kwargs["mongo_db"] = override_return_mongo_db()
             if "both" in test_args:
                 kwargs["async_session"] = await override_return_async_session()
                 kwargs["sync_session"] = override_return_sync_session()
@@ -105,7 +108,7 @@ def temp_db(*test_args, **test_kwargs):
                 get_async_session
             ] = override_async_session
             app.dependency_overrides[get_sync_session] = override_sync_session
-            app.dependency_overrides[get_mongo_client] = override_mongo_client
+            app.dependency_overrides[get_mongo_database] = override_mongo_db
             # Run tests
             try:
                 await test_function(*args, **kwargs)
@@ -121,7 +124,9 @@ def temp_db(*test_args, **test_kwargs):
 
                 app.dependency_overrides[get_async_session] = get_async_session
                 app.dependency_overrides[get_sync_session] = get_sync_session
-                app.dependency_overrides[get_mongo_client] = get_mongo_client
+                app.dependency_overrides[
+                    get_mongo_database
+                ] = get_mongo_database
 
         return func
 
