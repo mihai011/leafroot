@@ -21,3 +21,10 @@ async def get_books(_: CurrentUser, mongo_db: MongoDatabase):
     """Get all books from library"""
     response = await Library.GetItemsByFilter(mongo_db, {})
     return create_response("Books retrieved!", 200, item=response)
+
+
+@library_router.delete("/book/{item_id}")
+async def delete_books(_: CurrentUser, mongo_db: MongoDatabase, item_id: str):
+    """Delete a book by id from library"""
+    response = await Library.DeleteItemById(mongo_db, item_id)
+    return create_response("Books retrieved!", 200, item=response)

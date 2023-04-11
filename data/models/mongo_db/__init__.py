@@ -42,6 +42,13 @@ class BaseMongo:
         return res
 
     @classmethod
+    async def DeleteItemById(cls, db, item_id):
+        """Delete Item by id"""
+        collection = db[cls.collection__name]
+        delete_result = await collection.delete_one({"id": item_id})
+        return delete_result.deleted_count
+
+    @classmethod
     async def GetItemsByFilter(cls, db, filter_dict=None):
         """Get Items by filter, or all if filter is {}"""
         if filter_dict is None:
