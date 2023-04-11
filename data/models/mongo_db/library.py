@@ -52,16 +52,6 @@ class Library(BaseMongo):
 
     collection__name = "library"
 
-    @classmethod
-    async def GetAllBooks(cls, db):
-        """Get all the books in the database."""
-        collection = db[cls.collection__name]
-        books = []
-        async for book in collection.find():
-            books.append(book)
-
-        return books
-
 
 class BookPackage(BaseModel):
     """Book Package top be received by controllers"""

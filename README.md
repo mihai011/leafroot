@@ -25,6 +25,20 @@ new applications.
     14. TODO: Implement salts for passwords.
     15. TODO: Experiment with Apache Family (Kafka, Airlfow)
     16. TODO: Integrate Buildkite workflow.
+    17. TODO: Add a rate limiter and used circumvent it in testing.
+    18. TODO: Implement a rate limiter.
+    19. TODO: Implment consistent hashing.
+    20. TODO: Implement a key-value store.
+    21. TODO: Implement a unique id generator in distributed systems.
+    22. TODO: Implement a url shortner.
+    23. TODO: Implement a web crawler.
+    24. TODO: Implement a notification system.
+    25. TODO: Implement a news feed system.
+    26. TODO: Implement a chat system.
+    27. TODO: Implement a search autcomplete system.
+    28. TODO: Implement Youtube.
+    29. TODO: Implement Google Drive.
+
 
 
 ## Project environment set up (for vscode and docker users)

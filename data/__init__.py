@@ -27,7 +27,7 @@ from data.models.redis_db import (
     RedisEdge,
     RedisGraphQuery,
 )
-from data.models.particles import (
+from data.models.pydantic import (
     PydanticAtom,
     PydanticElectron,
     PydanticNeutron,

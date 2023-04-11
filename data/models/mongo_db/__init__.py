@@ -38,8 +38,17 @@ class BaseMongo:
     async def GetItemById(cls, db, item_id):
         """Get Item by id  field"""
         collection = db[cls.collection__name]
-        res = await collection.find_one({"id": item_id})
+        res = await collection.find_one({"id": item_id}, {"_id": False})
         return res
+
+    @classmethod
+    async def GetItemsByFilter(cls, db, filter_dict=None):
+        """Get Items by filter, or all if filter is {}"""
+        if filter_dict is None:
+            filter_dict = {}
+        collection = db[cls.collection__name]
+        cursor = collection.find(filter_dict, {"_id": False})
+        return [document async for document in cursor]
 
     @classmethod
     async def AddItem(cls, db, item) -> bool:

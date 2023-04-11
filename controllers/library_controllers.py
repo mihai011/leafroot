@@ -1,7 +1,6 @@
 """Library Controllers"""
 
 from fastapi import APIRouter
-from fastapi.responses import ORJSONResponse
 
 
 from controllers import create_response, CurrentUser, MongoDatabase
@@ -12,6 +11,13 @@ library_router = APIRouter(prefix="/library", tags=["library"])
 
 @library_router.post("/book")
 async def add_book(_: CurrentUser, mongo_db: MongoDatabase, book: BookPackage):
-
-    response = await Library.AddItem(mongo_db, book)
+    """Controller add book to library"""
+    await Library.AddItem(mongo_db, book)
     return create_response("Book added!", 200)
+
+
+@library_router.get("/books")
+async def get_books(_: CurrentUser, mongo_db: MongoDatabase):
+    """Get all books from library"""
+    response = await Library.GetItemsByFilter(mongo_db, {})
+    return create_response("Books retrieved!", 200, item=response)

@@ -3,15 +3,15 @@ version: '3.7'
 
 services:
 
-    backend:
+    api:
         build:
             context: .
             dockerfile: Dockerfile
             target: ${ENV}
         env_file:
             - ${ENV_FILE}
-        container_name: backend
-        hostname: backend
+        container_name: api
+        hostname: api
         restart: on-failure
         ports:
             - ${PORT}:${PORT}

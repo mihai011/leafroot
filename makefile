@@ -2,7 +2,7 @@ ACTIVATE_BASH=source ~/.bashrc
 ACTIVATE_VENV=. venv/bin/activate
 DIR_ARGS = app/ controllers/ data/ tests/ scripts/ utils/ cache/ config/
 DIR_NO_TESTS = app/ controllers/ data/ scripts/ utils/ cache/
-SERVICES = db redis rabbitmq backend mongo worker cassandra
+SERVICES = db redis rabbitmq api mongo worker cassandra
 FULL_SERVICES = $(SERVICES) pgadmin
 USER=$(shell whoami)
 # for mac os install coreutils ot get nproc
