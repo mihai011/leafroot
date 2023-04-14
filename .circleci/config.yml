@@ -10,9 +10,6 @@ jobs:
             - image: redis/redis-stack-server
             - image: rabbitmq:latest
             - image: mongo:latest
-        environment:
-            MONGO_INITDB_ROOT_USERNAME: user
-            MONGO_INITDB_ROOT_PASSWORD: pass
         steps:
             - checkout
             - run: whoami

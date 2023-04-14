@@ -4,7 +4,7 @@ from fastapi.responses import ORJSONResponse
 
 from controllers import create_response, CurrentUser
 from data import HttpRequest
-from external_api.utils import get_http_session, make_api_request
+from utils.external_api import get_http_session, make_api_request
 from logger import log
 
 api_router = APIRouter(prefix="/api", tags=["api"])

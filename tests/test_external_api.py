@@ -4,7 +4,7 @@ import pytest
 from aioresponses import aioresponses
 from data import HttpRequest
 
-from external_api.utils import (
+from utils.external_api import (
     make_api_request,
     make_get_request,
     make_post_request,

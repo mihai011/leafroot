@@ -152,3 +152,4 @@ dmypy.json
 # vscode files
 .vscode/launch.json
 leafroot.pem
+mongo_data/
