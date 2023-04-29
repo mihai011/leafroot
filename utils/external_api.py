@@ -1,3 +1,4 @@
+"""External requests util functions."""
 import urllib
 from aiohttp import ClientSession
 
@@ -7,9 +8,7 @@ from logger import log
 
 
 async def get_http_session():
-    """
-    yields an async http session
-    """
+    """Yields an async http session."""
 
     async with ClientSession() as session:
         yield session
@@ -18,9 +17,7 @@ async def get_http_session():
 
 
 async def make_api_request(session, request: HttpRequest):
-    """
-    Constructs a http request to an external api and sends it.
-    """
+    """Constructs a http request to an external api and sends it."""
 
     method = request.method
     url = request.url
@@ -31,11 +28,9 @@ async def make_api_request(session, request: HttpRequest):
     query_url = "{}{}".format(url, urllib.parse.urlencode(params))
 
     if method == "GET":
-
         response = await make_get_request(session, query_url, headers)
 
     if method == "POST":
-
         response = await make_post_request(session, query_url, body, headers)
 
     return response
@@ -44,8 +39,7 @@ async def make_api_request(session, request: HttpRequest):
 @testproof_cache(key_builder=my_key_builder)
 @log()
 async def make_get_request(session, url, headers):
-    """
-    Makes a http request to an url with GET method
+    """Makes a http request to an url with GET method.
 
     Parameters:
     session (aiohttp client session): http client session
@@ -53,17 +47,14 @@ async def make_get_request(session, url, headers):
 
     Returns:
     response from the external api in text form
-
     """
 
     async with session.get(url, headers=headers) as response:
-
         return await response.text()
 
 
 async def make_post_request(session, url, body, headers):
-    """
-    Makes a http request to an url with POSt method
+    """Makes a http request to an url with POSt method.
 
     Parameters:
     session (aiohttp client session): http client session
@@ -72,9 +63,7 @@ async def make_post_request(session, url, body, headers):
 
     Returns:
     response from the external api in text form
-
     """
 
     async with session.post(url, json=body, headers=headers) as response:
-
         return await response.text()

@@ -1,4 +1,4 @@
-"""making atoms.
+"""Making atoms.
 
 Revision ID: f0447f3df18e
 Revises: e24eefb81e98

@@ -47,7 +47,7 @@ class Atom(Base, ExtraBase):
 
 
 class Proton(Base, ExtraBase):
-    """class that represents a proton."""
+    """Class that represents a proton."""
 
     __tablename__ = "protons"
 
@@ -56,7 +56,7 @@ class Proton(Base, ExtraBase):
 
 
 class Neutron(Base, ExtraBase):
-    """class that represents a neutron."""
+    """Class that represents a neutron."""
 
     __tablename__ = "neutrons"
 
@@ -65,7 +65,7 @@ class Neutron(Base, ExtraBase):
 
 
 class Electron(Base, ExtraBase):
-    """class that represents an electron."""
+    """Class that represents an electron."""
 
     __tablename__ = "electrons"
 

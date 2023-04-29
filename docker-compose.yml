@@ -1,5 +1,5 @@
 ---
-version: '3.7'
+version: '3.8'
 
 services:
 
@@ -8,6 +8,8 @@ services:
             context: .
             dockerfile: Dockerfile
             target: ${ENV}
+            args:
+                PYTHON_VERSION: ${PYTHON_VERSION}
         env_file:
             - ${ENV_FILE}
         container_name: api
@@ -26,6 +28,8 @@ services:
             context: .
             dockerfile: Dockerfile
             target: worker
+            args:
+                PYTHON_VERSION: ${PYTHON_VERSION}
         env_file:
             - ${ENV_FILE}
         container_name: worker
@@ -43,6 +47,13 @@ services:
             - 127.0.0.1:9042:9042
         container_name: cassandra
         hostname: ${CASSANDRA_HOST}
+        networks:
+            - shared_network
+
+    scylladb:
+        image: scylladb/scylla
+        container_name: scylladb
+        hostname: ${SCYLLA_HOST}
         networks:
             - shared_network
 

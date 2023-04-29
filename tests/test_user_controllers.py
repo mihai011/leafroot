@@ -1,4 +1,4 @@
-"""base module for testing."""
+"""Base module for testing."""
 import pytest
 
 from data import User
@@ -9,7 +9,7 @@ from tests.conftest import temp_db
 @pytest.mark.asyncio
 @temp_db("async_session")
 async def test_greetings_controller(session):
-    """testing simple controller."""
+    """Testing simple controller."""
 
     ds = DataSource(session)
     await ds.make_user()
@@ -66,7 +66,7 @@ async def test_login_user(session):
 @pytest.mark.asyncio
 @temp_db("async_session")
 async def test_signup_user(session):
-    """testing simple flow."""
+    """Testing simple flow."""
 
     ds = DataSource(session)
     await ds.make_user()
@@ -147,7 +147,7 @@ async def test_signup_user(session):
 @pytest.mark.asyncio
 @temp_db("async_session")
 async def test_create_user(session):
-    """testing simple flow."""
+    """Testing simple flow."""
     ds = DataSource(session)
     await ds.make_user()
 

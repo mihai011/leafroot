@@ -1,4 +1,4 @@
-"""atom controllers."""
+"""Atom controllers."""
 from fastapi import APIRouter, Depends
 from fastapi.responses import ORJSONResponse
 

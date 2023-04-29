@@ -19,14 +19,14 @@ from logger import log
 def auth(
     authorization: str = Header(), session: Session = Depends(get_sync_session)
 ):
-    """Auth function based on header"""
+    """Auth function based on header."""
     token = authorization.split(" ")[-1]
     return authenthicate_user(token, session)
 
 
 @log()
 async def parse(request):
-    """simple parser for request."""
+    """Simple parser for request."""
     if request.method == "GET":
         args = request.query_params._dict
 

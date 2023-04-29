@@ -76,6 +76,6 @@ class HttpRequest(BaseModel):
     headers: Dict[str, str]
 
     class Config:
-        """Config class for HttpRequestModel"""
+        """Config class for HttpRequestModel."""
 
         use_enum_values = True

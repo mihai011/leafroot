@@ -14,7 +14,7 @@ from utils import random_string
 @pytest.mark.asyncio
 @temp_db("async_session")
 async def test_graph_controller(session):
-    """Test redis graph creation"""
+    """Test redis graph creation."""
 
     ds = DataSource(session)
     await ds.make_user()

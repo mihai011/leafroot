@@ -1,5 +1,4 @@
-"""
-Redis graph models."""
+"""Redis graph models."""
 
 import uuid
 from typing import Optional
@@ -8,13 +7,13 @@ from pydantic.typing import Any, Dict
 
 
 class RedisGraph(BaseModel):
-    """Graph class for Redis"""
+    """Graph class for Redis."""
 
     id: str = Field(default_factory=uuid.uuid4, alias="_id")
     name: str = Field(...)
 
     class Config:
-        """Class Config for Redis Graph"""
+        """Class Config for Redis Graph."""
 
         schema_extra = {
             "example": {
@@ -33,7 +32,7 @@ class RedisNode(BaseModel):
     properties: Dict[str, Any]
 
     class Config:
-        """Class Config for Redis Node"""
+        """Class Config for Redis Node."""
 
         schema_extra = {
             "example": {
@@ -55,7 +54,7 @@ class RedisEdge(BaseModel):
     properties: Optional[Dict[str, Any]]
 
     class Config:
-        """Class Config for Redis Edge"""
+        """Class Config for Redis Edge."""
 
         schema_extra = {
             "example": {
@@ -69,13 +68,13 @@ class RedisEdge(BaseModel):
 
 
 class RedisGraphQuery(BaseModel):
-    """Redis Pydantic Graph Class"""
+    """Redis Pydantic Graph Class."""
 
     graph: str
     query: str
 
     class Config:
-        """Class Config for Redis Query"""
+        """Class Config for Redis Query."""
 
         schema_extra = {
             "example": {

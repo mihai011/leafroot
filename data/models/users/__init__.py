@@ -4,14 +4,14 @@ from pydantic import BaseModel
 
 
 class PydanticUser(BaseModel):
-    """Pydantinc User class"""
+    """Pydantinc User class."""
 
     username: Optional[str]
     email: Optional[str]
     password: str
 
     class Config:
-        """Pydantic config class for user"""
+        """Pydantic config class for user."""
 
         example = {
             "username": "username",
@@ -21,7 +21,7 @@ class PydanticUser(BaseModel):
 
 
 class PydanticUserSignUp(BaseModel):
-    """Pydantic class"""
+    """Pydantic class."""
 
     username: str
     email: str
@@ -29,7 +29,7 @@ class PydanticUserSignUp(BaseModel):
     permissions: Optional[str]
 
     class Config:
-        """Pydantic config class for user"""
+        """Pydantic config class for user."""
 
         example = {
             "username": "username",

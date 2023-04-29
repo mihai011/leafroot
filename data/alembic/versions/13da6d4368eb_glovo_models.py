@@ -1,9 +1,8 @@
-"""glovo models
+"""Glovo models.
 
 Revision ID: 13da6d4368eb
 Revises: 339cbd9f5092
 Create Date: 2023-03-31 12:00:09.048986
-
 """
 from alembic import op
 import sqlalchemy as sa

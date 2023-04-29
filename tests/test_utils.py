@@ -10,7 +10,7 @@ from data import User
 
 @temp_db("both")
 async def test_authenticate(async_session, sync_session):
-    """test authenthication."""
+    """Test authenthication."""
 
     user_args = {
         "username": "test_name",

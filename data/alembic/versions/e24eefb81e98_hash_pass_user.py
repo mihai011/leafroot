@@ -1,4 +1,4 @@
-"""hash pass user.
+"""Hash pass user.
 
 Revision ID: e24eefb81e98
 Revises: 5503d97b7eea

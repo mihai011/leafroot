@@ -15,7 +15,7 @@ new applications.
     3. Docker containers and local environment already set up.
     4. Circle CI config for testing implemented.
     6. Implemented health check.
-    7. TODO: Add MongoDB and Cassandra.
+    7. TODO: Add MongoDB, Cassandra and ScyllaDB.
     8. TODO: Circle CI pipeline for fast deployment to AWS, ETA and Heroku.
     9. TODO: Add chat integration using socketio.
     10. TODO: Implement stress test.
@@ -38,6 +38,7 @@ new applications.
     27. TODO: Implement a search autcomplete system.
     28. TODO: Implement Youtube.
     29. TODO: Implement Google Drive.
+    30. TODO: Implement coverage html page exposed from path.
 
 
 

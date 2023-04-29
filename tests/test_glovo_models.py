@@ -1,5 +1,4 @@
-"""Test Glovo Queries
-"""
+"""Test Glovo Queries."""
 import random
 
 import pytest
@@ -12,7 +11,7 @@ from tests.conftest import temp_db
 @pytest.mark.asyncio
 @temp_db("async_session")
 async def test_glovo_queries(session):
-    """Testing sqlalchemy queries"""
+    """Testing sqlalchemy queries."""
 
     TOTAL_USERS = 100
     USERS_THAT_ORDER = 10

@@ -1,5 +1,4 @@
 # pylint: disable-all
-
 """Python3 time test controllers."""
 
 import json

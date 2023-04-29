@@ -1,4 +1,4 @@
-"""Glovo models"""
+"""Glovo models."""
 
 from sqlalchemy import Column, String, Float, Integer, ForeignKey
 from sqlalchemy import select
@@ -9,7 +9,7 @@ from data.models.postgresql import ExtraBase, Base
 
 
 class Restaurant(Base, ExtraBase):
-    """Restaurant class"""
+    """Restaurant class."""
 
     __tablename__ = "restaurants"
 
@@ -21,7 +21,7 @@ class Restaurant(Base, ExtraBase):
 
 
 class Product(Base, ExtraBase):
-    """Product class"""
+    """Product class."""
 
     __tablename__ = "products"
 
@@ -33,7 +33,7 @@ class Product(Base, ExtraBase):
 
     @classmethod
     async def getProductsbyClientId(cls, session, client_id):
-        """Get all products ordered by a client"""
+        """Get all products ordered by a client."""
 
         join_query = (
             select(cls)
@@ -47,7 +47,7 @@ class Product(Base, ExtraBase):
 
 
 class Curier(Base, ExtraBase):
-    """Curier Class"""
+    """Curier Class."""
 
     __tablename__ = "curiers"
 
@@ -56,7 +56,7 @@ class Curier(Base, ExtraBase):
 
 
 class OrderItem(Base, ExtraBase):
-    """Order Item"""
+    """Order Item."""
 
     __tablename__ = "orderitems"
 
@@ -66,7 +66,7 @@ class OrderItem(Base, ExtraBase):
 
 
 class Order(Base, ExtraBase):
-    """Order class"""
+    """Order class."""
 
     __tablename__ = "orders"
 

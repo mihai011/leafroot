@@ -1,6 +1,4 @@
-"""
-Models for mongodb database
-"""
+"""Models for mongodb database."""
 
 import motor.motor_asyncio
 
@@ -8,7 +6,7 @@ from config import config
 
 
 async def get_mongo_client():
-    """Creates mongo client"""
+    """Creates mongo client."""
     client_auth = motor.motor_asyncio.AsyncIOMotorClient(config.mongo_url_auth)
     client_not_auth = motor.motor_asyncio.AsyncIOMotorClient(
         config.mongo_url_not_auth
@@ -22,7 +20,7 @@ async def get_mongo_client():
 
 
 async def get_mongo_database():
-    """Get mongodb database"""
+    """Get mongodb database."""
     client = await anext(get_mongo_client())
     database = client[config.mongo_db]
     yield database
@@ -30,20 +28,20 @@ async def get_mongo_database():
 
 
 class BaseMongo:
-    """Base class for mongo models"""
+    """Base class for mongo models."""
 
     collection__name = "base"
 
     @classmethod
     async def GetItemById(cls, db, item_id):
-        """Get Item by id  field"""
+        """Get Item by id  field."""
         collection = db[cls.collection__name]
         res = await collection.find_one({"id": item_id}, {"_id": False})
         return res
 
     @classmethod
     async def DeleteItemById(cls, db, item_id):
-        """Delete Item by id"""
+        """Delete Item by id."""
         collection = db[cls.collection__name]
         delete_result = await collection.delete_one({"id": item_id})
         return delete_result.deleted_count
@@ -59,7 +57,7 @@ class BaseMongo:
 
     @classmethod
     async def AddItem(cls, db, item) -> bool:
-        """Add a book to library"""
+        """Add a book to library."""
         collection = db[cls.collection__name]
         data = item.dict()
         data["id"] = str(data["id"])

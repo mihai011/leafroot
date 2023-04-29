@@ -1,4 +1,4 @@
-"""Class for the mongo Library"""
+"""Class for the mongo Library."""
 
 import uuid
 from typing import Optional
@@ -48,13 +48,13 @@ class BookUpdate(BaseModel):
 
 
 class Library(BaseMongo):
-    """Library class"""
+    """Library class."""
 
     collection__name = "library"
 
 
 class BookPackage(BaseModel):
-    """Book Package top be received by controllers"""
+    """Book Package top be received by controllers."""
 
     id: str = Field(default_factory=uuid.uuid4, alias="_id")
     title: str = Field(...)

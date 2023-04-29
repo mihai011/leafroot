@@ -1,4 +1,4 @@
-"""tests for util functions."""
+"""Tests for util functions."""
 import json
 
 import pytest

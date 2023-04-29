@@ -32,7 +32,7 @@ async def test_library(mongo_db):
 @pytest.mark.asyncio
 @temp_db("async_session")
 async def test_library_controllers(session):
-    """Testing the library controllers"""
+    """Testing the library controllers."""
 
     ds = DataSource(session)
     await ds.make_user()

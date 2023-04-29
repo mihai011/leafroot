@@ -1,4 +1,4 @@
-"""base controller for stage."""
+"""Base controller for stage."""
 
 import requests
 import aiohttp
