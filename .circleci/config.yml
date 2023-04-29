@@ -20,9 +20,6 @@ jobs:
                       echo 'export $(grep -v '^#' .circleci/.env_circleci | xargs)' >> "$BASH_ENV"
                       source "$BASH_ENV"
             - run:
-                  name: Install Rust
-                  command: make install_rust
-            - run:
                   name: Create environment
                   command: make venv_create
             - run:
