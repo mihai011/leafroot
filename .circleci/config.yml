@@ -5,7 +5,7 @@ orbs:
 jobs:
     build-and-test:
         docker:
-            - image: cimg/python:3.10.7
+            - image: cimg/python:3.11
             - image: cimg/postgres:14.2
             - image: redis/redis-stack-server
             - image: rabbitmq:latest
