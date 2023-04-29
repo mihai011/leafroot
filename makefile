@@ -97,6 +97,9 @@ docker_update:
 start_celery_workers:
 	poetry run celery -A celery_worker worker --loglevel=info
 
+start_celery_workers_detached:
+	poetry run celery -A celery_worker worker --loglevel=info --detach
+
 
 bare_bones: venv_create start_services test_parallel sr_services
 
