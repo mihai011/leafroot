@@ -50,7 +50,7 @@ async def resolve_session(session_type):
             yield async_session
         await asyncio.shield(async_session.close())
 
-    def override_sync_session():
+    async def override_sync_session():
         with sync_session_maker() as sync_session:
             yield sync_session
         sync_session.close()
@@ -63,6 +63,11 @@ async def resolve_session(session_type):
     if session_type == "async":
         session = async_session_maker()
     yield session
+
+    if session_type == "async":
+        await asyncio.shield(session.close())
+    else:
+        session.close()
 
     app.dependency_overrides[get_async_session] = get_async_session
     app.dependency_overrides[get_sync_session] = get_sync_session
