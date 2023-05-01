@@ -5,15 +5,13 @@ import json
 import pytest
 
 from tests import DataSource
-from tests.conftest import temp_db
 
 
 @pytest.mark.asyncio
-@temp_db("async_session")
-async def test_health_status(session):
+async def test_health_status(async_session):
     """Verifying the health check."""
 
-    ds = DataSource(session)
+    ds = DataSource(async_session)
     await ds.make_user()
 
     response = await ds.client.get(
@@ -32,11 +30,10 @@ async def test_health_status(session):
 
 
 @pytest.mark.asyncio
-@temp_db("async_session")
-async def test_quotes(session):
+async def test_quotes(async_session):
     """Verifying the quotes endpoint."""
 
-    ds = DataSource(session)
+    ds = DataSource(async_session)
     await ds.make_user()
 
     payload_quote = {"quote": "test", "author": "author"}

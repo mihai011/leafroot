@@ -3,12 +3,10 @@ import json
 import pytest
 
 from data import Library, Book, BookPackage
-from tests.conftest import temp_db
 from tests import DataSource
 
 
 @pytest.mark.asyncio
-@temp_db("mongo_db")
 async def test_library(mongo_db):
     """Testing the mongodb class."""
     book1 = Book(title="test", author="test", synopsis="test")
@@ -30,11 +28,10 @@ async def test_library(mongo_db):
 
 
 @pytest.mark.asyncio
-@temp_db("async_session")
-async def test_library_controllers(session):
+async def test_library_controllers(async_session, mongo_db):
     """Testing the library controllers."""
 
-    ds = DataSource(session)
+    ds = DataSource(async_session)
     await ds.make_user()
 
     book = BookPackage(title="test", author="test", synopsis="control")

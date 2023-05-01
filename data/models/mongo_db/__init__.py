@@ -24,7 +24,7 @@ async def get_mongo_database():
     client = await anext(get_mongo_client())
     database = client[config.mongo_db]
     yield database
-    client.drop_database(config.mongo_db)
+    client.close()
 
 
 class BaseMongo:

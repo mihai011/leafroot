@@ -12,7 +12,7 @@ task_router = APIRouter(prefix="/tasks", tags=["tasks"])
 
 
 @task_router.post("/create_task")
-async def add_simple_task(user: CurrentUser) -> ORJSONResponse:
+async def add_simple_task(_: CurrentUser) -> ORJSONResponse:
     """Execute simple task."""
     task_id = uuid()
     response = small_task.apply_async((), task_id=task_id)

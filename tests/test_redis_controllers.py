@@ -6,17 +6,15 @@ import random
 import pytest
 
 from tests import DataSource
-from tests.conftest import temp_db
 from data import RedisGraph, RedisNode, RedisEdge, RedisGraphQuery
 from utils import random_string
 
 
 @pytest.mark.asyncio
-@temp_db("async_session")
-async def test_graph_controller(session):
+async def test_graph_controller(async_session):
     """Test redis graph creation."""
 
-    ds = DataSource(session)
+    ds = DataSource(async_session)
     await ds.make_user()
     graph_name = "test"
 
@@ -58,12 +56,11 @@ async def test_graph_controller(session):
 
 
 @pytest.mark.asyncio
-@temp_db("async_session")
-async def test_graph_add_nodes(session):
+async def test_graph_add_nodes(async_session):
     """Test node adding to graph."""
 
     graph_name = "Locations2"
-    ds = DataSource(session)
+    ds = DataSource(async_session)
     await ds.make_user()
 
     graph_pyd = RedisGraph(name=graph_name)
@@ -108,11 +105,10 @@ async def test_graph_add_nodes(session):
 
 
 @pytest.mark.asyncio
-@temp_db("async_session")
-async def test_graph_add_edge(session):
+async def test_graph_add_edge(async_session):
     """Test add edge to graph."""
 
-    ds = DataSource(session)
+    ds = DataSource(async_session)
     await ds.make_user()
     graph_name = "Locations"
 
@@ -181,10 +177,9 @@ async def test_graph_add_edge(session):
 
 
 @pytest.mark.asyncio
-@temp_db("async_session")
-async def test_graph_redis(session):
+async def test_graph_redis(async_session):
     """Test redis graph."""
-    ds = DataSource(session)
+    ds = DataSource(async_session)
     await ds.make_user()
     graph_name = "DenseGraph"
 

@@ -5,15 +5,13 @@ from aioresponses import aioresponses  # pylint: disable=R0801
 
 from data import HttpRequest
 from tests import DataSource  # pylint: disable=R0801
-from tests.conftest import temp_db  # pylint: disable=R0801
 
 
 @pytest.mark.asyncio
-@temp_db("async_session")
-async def test_api(session):
+async def test_api(async_session):
     """Test api request controller."""
 
-    ds = DataSource(session)
+    ds = DataSource(async_session)
     await ds.make_user()
 
     payload_api = HttpRequest(

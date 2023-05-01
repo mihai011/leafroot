@@ -2,15 +2,13 @@
 import pytest
 
 from tests import DataSource
-from tests.conftest import temp_db
 
 
 @pytest.mark.asyncio
-@temp_db("async_session")
-async def test_particles(session):
+async def test_particles(async_session):
     """Testing particles."""
 
-    ds = DataSource(session)
+    ds = DataSource(async_session)
     await ds.make_user()
     # make proton
     payload_particle = {"charge": 123.23}

@@ -2,6 +2,7 @@
 from uuid import uuid4
 
 import pytest
+import asyncio
 
 from sqlalchemy import create_engine
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
@@ -19,9 +20,8 @@ from data import (
 from config import config
 
 
-@pytest.fixture
-async def DatabasesObjects() -> None:
-    """Set of test database."""
+async def resolve_session(session_type):
+    """Creating async and sync session for testing."""
     database_name = uuid4()
     DB_URL_BASE_SYNC = "{}{}".format(
         config.sqlalchemy_database_url_base_sync, database_name
@@ -30,7 +30,6 @@ async def DatabasesObjects() -> None:
         config.sqlalchemy_database_url_base_async, database_name
     )
     engine_sync = create_engine(DB_URL_BASE_SYNC)
-
     try:
         create_database(DB_URL_BASE_SYNC)
     except Exception:
@@ -39,95 +38,70 @@ async def DatabasesObjects() -> None:
     # Create test database and tables
     Base.metadata.create_all(engine_sync)
     engine_async = create_async_engine(DB_URL_BASE_ASYNC)
-    given_async_session_maker = sessionmaker(
+    async_session_maker = sessionmaker(
         engine_async, class_=AsyncSession, expire_on_commit=False
     )
-    given_sync_session_maker = sessionmaker(
+    sync_session_maker = sessionmaker(
         engine_sync, class_=Session, expire_on_commit=False
     )
 
+    async def override_async_session():
+        async with async_session_maker() as async_session:
+            yield async_session
+        await asyncio.shield(async_session.close())
+
+    def override_sync_session():
+        with sync_session_maker() as sync_session:
+            yield sync_session
+        sync_session.close()
+
+    app.dependency_overrides[get_async_session] = override_async_session
+    app.dependency_overrides[get_sync_session] = override_sync_session
+
+    session = sync_session_maker()
+
+    if session_type == "async":
+        session = async_session_maker()
+    yield session
+
+    app.dependency_overrides[get_async_session] = get_async_session
+    app.dependency_overrides[get_sync_session] = get_sync_session
+    drop_database(DB_URL_BASE_SYNC)
+    yield 0
+
+
+@pytest.fixture
+async def async_session():
+    """Pytest fixture for SQLAlchemy postgresql session."""
+
+    session_generator = resolve_session("async")
+    session = await session_generator.__anext__()
+    yield session
+    await session_generator.__anext__()
+
+
+@pytest.fixture
+async def sync_session():
+    """Pytest fixture for SQLAlchemy postgresql session."""
+
+    session_generator = resolve_session("sync")
+    session = session_generator.__anext__()
+    yield session
+    await session_generator.__anext__()
+
+
+@pytest.fixture
+async def mongo_db():
+    """Mongodb fixture for mongodb MotorAsync client."""
+    database_name = uuid4()
     mongo_client = await anext(get_mongo_client())
     mongo_db = mongo_client[str(database_name)]
 
-    # Run the tests
-    yield (given_async_session_maker, given_sync_session_maker, mongo_db)
+    async def override_mongo_db():
+        yield mongo_db
 
-    # Drop the test database
-    drop_database(DB_URL_BASE_SYNC)
-    mongo_client.drop_database(str(database_name))
-
-
-def temp_db(*test_args, **test_kwargs):
-    """Pytest decorator to create a temp date."""
-
-    def inner(test_function):
-        async def func(DatabasesObjects, *args, **kwargs):
-            # Sessionmaker instance to connect to test DB
-            # (SessionLocalGenerator) From fixture
-
-            async def override_async_session():
-                async_generator = DatabasesObjects[0]
-                async with async_generator() as async_session:
-                    yield async_session
-                await async_session.close()
-
-            async def override_return_async_session():
-                async_generator = DatabasesObjects[0]
-                async with async_generator() as async_session:
-                    return async_session
-
-            async def override_mongo_db():
-                yield DatabasesObjects[2]
-
-            def override_sync_session():
-                sync_generator = DatabasesObjects[1]
-                with sync_generator() as sync_session:
-                    yield sync_session
-                sync_session.close()
-
-            def override_return_sync_session():
-                sync_generator = DatabasesObjects[1]
-                with sync_generator() as sync_session:
-                    return sync_session
-
-            def override_return_mongo_db():
-                return DatabasesObjects[2]
-
-            if "async_session" in test_args:
-                kwargs["session"] = await override_return_async_session()
-            if "sync_session" in test_args:
-                kwargs["session"] = override_return_sync_session()
-            if "mongo_db" in test_args:
-                kwargs["mongo_db"] = override_return_mongo_db()
-            if "both" in test_args:
-                kwargs["async_session"] = await override_return_async_session()
-                kwargs["sync_session"] = override_return_sync_session()
-
-            # get to use SessionLocalGenerator received from fixture_Force db
-            app.dependency_overrides[
-                get_async_session
-            ] = override_async_session
-            app.dependency_overrides[get_sync_session] = override_sync_session
-            app.dependency_overrides[get_mongo_database] = override_mongo_db
-            # Run tests
-            try:
-                await test_function(*args, **kwargs)
-            finally:
-                # get_Undo db
-                if "async_session" in test_args:
-                    await kwargs["session"].close()
-                if "sync_session" in test_args:
-                    kwargs["session"].close()
-                if "both" in test_args:
-                    await kwargs["async_session"].close()
-                    kwargs["sync_session"].close()
-
-                app.dependency_overrides[get_async_session] = get_async_session
-                app.dependency_overrides[get_sync_session] = get_sync_session
-                app.dependency_overrides[
-                    get_mongo_database
-                ] = get_mongo_database
-
-        return func
-
-    return inner
+    app.dependency_overrides[get_mongo_database] = override_mongo_db
+    yield mongo_db
+    await mongo_client.drop_database(str(database_name))
+    mongo_client.close()
+    app.dependency_overrides[get_mongo_database] = get_mongo_database

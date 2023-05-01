@@ -6,7 +6,7 @@ from fastapi.templating import Jinja2Templates
 
 from data import User, PydanticUser, PydanticUserSignUp
 
-from controllers import create_response, CurrentUser, CurrentSession
+from controllers import create_response, CurrentUser, CurrentAsyncSession
 from utils import (
     create_access_token,
     get_password_hash,
@@ -22,7 +22,7 @@ templates = Jinja2Templates(directory="templates")
 async def create_user(
     pydantic_user: PydanticUser,
     user: CurrentUser,
-    session: CurrentSession,
+    session: CurrentAsyncSession,
 ):
     """Creating a simple user."""
 
@@ -43,7 +43,7 @@ async def create_user(
 async def get_user(
     id_user: int,
     user: CurrentUser,
-    session: CurrentSession,
+    session: CurrentAsyncSession,
 ) -> ORJSONResponse:
     """Get user by id."""
 
@@ -58,7 +58,7 @@ async def get_user(
 @user_router.post("/login")
 async def login(
     pydantic_user: PydanticUser,
-    session: CurrentSession,
+    session: CurrentAsyncSession,
 ) -> ORJSONResponse:
     """Login controller for a user."""
 
@@ -89,7 +89,7 @@ async def login(
 @user_router.post("/sign-up")
 async def sign_up(
     form: PydanticUserSignUp,
-    session: CurrentSession,
+    session: CurrentAsyncSession,
 ) -> ORJSONResponse:
     """Sign-up controller for the user."""
 

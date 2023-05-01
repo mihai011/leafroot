@@ -3,15 +3,13 @@ import pytest
 
 from data import User
 from tests import DataSource
-from tests.conftest import temp_db
 
 
 @pytest.mark.asyncio
-@temp_db("async_session")
-async def test_greetings_controller(session):
+async def test_greetings_controller(async_session):
     """Testing simple controller."""
 
-    ds = DataSource(session)
+    ds = DataSource(async_session)
     await ds.make_user()
 
     response = await ds.client.get("/", headers=ds.headers["Test_user"])
@@ -20,11 +18,10 @@ async def test_greetings_controller(session):
 
 
 @pytest.mark.asyncio
-@temp_db("async_session")
-async def test_login_user(session):
+async def test_login_user(async_session):
     """Testing simple flow."""
 
-    ds = DataSource(session)
+    ds = DataSource(async_session)
     await ds.make_user({"email": "test@gmail.com"})
     user_login_data = {"password": "test"}
 
@@ -64,11 +61,10 @@ async def test_login_user(session):
 
 
 @pytest.mark.asyncio
-@temp_db("async_session")
-async def test_signup_user(session):
+async def test_signup_user(async_session):
     """Testing simple flow."""
 
-    ds = DataSource(session)
+    ds = DataSource(async_session)
     await ds.make_user()
     user_signup_data = {"username": "test"}
 
@@ -145,10 +141,9 @@ async def test_signup_user(session):
 
 
 @pytest.mark.asyncio
-@temp_db("async_session")
-async def test_create_user(session):
+async def test_create_user(async_session):
     """Testing simple flow."""
-    ds = DataSource(session)
+    ds = DataSource(async_session)
     await ds.make_user()
 
     # test endpoint for creating user
@@ -184,9 +179,9 @@ async def test_create_user(session):
     response_content = response.json()
     assert response.status_code == 422
 
-    users = await User.GetAll(session)
+    users = await User.GetAll(async_session)
     assert len(users) == 2
 
-    await User.DeleteAll(session)
-    users = await User.GetAll(session)
+    await User.DeleteAll(async_session)
+    users = await User.GetAll(async_session)
     assert len(users) == 0

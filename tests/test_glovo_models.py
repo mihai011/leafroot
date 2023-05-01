@@ -5,12 +5,9 @@ import pytest
 
 from data import User, Curier, Restaurant, Order, Product, OrderItem
 
-from tests.conftest import temp_db
-
 
 @pytest.mark.asyncio
-@temp_db("async_session")
-async def test_glovo_queries(session):
+async def test_glovo_queries(async_session):
     """Testing sqlalchemy queries."""
 
     TOTAL_USERS = 100
@@ -23,7 +20,7 @@ async def test_glovo_queries(session):
 
     users = [
         await User.AddNew(
-            session,
+            async_session,
             {"username": str(i), "email": str(i), "hashed_pass": str(i)},
         )
         for i in range(TOTAL_USERS)
@@ -34,7 +31,7 @@ async def test_glovo_queries(session):
     )
 
     restaurants = [
-        await Restaurant.AddNew(session, {"name": str(i)})
+        await Restaurant.AddNew(async_session, {"name": str(i)})
         for i in range(TOTAL_RESTAURANTS)
     ]
 
@@ -44,7 +41,7 @@ async def test_glovo_queries(session):
 
     products = [
         await Product.AddNew(
-            session,
+            async_session,
             {
                 "name": str(i),
                 "restaurant_id": random.choice(available_restaurants).id,
@@ -55,7 +52,7 @@ async def test_glovo_queries(session):
     ordered_products = list(set(random.choice(products) for _ in range(10)))
 
     curiers = [
-        await Curier.AddNew(session, {"name": str(i), "price": i})
+        await Curier.AddNew(async_session, {"name": str(i), "price": i})
         for i in range(TOTAL_CURIERS)
     ]
 
@@ -67,7 +64,7 @@ async def test_glovo_queries(session):
     for curier in active_curiers:
         for user in users_that_make_orders:
             o = await Order.AddNew(
-                session,
+                async_session,
                 {"curier_id": curier.id, "client_id": user.id},
             )
             orders.append(o)
@@ -75,7 +72,7 @@ async def test_glovo_queries(session):
     for order in orders:
         for product in ordered_products:
             await OrderItem.AddNew(
-                session,
+                async_session,
                 {
                     "product_id": product.id,
                     "order_id": order.id,
@@ -83,6 +80,6 @@ async def test_glovo_queries(session):
             )
 
     user_id = random.choice(users_that_make_orders).id
-    user_orders = await Order.getOrdersByClientId(session, user_id)
-    user_products = await Product.getProductsbyClientId(session, user_id)
+    user_orders = await Order.getOrdersByClientId(async_session, user_id)
+    user_products = await Product.getProductsbyClientId(async_session, user_id)
     assert len(user_products) == len(user_orders) * len(ordered_products)

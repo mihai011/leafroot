@@ -5,16 +5,14 @@ import pytest
 import redis
 
 from tests import DataSource
-from tests.conftest import temp_db
 from config import config
 
 
 @pytest.mark.asyncio
-@temp_db("async_session")
-async def test_small_task(session):
+async def test_small_task(async_session):
     """Test authenthication."""
 
-    ds = DataSource(session)
+    ds = DataSource(async_session)
     await ds.make_user()
 
     response = await ds.client.post(
