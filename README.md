@@ -1,7 +1,5 @@
-# fast-api-full
-Hello and welcome to a FastAPI template base project.
-This repo serves as base project for everyone to use and build upon
-new applications.
+# Leafroot
+Leafroot is a personal exercise for me as a software engineer.
 
 ## Features
 
