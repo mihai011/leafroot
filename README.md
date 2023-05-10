@@ -38,6 +38,7 @@ Leafroot is a personal exercise for me as a software engineer.
     29. TODO: Implement Google Drive.
     30. TODO: Implement coverage html page exposed from path.
     31. TODO: Implement OpenAPI Swagger documentation and write Postman documentation for frontend developers.
+    32. TODO: Implement stress test with locust and docker.
 
 
 
