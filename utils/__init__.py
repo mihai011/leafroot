@@ -5,8 +5,8 @@ import random
 import string
 
 from fastapi import HTTPException, status
-from passlib.context import CryptContext
 from fastapi.security import OAuth2PasswordBearer
+from passlib.context import CryptContext
 from jose import jwt
 from jose.exceptions import JWTError
 from sqlalchemy.orm import Session

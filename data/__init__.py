@@ -44,7 +44,6 @@ from data.models.pydantic import (
     BookListResponseItem,
     ParticleResponseItem,
     AtomResponseItem,
-    ParticleResponseItem,
     ParticleResponseListItem,
     RedisGraphResponseItem,
     RedisNodeResponseItem,

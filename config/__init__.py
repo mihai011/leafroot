@@ -9,6 +9,7 @@ from pydantic import (
     AmqpDsn,
     MongoDsn,
     Field,
+    AnyUrl,
 )
 from pydantic.typing import Optional
 
@@ -28,6 +29,8 @@ class Settings(BaseSettings):
 
     rabbitmq_host: str
     rabbitmq_protocol: Literal["amqp", "amqps"]
+
+    sentry_dsn: AnyUrl
 
     access_token_expire_seconds: int
     secret_key: str

@@ -14,6 +14,7 @@ from starlette_context import plugins
 from starlette_context.middleware import RawContextMiddleware
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import IntegrityError
+import sentry_sdk
 
 from controllers.users_controllers import user_router
 from controllers.base_controllers import base_router
@@ -55,6 +56,7 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 async def validation_exception_handler(
     _: Request, exc: RequestValidationError
 ):
+    """Error handler for Request package."""
     return JSONResponse(
         status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
         content=jsonable_encoder({"detail": exc.errors(), "body": exc.body}),
@@ -63,6 +65,7 @@ async def validation_exception_handler(
 
 @app.exception_handler(HTTPException)
 async def http_exception_handler(_: Request, exc: HTTPException):
+    """Error handler for HTTPException"""
     return JSONResponse(
         status_code=exc.status_code,
         content=jsonable_encoder({"detail": exc.detail}),
@@ -71,10 +74,20 @@ async def http_exception_handler(_: Request, exc: HTTPException):
 
 @app.exception_handler(IntegrityError)
 async def treat_integrity_error(_: Request, exc: IntegrityError):
+    """Error handler for Integrity error."""
     return JSONResponse(
         status_code=status.HTTP_400_BAD_REQUEST,
         content=jsonable_encoder({"detail": "Integrity Error!"}),
     )
+
+
+sentry_sdk.init(
+    dsn=config.sentry_dsn,
+    # Set traces_sample_rate to 1.0 to capture 100%
+    # of transactions for performance monitoring.
+    # We recommend adjusting this value in production,
+    traces_sample_rate=1.0,
+)
 
 
 # include routes

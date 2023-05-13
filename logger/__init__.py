@@ -25,11 +25,6 @@ def initialize_logger():
         format=FORMAT,
         force=True,
     )
-    logging.info("Logging Initialized")
-    logging.debug("Logging debug")
-    logging.warning("Logging warning")
-    logging.error("Error here")
-    logging.exception("Exception here")
 
 
 @contextmanager

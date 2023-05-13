@@ -97,8 +97,8 @@ class ExtraBase(SerializerMixin):
 
         query = select(cls).where(cls.id == obj_id)
         result = await session.execute(query)
-        object = result.scalars().first()
-        return object
+        o = result.scalars().first()
+        return o
 
     @classmethod
     async def GetByArgs(cls, session, args):

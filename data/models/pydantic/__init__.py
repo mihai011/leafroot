@@ -19,7 +19,6 @@ from .responses import (
     BookListResponseItem,
     ParticleResponseItem,
     AtomResponseItem,
-    ParticleResponseItem,
     ParticleResponseListItem,
     RedisGraphResponseItem,
     RedisNodeResponseItem,

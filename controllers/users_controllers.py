@@ -8,7 +8,6 @@ from fastapi import status
 from data import (
     User,
     PydanticUser,
-    UserResponse,
     PydanticUserSignUp,
     UserResponseItem,
     AuthorizedUserResponseItem,
