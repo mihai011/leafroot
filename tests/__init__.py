@@ -1,5 +1,6 @@
 """Datasource module for testing."""
 from httpx import AsyncClient
+from fastapi import status
 from fastapi.testclient import TestClient
 
 from app.app import app
@@ -28,8 +29,8 @@ class DataSource:
             args.update(received_args)
 
         response = await self.client.post("users/sign-up", json=args)
+        assert response.status_code == status.HTTP_200_OK
         response = response.json()
-        assert response["status"] == 200
 
         user = await User.GetById(self.session, 1)
         assert str(user) == "<User 'Test_user'>"

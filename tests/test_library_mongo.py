@@ -1,6 +1,7 @@
 """Tests for mongo library models."""
 import json
 import pytest
+from fastapi import status
 
 from data import Library, Book, BookPackage
 from tests import DataSource
@@ -38,32 +39,27 @@ async def test_library_controllers(async_session, mongo_db):
     response = await ds.client.post(
         "/library/book", headers=ds.headers["Test_user"], data=book.json()
     )
-    assert response.status_code == 200
-    status = json.loads(response.content)["status"]
-    assert status == 200
+    assert response.status_code == status.HTTP_200_OK
 
     response = await ds.client.get(
         "/library/books",
         headers=ds.headers["Test_user"],
     )
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_200_OK
     response_json = json.loads(response.content)
-    assert response_json["status"] == 200
     book_id = response_json["item"][0]["id"]
 
     response = await ds.client.delete(
         f"/library/book/{book_id}",
         headers=ds.headers["Test_user"],
     )
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_200_OK
     response_json = json.loads(response.content)
-    assert response_json["status"] == 200
 
     response = await ds.client.get(
         "/library/books",
         headers=ds.headers["Test_user"],
     )
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_200_OK
     response_json = json.loads(response.content)
-    assert response_json["status"] == 200
     assert response_json["item"] == []

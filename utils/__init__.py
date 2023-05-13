@@ -4,9 +4,11 @@
 import random
 import string
 
+from fastapi import HTTPException, status
 from passlib.context import CryptContext
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt
+from jose.exceptions import JWTError
 from sqlalchemy.orm import Session
 
 
@@ -53,15 +55,21 @@ def create_access_token(
 )
 def authenthicate_user(token: str, session: Session) -> User:
     """Authenticate a token."""
-
-    payload = jwt.decode(
-        token, config.secret_key, algorithms=[config.algorithm]
-    )
+    try:
+        payload = jwt.decode(
+            token, config.secret_key, algorithms=[config.algorithm]
+        )
+    except JWTError:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid token!"
+        )
 
     users = User.GetByArgsSync(session, payload)
 
-    if len(users) == 0:
-        raise Exception("No user found!")
+    if len(users) != 1:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="No user found!"
+        )
 
     user = users[0]
 

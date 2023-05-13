@@ -4,8 +4,11 @@ Here you include the routers for the application and middleware used.
 """
 import logging
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request, status
 from fastapi.staticfiles import StaticFiles
+from fastapi.exceptions import RequestValidationError, HTTPException
+from fastapi.encoders import jsonable_encoder
+from fastapi.responses import JSONResponse
 from starlette.middleware import Middleware
 from starlette_context import plugins
 from starlette_context.middleware import RawContextMiddleware
@@ -21,6 +24,7 @@ from controllers.ws_controllers import ws_router
 from controllers.utils_controllers import utils_router
 from controllers.redis_controllers import redis_router
 from controllers.library_controllers import library_router
+from controllers.quote_controllers import quotes_router
 from data import (
     async_session,
     User,
@@ -32,6 +36,7 @@ from logger import initialize_logger
 from utils import get_password_hash
 from middleware import TimeRequestMiddleware
 
+
 middleware = [
     Middleware(
         RawContextMiddleware,
@@ -42,9 +47,35 @@ middleware = [
 
 
 app = FastAPI(middleware=middleware)
-
-
 app.mount("/static", StaticFiles(directory="static"), name="static")
+
+
+# Error handlers
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(
+    _: Request, exc: RequestValidationError
+):
+    return JSONResponse(
+        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+        content=jsonable_encoder({"detail": exc.errors(), "body": exc.body}),
+    )
+
+
+@app.exception_handler(HTTPException)
+async def http_exception_handler(_: Request, exc: HTTPException):
+    return JSONResponse(
+        status_code=exc.status_code,
+        content=jsonable_encoder({"detail": exc.detail}),
+    )
+
+
+@app.exception_handler(IntegrityError)
+async def treat_integrity_error(_: Request, exc: IntegrityError):
+    return JSONResponse(
+        status_code=status.HTTP_400_BAD_REQUEST,
+        content=jsonable_encoder({"detail": "Integrity Error!"}),
+    )
+
 
 # include routes
 app.include_router(user_router)
@@ -56,6 +87,7 @@ app.include_router(ws_router)
 app.include_router(utils_router)
 app.include_router(redis_router)
 app.include_router(library_router)
+app.include_router(quotes_router)
 
 
 @app.on_event("startup")

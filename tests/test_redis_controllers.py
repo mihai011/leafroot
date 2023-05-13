@@ -3,6 +3,7 @@
 import json
 import random
 
+from fastapi import status
 import pytest
 
 from tests import DataSource
@@ -25,15 +26,7 @@ async def test_graph_controller(async_session):
         headers=ds.headers["Test_user"],
         data=graph.json(),
     )
-    response = await ds.client.post(
-        "/redis-graph/graph",
-        headers=ds.headers["Test_user"],
-        data=graph.json(),
-    )
-
-    response = await ds.client.get(
-        f"/redis-graph/graph/{graph_name}", headers=ds.headers["Test_user"]
-    )
+    assert response.status_code == status.HTTP_200_OK
 
     response = await ds.client.get(
         f"/redis-graph/graph/{graph_name}", headers=ds.headers["Test_user"]
@@ -46,13 +39,13 @@ async def test_graph_controller(async_session):
         headers=ds.headers["Test_user"],
         data=graph.json(),
     )
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_200_OK
 
     response = await ds.client.delete(
         f"/redis-graph/graph/{graph_name}",
         headers=ds.headers["Test_user"],
     )
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_200_OK
 
 
 @pytest.mark.asyncio
@@ -73,14 +66,14 @@ async def test_graph_add_nodes(async_session):
         headers=ds.headers["Test_user"],
         data=graph_pyd.json(),
     )
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_200_OK
     graph = json.loads(response.content)["item"]
     assert len(graph["nodes"]) == 1
 
     response = await ds.client.post(
         "/redis-graph/node", headers=ds.headers["Test_user"], data=node.json()
     )
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_200_OK
     graph = json.loads(response.content)["item"]
 
     response = await ds.client.get(
@@ -95,13 +88,13 @@ async def test_graph_add_nodes(async_session):
         headers=ds.headers["Test_user"],
         data=graph_pyd.json(),
     )
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_200_OK
 
     response = await ds.client.delete(
         f"/redis-graph/graph/{graph_name}",
         headers=ds.headers["Test_user"],
     )
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_200_OK
 
 
 @pytest.mark.asyncio
@@ -119,7 +112,7 @@ async def test_graph_add_edge(async_session):
         headers=ds.headers["Test_user"],
         data=graph_pyd.json(),
     )
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_200_OK
 
     node_1 = RedisNode(
         graph=graph_name, label="Bucharest", properties={"area": 10000}
@@ -152,7 +145,7 @@ async def test_graph_add_edge(async_session):
         "/redis-graph/edge", headers=ds.headers["Test_user"], data=edge.json()
     )
 
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_200_OK
 
     response = await ds.client.get(
         f"/redis-graph/graph/{graph_name}", headers=ds.headers["Test_user"]
@@ -167,13 +160,13 @@ async def test_graph_add_edge(async_session):
         headers=ds.headers["Test_user"],
         data=graph_pyd.json(),
     )
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_200_OK
 
     response = await ds.client.delete(
         f"/redis-graph/graph/{graph_name}",
         headers=ds.headers["Test_user"],
     )
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_200_OK
 
 
 @pytest.mark.asyncio
@@ -192,7 +185,7 @@ async def test_graph_redis(async_session):
         headers=ds.headers["Test_user"],
         data=graph_pyd.json(),
     )
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_200_OK
 
     graph_labels = ["location", "person", "act", "consequence"]
 
@@ -211,7 +204,7 @@ async def test_graph_redis(async_session):
             headers=ds.headers["Test_user"],
             data=node.json(),
         )
-        assert response.status_code == 200
+        assert response.status_code == status.HTTP_200_OK
 
     response = await ds.client.get(
         f"/redis-graph/graph/{graph_name}", headers=ds.headers["Test_user"]
@@ -238,7 +231,7 @@ async def test_graph_redis(async_session):
             headers=ds.headers["Test_user"],
             data=edge.json(),
         )
-        assert response.status_code == 200
+        assert response.status_code == status.HTTP_200_OK
 
     response = await ds.client.get(
         f"/redis-graph/graph/{graph_name}", headers=ds.headers["Test_user"]
@@ -252,7 +245,7 @@ async def test_graph_redis(async_session):
         headers=ds.headers["Test_user"],
         data=graph_pyd.json(),
     )
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_200_OK
 
     redis_query = RedisGraphQuery(
         graph=graph_name, query="MATCH (n:location) RETURN n"
@@ -264,13 +257,14 @@ async def test_graph_redis(async_session):
         data=redis_query.json(),
     )
 
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_200_OK
     assert all(
-        t[0]["labels"][0] == "location" for t in response.json()["item"]
+        t[0]["labels"][0] == "location"
+        for t in response.json()["item"]["result"]
     )
 
     response = await ds.client.delete(
         f"/redis-graph/graph/{graph_name}",
         headers=ds.headers["Test_user"],
     )
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_200_OK

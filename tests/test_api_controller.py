@@ -2,6 +2,7 @@
 
 import pytest  # pylint: disable=R0801
 from aioresponses import aioresponses  # pylint: disable=R0801
+from fastapi import status
 
 from data import HttpRequest
 from tests import DataSource  # pylint: disable=R0801
@@ -28,9 +29,8 @@ async def test_api(async_session):
             data=payload_api.json(),
             headers=ds.headers["Test_user"],
         )
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_200_OK
     assert response.json() == {
-        "message": "api called",
+        "message": "Api called",
         "item": "test1",
-        "status": 200,
     }

@@ -9,7 +9,7 @@ from functools import wraps
 from starlette_context import context
 from starlette_context.errors import ContextDoesNotExistError
 from contextlib import contextmanager
-from fastapi import HTTPException
+from fastapi import HTTPException, status
 
 
 FORMAT = "%(asctime)s - %(module)s - %(funcName)s - line:%(lineno)d - %(levelname)s - %(message)s"
@@ -32,11 +32,6 @@ def initialize_logger():
     logging.exception("Exception here")
 
 
-def parse_exception(e: Exception):
-
-    return HTTPException(400, str(e))
-
-
 @contextmanager
 def wrapping_logic(func, request_id):
     try:
@@ -54,7 +49,7 @@ def wrapping_logic(func, request_id):
             f"Exception  {request_id} raised in {func.__name__}. exception: {str(e)}"
         )
         # TODO: parse the exception and return a proper one
-        raise parse_exception(e)
+        raise e
 
 
 def log():

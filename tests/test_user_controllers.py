@@ -1,5 +1,6 @@
 """Base module for testing."""
 import pytest
+from fastapi import status
 
 from data import User
 from tests import DataSource
@@ -22,42 +23,42 @@ async def test_login_user(async_session):
     """Testing simple flow."""
 
     ds = DataSource(async_session)
-    await ds.make_user({"email": "test@gmail.com"})
-    user_login_data = {"password": "test"}
+    data_login = {"email": "test@gmail.com", "password": "test"}
+    await ds.make_user(data_login)
+    unknown_data_login = {"email": "test2@gmail.com", "password": "test2"}
 
-    response = await ds.client.post("users/login", json=user_login_data)
+    response = await ds.client.post("users/login", json=unknown_data_login)
     response_content = response.json()
-    assert response.status_code == 200
-    assert response_content["status"] == 400
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert (
-        response_content["message"]
-        == "No user with such email or username found"
+        response_content["detail"]
+        == "No user with such email or username found!"
     )
 
     user_login_data = {"email": "test@gmail.com"}
 
     response = await ds.client.post("users/login", json=user_login_data)
     response_content = response.json()
-    assert response.status_code == 422
+    assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+    assert "password" in response_content["detail"][0]["loc"]
+    assert response_content["detail"][0]["msg"] == "field required"
 
     user_login_data = {"email": "no_such_user@gmail.com", "password": "test"}
 
     response = await ds.client.post("users/login", json=user_login_data)
     response_content = response.json()
-    assert response.status_code == 200
-    assert response_content["status"] == 400
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
     assert (
-        response_content["message"]
-        == "No user with such email or username found"
+        response_content["detail"]
+        == "No user with such email or username found!"
     )
 
     user_login_data = {"email": "test@gmail.com", "password": "fake_pass"}
 
     response = await ds.client.post("users/login", json=user_login_data)
     response_content = response.json()
-    assert response.status_code == 200
-    assert response_content["status"] == 400
-    assert response_content["message"] == "Incorrect password!"
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED
+    assert response_content["detail"] == "Incorrect Password!"
 
 
 @pytest.mark.asyncio
@@ -69,20 +70,17 @@ async def test_signup_user(async_session):
     user_signup_data = {"username": "test"}
 
     response = await ds.client.post("users/sign-up", json=user_signup_data)
-    response_content = response.json()
-    assert response.status_code == 422
+    assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
     user_signup_data = {"username": "test", "password": "some_password"}
 
     response = await ds.client.post("users/sign-up", json=user_signup_data)
-    response_content = response.json()
-    assert response.status_code == 422
+    assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
     user_signup_data = {"email": "test@gmail.com", "password": "some_password"}
 
     response = await ds.client.post("users/sign-up", json=user_signup_data)
-    response_content = response.json()
-    assert response.status_code == 422
+    assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
     user_signup_data = {
         "username": "test_duplicate",
@@ -91,35 +89,24 @@ async def test_signup_user(async_session):
     }
 
     response = await ds.client.post("users/sign-up", json=user_signup_data)
-    response_content = response.json()
-    assert response.status_code == 200
-    assert response_content["status"] == 200
-
-    user_signup_data = {
-        "username": "test_duplicate",
-        "email": "test_alternate@gmail.com",
-        "password": "some_password",
-    }
+    assert response.status_code == status.HTTP_200_OK
 
     response = await ds.client.post("users/sign-up", json=user_signup_data)
-    response_content = response.json()
-    assert response.status_code == 200
-    assert response_content["status"] == 400
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
 
     user_id = 2
     response = await ds.client.get(
         "/users/get_user/{}".format(user_id), headers=ds.headers["Test_user"]
     )
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_200_OK
 
     user_id = 3
     response = await ds.client.get(
-        "/users/get_user/{}".format(3), headers=ds.headers["Test_user"]
+        "/users/get_user/{}".format(user_id), headers=ds.headers["Test_user"]
     )
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_200_OK
     response_content = response.json()
-    assert response_content["status"] == 400
-    assert response_content["message"] == "User not found!"
+    assert response_content["detail"] == "No user found!"
 
     # test with fake authorization headers
     fake_headers = {}
@@ -128,8 +115,8 @@ async def test_signup_user(async_session):
         "/users/get_user/{}".format(user_id), headers=fake_headers
     )
     response_content = response.json()
-    assert response.status_code == 400
-    assert response_content["detail"] == "(400, 'Not enough segments')"
+    assert response.status_code == status.HTTP_400_BAD_REQUEST
+    assert response_content["detail"] == "Invalid token!"
 
     # test with no correct header
     fake_headers = {}
@@ -137,7 +124,7 @@ async def test_signup_user(async_session):
     response = await ds.client.get(
         "/users/get_user/{}".format(user_id), headers=fake_headers
     )
-    assert response.status_code == 422
+    assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
 
 @pytest.mark.asyncio
@@ -156,8 +143,7 @@ async def test_create_user(async_session):
             "password": "hashed pass",
         },
     )
-    response_content = response.json()
-    assert response_content["status"] == 200
+    assert response.status_code == status.HTTP_200_OK
 
     # test endpoint for creating users (duplicate)
     response = await ds.client.post(
@@ -169,15 +155,13 @@ async def test_create_user(async_session):
             "pass": "hashed pass",
         },
     )
-    response_content = response.json()
-    assert response.status_code == 422
+    assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
     # test endpoint for creating users
     response = await ds.client.post(
         "/users/create_user", headers=ds.headers["Test_user"], json={}
     )
-    response_content = response.json()
-    assert response.status_code == 422
+    assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
     users = await User.GetAll(async_session)
     assert len(users) == 2

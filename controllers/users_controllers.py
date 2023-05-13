@@ -1,10 +1,19 @@
 """Basic controllers for users."""
 
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from fastapi.responses import ORJSONResponse
 from fastapi.templating import Jinja2Templates
+from fastapi import status
 
-from data import User, PydanticUser, PydanticUserSignUp
+from data import (
+    User,
+    PydanticUser,
+    UserResponse,
+    PydanticUserSignUp,
+    UserResponseItem,
+    AuthorizedUserResponseItem,
+    ErrorResponse,
+)
 
 from controllers import create_response, CurrentUser, CurrentAsyncSession
 from utils import (
@@ -18,7 +27,7 @@ user_router = APIRouter(prefix="/users", tags=["users"])
 templates = Jinja2Templates(directory="templates")
 
 
-@user_router.post("/create_user")
+@user_router.post("/create_user", response_model=UserResponseItem)
 async def create_user(
     pydantic_user: PydanticUser,
     user: CurrentUser,
@@ -31,15 +40,17 @@ async def create_user(
     hashed_pass = get_password_hash(password)
     params["hashed_pass"] = hashed_pass
 
-    try:
-        user = await User.AddNew(session, params)
-    except Exception as e:
-        return create_response(str(e), 400)
+    user = await User.AddNew(session, params)
 
-    return create_response("User created!", 200, user.serialize())
+    return create_response(
+        message="User created!",
+        status=200,
+        response_model=UserResponseItem,
+        item=user.serialize(),
+    )
 
 
-@user_router.get("/get_user/{id_user}")
+@user_router.get("/get_user/{id_user}", response_model=UserResponseItem)
 async def get_user(
     id_user: int,
     user: CurrentUser,
@@ -48,14 +59,27 @@ async def get_user(
     """Get user by id."""
 
     user = await User.GetById(session, id_user)
+    if user is None:
+        raise HTTPException(
+            status_code=status.HTTP_200_OK, detail="No user found!"
+        )
 
-    if not user:
-        return create_response("User not found!", 400)
+    return create_response(
+        message="User fetched!",
+        status=status.HTTP_200_OK,
+        response_model=UserResponseItem,
+        item=user.serialize(),
+    )
 
-    return create_response("User fetched!", 200, user.serialize())
 
-
-@user_router.post("/login")
+@user_router.post(
+    "/login",
+    response_model=AuthorizedUserResponseItem,
+    responses={
+        status.HTTP_400_BAD_REQUEST: {"model": ErrorResponse},
+        status.HTTP_401_UNAUTHORIZED: {"model": ErrorResponse},
+    },
+)
 async def login(
     pydantic_user: PydanticUser,
     session: CurrentAsyncSession,
@@ -67,11 +91,13 @@ async def login(
     users = await User.GetByArgs(session, data)
 
     if not users:
-        return create_response(
-            "No user with such email or username found", 400
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="No user with such email or username found!",
         )
 
     user = users[0]
+    item = {}
 
     if verify_password(password, user.hashed_pass):
         data = user.serialize()
@@ -79,14 +105,27 @@ async def login(
         data.pop("created_at")
         data.pop("updated_at")
         token = create_access_token(data)
+
+        item["token"] = token
+        item["user"] = user.serialize()
         return create_response(
-            "User logged in!", 200, {"token": token, "user": user.serialize()}
+            message="User logged in!",
+            status=200,
+            response_model=AuthorizedUserResponseItem,
+            item=item,
         )
 
-    return create_response("Incorrect password!", 400)
+    raise HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Incorrect Password!",
+    )
 
 
-@user_router.post("/sign-up")
+@user_router.post(
+    "/sign-up",
+    response_model=UserResponseItem,
+    responses={status.HTTP_400_BAD_REQUEST: {"model": ErrorResponse}},
+)
 async def sign_up(
     form: PydanticUserSignUp,
     session: CurrentAsyncSession,
@@ -98,9 +137,11 @@ async def sign_up(
     hashed_pass = get_password_hash(password)
     params["hashed_pass"] = hashed_pass
 
-    try:
-        user = await User.AddNew(session, params)
-    except Exception as user_error:
-        return create_response(str(user_error), 400)
+    user = await User.AddNew(session, params)
 
-    return create_response("User created!", 200, user.serialize())
+    return create_response(
+        message="User created!",
+        status=status.HTTP_200_OK,
+        response_model=UserResponseItem,
+        item=user.serialize(),
+    )

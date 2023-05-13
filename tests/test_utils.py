@@ -6,7 +6,8 @@ from fastapi import HTTPException
 from utils import create_access_token, authenthicate_user
 
 
-async def test_fake_user(async_session):
+@pytest.mark.asyncio
+async def test_fake_user(sync_session):
     """Test authenthication with fake creds."""
 
     user_args = {
@@ -17,4 +18,4 @@ async def test_fake_user(async_session):
     token = create_access_token(user_args)
 
     with pytest.raises(HTTPException):
-        authenthicate_user(token, async_session)
+        authenthicate_user(token, sync_session)

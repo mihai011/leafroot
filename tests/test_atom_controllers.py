@@ -1,5 +1,6 @@
 """Module for testing particles controller."""
 import pytest
+from fastapi import status
 
 from tests import DataSource
 
@@ -19,44 +20,44 @@ async def test_particles(async_session):
         headers=ds.headers["Test_user"],
         json=payload_atom,
     )
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_200_OK
 
     response = await ds.client.post(
         "/atoms/proton", headers=ds.headers["Test_user"], json=payload_particle
     )
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_200_OK
 
     response = await ds.client.get(
         "/atoms/proton",
         params=payload_particle,
         headers=ds.headers["Test_user"],
     )
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_200_OK
 
     response = await ds.client.post(
         "/atoms/neutron",
         headers=ds.headers["Test_user"],
         json=payload_particle,
     )
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_200_OK
 
     response = await ds.client.get(
         "/atoms/neutron",
         params=payload_particle,
         headers=ds.headers["Test_user"],
     )
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_200_OK
 
     response = await ds.client.post(
         "/atoms/electron",
         headers=ds.headers["Test_user"],
         json=payload_particle,
     )
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_200_OK
 
     response = await ds.client.get(
         "/atoms/electron",
         params=payload_particle,
         headers=ds.headers["Test_user"],
     )
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_200_OK

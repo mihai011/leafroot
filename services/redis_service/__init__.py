@@ -57,11 +57,8 @@ class RedisService:
         e = Edge(source_node, relation, destination_node)
         graph.add_edge(e)
 
-        return True
-
     @log()
     def get_graph_metadata(self, name):
-
         graph = self.graphs[name]
         metadata = {}
         metadata["name"] = name
@@ -72,21 +69,16 @@ class RedisService:
 
     @log()
     def graph_flush(self, graph):
-
         graph = self.graphs[graph.name]
         graph.flush()
 
-        return True
-
     @log()
     def delete_graph(self, name):
-
         graph = self.graphs.pop(name)
         graph.delete()
 
     @log()
     def graph_query(self, query):
-
         graph = self.graphs[query.graph]
         result = graph.query(query.query)
         return [[n.__dict__ for n in r] for r in result.result_set]

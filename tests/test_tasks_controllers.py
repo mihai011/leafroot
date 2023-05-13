@@ -1,6 +1,7 @@
 """Tests for util functions."""
 import json
 
+from fastapi import status
 import pytest
 import redis
 
@@ -18,7 +19,7 @@ async def test_small_task(async_session):
     response = await ds.client.post(
         "/tasks/create_task", headers=ds.headers["Test_user"]
     )
-    assert response.status_code == 200
+    assert response.status_code == status.HTTP_200_OK
     task_metadata = json.loads(response.text)
     task_id = task_metadata["item"]["task_id"]
     redis_connection = redis.from_url(config.redis_url)

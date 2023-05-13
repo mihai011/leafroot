@@ -1,8 +1,8 @@
 """Configuration module for testing."""
 from uuid import uuid4
 
-import pytest
 import asyncio
+import pytest
 
 from sqlalchemy import create_engine
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
@@ -90,7 +90,7 @@ async def sync_session():
     """Pytest fixture for SQLAlchemy postgresql session."""
 
     session_generator = resolve_session("sync")
-    session = session_generator.__anext__()
+    session = await session_generator.__anext__()
     yield session
     await session_generator.__anext__()
 
