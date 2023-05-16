@@ -3,7 +3,7 @@ ACTIVATE_VENV= poetry shell
 DIR_ARGS = app/ controllers/ data/ tests/ scripts/ utils/ cache/ config/
 DIR_NO_TESTS = app/ controllers/ data/ scripts/ utils/ cache/
 SERVICES = db redis rabbitmq api mongo worker cassandra scylladb
-FULL_SERVICES = $(SERVICES) pgadmin
+FULL_SERVICES = $(SERVICES) pgadmin airflow
 USER=$(shell whoami)
 # for mac os install coreutils ot get nproc
 CORES := $(shell nproc)

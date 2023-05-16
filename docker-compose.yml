@@ -39,6 +39,15 @@ services:
         networks:
             - shared_network
 
+    airflow:
+        image: apache/airflow:latest
+        ports:
+            - 127.0.0.1:9000:8080
+        hostname: ${AIRFLOW_HOST}
+        command: sleep infinity
+        networks:
+            - shared_network
+
     cassandra:
         image: cassandra:4.1.0
         ports:

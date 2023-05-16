@@ -10,7 +10,6 @@ RUN pip install poetry
 RUN make venv_create
 
 FROM base AS dev
-RUN bash scripts/install_sonar.sh
 CMD sleep infinity
 
 FROM base AS prod
