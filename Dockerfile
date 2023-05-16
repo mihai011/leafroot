@@ -2,14 +2,15 @@ ARG PYTHON_VERSION
 FROM python:$PYTHON_VERSION AS base
 
 
-RUN mkdir /workspace
-WORKDIR /workspace
+RUN mkdir /leafroot
+WORKDIR /leafroot
 
 COPY . .
 RUN pip install poetry
 RUN make venv_create
 
 FROM base AS dev
+RUN bash scripts/install_sonar.sh
 CMD sleep infinity
 
 FROM base AS prod

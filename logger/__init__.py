@@ -23,7 +23,6 @@ def initialize_logger():
         filemode="w+",
         level=logging.DEBUG,
         format=FORMAT,
-        force=True,
     )
 
 

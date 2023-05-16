@@ -29,7 +29,7 @@ templates = Jinja2Templates(directory="templates")
 @user_router.post("/create_user", response_model=UserResponseItem)
 async def create_user(
     pydantic_user: PydanticUser,
-    user: CurrentUser,
+    _: CurrentUser,
     session: CurrentAsyncSession,
 ):
     """Creating a simple user."""
@@ -52,7 +52,7 @@ async def create_user(
 @user_router.get("/get_user/{id_user}", response_model=UserResponseItem)
 async def get_user(
     id_user: int,
-    user: CurrentUser,
+    _: CurrentUser,
     session: CurrentAsyncSession,
 ) -> ORJSONResponse:
     """Get user by id."""
