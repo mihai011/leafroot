@@ -152,3 +152,6 @@ dmypy.json
 .vscode/launch.json
 leafroot.pem
 mongo_data/
+
+# scanner
+.scannerwork
