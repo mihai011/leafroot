@@ -3,7 +3,8 @@ ACTIVATE_VENV= poetry shell
 DIR_ARGS = app/ controllers/ data/ tests/ scripts/ utils/ cache/ config/
 DIR_NO_TESTS = app/ controllers/ data/ scripts/ utils/ cache/
 SERVICES = db redis rabbitmq api mongo worker cassandra scylladb
-FULL_SERVICES = $(SERVICES) pgadmin airflow
+AIRFLOW_SERVICES = airflow-webserver airflow-scheduler airflow-worker airflow-triggerer airflow-init airflow-cli flower
+FULL_SERVICES = $(SERVICES) pgadmin $(AIRFLOW_SERVICES)
 USER=$(shell whoami)
 # for mac os install coreutils ot get nproc
 CORES := $(shell nproc)
@@ -76,7 +77,7 @@ start_services:
 	docker compose --env-file $(ENV_FILE) up -d $(SERVICES)
 
 start_full_services:
-	docker compose --env-file $(ENV_FILE) up -d $(FULL_SERVICES)
+	docker compose --env-file $(ENV_FILE) -f docker-compose.yml -f docker-compose-airflow.yml up -d $(FULL_SERVICES)
 
 stop_services:
 	docker compose --env-file $(ENV_FILE) stop $(SERVICES)
@@ -84,15 +85,26 @@ stop_services:
 sr_services:
 	docker compose --env-file $(ENV_FILE) down
 
-docker_clean:
-	docker system prune -af
-
 build:
 	docker build -t test --target prod -f
 
 docker_update:
 	docker compose --env-file $(ENV_FILE) pull
-	make start_services
+	make start_full_services
+
+remove_images:
+	dcker rmi $$(docker images -aq)
+
+docker_clean:
+	docker stop $$(docker ps -a -q)
+	docker rm $$(docker ps -a -q)
+	docker volume rm $$(docker volume ls -q)
+
+
+docker_stop:
+	docker stop $$(docker ps -a -q)
+	docker rm $$(docker ps -a -q)
+
 
 start_celery_workers:
 	poetry run celery -A celery_worker worker --loglevel=info

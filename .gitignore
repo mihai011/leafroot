@@ -155,3 +155,6 @@ mongo_data/
 
 # scanner
 .scannerwork
+
+# airflow
+airflow/logs/
