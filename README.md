@@ -41,6 +41,7 @@ Leafroot is a personal exercise for me as a software engineer.
     32. TODO: Implement stress test with locust and docker.
     33. TODO: Add ChatGPT features.
     34. TODO: Add WebGPU features.
+    35. TODO: Add all neccesary variables in a .env file to maintain a single source of truth.
 
 
 
