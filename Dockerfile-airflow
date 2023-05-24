@@ -1,0 +1,5 @@
+FROM apache/airflow:2.6.1
+
+RUN sudo apt-get install libkrb5-dev gcc python3-dev  && \
+    pip install poetry && \
+    pip install apache-airflow-providers-cncf-kubernetes

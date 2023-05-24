@@ -93,13 +93,12 @@ docker_update:
 	make start_full_services
 
 remove_images:
-	dcker rmi $$(docker images -aq)
+	docker rmi $$(docker images -aq)
 
 docker_clean:
 	docker stop $$(docker ps -a -q)
 	docker rm $$(docker ps -a -q)
 	docker volume rm $$(docker volume ls -q)
-
 
 docker_stop:
 	docker stop $$(docker ps -a -q)
