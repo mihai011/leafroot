@@ -1,5 +1,14 @@
-FROM apache/airflow:2.6.1
+ARG PYTHON_VERSION
 
-RUN sudo apt-get install libkrb5-dev gcc python3-dev  && \
-    pip install poetry && \
-    pip install apache-airflow-providers-cncf-kubernetes
+FROM python:${PYTHON_VERSION}
+ARG AIRFLOW_PROJ_DIR
+
+RUN pip install poetry
+RUN mkdir /$AIRFLOW_PROJ_DIR
+WORKDIR $AIRFLOW_PROJ_DIR
+COPY ./$AIRFLOW_PROJ_DIR/scripts/poetry.lock poetry.lock
+COPY ./$AIRFLOW_PROJ_DIR/scripts/pyproject.toml pyproject.toml
+RUN poetry install
+
+ENTRYPOINT [ "poetry", "run" ]
+CMD ["shell"]

@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "scripts"
+version = "0.1.0"
+description = ""
+authors = ["leafroot"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.7"
+apache-airflow = "^2.6.1"
+polars = "^0.17.15"
+pendulum = "^2.1.2"
+psycopg2 = "^2.9.6"
+celery = "^5.2.7"
+redis = "^4.5.5"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

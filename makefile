@@ -18,7 +18,6 @@ venv_create:
 venv_update:
 	poetry update
 
-
 typehint:
 	poetry run mypy $(DIR_ARGS)
 
@@ -95,14 +94,14 @@ docker_update:
 remove_images:
 	docker rmi $$(docker images -aq)
 
-docker_clean:
-	docker stop $$(docker ps -a -q)
-	docker rm $$(docker ps -a -q)
-	docker volume rm $$(docker volume ls -q)
-
 docker_stop:
 	docker stop $$(docker ps -a -q)
 	docker rm $$(docker ps -a -q)
+
+docker_clean:
+	make docker_stop
+	make remove_images
+	docker volume rm $$(docker volume ls -q)
 
 
 start_celery_workers:
