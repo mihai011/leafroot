@@ -10,5 +10,5 @@ COPY ./$AIRFLOW_PROJ_DIR/scripts/poetry.lock poetry.lock
 COPY ./$AIRFLOW_PROJ_DIR/scripts/pyproject.toml pyproject.toml
 RUN poetry install
 
-ENTRYPOINT [ "poetry", "run" ]
-CMD ["shell"]
+ENTRYPOINT ["poetry", "run","airflow"]
+CMD ["standalone"]
