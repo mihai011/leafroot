@@ -92,7 +92,7 @@ build:
 
 docker_update:
 	docker compose --env-file $(ENV_FILE) pull
-	make start_full_services
+	make start
 
 remove_images:
 	docker rmi $$(docker images -aq)
