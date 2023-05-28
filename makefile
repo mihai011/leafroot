@@ -75,8 +75,11 @@ pycodestyle:
 start_services:
 	docker compose --env-file $(ENV_FILE) up -d $(SERVICES)
 
-start_full_services:
+start:
 	docker compose --env-file $(ENV_FILE) -f docker-compose.yml -f docker-compose-airflow.yml up -d $(FULL_SERVICES)
+
+docker_build:
+	docker compose --env-file $(ENV_FILE) -f docker-compose.yml -f docker-compose-airflow.yml build $(FULL_SERVICES)
 
 stop_services:
 	docker compose --env-file $(ENV_FILE) stop $(SERVICES)

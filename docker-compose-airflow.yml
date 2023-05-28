@@ -10,8 +10,6 @@ x-airflow-common: &airflow-common
         args:
             PYTHON_VERSION: ${PYTHON_VERSION}
             AIRFLOW_PROJ_DIR: ${AIRFLOW_PROJ_DIR}
-    env_file:
-        - ${ENV_FILE}
     environment: &airflow-common-env
         AIRFLOW__CORE__EXECUTOR: CeleryExecutor
         AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}/${POSTGRES_DB}
@@ -44,7 +42,9 @@ x-airflow-common: &airflow-common
 services:
     airflow-webserver:
         <<: *airflow-common
-        command: [poetry, run, airflow, webserver]
+        command: [webserver]
+        env_file:
+            - ${ENV_FILE}
         ports:
             - 8080:8080
         healthcheck:
@@ -63,7 +63,9 @@ services:
 
     airflow-scheduler:
         <<: *airflow-common
-        command: [poetry, run, airflow, scheduler]
+        command: scheduler
+        env_file:
+            - ${ENV_FILE}
         healthcheck:
             test: [CMD, bash, scripts/healthcheck_scheduler.sh]
             interval: 30s
@@ -80,7 +82,9 @@ services:
 
     airflow-worker:
         <<: *airflow-common
-        command: [poetry, run, airflow, celery, worker]
+        command: worker
+        env_file:
+            - ${ENV_FILE}
         healthcheck:
             test: [CMD, bash, scripts/healthcheck_worker.sh]
             interval: 30s
@@ -102,7 +106,9 @@ services:
 
     airflow-triggerer:
         <<: *airflow-common
-        command: [poetry, run, airflow, triggerer]
+        command: triggerer
+        env_file:
+            - ${ENV_FILE}
         healthcheck:
             test: [CMD, bash, scripts/healthcheck_triggerer.sh]
             interval: 30s
@@ -119,7 +125,9 @@ services:
 
     airflow-init:
         <<: *airflow-common
-        command: [poetry, run, airflow, db, init]
+        command: init
+        env_file:
+            - ${ENV_FILE}
         environment:
             <<: *airflow-common-env
             _AIRFLOW_DB_UPGRADE: 'true'
@@ -137,6 +145,8 @@ services:
         <<: *airflow-common
         profiles:
             - debug
+        env_file:
+            - ${ENV_FILE}
         environment:
             <<: *airflow-common-env
             CONNECTION_CHECK_MAX_COUNT: '0'
@@ -153,7 +163,9 @@ services:
   # See: https://docs.docker.com/compose/profiles/
     flower:
         <<: *airflow-common
-        command: [poetry, run, airflow, celery, worker]
+        command: flower
+        env_file:
+            - ${ENV_FILE}
         profiles:
             - flower
         ports:
