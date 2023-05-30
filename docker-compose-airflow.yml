@@ -10,11 +10,6 @@ x-airflow-common: &airflow-common
         args:
             PYTHON_VERSION: ${PYTHON_VERSION}
             AIRFLOW_PROJ_DIR: ${AIRFLOW_PROJ_DIR}
-    environment: &airflow-common-env
-        AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}/${POSTGRES_DB}
-        AIRFLOW__CELERY__RESULT_BACKEND: db+postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}/${POSTGRES_DB}
-        AIRFLOW__CELERY__BROKER_URL: ${REDIS_PROTOCOL}://:@${REDIS_HOST}:6379/0
-
     volumes:
         - ./${AIRFLOW_PROJ_DIR}/dags:/opt/airflow/dags
         - ./${AIRFLOW_PROJ_DIR}/logs:/opt/airflow/logs
@@ -79,11 +74,6 @@ services:
             timeout: 10s
             retries: 5
             start_period: 30s
-        environment:
-            <<: *airflow-common-env
-      # Required to handle warm shutdown of the celery workers properly
-      # See https://airflow.apache.org/docs/docker-stack/entrypoint.html#signal-propagation
-            DUMB_INIT_SETSID: '0'
         restart: always
         depends_on:
             <<: *airflow-common-depends-on
@@ -116,13 +106,6 @@ services:
         command: init
         env_file:
             - ${ENV_FILE}
-        environment:
-            <<: *airflow-common-env
-            _AIRFLOW_DB_UPGRADE: 'true'
-            _AIRFLOW_WWW_USER_CREATE: 'true'
-            _AIRFLOW_WWW_USER_USERNAME: ${_AIRFLOW_WWW_USER_USERNAME:-airflow}
-            _AIRFLOW_WWW_USER_PASSWORD: ${_AIRFLOW_WWW_USER_PASSWORD:-airflow}
-            _PIP_ADDITIONAL_REQUIREMENTS: ''
         user: 0:0
         volumes:
             - ./${AIRFLOW_PROJ_DIR:-.}:/sources
@@ -135,9 +118,6 @@ services:
             - debug
         env_file:
             - ${ENV_FILE}
-        environment:
-            <<: *airflow-common-env
-            CONNECTION_CHECK_MAX_COUNT: '0'
     # Workaround for entrypoint issue. See: https://github.com/apache/airflow/issues/16252
         command:
             - bash

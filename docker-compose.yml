@@ -59,6 +59,8 @@ services:
         image: postgres:14-alpine
         container_name: db
         hostname: ${POSTGRES_HOST}
+        env_file:
+            - ${ENV_FILE}
         ports:
             - 127.0.0.1:5432:5432
         volumes:
@@ -68,10 +70,6 @@ services:
             interval: 10s
             retries: 5
             start_period: 5s
-        environment:
-            - POSTGRES_DB=${POSTGRES_DB}
-            - POSTGRES_USER=${POSTGRES_USER}
-            - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
         networks:
             - shared_network
 
@@ -79,9 +77,8 @@ services:
         image: mongo:latest
         container_name: mongo
         hostname: ${MONGO_HOST}
-        environment:
-            - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
-            - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+        env_file:
+            - ${ENV_FILE}
         ports:
             - 127.0.0.1:27017:27017
         volumes:
@@ -94,6 +91,8 @@ services:
         expose:
             - 6379
         container_name: redis
+        env_file:
+            - ${ENV_FILE}
         healthcheck:
             test: [CMD, redis-cli, ping]
             interval: 10s
@@ -111,17 +110,16 @@ services:
         image: rabbitmq:latest
         container_name: rabbitmq
         hostname: ${RABBITMQ_HOST}
-        environment:
-            - RABBITMQ_USER=${RABBITMQ_USER}
-            - RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
+        env_file:
+            - ${ENV_FILE}
         ports:
             - 127.0.0.1:5672:5672
         networks:
             - shared_network
 
     pgadmin:
-        container_name: pgadmin4_container
         image: dpage/pgadmin4
+        container_name: pgadmin4_container
         restart: always
         environment:
             PGADMIN_DEFAULT_EMAIL: admin@admin.com
