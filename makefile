@@ -76,7 +76,7 @@ start_services:
 	docker compose --env-file $(ENV_FILE) up -d $(SERVICES)
 
 start:
-	docker compose --env-file $(ENV_FILE) -f docker-compose.yml -f docker-compose-airflow.yml up -d $(FULL_SERVICES)
+	docker compose --env-file $(ENV_FILE) -f docker-compose.yml -f docker-compose-airflow.yml up --build -d $(FULL_SERVICES)
 
 docker_build:
 	docker compose --env-file $(ENV_FILE) -f docker-compose.yml -f docker-compose-airflow.yml build $(FULL_SERVICES)
@@ -94,16 +94,19 @@ docker_update:
 	docker compose --env-file $(ENV_FILE) pull
 	make start
 
-remove_images:
-	docker rmi $$(docker images -aq)
-
-docker_stop:
+stop:
 	docker stop $$(docker ps -a -q)
 	docker rm $$(docker ps -a -q)
+	make remove_volumes
 
-docker_clean:
-	make docker_stop
+clean:
+	make stop
 	make remove_images
+	docker system prune -af
+
+remove_images:
+	docker rmi $$(docker images -aq)
+remove_volumes:
 	docker volume rm $$(docker volume ls -q)
 
 
