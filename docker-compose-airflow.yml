@@ -23,6 +23,7 @@ x-airflow-common: &airflow-common
             condition: service_healthy
 
 services:
+
     airflow-webserver:
         <<: *airflow-common
         command: [webserver]
