@@ -18,7 +18,7 @@ services:
         ports:
             - ${PORT}:${PORT}
         volumes:
-            - .:/workspace
+            - .:/leafroot
         networks:
             - shared_network
 
