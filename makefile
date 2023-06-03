@@ -2,7 +2,7 @@ ACTIVATE_BASH=source ~/.bashrc
 ACTIVATE_VENV= poetry shell
 DIR_ARGS = app/ controllers/ data/ tests/ scripts/ utils/ cache/ config/
 DIR_NO_TESTS = app/ controllers/ data/ scripts/ utils/ cache/
-SERVICES = db redis rabbitmq api mongo worker cassandra scylladb
+SERVICES = db redis rabbitmq api mongo worker cassandra scylladb traefik whoami
 AIRFLOW_SERVICES = airflow-webserver airflow-scheduler airflow-worker airflow-triggerer airflow-init airflow-cli flower
 FULL_SERVICES = $(SERVICES) pgadmin $(AIRFLOW_SERVICES)
 USER=$(shell whoami)
@@ -76,7 +76,7 @@ start_services:
 	docker compose --env-file $(ENV_FILE) up -d $(SERVICES)
 
 start:
-	docker compose --env-file $(ENV_FILE) -f docker-compose.yml -f docker-compose-airflow.yml up --build -d $(FULL_SERVICES)
+	docker compose --env-file $(ENV_FILE) -f docker-compose.yml -f docker-compose-airflow.yml up -d --build $(FULL_SERVICES)
 
 docker_build:
 	docker compose --env-file $(ENV_FILE) -f docker-compose.yml -f docker-compose-airflow.yml build $(FULL_SERVICES)

@@ -6,10 +6,14 @@ jobs:
     build-and-test:
         docker:
             - image: cimg/python:3.11
-            - image: cimg/postgres:15.3.0
+            - image: postgres:15
             - image: redis/redis-stack-server
             - image: rabbitmq:latest
             - image: mongo:latest
+        environment:
+            POSTGRES_DB: app
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: pass
         steps:
             - checkout
             - run: whoami
