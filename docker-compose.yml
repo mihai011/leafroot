@@ -35,7 +35,7 @@ services:
         hostname: worker
         restart: on-failure
         volumes:
-            - .:/workspace
+            - .:/leafroot
         networks:
             - shared_network
 

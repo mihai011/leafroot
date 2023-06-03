@@ -9,6 +9,7 @@ readme = "README.md"
 python = "^3.7"
 apache-airflow = {extras = ["celery", "redis"], version = "^2.6.1"}
 psycopg2-binary = "^2.9.6"
+pendulum = "^2.1.2"
 
 
 [build-system]

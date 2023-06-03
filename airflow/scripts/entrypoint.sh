@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 set -euo pipefail
 
@@ -15,7 +15,6 @@ CREATE_PAYLOAD="CREATE DATABASE ${AIRFLOW_DB};CREATE USER ${AIRFLOW_DB_USER}
 
 
 
-echo $CREATE_PAYLOAD | PGPASSWORD=$POSTGRES_PASSWORD psql --user $POSTGRES_USER --host $POSTGRES_HOST
 
 
 AIRFLOW__DATABASE__SQL_ALCHEMY_CONN="postgresql+psycopg2://${AIRFLOW_DB_USER}:${AIRFLOW_DB_PASS}@${AIRFLOW_DB_HOST}/${AIRFLOW_DB}"
@@ -55,11 +54,16 @@ echo $AIRFLOW__CELERY__BROKER_URL
 echo "Container's IP address: `awk 'END{print $1}' /etc/hosts`"
 echo  "Executed command: $1"
 
+if [ "$1" = 'export' ]; then
+    return 0
+fi
+
 if [ "$1" = 'standalone' ]; then
     poetry run airflow standalone
 fi
 
 if [ "$1" = 'init' ]; then
+    echo $CREATE_PAYLOAD | PGPASSWORD=$POSTGRES_PASSWORD psql --user $POSTGRES_USER --host $POSTGRES_HOST
     poetry run airflow db check
     poetry run airflow db init
     poetry run airflow users create \
