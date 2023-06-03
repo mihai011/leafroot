@@ -6,7 +6,7 @@ jobs:
     build-and-test:
         docker:
             - image: cimg/python:3.11
-            - image: postgres:15
+            - image: cimg/postgres:15.3.0
             - image: redis/redis-stack-server
             - image: rabbitmq:latest
             - image: mongo:latest

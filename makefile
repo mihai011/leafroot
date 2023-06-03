@@ -106,6 +106,7 @@ clean:
 
 remove_images:
 	docker rmi $$(docker images -aq)
+
 remove_volumes:
 	docker volume rm $$(docker volume ls -q)
 
