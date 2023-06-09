@@ -1,0 +1,30 @@
+---
+version: '3.8'
+
+services:
+
+    mysql:
+        build:
+            context: .
+            dockerfile: Dockerfile-mysql
+        image: mysql:8
+        container_name: mysql
+        hostname: mysql
+        environment:
+            MYSQL_ROOT_PASSWORD: pass
+        restart: on-failure
+        volumes:
+            - ./dumps:/dumps
+
+    db:
+        image: postgres:15
+        container_name: db_test
+        hostname: db_test
+        environment:
+            POSTGRES_DB: app
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: pass
+        ports:
+            - 127.0.0.1:5432:5432
+        volumes:
+            - ./dumps:/dumps

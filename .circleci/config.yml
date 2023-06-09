@@ -8,7 +8,7 @@ jobs:
             - image: circleci/python:3
             - image: circleci/postgres
               environment:
-                  POSTGRES_USER: postgres
+                  POSTGRES_USER: postgrespostgrespostgres
                   POSTGRES_DB: app
                   POSTGRES_PASSWORD: pass
             - image: redis/redis-stack-server

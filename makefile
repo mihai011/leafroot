@@ -2,9 +2,11 @@ ACTIVATE_BASH=source ~/.bashrc
 ACTIVATE_VENV= poetry shell
 DIR_ARGS = app/ controllers/ data/ tests/ scripts/ utils/ cache/ config/
 DIR_NO_TESTS = app/ controllers/ data/ scripts/ utils/ cache/
-SERVICES = db redis rabbitmq api mongo worker cassandra scylladb traefik whoami
+SERVICES = db redis rabbitmq api mongo worker cassandra scylladb
 AIRFLOW_SERVICES = airflow-webserver airflow-scheduler airflow-worker airflow-triggerer airflow-init airflow-cli flower
-FULL_SERVICES = $(SERVICES) pgadmin $(AIRFLOW_SERVICES)
+SPARK_SERVICES = spark-master spark-worker
+DOCKER_COMPOSES= -f docker-compose.yml -f docker-compose-airflow.yml -f docker-compose-spark.yml
+FULL_SERVICES = $(SERVICES) pgadmin $(AIRFLOW_SERVICES) $(SPARK_SERVICES)
 USER=$(shell whoami)
 # for mac os install coreutils ot get nproc
 CORES := $(shell nproc)
@@ -76,10 +78,10 @@ start_services:
 	docker compose --env-file $(ENV_FILE) up -d $(SERVICES)
 
 start:
-	docker compose --env-file $(ENV_FILE) -f docker-compose.yml -f docker-compose-airflow.yml up -d --build $(FULL_SERVICES)
+	docker compose --env-file $(ENV_FILE) $(DOCKER_COMPOSES) up -d  $(FULL_SERVICES)
 
 docker_build:
-	docker compose --env-file $(ENV_FILE) -f docker-compose.yml -f docker-compose-airflow.yml build $(FULL_SERVICES)
+	docker compose --env-file $(ENV_FILE) $(DOCKER_COMPOSES) build $(FULL_SERVICES)
 
 stop_services:
 	docker compose --env-file $(ENV_FILE) stop $(SERVICES)
