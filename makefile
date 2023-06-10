@@ -78,7 +78,7 @@ start_services:
 	docker compose --env-file $(ENV_FILE) up -d $(SERVICES)
 
 start:
-	docker compose --env-file $(ENV_FILE) $(DOCKER_COMPOSES) up -d  $(FULL_SERVICES)
+	docker compose --env-file $(ENV_FILE) $(DOCKER_COMPOSES) up -d --build $(FULL_SERVICES)
 
 docker_build:
 	docker compose --env-file $(ENV_FILE) $(DOCKER_COMPOSES) build $(FULL_SERVICES)

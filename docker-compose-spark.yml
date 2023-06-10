@@ -3,7 +3,10 @@ version: '3.8'
 services:
 
     spark-master:
-        image: apache/spark-py
+        build:
+            context: .
+            dockerfile: Dockerfile-spark
+        hostname: spark-master
         ports:
             - 9090:8080
             - 7077:7077
@@ -11,20 +14,23 @@ services:
             - ./spark-apps:/opt/spark-apps
             - ./spark-data:/opt/spark-data
         environment:
-            SPARK_LOCAL_IP: spark-masterark-master
-            SPARK_WORKLOAD: masterascasc
+            SPARK_LOCAL_IP: spark-master
+            SPARK_WORKLOAD: master
             SPARK_MODE: master
-        command: sleep infinity
         networks:
             - shared_network
 
     spark-worker:
-        image: apache/spark-py
+        scale: 2
+        build:
+            context: .
+            dockerfile: Dockerfile-spark
         volumes:
             - ./spark-apps:/opt/spark-apps
             - ./spark-data:/opt/spark-data
+        command: /opt/spark/sbin/start-worker.sh spark-master:7077
         environment:
             SPARK_MASTER: spark://spark-master:7077
             SPARK_MODE: worker
-        networks:
+        networks:   
             - shared_network
