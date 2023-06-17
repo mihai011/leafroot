@@ -4,9 +4,10 @@ DIR_ARGS = app/ controllers/ data/ tests/ scripts/ utils/ cache/ config/
 DIR_NO_TESTS = app/ controllers/ data/ scripts/ utils/ cache/
 SERVICES = db redis rabbitmq api mongo worker cassandra scylladb
 AIRFLOW_SERVICES = airflow-webserver airflow-scheduler airflow-worker airflow-triggerer airflow-init airflow-cli flower
-SPARK_SERVICES = spark-master spark-worker
-DOCKER_COMPOSES= -f docker-compose.yml -f docker-compose-airflow.yml -f docker-compose-spark.yml
-FULL_SERVICES = $(SERVICES) pgadmin $(AIRFLOW_SERVICES) $(SPARK_SERVICES)
+SPARK_SERVICES = spark-master spark-worker 
+KAFKA_SERVICES = zookeeper broker
+DOCKER_COMPOSES= -f docker-compose.yml -f docker-compose-airflow.yml -f docker-compose-spark.yml -f docker-compose-kafka.yml
+FULL_SERVICES = $(SERVICES) pgadmin $(AIRFLOW_SERVICES) $(SPARK_SERVICES) $(KAFKA_SERVICES)
 USER=$(shell whoami)
 # for mac os install coreutils ot get nproc
 CORES := $(shell nproc)
@@ -78,22 +79,13 @@ start_services:
 	docker compose --env-file $(ENV_FILE) up -d $(SERVICES)
 
 start:
-	docker compose --env-file $(ENV_FILE) $(DOCKER_COMPOSES) up -d --build $(FULL_SERVICES)
-
-docker_build:
-	docker compose --env-file $(ENV_FILE) $(DOCKER_COMPOSES) build $(FULL_SERVICES)
-
-stop_services:
-	docker compose --env-file $(ENV_FILE) stop $(SERVICES)
-
-sr_services:
-	docker compose --env-file $(ENV_FILE) down
+	docker compose --env-file $(ENV_FILE) $(DOCKER_COMPOSES) up -d  $(FULL_SERVICES)
 
 build:
-	docker build -t test --target prod -f
+	docker compose --env-file $(ENV_FILE) $(DOCKER_COMPOSES) build $(FULL_SERVICES)
 
-docker_update:
-	docker compose --env-file $(ENV_FILE) pull
+update:
+	docker compose --env-file $(ENV_FILE) $(DOCKER_COMPOSES) pull
 	make start
 
 stop:
