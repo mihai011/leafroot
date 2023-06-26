@@ -58,6 +58,9 @@ class StatusResponse(BaseModel):
     redis: Union[bool, str]
     rabbitmq: Union[bool, str]
     mongo: Union[bool, str]
+    spark: Union[bool, str]
+    kafka: Union[bool, str]
+    surrealdb: Union[bool, str]
 
 
 class StatusResponseItem(BaseResponse):

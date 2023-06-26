@@ -10,6 +10,7 @@ RUN pip install poetry
 RUN make venv_create
 
 FROM base AS dev
+RUN apt install iputils-ping
 CMD sleep infinity
 
 FROM base AS prod

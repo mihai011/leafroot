@@ -13,11 +13,11 @@ Leafroot is a personal exercise for me as a software engineer.
     3. Docker containers and local environment already set up.
     4. Circle CI config for testing implemented.
     6. Implemented health check.
-    7. TODO: Add MongoDB, Cassandra and ScyllaDB.
-    8. TODO: Circle CI pipeline for fast deployment to AWS, ETA and Heroku.
+    7. TODO: Add MongoDB, Cassandra, ScyllaDB and SurrealDB
+    8. TODO: Circle CI pipeline for fast deployment to AWS.
     9. TODO: Add chat integration using socketio.
     10. TODO: Implement stress test.
-    11. TODO: Mock mongo database for test.
+    11. Mongo database for test.(DONE)
     12. TODO: Implement Exception processing.
     13. TODO: Implement Super User.
     14. TODO: Implement salts for passwords.
@@ -45,6 +45,8 @@ Leafroot is a personal exercise for me as a software engineer.
     46. TODO: Find out how ariflow init container works.
     47. TODO: Add slack integrations.
     47. TODO: Add traefik.
+    48. TODO: Add DISCORD implementation.
+    49. TODO: Implement pagination, async logging, payload compression, connection pool.
 
 
 

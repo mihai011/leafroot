@@ -39,19 +39,26 @@ services:
         networks:
             - shared_network
 
-    cassandra:
+    cassandradb:
         image: cassandra:4.1.0
         ports:
             - 127.0.0.1:9042:9042
         container_name: cassandra
-        hostname: ${CASSANDRA_HOST}
+        hostname: ${CASSANDRADB_HOST}
+        networks:
+            - shared_network
+
+    surrealdb:
+        image: surrealdb/surrealdb
+        container_name: ${SURREALDB_HOST}
+        command: start --user ${SURREALDB_USER} --pass ${SURREALDB_PASS}
         networks:
             - shared_network
 
     scylladb:
         image: scylladb/scylla
         container_name: scylladb
-        hostname: ${SCYLLA_HOST}
+        hostname: ${SCYLLADB_HOST}
         networks:
             - shared_network
 

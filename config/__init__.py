@@ -3,12 +3,12 @@
 from typing import Literal
 
 from pydantic import (
+    Field,
     BaseSettings,
     RedisDsn,
     PostgresDsn,
     AmqpDsn,
     MongoDsn,
-    Field,
     AnyUrl,
 )
 from pydantic.typing import Optional
@@ -40,8 +40,28 @@ class Settings(BaseSettings):
     interface: Optional[str]
     port: Optional[int] = Field(..., ge=1024, le=65536)
 
+    kafka_host: Optional[str]
+    kafka_url: Optional[AnyUrl]
+
+    spark_host: Optional[str]
+    spark_url: Optional[AnyUrl]
+
+    cassandradb_host: Optional[str]
+
+    scylladb_host: Optional[str]
+    scylladb_url: Optional[AnyUrl]
+
+
+    surrealdb_host: Optional[str]
+    surrealdb_user: Optional[str]
+    surrealdb_pass: Optional[str]
+    surrealdb_namespace: Optional[str]
+    surrealdb_db: Optional[str]
+    surrealdb_url: Optional[AnyUrl]
+
     celery_broker_url: Optional[AmqpDsn]
     redis_url: Optional[RedisDsn]
+
     mongo_url_auth: Optional[MongoDsn]
     mongo_url_not_auth: Optional[MongoDsn]
 
@@ -80,6 +100,25 @@ class Settings(BaseSettings):
         self.create_celery_result_backend()
         self.create_database_urls()
         self.create_mongo_url()
+        self.create_spark_url()
+        self.create_kafka_url()
+        self.create_surrealdb_url()
+
+    def create_surrealdb_url(self):
+        """Create Surrealdb url from surreal host."""
+        host = self.interface or self.surrealdb_host
+        self.surrealdb_url = f"http://{host}:8000"
+
+    def create_kafka_url(self):
+        """Create kafka connection url from kafka host"""
+        host = self.interface or self.kafka_host
+        self.kafka_url = f"aiokafka://{host}"
+
+    def create_spark_url(self):
+        """Create spark conection url"""
+        host = self.interface or self.spark_host
+
+        self.spark_url = f"spark://{host}"
 
     def create_mongo_url(self):
         """Create the connection url for mongo."""

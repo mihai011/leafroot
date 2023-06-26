@@ -2,9 +2,14 @@ from logger import log
 from config import config
 
 from sqlalchemy import create_engine
+from surrealdb import Surreal
+from surrealdb.ws import SurrealAuthenticationException
+
 import redis.asyncio as redis
 import pika
 import motor.motor_asyncio
+
+from utils import check_host
 
 
 async def health_check():
@@ -19,9 +24,25 @@ async def health_check():
     status["redis"] = await check_redis()
     status["rabbitmq"] = await check_rabbitmq()
     status["mongo"] = await check_mongodb()
+    status["spark"] = await check_host(config.spark_host)
+    status["kafka"] = await check_host(config.kafka_host)
+    status["surrealdb"] = await check_surrealdb()
+    # status["scylladb"] = await check_scylladb()
+    # status["cassandradb"] = await check_cassandradb()
 
     return status
 
+@log()
+async def check_surrealdb():
+    """Check surrealdb database."""
+    try:
+        async with Surreal(config.surrealdb_url) as db:
+            await db.signin({"user": config.surrealdb_user, "pass": config.surrealdb_pass,})
+            await db.use(config.surrealdb_namespace, config.surrealdb_db)
+            return True
+    except SurrealAuthenticationException as e:
+        return False
+    
 
 @log()
 async def check_mongodb():
