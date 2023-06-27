@@ -104,7 +104,6 @@ remove_images:
 remove_volumes:
 	docker volume rm $$(docker volume ls -q)
 
-
 start_celery_workers:
 	poetry run celery -A celery_worker worker --loglevel=info
 
