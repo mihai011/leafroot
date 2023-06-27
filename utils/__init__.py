@@ -28,7 +28,7 @@ async def check_host(hostname):
     """Check generic host is alive."""
 
     # Building the command. Ex: "ping -c 1 google.com"
-    command = ['ping', "-c", '1', hostname]
+    command = ["ping", "-c", "1", hostname]
 
     return subprocess.call(command) == 0
 

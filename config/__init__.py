@@ -51,7 +51,6 @@ class Settings(BaseSettings):
     scylladb_host: Optional[str]
     scylladb_url: Optional[AnyUrl]
 
-
     surrealdb_host: Optional[str]
     surrealdb_user: Optional[str]
     surrealdb_pass: Optional[str]

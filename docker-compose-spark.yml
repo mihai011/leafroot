@@ -34,5 +34,5 @@ services:
         environment:
             SPARK_MASTER: spark://${SPARK_HOST}:7077
             SPARK_MODE: worker
-        networks:   
+        networks:
             - shared_network

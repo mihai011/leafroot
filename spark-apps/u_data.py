@@ -10,4 +10,4 @@ result = ratings.countByValue()
 
 sortedResults = collections.OrderedDict(sorted(result.items()))
 for k, v in sortedResults.items():
-    print(k,v)
+    print(k, v)

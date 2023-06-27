@@ -2,11 +2,11 @@
 import faust
 
 app = faust.App(
-    'hello-world',
-    broker='kafka://kafka:9092',
+    "hello-world",
+    broker="kafka://kafka:9092",
 )
 
-greetings_topic = app.topic('greetings', value_type=str)
+greetings_topic = app.topic("greetings", value_type=str)
 
 
 @app.agent(greetings_topic)
@@ -18,7 +18,8 @@ async def print_greetings(greetings):
 @app.timer(5)
 async def produce():
     for i in range(1000000):
-        await greetings_topic.send(value=f'hello {i}')
+        await greetings_topic.send(value=f"hello {i}")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     app.main()

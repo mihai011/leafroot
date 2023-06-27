@@ -1,6 +1,6 @@
 FROM apache/spark-py
 
-USER root 
+USER root
 
 RUN mkdir -p /opt/spark/logs && chmod a+wr /opt/spark/logs
 RUN mkdir -p /opt/spark/work && chmod a+wr /opt/spark/work

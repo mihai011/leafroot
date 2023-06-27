@@ -32,17 +32,23 @@ async def health_check():
 
     return status
 
+
 @log()
 async def check_surrealdb():
     """Check surrealdb database."""
     try:
         async with Surreal(config.surrealdb_url) as db:
-            await db.signin({"user": config.surrealdb_user, "pass": config.surrealdb_pass,})
+            await db.signin(
+                {
+                    "user": config.surrealdb_user,
+                    "pass": config.surrealdb_pass,
+                }
+            )
             await db.use(config.surrealdb_namespace, config.surrealdb_db)
             return True
     except SurrealAuthenticationException as e:
         return False
-    
+
 
 @log()
 async def check_mongodb():
