@@ -454,24 +454,6 @@ tests = ["pytest (>=3.2.1,!=3.3.0)"]
 typecheck = ["mypy"]
 
 [[package]]
-name = "beautifulsoup4"
-version = "4.12.2"
-description = "Screen-scraping library"
-optional = false
-python-versions = ">=3.6.0"
-files = [
-    {file = "beautifulsoup4-4.12.2-py3-none-any.whl", hash = "sha256:bd2520ca0d9d7d12694a53d44ac482d181b4ec1888909b035a3dbf40d0f57d4a"},
-    {file = "beautifulsoup4-4.12.2.tar.gz", hash = "sha256:492bbc69dca35d12daac71c4db1bfff0c876c00ef4a2ffacce226d4638eb72da"},
-]
-
-[package.dependencies]
-soupsieve = ">1.2"
-
-[package.extras]
-html5lib = ["html5lib"]
-lxml = ["lxml"]
-
-[[package]]
 name = "billiard"
 version = "4.1.0"
 description = "Python multiprocessing fork with improvements and bugfixes"
@@ -542,68 +524,6 @@ files = [
 
 [package.dependencies]
 black = ">=22.1.0"
-
-[[package]]
-name = "cachetools"
-version = "5.3.1"
-description = "Extensible memoizing collections and decorators"
-optional = false
-python-versions = ">=3.7"
-files = [
-    {file = "cachetools-5.3.1-py3-none-any.whl", hash = "sha256:95ef631eeaea14ba2e36f06437f36463aac3a096799e876ee55e5cdccb102590"},
-    {file = "cachetools-5.3.1.tar.gz", hash = "sha256:dce83f2d9b4e1f732a8cd44af8e8fab2dbe46201467fc98b3ef8f269092bf62b"},
-]
-
-[[package]]
-name = "cassandra-driver"
-version = "3.28.0"
-description = "DataStax Driver for Apache Cassandra"
-optional = false
-python-versions = "*"
-files = [
-    {file = "cassandra-driver-3.28.0.tar.gz", hash = "sha256:64ff130d19f994b80997c14343a8306be52a0e7ab92520a534eed944c88d70df"},
-    {file = "cassandra_driver-3.28.0-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:a8cceb2cc658b3ebf28873f84aab4f28bbd5df23a6528a5b38ecf89a45232509"},
-    {file = "cassandra_driver-3.28.0-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:35aef74e2a593a969b77a3fcf02d27e9b82a078d9aa66caa3bd2d2583c46a82c"},
-    {file = "cassandra_driver-3.28.0-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:48f20e0d21b6c7406dfd8a4d9e07fddc3c7c3d6ad7d5b5d480bf82aac7068739"},
-    {file = "cassandra_driver-3.28.0-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:3820a421fb7e4cf215718dc35522869c5f933d4fd4c50fd43307d3ce5d9dd138"},
-    {file = "cassandra_driver-3.28.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:0dd9511fe5b85010e92199f6589e0733ab14ed3d2279dcc6ae504c0cef11d652"},
-    {file = "cassandra_driver-3.28.0-cp310-cp310-win32.whl", hash = "sha256:887f7e3df9b34b41de6dfdd5f2ef8804c2d9782bbc39202eda9d3b67a3c8fe37"},
-    {file = "cassandra_driver-3.28.0-cp310-cp310-win_amd64.whl", hash = "sha256:28c636239b15944103df18a12ef95e6401ceadd7b9aca2d59f4beccf9ca21e2d"},
-    {file = "cassandra_driver-3.28.0-cp311-cp311-macosx_10_9_universal2.whl", hash = "sha256:9232434459303b0e1a26fa65006fd8438475037aef4e6204a32dfaeb10e7f739"},
-    {file = "cassandra_driver-3.28.0-cp311-cp311-macosx_10_9_x86_64.whl", hash = "sha256:634a553a5309a9faa08c3256fe0237ff0308152210211f3b8eab0664335560e0"},
-    {file = "cassandra_driver-3.28.0-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:4a101114a7d93505ee79272edc82dba0cfc706172ad7948a6e4fb3dc1eb8b59c"},
-    {file = "cassandra_driver-3.28.0-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:36d844ba0089111858fad3c53897b0fea7c91cedd8bd205eeb82fe22fd60e748"},
-    {file = "cassandra_driver-3.28.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:c3bf6bacb60dc8d1b8ba5ddd7d35772e3b98da951aed6bb148827aa9c38cd009"},
-    {file = "cassandra_driver-3.28.0-cp311-cp311-win32.whl", hash = "sha256:212eb39ca99ab5960eb5c31ce279b61e075df02ac7a6209415982a3f8cfe1126"},
-    {file = "cassandra_driver-3.28.0-cp311-cp311-win_amd64.whl", hash = "sha256:777f60ed821ec43d5b3f7a65eaf02decbd9cbc11e32f2099bfe9d7a6bfe33da9"},
-    {file = "cassandra_driver-3.28.0-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:b867c49c3c9efa21923845456cfb3e81ad13a33e40eb20279f58b3642d54614f"},
-    {file = "cassandra_driver-3.28.0-cp37-cp37m-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:f1dc54edf3b664dc8e45a9c8fed163dacbad8bc92c788c84a371ccb700e18638"},
-    {file = "cassandra_driver-3.28.0-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:e383aff200b7194d0d5625bf162bbc8471d05db7163c546341e5f27b36b53134"},
-    {file = "cassandra_driver-3.28.0-cp37-cp37m-win32.whl", hash = "sha256:a5e8b066f816868b344c108f34acc04b53c44caed2cdbcfe08ebdcbc1fd35046"},
-    {file = "cassandra_driver-3.28.0-cp37-cp37m-win_amd64.whl", hash = "sha256:ae8c8e9a46e1b0174ace1e836d4ea97292aa6de509db0def0f816322468fb430"},
-    {file = "cassandra_driver-3.28.0-cp38-cp38-macosx_10_9_universal2.whl", hash = "sha256:d5e8cf7db955b113f51274f166be9db0f0a06620c894abc41159828f0aeda259"},
-    {file = "cassandra_driver-3.28.0-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:26cbdb0d04f749b78bf7de17fd6a713b90430d1c70d8aa442845d51db823b9eb"},
-    {file = "cassandra_driver-3.28.0-cp38-cp38-macosx_11_0_arm64.whl", hash = "sha256:fe302940780932d83414ad5282c8a6bd72b248f3b1fceff995f28c77a6ebc925"},
-    {file = "cassandra_driver-3.28.0-cp38-cp38-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:3694c1e19d310668f5a60c16511fb12c3ad4c387d089a8080b74239a916620fb"},
-    {file = "cassandra_driver-3.28.0-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:9f5690b7b121e82c4365d298bd49dc574ecd8eed3ec0bafdf43fce708f2f992b"},
-    {file = "cassandra_driver-3.28.0-cp38-cp38-win32.whl", hash = "sha256:d09c8b0b392064054656050448dece04e4fa890af3c677a2f2034af14983ceb5"},
-    {file = "cassandra_driver-3.28.0-cp38-cp38-win_amd64.whl", hash = "sha256:e2342420bae4f80587e2ddebb38ade448c9ab1d210787a8030c1c04f54ef4a84"},
-    {file = "cassandra_driver-3.28.0-cp39-cp39-macosx_10_9_universal2.whl", hash = "sha256:c8d934cb7eac6586823a7eb69d40019154fd8e7d640bfaed49ac7edc373578df"},
-    {file = "cassandra_driver-3.28.0-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:8b51805d57ff6ed73a95c83c25d0479391da28c765c2bf019ee1370d8ca64cd0"},
-    {file = "cassandra_driver-3.28.0-cp39-cp39-macosx_11_0_arm64.whl", hash = "sha256:5f05495ccabe5be046bb9f1c2cc3e3ff696a94fd4f2f2b1004c951e56b1ea38d"},
-    {file = "cassandra_driver-3.28.0-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:59050666423c4ffdda9626676c18cce83a71c8331dd3d99f6b9306e0941348cf"},
-    {file = "cassandra_driver-3.28.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:a665841c15f2fade6b00a8404d3424fed8757971b75e791b69bfedacc4753f7c"},
-    {file = "cassandra_driver-3.28.0-cp39-cp39-win32.whl", hash = "sha256:46433de332b8ef59ad44140f287b584303b90111cf6f355ec8c990830135dd21"},
-    {file = "cassandra_driver-3.28.0-cp39-cp39-win_amd64.whl", hash = "sha256:5e6213f10d58b05a6120bcff4f479d89c152d3f4ba43b3bda3283ee67c3abe23"},
-]
-
-[package.dependencies]
-geomet = ">=0.1,<0.3"
-six = ">=1.9"
-
-[package.extras]
-cle = ["cryptography (>=35.0)"]
-graph = ["gremlinpython (==3.4.6)"]
 
 [[package]]
 name = "celery"
@@ -1489,117 +1409,6 @@ files = [
 gitdb = ">=4.0.1,<5"
 
 [[package]]
-name = "google"
-version = "3.0.0"
-description = "Python bindings to the Google search engine."
-optional = false
-python-versions = "*"
-files = [
-    {file = "google-3.0.0-py2.py3-none-any.whl", hash = "sha256:889cf695f84e4ae2c55fbc0cfdaf4c1e729417fa52ab1db0485202ba173e4935"},
-    {file = "google-3.0.0.tar.gz", hash = "sha256:143530122ee5130509ad5e989f0512f7cb218b2d4eddbafbad40fd10e8d8ccbe"},
-]
-
-[package.dependencies]
-beautifulsoup4 = "*"
-
-[[package]]
-name = "google-api-core"
-version = "2.11.1"
-description = "Google API client core library"
-optional = false
-python-versions = ">=3.7"
-files = [
-    {file = "google-api-core-2.11.1.tar.gz", hash = "sha256:25d29e05a0058ed5f19c61c0a78b1b53adea4d9364b464d014fbda941f6d1c9a"},
-    {file = "google_api_core-2.11.1-py3-none-any.whl", hash = "sha256:d92a5a92dc36dd4f4b9ee4e55528a90e432b059f93aee6ad857f9de8cc7ae94a"},
-]
-
-[package.dependencies]
-google-auth = ">=2.14.1,<3.0.dev0"
-googleapis-common-protos = ">=1.56.2,<2.0.dev0"
-protobuf = ">=3.19.5,<3.20.0 || >3.20.0,<3.20.1 || >3.20.1,<4.21.0 || >4.21.0,<4.21.1 || >4.21.1,<4.21.2 || >4.21.2,<4.21.3 || >4.21.3,<4.21.4 || >4.21.4,<4.21.5 || >4.21.5,<5.0.0.dev0"
-requests = ">=2.18.0,<3.0.0.dev0"
-
-[package.extras]
-grpc = ["grpcio (>=1.33.2,<2.0dev)", "grpcio (>=1.49.1,<2.0dev)", "grpcio-status (>=1.33.2,<2.0.dev0)", "grpcio-status (>=1.49.1,<2.0.dev0)"]
-grpcgcp = ["grpcio-gcp (>=0.2.2,<1.0.dev0)"]
-grpcio-gcp = ["grpcio-gcp (>=0.2.2,<1.0.dev0)"]
-
-[[package]]
-name = "google-api-python-client"
-version = "2.90.0"
-description = "Google API Client Library for Python"
-optional = false
-python-versions = ">=3.7"
-files = [
-    {file = "google-api-python-client-2.90.0.tar.gz", hash = "sha256:cbcb3ba8be37c6806676a49df16ac412077e5e5dc7fa967941eff977b31fba03"},
-    {file = "google_api_python_client-2.90.0-py2.py3-none-any.whl", hash = "sha256:4a41ffb7797d4f28e44635fb1e7076240b741c6493e7c3233c0e4421cec7c913"},
-]
-
-[package.dependencies]
-google-api-core = ">=1.31.5,<2.0.dev0 || >2.3.0,<3.0.0.dev0"
-google-auth = ">=1.19.0,<3.0.0.dev0"
-google-auth-httplib2 = ">=0.1.0"
-httplib2 = ">=0.15.0,<1.dev0"
-uritemplate = ">=3.0.1,<5"
-
-[[package]]
-name = "google-auth"
-version = "2.17.3"
-description = "Google Authentication Library"
-optional = false
-python-versions = ">=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,!=3.5.*"
-files = [
-    {file = "google-auth-2.17.3.tar.gz", hash = "sha256:ce311e2bc58b130fddf316df57c9b3943c2a7b4f6ec31de9663a9333e4064efc"},
-    {file = "google_auth-2.17.3-py2.py3-none-any.whl", hash = "sha256:f586b274d3eb7bd932ea424b1c702a30e0393a2e2bc4ca3eae8263ffd8be229f"},
-]
-
-[package.dependencies]
-cachetools = ">=2.0.0,<6.0"
-pyasn1-modules = ">=0.2.1"
-rsa = {version = ">=3.1.4,<5", markers = "python_version >= \"3.6\""}
-six = ">=1.9.0"
-
-[package.extras]
-aiohttp = ["aiohttp (>=3.6.2,<4.0.0dev)", "requests (>=2.20.0,<3.0.0dev)"]
-enterprise-cert = ["cryptography (==36.0.2)", "pyopenssl (==22.0.0)"]
-pyopenssl = ["cryptography (>=38.0.3)", "pyopenssl (>=20.0.0)"]
-reauth = ["pyu2f (>=0.1.5)"]
-requests = ["requests (>=2.20.0,<3.0.0dev)"]
-
-[[package]]
-name = "google-auth-httplib2"
-version = "0.1.0"
-description = "Google Authentication Library: httplib2 transport"
-optional = false
-python-versions = "*"
-files = [
-    {file = "google-auth-httplib2-0.1.0.tar.gz", hash = "sha256:a07c39fd632becacd3f07718dfd6021bf396978f03ad3ce4321d060015cc30ac"},
-    {file = "google_auth_httplib2-0.1.0-py2.py3-none-any.whl", hash = "sha256:31e49c36c6b5643b57e82617cb3e021e3e1d2df9da63af67252c02fa9c1f4a10"},
-]
-
-[package.dependencies]
-google-auth = "*"
-httplib2 = ">=0.15.0"
-six = "*"
-
-[[package]]
-name = "googleapis-common-protos"
-version = "1.59.1"
-description = "Common protobufs used in Google APIs"
-optional = false
-python-versions = ">=3.7"
-files = [
-    {file = "googleapis-common-protos-1.59.1.tar.gz", hash = "sha256:b35d530fe825fb4227857bc47ad84c33c809ac96f312e13182bdeaa2abe1178a"},
-    {file = "googleapis_common_protos-1.59.1-py2.py3-none-any.whl", hash = "sha256:0cbedb6fb68f1c07e18eb4c48256320777707e7d0c55063ae56c15db3224a61e"},
-]
-
-[package.dependencies]
-protobuf = ">=3.19.5,<3.20.0 || >3.20.0,<3.20.1 || >3.20.1,<4.21.1 || >4.21.1,<4.21.2 || >4.21.2,<4.21.3 || >4.21.3,<4.21.4 || >4.21.4,<4.21.5 || >4.21.5,<5.0.0.dev0"
-
-[package.extras]
-grpc = ["grpcio (>=1.44.0,<2.0.0.dev0)"]
-
-[[package]]
 name = "greenlet"
 version = "2.0.2"
 description = "Lightweight in-process concurrent programming"
@@ -1673,79 +1482,6 @@ docs = ["Sphinx", "docutils (<0.18)"]
 test = ["objgraph", "psutil"]
 
 [[package]]
-name = "grpcio"
-version = "1.56.0"
-description = "HTTP/2-based RPC framework"
-optional = false
-python-versions = ">=3.7"
-files = [
-    {file = "grpcio-1.56.0-cp310-cp310-linux_armv7l.whl", hash = "sha256:fb34ace11419f1ae321c36ccaa18d81cd3f20728cd191250be42949d6845bb2d"},
-    {file = "grpcio-1.56.0-cp310-cp310-macosx_12_0_universal2.whl", hash = "sha256:008767c0aed4899e657b50f2e0beacbabccab51359eba547f860e7c55f2be6ba"},
-    {file = "grpcio-1.56.0-cp310-cp310-manylinux_2_17_aarch64.whl", hash = "sha256:17f47aeb9be0da5337f9ff33ebb8795899021e6c0741ee68bd69774a7804ca86"},
-    {file = "grpcio-1.56.0-cp310-cp310-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:43c50d810cc26349b093bf2cfe86756ab3e9aba3e7e681d360930c1268e1399a"},
-    {file = "grpcio-1.56.0-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:187b8f71bad7d41eea15e0c9812aaa2b87adfb343895fffb704fb040ca731863"},
-    {file = "grpcio-1.56.0-cp310-cp310-musllinux_1_1_i686.whl", hash = "sha256:881575f240eb5db72ddca4dc5602898c29bc082e0d94599bf20588fb7d1ee6a0"},
-    {file = "grpcio-1.56.0-cp310-cp310-musllinux_1_1_x86_64.whl", hash = "sha256:c243b158dd7585021d16c50498c4b2ec0a64a6119967440c5ff2d8c89e72330e"},
-    {file = "grpcio-1.56.0-cp310-cp310-win32.whl", hash = "sha256:8b3b2c7b5feef90bc9a5fa1c7f97637e55ec3e76460c6d16c3013952ee479cd9"},
-    {file = "grpcio-1.56.0-cp310-cp310-win_amd64.whl", hash = "sha256:03a80451530fd3b8b155e0c4480434f6be669daf7ecba56f73ef98f94222ee01"},
-    {file = "grpcio-1.56.0-cp311-cp311-linux_armv7l.whl", hash = "sha256:64bd3abcf9fb4a9fa4ede8d0d34686314a7075f62a1502217b227991d9ca4245"},
-    {file = "grpcio-1.56.0-cp311-cp311-macosx_10_10_universal2.whl", hash = "sha256:fdc3a895791af4addbb826808d4c9c35917c59bb5c430d729f44224e51c92d61"},
-    {file = "grpcio-1.56.0-cp311-cp311-manylinux_2_17_aarch64.whl", hash = "sha256:4f84a6fd4482e5fe73b297d4874b62a535bc75dc6aec8e9fe0dc88106cd40397"},
-    {file = "grpcio-1.56.0-cp311-cp311-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:14e70b4dda3183abea94c72d41d5930c333b21f8561c1904a372d80370592ef3"},
-    {file = "grpcio-1.56.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:6b5ce42a5ebe3e04796246ba50357f1813c44a6efe17a37f8dc7a5c470377312"},
-    {file = "grpcio-1.56.0-cp311-cp311-musllinux_1_1_i686.whl", hash = "sha256:8219f17baf069fe8e42bd8ca0b312b875595e43a70cabf397be4fda488e2f27d"},
-    {file = "grpcio-1.56.0-cp311-cp311-musllinux_1_1_x86_64.whl", hash = "sha256:defdd14b518e6e468466f799aaa69db0355bca8d3a5ea75fb912d28ba6f8af31"},
-    {file = "grpcio-1.56.0-cp311-cp311-win32.whl", hash = "sha256:50f4daa698835accbbcc60e61e0bc29636c0156ddcafb3891c987e533a0031ba"},
-    {file = "grpcio-1.56.0-cp311-cp311-win_amd64.whl", hash = "sha256:59c4e606993a47146fbeaf304b9e78c447f5b9ee5641cae013028c4cca784617"},
-    {file = "grpcio-1.56.0-cp37-cp37m-linux_armv7l.whl", hash = "sha256:b1f4b6f25a87d80b28dd6d02e87d63fe1577fe6d04a60a17454e3f8077a38279"},
-    {file = "grpcio-1.56.0-cp37-cp37m-macosx_10_10_universal2.whl", hash = "sha256:c2148170e01d464d41011a878088444c13413264418b557f0bdcd1bf1b674a0e"},
-    {file = "grpcio-1.56.0-cp37-cp37m-manylinux_2_17_aarch64.whl", hash = "sha256:0409de787ebbf08c9d2bca2bcc7762c1efe72eada164af78b50567a8dfc7253c"},
-    {file = "grpcio-1.56.0-cp37-cp37m-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:66f0369d27f4c105cd21059d635860bb2ea81bd593061c45fb64875103f40e4a"},
-    {file = "grpcio-1.56.0-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:38fdf5bd0a1c754ce6bf9311a3c2c7ebe56e88b8763593316b69e0e9a56af1de"},
-    {file = "grpcio-1.56.0-cp37-cp37m-musllinux_1_1_i686.whl", hash = "sha256:79d4c5911d12a7aa671e5eb40cbb50a830396525014d2d6f254ea2ba180ce637"},
-    {file = "grpcio-1.56.0-cp37-cp37m-musllinux_1_1_x86_64.whl", hash = "sha256:5d2fc471668a7222e213f86ef76933b18cdda6a51ea1322034478df8c6519959"},
-    {file = "grpcio-1.56.0-cp37-cp37m-win_amd64.whl", hash = "sha256:991224fd485e088d3cb5e34366053691a4848a6b7112b8f5625a411305c26691"},
-    {file = "grpcio-1.56.0-cp38-cp38-linux_armv7l.whl", hash = "sha256:c6f36621aabecbaff3e70c4d1d924c76c8e6a7ffec60c331893640a4af0a8037"},
-    {file = "grpcio-1.56.0-cp38-cp38-macosx_10_10_universal2.whl", hash = "sha256:1eadd6de258901929223f422ffed7f8b310c0323324caf59227f9899ea1b1674"},
-    {file = "grpcio-1.56.0-cp38-cp38-manylinux_2_17_aarch64.whl", hash = "sha256:72836b5a1d4f508ffbcfe35033d027859cc737972f9dddbe33fb75d687421e2e"},
-    {file = "grpcio-1.56.0-cp38-cp38-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:f92a99ab0c7772fb6859bf2e4f44ad30088d18f7c67b83205297bfb229e0d2cf"},
-    {file = "grpcio-1.56.0-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:aa08affbf672d051cd3da62303901aeb7042a2c188c03b2c2a2d346fc5e81c14"},
-    {file = "grpcio-1.56.0-cp38-cp38-musllinux_1_1_i686.whl", hash = "sha256:e2db108b4c8e29c145e95b0226973a66d73ae3e3e7fae00329294af4e27f1c42"},
-    {file = "grpcio-1.56.0-cp38-cp38-musllinux_1_1_x86_64.whl", hash = "sha256:8674fdbd28266d8efbcddacf4ec3643f76fe6376f73283fd63a8374c14b0ef7c"},
-    {file = "grpcio-1.56.0-cp38-cp38-win32.whl", hash = "sha256:bd55f743e654fb050c665968d7ec2c33f03578a4bbb163cfce38024775ff54cc"},
-    {file = "grpcio-1.56.0-cp38-cp38-win_amd64.whl", hash = "sha256:c63bc5ac6c7e646c296fed9139097ae0f0e63f36f0864d7ce431cce61fe0118a"},
-    {file = "grpcio-1.56.0-cp39-cp39-linux_armv7l.whl", hash = "sha256:c0bc9dda550785d23f4f025be614b7faa8d0293e10811f0f8536cf50435b7a30"},
-    {file = "grpcio-1.56.0-cp39-cp39-macosx_10_10_universal2.whl", hash = "sha256:d596408bab632ec7b947761e83ce6b3e7632e26b76d64c239ba66b554b7ee286"},
-    {file = "grpcio-1.56.0-cp39-cp39-manylinux_2_17_aarch64.whl", hash = "sha256:76b6e6e1ee9bda32e6e933efd61c512e9a9f377d7c580977f090d1a9c78cca44"},
-    {file = "grpcio-1.56.0-cp39-cp39-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:7beb84ebd0a3f732625124b73969d12b7350c5d9d64ddf81ae739bbc63d5b1ed"},
-    {file = "grpcio-1.56.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:83ec714bbbe9b9502177c842417fde39f7a267031e01fa3cd83f1ca49688f537"},
-    {file = "grpcio-1.56.0-cp39-cp39-musllinux_1_1_i686.whl", hash = "sha256:4feee75565d1b5ab09cb3a5da672b84ca7f6dd80ee07a50f5537207a9af543a4"},
-    {file = "grpcio-1.56.0-cp39-cp39-musllinux_1_1_x86_64.whl", hash = "sha256:b4638a796778329cc8e142e4f57c705adb286b3ba64e00b0fa91eeb919611be8"},
-    {file = "grpcio-1.56.0-cp39-cp39-win32.whl", hash = "sha256:437af5a7673bca89c4bc0a993382200592d104dd7bf55eddcd141cef91f40bab"},
-    {file = "grpcio-1.56.0-cp39-cp39-win_amd64.whl", hash = "sha256:4241a1c2c76e748023c834995cd916570e7180ee478969c2d79a60ce007bc837"},
-    {file = "grpcio-1.56.0.tar.gz", hash = "sha256:4c08ee21b3d10315b8dc26f6c13917b20ed574cdbed2d2d80c53d5508fdcc0f2"},
-]
-
-[package.extras]
-protobuf = ["grpcio-tools (>=1.56.0)"]
-
-[[package]]
-name = "grpcio-status"
-version = "1.56.0"
-description = "Status proto mapping for gRPC"
-optional = false
-python-versions = ">=3.6"
-files = [
-    {file = "grpcio-status-1.56.0.tar.gz", hash = "sha256:9eca0b2dcda0782d3702df225918efd6d820f75f93cd5c51c7fb6a4ffbfea12c"},
-    {file = "grpcio_status-1.56.0-py3-none-any.whl", hash = "sha256:e5f101c96686e9d4e94a114567960fdb00052aa3c818b029745e3db37dc9c613"},
-]
-
-[package.dependencies]
-googleapis-common-protos = ">=1.5.5"
-grpcio = ">=1.56.0"
-protobuf = ">=4.21.6"
-
-[[package]]
 name = "gunicorn"
 version = "20.1.0"
 description = "WSGI HTTP Server for UNIX"
@@ -1796,20 +1532,6 @@ sniffio = "==1.*"
 [package.extras]
 http2 = ["h2 (>=3,<5)"]
 socks = ["socksio (==1.*)"]
-
-[[package]]
-name = "httplib2"
-version = "0.22.0"
-description = "A comprehensive HTTP client library."
-optional = false
-python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
-files = [
-    {file = "httplib2-0.22.0-py3-none-any.whl", hash = "sha256:14ae0a53c1ba8f3d37e9e27cf37eabb0fb9980f435ba405d546948b009dd64dc"},
-    {file = "httplib2-0.22.0.tar.gz", hash = "sha256:d7a10bc5ef5ab08322488bde8c726eeee5c8618723fdb399597ec58f3d82df81"},
-]
-
-[package.dependencies]
-pyparsing = {version = ">=2.4.2,<3.0.0 || >3.0.0,<3.0.1 || >3.0.1,<3.0.2 || >3.0.2,<3.0.3 || >3.0.3,<4", markers = "python_version > \"3.0\""}
 
 [[package]]
 name = "httptools"
@@ -2610,72 +2332,6 @@ files = [
 ]
 
 [[package]]
-name = "pandas"
-version = "2.0.2"
-description = "Powerful data structures for data analysis, time series, and statistics"
-optional = false
-python-versions = ">=3.8"
-files = [
-    {file = "pandas-2.0.2-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:9ebb9f1c22ddb828e7fd017ea265a59d80461d5a79154b49a4207bd17514d122"},
-    {file = "pandas-2.0.2-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:1eb09a242184092f424b2edd06eb2b99d06dc07eeddff9929e8667d4ed44e181"},
-    {file = "pandas-2.0.2-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:c7319b6e68de14e6209460f72a8d1ef13c09fb3d3ef6c37c1e65b35d50b5c145"},
-    {file = "pandas-2.0.2-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:dd46bde7309088481b1cf9c58e3f0e204b9ff9e3244f441accd220dd3365ce7c"},
-    {file = "pandas-2.0.2-cp310-cp310-win32.whl", hash = "sha256:51a93d422fbb1bd04b67639ba4b5368dffc26923f3ea32a275d2cc450f1d1c86"},
-    {file = "pandas-2.0.2-cp310-cp310-win_amd64.whl", hash = "sha256:66d00300f188fa5de73f92d5725ced162488f6dc6ad4cecfe4144ca29debe3b8"},
-    {file = "pandas-2.0.2-cp311-cp311-macosx_10_9_x86_64.whl", hash = "sha256:02755de164da6827764ceb3bbc5f64b35cb12394b1024fdf88704d0fa06e0e2f"},
-    {file = "pandas-2.0.2-cp311-cp311-macosx_11_0_arm64.whl", hash = "sha256:0a1e0576611641acde15c2322228d138258f236d14b749ad9af498ab69089e2d"},
-    {file = "pandas-2.0.2-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:a6b5f14cd24a2ed06e14255ff40fe2ea0cfaef79a8dd68069b7ace74bd6acbba"},
-    {file = "pandas-2.0.2-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:50e451932b3011b61d2961b4185382c92cc8c6ee4658dcd4f320687bb2d000ee"},
-    {file = "pandas-2.0.2-cp311-cp311-win32.whl", hash = "sha256:7b21cb72958fc49ad757685db1919021d99650d7aaba676576c9e88d3889d456"},
-    {file = "pandas-2.0.2-cp311-cp311-win_amd64.whl", hash = "sha256:c4af689352c4fe3d75b2834933ee9d0ccdbf5d7a8a7264f0ce9524e877820c08"},
-    {file = "pandas-2.0.2-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:69167693cb8f9b3fc060956a5d0a0a8dbfed5f980d9fd2c306fb5b9c855c814c"},
-    {file = "pandas-2.0.2-cp38-cp38-macosx_11_0_arm64.whl", hash = "sha256:30a89d0fec4263ccbf96f68592fd668939481854d2ff9da709d32a047689393b"},
-    {file = "pandas-2.0.2-cp38-cp38-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:a18e5c72b989ff0f7197707ceddc99828320d0ca22ab50dd1b9e37db45b010c0"},
-    {file = "pandas-2.0.2-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:7376e13d28eb16752c398ca1d36ccfe52bf7e887067af9a0474de6331dd948d2"},
-    {file = "pandas-2.0.2-cp38-cp38-win32.whl", hash = "sha256:6d6d10c2142d11d40d6e6c0a190b1f89f525bcf85564707e31b0a39e3b398e08"},
-    {file = "pandas-2.0.2-cp38-cp38-win_amd64.whl", hash = "sha256:e69140bc2d29a8556f55445c15f5794490852af3de0f609a24003ef174528b79"},
-    {file = "pandas-2.0.2-cp39-cp39-macosx_10_9_x86_64.whl", hash = "sha256:b42b120458636a981077cfcfa8568c031b3e8709701315e2bfa866324a83efa8"},
-    {file = "pandas-2.0.2-cp39-cp39-macosx_11_0_arm64.whl", hash = "sha256:f908a77cbeef9bbd646bd4b81214cbef9ac3dda4181d5092a4aa9797d1bc7774"},
-    {file = "pandas-2.0.2-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:713f2f70abcdade1ddd68fc91577cb090b3544b07ceba78a12f799355a13ee44"},
-    {file = "pandas-2.0.2-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:cf3f0c361a4270185baa89ec7ab92ecaa355fe783791457077473f974f654df5"},
-    {file = "pandas-2.0.2-cp39-cp39-win32.whl", hash = "sha256:598e9020d85a8cdbaa1815eb325a91cfff2bb2b23c1442549b8a3668e36f0f77"},
-    {file = "pandas-2.0.2-cp39-cp39-win_amd64.whl", hash = "sha256:77550c8909ebc23e56a89f91b40ad01b50c42cfbfab49b3393694a50549295ea"},
-    {file = "pandas-2.0.2.tar.gz", hash = "sha256:dd5476b6c3fe410ee95926873f377b856dbc4e81a9c605a0dc05aaccc6a7c6c6"},
-]
-
-[package.dependencies]
-numpy = [
-    {version = ">=1.21.0", markers = "python_version >= \"3.10\""},
-    {version = ">=1.23.2", markers = "python_version >= \"3.11\""},
-]
-python-dateutil = ">=2.8.2"
-pytz = ">=2020.1"
-tzdata = ">=2022.1"
-
-[package.extras]
-all = ["PyQt5 (>=5.15.1)", "SQLAlchemy (>=1.4.16)", "beautifulsoup4 (>=4.9.3)", "bottleneck (>=1.3.2)", "brotlipy (>=0.7.0)", "fastparquet (>=0.6.3)", "fsspec (>=2021.07.0)", "gcsfs (>=2021.07.0)", "html5lib (>=1.1)", "hypothesis (>=6.34.2)", "jinja2 (>=3.0.0)", "lxml (>=4.6.3)", "matplotlib (>=3.6.1)", "numba (>=0.53.1)", "numexpr (>=2.7.3)", "odfpy (>=1.4.1)", "openpyxl (>=3.0.7)", "pandas-gbq (>=0.15.0)", "psycopg2 (>=2.8.6)", "pyarrow (>=7.0.0)", "pymysql (>=1.0.2)", "pyreadstat (>=1.1.2)", "pytest (>=7.0.0)", "pytest-asyncio (>=0.17.0)", "pytest-xdist (>=2.2.0)", "python-snappy (>=0.6.0)", "pyxlsb (>=1.0.8)", "qtpy (>=2.2.0)", "s3fs (>=2021.08.0)", "scipy (>=1.7.1)", "tables (>=3.6.1)", "tabulate (>=0.8.9)", "xarray (>=0.21.0)", "xlrd (>=2.0.1)", "xlsxwriter (>=1.4.3)", "zstandard (>=0.15.2)"]
-aws = ["s3fs (>=2021.08.0)"]
-clipboard = ["PyQt5 (>=5.15.1)", "qtpy (>=2.2.0)"]
-compression = ["brotlipy (>=0.7.0)", "python-snappy (>=0.6.0)", "zstandard (>=0.15.2)"]
-computation = ["scipy (>=1.7.1)", "xarray (>=0.21.0)"]
-excel = ["odfpy (>=1.4.1)", "openpyxl (>=3.0.7)", "pyxlsb (>=1.0.8)", "xlrd (>=2.0.1)", "xlsxwriter (>=1.4.3)"]
-feather = ["pyarrow (>=7.0.0)"]
-fss = ["fsspec (>=2021.07.0)"]
-gcp = ["gcsfs (>=2021.07.0)", "pandas-gbq (>=0.15.0)"]
-hdf5 = ["tables (>=3.6.1)"]
-html = ["beautifulsoup4 (>=4.9.3)", "html5lib (>=1.1)", "lxml (>=4.6.3)"]
-mysql = ["SQLAlchemy (>=1.4.16)", "pymysql (>=1.0.2)"]
-output-formatting = ["jinja2 (>=3.0.0)", "tabulate (>=0.8.9)"]
-parquet = ["pyarrow (>=7.0.0)"]
-performance = ["bottleneck (>=1.3.2)", "numba (>=0.53.1)", "numexpr (>=2.7.1)"]
-plot = ["matplotlib (>=3.6.1)"]
-postgresql = ["SQLAlchemy (>=1.4.16)", "psycopg2 (>=2.8.6)"]
-spss = ["pyreadstat (>=1.1.2)"]
-sql-other = ["SQLAlchemy (>=1.4.16)"]
-test = ["hypothesis (>=6.34.2)", "pytest (>=7.0.0)", "pytest-asyncio (>=0.17.0)", "pytest-xdist (>=2.2.0)"]
-xml = ["lxml (>=4.6.3)"]
-
-[[package]]
 name = "parso"
 version = "0.8.3"
 description = "A Python Parser"
@@ -2910,28 +2566,6 @@ files = [
 wcwidth = "*"
 
 [[package]]
-name = "protobuf"
-version = "4.23.3"
-description = ""
-optional = false
-python-versions = ">=3.7"
-files = [
-    {file = "protobuf-4.23.3-cp310-abi3-win32.whl", hash = "sha256:514b6bbd54a41ca50c86dd5ad6488afe9505901b3557c5e0f7823a0cf67106fb"},
-    {file = "protobuf-4.23.3-cp310-abi3-win_amd64.whl", hash = "sha256:cc14358a8742c4e06b1bfe4be1afbdf5c9f6bd094dff3e14edb78a1513893ff5"},
-    {file = "protobuf-4.23.3-cp37-abi3-macosx_10_9_universal2.whl", hash = "sha256:2991f5e7690dab569f8f81702e6700e7364cc3b5e572725098215d3da5ccc6ac"},
-    {file = "protobuf-4.23.3-cp37-abi3-manylinux2014_aarch64.whl", hash = "sha256:08fe19d267608d438aa37019236db02b306e33f6b9902c3163838b8e75970223"},
-    {file = "protobuf-4.23.3-cp37-abi3-manylinux2014_x86_64.whl", hash = "sha256:3b01a5274ac920feb75d0b372d901524f7e3ad39c63b1a2d55043f3887afe0c1"},
-    {file = "protobuf-4.23.3-cp37-cp37m-win32.whl", hash = "sha256:aca6e86a08c5c5962f55eac9b5bd6fce6ed98645d77e8bfc2b952ecd4a8e4f6a"},
-    {file = "protobuf-4.23.3-cp37-cp37m-win_amd64.whl", hash = "sha256:0149053336a466e3e0b040e54d0b615fc71de86da66791c592cc3c8d18150bf8"},
-    {file = "protobuf-4.23.3-cp38-cp38-win32.whl", hash = "sha256:84ea0bd90c2fdd70ddd9f3d3fc0197cc24ecec1345856c2b5ba70e4d99815359"},
-    {file = "protobuf-4.23.3-cp38-cp38-win_amd64.whl", hash = "sha256:3bcbeb2bf4bb61fe960dd6e005801a23a43578200ea8ceb726d1f6bd0e562ba1"},
-    {file = "protobuf-4.23.3-cp39-cp39-win32.whl", hash = "sha256:5cb9e41188737f321f4fce9a4337bf40a5414b8d03227e1d9fbc59bc3a216e35"},
-    {file = "protobuf-4.23.3-cp39-cp39-win_amd64.whl", hash = "sha256:29660574cd769f2324a57fb78127cda59327eb6664381ecfe1c69731b83e8288"},
-    {file = "protobuf-4.23.3-py3-none-any.whl", hash = "sha256:447b9786ac8e50ae72cae7a2eec5c5df6a9dbf9aa6f908f1b8bda6032644ea62"},
-    {file = "protobuf-4.23.3.tar.gz", hash = "sha256:7a92beb30600332a52cdadbedb40d33fd7c8a0d7f549c440347bc606fb3fe34b"},
-]
-
-[[package]]
 name = "psycopg2"
 version = "2.9.6"
 description = "psycopg2 - Python-PostgreSQL Database Adapter"
@@ -3036,20 +2670,6 @@ files = [
     {file = "pyasn1-0.5.0-py2.py3-none-any.whl", hash = "sha256:87a2121042a1ac9358cabcaf1d07680ff97ee6404333bacca15f76aa8ad01a57"},
     {file = "pyasn1-0.5.0.tar.gz", hash = "sha256:97b7290ca68e62a832558ec3976f15cbf911bf5d7c7039d8b861c2a0ece69fde"},
 ]
-
-[[package]]
-name = "pyasn1-modules"
-version = "0.3.0"
-description = "A collection of ASN.1-based protocols modules"
-optional = false
-python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,!=3.5.*,>=2.7"
-files = [
-    {file = "pyasn1_modules-0.3.0-py2.py3-none-any.whl", hash = "sha256:d3ccd6ed470d9ffbc716be08bd90efbd44d0734bc9303818f7336070984a162d"},
-    {file = "pyasn1_modules-0.3.0.tar.gz", hash = "sha256:5bd01446b736eb9d31512a30d46c1ac3395d676c6f3cafa4c03eb54b9925631c"},
-]
-
-[package.dependencies]
-pyasn1 = ">=0.4.6,<0.6.0"
 
 [[package]]
 name = "pycparser"
@@ -3613,6 +3233,66 @@ files = [
 pyasn1 = ">=0.1.3"
 
 [[package]]
+name = "scylla-driver"
+version = "3.26.2"
+description = "Scylla Driver for Apache Cassandra"
+optional = false
+python-versions = "*"
+files = [
+    {file = "scylla-driver-3.26.2.tar.gz", hash = "sha256:b9f73e35ca86f0c9396c6dd2f9a2b04479cf04abdc24b5226938d4dc5b29959f"},
+    {file = "scylla_driver-3.26.2-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:984f4da4f43713611cfd402e7bf8bd64e7e324fcffa7c25bf1ac7c9ab1597bcf"},
+    {file = "scylla_driver-3.26.2-cp310-cp310-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:4f90907ed57194a2824801a4d71ae822c4a8c6fb260dc2515e28cf72588e64b8"},
+    {file = "scylla_driver-3.26.2-cp310-cp310-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:bda767ea4aec62695a17b93ef59a12f85e7836529b9e30352e65e88a14dbcfdc"},
+    {file = "scylla_driver-3.26.2-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:891dcc5326877fc74b4f8bb96dbbdc2a285cad3d6162a8b5ed94fa88347bd14f"},
+    {file = "scylla_driver-3.26.2-cp310-cp310-win32.whl", hash = "sha256:8c7ce099dd9b2efa5027420322e024402c447f5ecda1383c5e8d3e9dc5a0b559"},
+    {file = "scylla_driver-3.26.2-cp310-cp310-win_amd64.whl", hash = "sha256:8e496bfb226ca9e75619a6b03d0faba60756c6e87065c081b0d3ada148a9f996"},
+    {file = "scylla_driver-3.26.2-cp311-cp311-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:53c9a7919437c21fb1cc93746e48f55aea3683e2b27b6cdd5dfcb7c84dc91d5d"},
+    {file = "scylla_driver-3.26.2-cp311-cp311-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:f0112e6383cc32dbe72f8a7109c487a488d3ef2a666f464c6e16c8c6d32ad68e"},
+    {file = "scylla_driver-3.26.2-cp311-cp311-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:315b0b05025e15ef9812e5c0b4e5c8f6c13d3d4da241bb689c395ecd2d6a4ca0"},
+    {file = "scylla_driver-3.26.2-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:ad081db290e86a12eed64c4e95298bb436869814a6db65a55c3ffa13ae81feac"},
+    {file = "scylla_driver-3.26.2-cp311-cp311-win32.whl", hash = "sha256:d629c6ae209d3fe353b480cb39ef813d5d1c9b3d20ebfb0c1cfad46b1621b872"},
+    {file = "scylla_driver-3.26.2-cp311-cp311-win_amd64.whl", hash = "sha256:9c40e1edd0f4b59f311626b6c876ec16a424b82bf277222d40f584a4b5a09307"},
+    {file = "scylla_driver-3.26.2-cp37-cp37m-macosx_10_9_x86_64.whl", hash = "sha256:77c173f7b816f7dffb9fbf62c982794216eaa00ffe252ee43775ab2d170f27ea"},
+    {file = "scylla_driver-3.26.2-cp37-cp37m-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:be596d0d963e491c108ad6c67b54ad07354527495a93a1f24a1d10ebef917d3c"},
+    {file = "scylla_driver-3.26.2-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:cd6638fd938c13d362f58abe6c004776fae33562926c3ef611362afeed8488b0"},
+    {file = "scylla_driver-3.26.2-cp37-cp37m-win32.whl", hash = "sha256:dfc9a3987a50ba724066bec567db1c08ca6a1339937e843886b49ee974d5eda9"},
+    {file = "scylla_driver-3.26.2-cp37-cp37m-win_amd64.whl", hash = "sha256:4bf47b1ffe2d44ea0e364f65e4eb14a778fc291b0bebc2e0aba771e507aa31ac"},
+    {file = "scylla_driver-3.26.2-cp38-cp38-macosx_10_9_x86_64.whl", hash = "sha256:ae55d421ee47ee07a992253e0d8f8bad9fbb67eec3f2a2b4f7ceba57b672191e"},
+    {file = "scylla_driver-3.26.2-cp38-cp38-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:24adaa229979436447ad40e60d35cd524910c7123d3e58576b8419c50821e1cf"},
+    {file = "scylla_driver-3.26.2-cp38-cp38-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:ee7f369046d87d26b4e04ee6853e4ccea68105c429a7c7aa310b341b34f6a18b"},
+    {file = "scylla_driver-3.26.2-cp38-cp38-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:480114ad3c1b30546bd345da6b08d95cb1d9a5d170eba3052277a94bc73fe38e"},
+    {file = "scylla_driver-3.26.2-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:88a24238dad1490fc7ed2b6dcaa54569d91e17707830e387fcf471595cf928ca"},
+    {file = "scylla_driver-3.26.2-cp38-cp38-win32.whl", hash = "sha256:2d421834de504f7f3dac8d36a919275c5a91ef9ecf87529028f64b790e1df19d"},
+    {file = "scylla_driver-3.26.2-cp38-cp38-win_amd64.whl", hash = "sha256:ff751b86627e648732af5d90693f6b8420b9c8b1ff9143cc144fd4b8db2bb9c4"},
+    {file = "scylla_driver-3.26.2-cp39-cp39-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:c534931fe5ac711e562c2ed98c0e007842c0cebbd3f80caa3593885938a0524f"},
+    {file = "scylla_driver-3.26.2-cp39-cp39-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:10bea4e0e3f9b3e6bb6a75d50ac2fd46505e737f38638bb2391765b78318331e"},
+    {file = "scylla_driver-3.26.2-cp39-cp39-manylinux_2_17_ppc64le.manylinux2014_ppc64le.whl", hash = "sha256:901bcb9d01fb3c9ca3aa673a4f8371d34a6aa73d16c4ad6c2e22e746d6018cc3"},
+    {file = "scylla_driver-3.26.2-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:65c60abf98dbd1088bcdd52f118ace04665943c0af57d606fd33c89fff5c1464"},
+    {file = "scylla_driver-3.26.2-cp39-cp39-win32.whl", hash = "sha256:549a03f4aa73ee1ed7d650bf82b5c0e874bee5f22869497316eabb6c66c431f5"},
+    {file = "scylla_driver-3.26.2-cp39-cp39-win_amd64.whl", hash = "sha256:bbb2120a122ba783a4a3cd726d01778e3bb7c9fb4bc9dd5aff3bfd2f2ea40baf"},
+    {file = "scylla_driver-3.26.2-pp37-pypy37_pp73-macosx_10_9_x86_64.whl", hash = "sha256:bb84bfc0357958dc10b8717491b06298b4f109eaee9473395d4ca557180585df"},
+    {file = "scylla_driver-3.26.2-pp37-pypy37_pp73-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:d0d79066917c49763655c6d33e45c3d99b70d6a5f33e51604fcd50ba7aca4fb9"},
+    {file = "scylla_driver-3.26.2-pp37-pypy37_pp73-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:ef67d7075a43708542bf273d46e3a1db79036ba5c9f8f65f97754e842bd4e783"},
+    {file = "scylla_driver-3.26.2-pp37-pypy37_pp73-win_amd64.whl", hash = "sha256:afd6f4fa8aa7fda3cd88c55d309d54fa36c33cab785767c1d40d399fc11e494e"},
+    {file = "scylla_driver-3.26.2-pp38-pypy38_pp73-macosx_10_9_x86_64.whl", hash = "sha256:ec43bcdbd7753601995c998d2ce9ffd50930f14f5d6fdadf9f31df11090ced11"},
+    {file = "scylla_driver-3.26.2-pp38-pypy38_pp73-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:1d07cd30643e37fb3a307ed470cc1a202f3dcdf6fa5709589039ed2c4998f4aa"},
+    {file = "scylla_driver-3.26.2-pp38-pypy38_pp73-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:2bc00d3bc8deb3bb5c64a185e1233ed5ec85cfa25c224217b6a8fdbbf5e7e651"},
+    {file = "scylla_driver-3.26.2-pp38-pypy38_pp73-win_amd64.whl", hash = "sha256:0cb9dc738b12647233f92cbe981afbf8bf15066f866bbfa1cd8f1c53d5b5547c"},
+    {file = "scylla_driver-3.26.2-pp39-pypy39_pp73-macosx_10_9_x86_64.whl", hash = "sha256:efe9c35b6ec1b09ec0a42d7974c2c9f17f058765bb9202ed192c3a42a4d14180"},
+    {file = "scylla_driver-3.26.2-pp39-pypy39_pp73-manylinux_2_5_i686.manylinux1_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:af08797e24346555414d68026468a39a81a36573fcbdfdf58386b85c55e3ceef"},
+    {file = "scylla_driver-3.26.2-pp39-pypy39_pp73-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:cdf778ef80e2336144964e55d8f2fa95220d03814cfb1a5cd886b7bfd99d9452"},
+    {file = "scylla_driver-3.26.2-pp39-pypy39_pp73-win_amd64.whl", hash = "sha256:98fd53c8ed664e915f880b6fccd0940fcb8c6589e240126e471427388bca62f9"},
+]
+
+[package.dependencies]
+geomet = ">=0.1,<0.3"
+pyyaml = ">5.0"
+six = ">=1.9"
+
+[package.extras]
+graph = ["gremlinpython (==3.4.6)"]
+
+[[package]]
 name = "sentry-sdk"
 version = "1.26.0"
 description = "Python client for Sentry (https://sentry.io)"
@@ -4029,17 +3709,6 @@ files = [
 ]
 
 [[package]]
-name = "uritemplate"
-version = "4.1.1"
-description = "Implementation of RFC 6570 URI Templates"
-optional = false
-python-versions = ">=3.6"
-files = [
-    {file = "uritemplate-4.1.1-py2.py3-none-any.whl", hash = "sha256:830c08b8d99bdd312ea4ead05994a38e8936266f84b9a7878232db50b044e02e"},
-    {file = "uritemplate-4.1.1.tar.gz", hash = "sha256:4346edfc5c3b79f694bccd6d6099a322bbeb628dbf2cd86eea55a456ce5124f0"},
-]
-
-[[package]]
 name = "urllib3"
 version = "2.0.3"
 description = "HTTP library with thread-safe connection pooling, file post, and more."
@@ -4441,4 +4110,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "ea581c686294ea886e1c2cfe07de918e075ab442d449986f9929ca5b9783908a"
+content-hash = "467b44b4ab30949f5c777763e2bd08ddb3b31aec657ce057fe2c0a704afb2293"

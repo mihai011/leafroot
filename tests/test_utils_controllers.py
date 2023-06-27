@@ -29,7 +29,7 @@ async def test_health_status(async_session):
         "spark": True,
         "kafka": True,
         "surrealdb": True,
-        # "scylladb": True,
+        "scylladb": True,
         # "cassandradb": True,
     }
     assert response_data["item"] == health_check_ok

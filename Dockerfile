@@ -8,9 +8,9 @@ WORKDIR /leafroot
 COPY . .
 RUN pip install poetry
 RUN make venv_create
+RUN apt update && apt install -y iputils-ping
 
 FROM base AS dev
-RUN apt install iputils-ping
 CMD sleep infinity
 
 FROM base AS prod

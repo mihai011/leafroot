@@ -47,6 +47,7 @@ Leafroot is a personal exercise for me as a software engineer.
     47. TODO: Add traefik.
     48. TODO: Add DISCORD implementation.
     49. TODO: Implement pagination, async logging, payload compression, connection pool.
+    50. TODO: Make connection from scylladb to spark and kafka.
 
 
 
