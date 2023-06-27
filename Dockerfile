@@ -1,7 +1,6 @@
 ARG PYTHON_VERSION
 FROM python:$PYTHON_VERSION AS base
 
-
 RUN mkdir /leafroot
 WORKDIR /leafroot
 

@@ -4,6 +4,8 @@ from config import config
 from sqlalchemy import create_engine
 from surrealdb import Surreal
 from surrealdb.ws import SurrealAuthenticationException
+from cassandra import UnresolvableContactPoints
+from cassandra.cluster import Cluster
 
 import redis.asyncio as redis
 import pika
@@ -27,10 +29,22 @@ async def health_check():
     status["spark"] = await check_host(config.spark_host)
     status["kafka"] = await check_host(config.kafka_host)
     status["surrealdb"] = await check_surrealdb()
-    # status["scylladb"] = await check_scylladb()
+    status["scylladb"] = await check_scylladb()
     # status["cassandradb"] = await check_cassandradb()
 
     return status
+
+
+@log()
+async def check_scylladb():
+    """Check scylladb leak."""
+
+    try:
+        cluster = Cluster(contact_points=[config.scylladb_host])
+        cluster.connect()
+        return True
+    except UnresolvableContactPoints:
+        return False
 
 
 @log()
@@ -46,7 +60,7 @@ async def check_surrealdb():
             )
             await db.use(config.surrealdb_namespace, config.surrealdb_db)
             return True
-    except SurrealAuthenticationException as e:
+    except SurrealAuthenticationException:
         return False
 
 
