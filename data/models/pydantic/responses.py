@@ -62,6 +62,7 @@ class StatusResponse(BaseModel):
     kafka: Union[bool, str]
     surrealdb: Union[bool, str]
     scylladb: Union[bool, str]
+    cassandradb: Union[bool, str]
 
 
 class StatusResponseItem(BaseResponse):

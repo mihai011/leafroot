@@ -30,14 +30,26 @@ async def health_check():
     status["kafka"] = await check_host(config.kafka_host)
     status["surrealdb"] = await check_surrealdb()
     status["scylladb"] = await check_scylladb()
-    # status["cassandradb"] = await check_cassandradb()
+    status["cassandradb"] = await check_cassandradb()
 
     return status
 
 
 @log()
+async def check_cassandradb():
+    """Check cassandradb cluster"""
+
+    try:
+        cluster = Cluster(contact_points=[config.cassandradb_host])
+        cluster.connect()
+        return True
+    except UnresolvableContactPoints as e:
+        return False
+
+
+@log()
 async def check_scylladb():
-    """Check scylladb leak."""
+    """Check scylladb cluster."""
 
     try:
         cluster = Cluster(contact_points=[config.scylladb_host])

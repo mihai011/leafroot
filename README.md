@@ -7,7 +7,7 @@ Leafroot is a personal exercise for me as a software engineer.
     it easier for new developers to read, understand and write
     asynchronous code. And by "everything" I mean everything:
         - asynchronous controllers
-        - asynchronous connections to a postgresql database
+        - asynchronous connections to external services like databases.
         - asynchronous and parallel tests
     2. Alembic made migrations for the database.
     3. Docker containers and local environment already set up.
