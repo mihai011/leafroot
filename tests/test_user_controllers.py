@@ -12,6 +12,7 @@ async def test_greetings_controller(async_session):
 
     ds = DataSource(async_session)
     await ds.make_user()
+    await ds.make_users()
 
     response = await ds.client.get("/", headers=ds.headers["Test_user"])
     assert response.status_code == 200

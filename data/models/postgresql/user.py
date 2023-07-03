@@ -14,6 +14,7 @@ class User(Base, ExtraBase):
     email = Column(String(120), unique=True, nullable=False)
     hashed_pass = Column(String(256), unique=True, nullable=False)
     permissions = Column(String(3))
+    address = Column(String(200))
 
     def __repr__(self):
         return "<User %r>" % self.username

@@ -47,7 +47,7 @@ services:
         hostname: ${CASSANDRADB_HOST}
         environment:
             HEAP_NEWSIZE: 128M
-            MAX_HEAP_SIZE: 1024M
+            MAX_HEAP_SIZE: 1256M
         networks:
             - shared_network
 
@@ -75,6 +75,24 @@ services:
             - 127.0.0.1:5432:5432
         volumes:
             - postgres-data:/var/lib/postgresql/data
+        healthcheck:
+            test: [CMD, pg_isready, -U, airflow]
+            interval: 10s
+            retries: 5
+            start_period: 5s
+        networks:
+            - shared_network
+
+    db_backup:
+        image: postgres:15
+        container_name: db_backup
+        hostname: ${POSTGRES_HOST_BACKUP}
+        env_file:
+            - ${ENV_FILE}
+        ports:
+            - 127.0.0.1:5433:5432
+        volumes:
+            - postgres-backup:/var/lib/postgresql/backup
         healthcheck:
             test: [CMD, pg_isready, -U, airflow]
             interval: 10s
@@ -143,6 +161,7 @@ services:
 
 volumes:
     postgres-data:
+    postgres-backup:
     pgadmin:
     mongodb-data:
 
