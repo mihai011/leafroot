@@ -158,3 +158,5 @@ mongo_data/
 
 # airflow
 airflow/logs/
+.coveragerc
+.coveragerc
