@@ -9,12 +9,14 @@ from fastapi import Header, Depends
 from sqlalchemy.orm import Session
 from sqlalchemy.ext.asyncio import AsyncSession
 from motor.motor_asyncio import AsyncIOMotorClient
+from cassandra.cluster import Cluster
 
 from data import (
     User,
     get_async_session,
     get_sync_session,
     get_mongo_database,
+    get_cassandra_connection,
     BaseResponse,
 )
 from utils.external_api import get_http_session
@@ -25,6 +27,7 @@ CurrentAsyncSession = Annotated[AsyncSession, Depends(get_async_session)]
 CurrentSyncSession = Annotated[Session, Depends(get_sync_session)]
 MongoDatabase = Annotated[AsyncIOMotorClient, Depends(get_mongo_database)]
 HttpSession = Annotated[ClientSession, Depends(get_http_session)]
+CassandraConnection = Annotated[Cluster, Depends(get_cassandra_connection)]
 
 
 @log()

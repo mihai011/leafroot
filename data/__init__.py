@@ -28,6 +28,10 @@ from data.models.redis_db import (
     RedisGraphQuery,
 )
 from data.models.pydantic import (
+    MessagePacket,
+    MessageBoardPacket,
+    MessageBoardResponseItem,
+    MessageResponseItem,
     PydanticAtom,
     PydanticElectron,
     PydanticNeutron,
@@ -51,6 +55,13 @@ from data.models.pydantic import (
 )
 from data.models.mongo_db.library import Library, Book, BookUpdate, BookPackage
 from data.models.mongo_db import get_mongo_database, get_mongo_client
+
+from data.models.cassandra_db import (
+    MessageBoard,
+    ChatUser,
+    Message,
+    get_cassandra_connection,
+)
 
 from data.models.users import PydanticUser, PydanticUserSignUp
 from config import config

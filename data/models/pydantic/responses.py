@@ -207,3 +207,31 @@ class RedisQueryResponseItem(BaseResponse):
     """Response for query result item."""
 
     item: RedisQueryResponse
+
+
+class MessageResponse(BaseModel):
+    """Response Message Model."""
+
+    user_id: UUID4
+    message_id: UUID4
+    text: str
+
+
+class MessageResponseItem(BaseResponse):
+    """Message Response Item"""
+
+    item: MessageResponse
+
+
+class MessageBoardResponse(BaseModel):
+    """Response MessageBoard Model."""
+
+    uuid: UUID4
+    name: str
+    messages: List[MessageResponse]
+
+
+class MessageBoardResponseItem(BaseResponse):
+    """Message Board Response Item"""
+
+    item: MessageBoardResponse

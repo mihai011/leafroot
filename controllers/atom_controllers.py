@@ -17,7 +17,7 @@ from controllers import create_response, CurrentUser, CurrentAsyncSession
 atom_router = APIRouter(prefix="/atoms", tags=["atoms"])
 
 
-@atom_router.post("/create_atom")
+@atom_router.post("/create_atom", response_model=AtomResponseItem)
 async def create_atom(
     pydantic_atom: PydanticAtom,
     _: CurrentUser,
@@ -35,7 +35,7 @@ async def create_atom(
     )
 
 
-@atom_router.post("/proton")
+@atom_router.post("/proton", response_model=ParticleResponseItem)
 async def add_proton(
     pydantic_proton: PydanticProton,
     _: CurrentUser,
@@ -54,7 +54,7 @@ async def add_proton(
     )
 
 
-@atom_router.get("/proton")
+@atom_router.get("/proton", response_model=ParticleResponseListItem)
 async def get_proton(
     _: CurrentUser,
     session: CurrentAsyncSession,
@@ -73,7 +73,7 @@ async def get_proton(
     )
 
 
-@atom_router.post("/neutron")
+@atom_router.post("/neutron", response_model=ParticleResponseItem)
 async def add_neutron(
     pydantic_neutron: PydanticNeutron,
     _: CurrentUser,
@@ -110,7 +110,7 @@ async def get_neutron(
     )
 
 
-@atom_router.post("/electron", response_model={})
+@atom_router.post("/electron", response_model=ParticleResponseItem)
 async def add_electron(
     pydantic_electron: PydanticElectron,
     _: CurrentUser,
