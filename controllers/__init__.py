@@ -16,7 +16,7 @@ from data import (
     get_async_session,
     get_sync_session,
     get_mongo_database,
-    get_cassandra_connection,
+    get_cassandra_cluster,
     BaseResponse,
 )
 from utils.external_api import get_http_session
@@ -27,7 +27,7 @@ CurrentAsyncSession = Annotated[AsyncSession, Depends(get_async_session)]
 CurrentSyncSession = Annotated[Session, Depends(get_sync_session)]
 MongoDatabase = Annotated[AsyncIOMotorClient, Depends(get_mongo_database)]
 HttpSession = Annotated[ClientSession, Depends(get_http_session)]
-CassandraConnection = Annotated[Cluster, Depends(get_cassandra_connection)]
+CassandraCluster = Annotated[Cluster, Depends(get_cassandra_cluster)]
 
 
 @log()

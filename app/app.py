@@ -26,11 +26,7 @@ from controllers.utils_controllers import utils_router
 from controllers.redis_controllers import redis_router
 from controllers.library_controllers import library_router
 from controllers.quote_controllers import quotes_router
-from data import (
-    async_session,
-    User,
-    create_database_app,
-)
+from data import async_session, User, create_database_app, initiate_cassandra
 from config import config
 from cache import initialize_cache
 from logger import initialize_logger
@@ -115,6 +111,7 @@ async def user_on_startup(session: AsyncSession = async_session()):
     initialize_cache()
     initialize_logger()
     create_database_app()
+    initiate_cassandra()
 
     if config.user_name and config.user_email and config.user_password:
         params = {

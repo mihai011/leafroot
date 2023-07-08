@@ -60,7 +60,8 @@ from data.models.cassandra_db import (
     MessageBoard,
     ChatUser,
     Message,
-    get_cassandra_connection,
+    get_cassandra_cluster,
+    initiate_cassandra,
 )
 
 from data.models.users import PydanticUser, PydanticUserSignUp
