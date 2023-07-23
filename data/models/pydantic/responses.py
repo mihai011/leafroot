@@ -226,9 +226,9 @@ class MessageResponseItem(BaseResponse):
 class MessageBoardResponse(BaseModel):
     """Response MessageBoard Model."""
 
-    uuid: UUID4
+    board: UUID4
     name: str
-    messages: List[MessageResponse]
+    messages: Optional[List[MessageResponse]]
 
 
 class MessageBoardResponseItem(BaseResponse):

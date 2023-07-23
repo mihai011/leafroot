@@ -1,10 +1,7 @@
-from enum import unique
-
+""" Cassandra Models
+"""
 from cassandra.cqlengine import columns
 from cassandra.cqlengine.models import Model
-from sqlalchemy import column
-
-from config import config
 
 
 class MessageBoard(Model):

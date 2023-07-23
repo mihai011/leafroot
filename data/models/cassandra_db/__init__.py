@@ -24,6 +24,6 @@ def initiate_cassandra():
 
     create_keyspace_simple("leafroot", replication_factor=1)
 
-    sync_table(MessageBoard)
-    sync_table(ChatUser)
-    sync_table(Message)
+    sync_table(MessageBoard, ["leafroot"])
+    sync_table(ChatUser, ["leafroot"])
+    sync_table(Message, ["leafroot"])

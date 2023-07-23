@@ -45,6 +45,7 @@ services:
             - 127.0.0.1:9042:9042
         container_name: cassandradb
         hostname: ${CASSANDRADB_HOST}
+        restart: on-failure
         environment:
             HEAP_NEWSIZE: 128M
             MAX_HEAP_SIZE: 1256M
