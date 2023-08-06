@@ -2,11 +2,12 @@ FROM apache/spark-py
 
 USER root
 
-RUN mkdir -p /opt/spark/logs && chmod a+wr /opt/spark/logs
-RUN mkdir -p /opt/spark/work && chmod a+wr /opt/spark/work
+# RUN mkdir -p /opt/spark/logs && chmod a+wr /opt/spark/logs
+# RUN mkdir -p /opt/spark/work && chmod a+wr /opt/spark/work
+
+WORKDIR /opt/spark/work
 
 RUN apt update && apt install -y iputils-ping
-USER 185
 
 ENV SPARK_NO_DAEMONIZE=true
 
