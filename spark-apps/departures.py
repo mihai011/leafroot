@@ -1,3 +1,5 @@
+"""This file contains example for sql queries and dataframe api on data from departures.csv file.
+"""
 from pyspark.sql import SparkSession  # Create a SparkSession
 from pyspark.sql.functions import col, desc, count, when
 
