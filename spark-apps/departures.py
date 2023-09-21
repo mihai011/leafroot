@@ -82,4 +82,16 @@ df.withColumn(
 )
 
 
-# working with dataframes
+# working with dataframes writes
+# parquet
+df.write.format("parquet").mode("overwrite").option(
+    "compression", "snappy"
+).save("spark-data/dataframes_wr/departures.parquet")
+
+df.write.mode("overwrite").parquet(
+    "spark-data/dataframes_wr/departures.parquet"
+)
+
+df.write.format("json").mode("overwrite").option("compression", "snappy").save(
+    "spark-data/dataframes_wr/"
+)
