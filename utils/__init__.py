@@ -93,7 +93,7 @@ def random_string():
     init_pepper = "R"
     r_string = "".join(
         random.choice(string.ascii_uppercase + string.digits)
-        for _ in range(100)
+        for _ in range(10)
     )
 
     return init_pepper + r_string

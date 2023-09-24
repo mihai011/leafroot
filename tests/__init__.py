@@ -7,6 +7,7 @@ from fastapi.testclient import TestClient
 
 from app.app import app
 from data import User
+from utils import random_string
 
 
 class DataSource:
@@ -19,14 +20,14 @@ class DataSource:
         self.headers = {}
         self.session = session
 
-    async def make_users(self):
+    async def make_users(self, number_of_users):
         """Create users susing the faker package."""
 
         f = Faker(["it_IT", "en_US", "ja_JP"])
-        for _ in tqdm(range(100)):
+        for _ in tqdm(range(number_of_users)):
             args = {
-                "username": f.name(),
-                "email": f.email(),
+                "username": f.name() + random_string(),
+                "email": f.email() + random_string(),
                 "hashed_pass": f.password(),
                 "address": f.address(),
             }

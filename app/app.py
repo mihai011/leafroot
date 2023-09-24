@@ -113,7 +113,7 @@ async def user_on_startup(session: AsyncSession = async_session()):
     initialize_cache()
     initialize_logger()
     create_database_app()
-    initiate_cassandra()
+    # initiate_cassandra()
 
     if config.user_name and config.user_email and config.user_password:
         params = {
