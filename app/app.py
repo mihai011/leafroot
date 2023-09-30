@@ -23,7 +23,6 @@ from controllers.api_controllers import api_router
 from controllers.task_controllers import task_router
 from controllers.ws_controllers import ws_router
 from controllers.utils_controllers import utils_router
-from controllers.redis_controllers import redis_router
 from controllers.library_controllers import library_router
 from controllers.quote_controllers import quotes_router
 from controllers.cassandradb_controllers import cassandra_router
@@ -96,7 +95,6 @@ app.include_router(api_router)
 app.include_router(task_router)
 app.include_router(ws_router)
 app.include_router(utils_router)
-app.include_router(redis_router)
 app.include_router(library_router)
 app.include_router(quotes_router)
 app.include_router(cassandra_router)
