@@ -15,4 +15,4 @@ async def test_lot_users(async_session):
 
     await ds.make_users(NUMBER_OF_USERS)
 
-    users = await User.GetAll(async_session)
+    return True

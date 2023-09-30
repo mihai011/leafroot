@@ -28,7 +28,7 @@ class RedisService:
         if name in self.graphs:
             return self.get_graph_metadata(name)
 
-        self.graphs[graph.name] = self.client.graph(name)
+        self.graphs[graph.name] = self.client(name)
         graph = self.graphs[name]
         dummy_node = Node(label="DUMMY", properties={})
         graph.add_node(dummy_node)

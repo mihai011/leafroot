@@ -5,14 +5,14 @@ from pyspark.sql.types import LongType
 import pandas as pd
 
 
-def cubed(s):
-    return s**3
-
-
 from pyspark.sql import SparkSession  # Create a SparkSession
 from pyspark.sql.functions import col, pandas_udf
 
 spark = SparkSession.builder.appName("UDF").getOrCreate()
+spark.sparkContext.addPyFile("spark-apps/utils.py")
+
+from utils import cubed
+
 spark.udf.register("cubed", cubed, LongType())
 spark.range(1, 9).createOrReplaceTempView("udf_test")
 spark.sql("SELECT id, cubed(id) AS id_cubed FROM udf_test").show()
