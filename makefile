@@ -15,6 +15,7 @@ MANUAL_CORES=8
 
 
 venv_create:
+	pip install poetry
 	poetry install
 	poetry run pre-commit install
 
