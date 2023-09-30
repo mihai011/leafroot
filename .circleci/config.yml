@@ -1,7 +1,5 @@
 ---
 version: 2.1
-orbs:
-    python: circleci/python@1.5.0
 jobs:
     build-and-test:
         docker:
@@ -17,7 +15,6 @@ jobs:
         steps:
             - checkout
             - run: whoami
-            - run: pkill --help
             - run:
                   name: Create environment variables
                   command: |
