@@ -54,15 +54,15 @@ class ErrorResponse(BaseModel):
 class StatusResponse(BaseModel):
     """Response for status."""
 
-    postgressql: Union[bool, str]
-    redis: Union[bool, str]
-    rabbitmq: Union[bool, str]
-    mongo: Union[bool, str]
-    spark: Union[bool, str]
-    kafka: Union[bool, str]
-    surrealdb: Union[bool, str]
-    scylladb: Union[bool, str]
-    cassandradb: Union[bool, str]
+    postgressql: Optional[bool]
+    redis: Optional[bool]
+    rabbitmq: Optional[bool]
+    mongo: Optional[bool]
+    spark: Optional[bool]
+    kafka: Optional[bool]
+    surrealdb: Optional[bool]
+    scylladb: Optional[bool]
+    cassandradb: Optional[bool]
 
 
 class StatusResponseItem(BaseResponse):
