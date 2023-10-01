@@ -2,7 +2,8 @@ from pyspark.sql import SparkSession  # Create a SparkSession
 
 spark = (
     SparkSession.builder.remote("sc://spark")
-    .config("spark.sql.session.localRelationCacheThreshold", 67108864)
+    .config("spark.network.timeout", "5s")
+    .config("spark.executor.heartbeatInterval", "5s")
     .getOrCreate()
 )
 

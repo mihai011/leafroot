@@ -1,11 +1,15 @@
 from logger import log
 from config import config
 
+from cassandra import UnresolvableContactPoints
+from cassandra.cluster import Cluster
 from sqlalchemy import create_engine
 from surrealdb import Surreal
 from surrealdb.ws import SurrealAuthenticationException
-from cassandra import UnresolvableContactPoints
-from cassandra.cluster import Cluster
+from pyspark.sql import SparkSession
+from kafka import KafkaProducer
+from kafka.errors import NoBrokersAvailable
+import timeout_decorator
 
 import redis.asyncio as redis
 import pika
@@ -26,13 +30,54 @@ async def health_check():
     status["redis"] = await check_redis()
     status["rabbitmq"] = await check_rabbitmq()
     status["mongo"] = await check_mongodb()
-    status["spark"] = await check_host(config.spark_host)
-    status["kafka"] = await check_host(config.kafka_host)
+    status["spark"] = check_spark()
+    status["kafka"] = check_kafka()
     status["surrealdb"] = await check_surrealdb()
     status["scylladb"] = await check_scylladb()
     status["cassandradb"] = await check_cassandradb()
 
     return status
+
+
+@log()
+def check_kafka():
+    """Check connection to kafka cluster"""
+
+    try:
+        producer = KafkaProducer(bootstrap_servers=config.kafka_host)
+        producer.metrics()
+    except NoBrokersAvailable:
+        return False
+    return True
+
+
+@log()
+def check_spark():
+    """Check connection to spark cluster"""
+
+    @timeout_decorator.timeout(5)
+    def try_connect():
+        """Try to connect to spark"""
+        spark = SparkSession.builder.remote(
+            f"sc://{config.spark_host}"
+        ).getOrCreate()
+
+        sample_data = [
+            {"name": "John    D.", "age": 30},
+            {"name": "Alice   G.", "age": 25},
+            {"name": "Bob  T.", "age": 35},
+            {"name": "Eve   A.", "age": 28},
+        ]
+
+        df = spark.createDataFrame(sample_data)
+        df.show()
+
+    try:
+        try_connect()
+    except Exception:
+        return False
+
+    return True
 
 
 @log()
@@ -102,7 +147,7 @@ async def check_mongodb():
     except Exception as e:
         error = e
 
-    return str(error)
+    return False
 
 
 @log()
@@ -114,7 +159,7 @@ async def check_postgressql():
         with engine.connect() as _:
             return True
     except Exception as e:
-        return str(e)
+        return False
 
 
 @log()
@@ -126,7 +171,7 @@ async def check_redis():
         await redis_connection.ping()
         return True
     except Exception as e:
-        return str(e)
+        return False
 
 
 @log()
@@ -144,4 +189,4 @@ async def check_rabbitmq():
         connection.close()
         return True
     except Exception as e:
-        return str(e)
+        return False
