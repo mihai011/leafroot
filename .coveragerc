@@ -1,3 +1,0 @@
-[run]
-concurrency=greenlet
-omit=tests/conftest.py 
