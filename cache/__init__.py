@@ -15,6 +15,14 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from config import config
 
 
+def get_redis_async_client():
+    """Create and returns an asyunc redis client"""
+
+    return redis.from_url(
+        config.redis_url, encoding="utf8", decode_responses=True
+    )
+
+
 def initialize_cache():
     """Initialize cache with an available backend."""
     cache_backend = InMemoryBackend

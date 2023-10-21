@@ -19,6 +19,7 @@ class Settings(BaseSettings):
 
     app_name: str = "Fast Full API"
     env: Literal["dev", "prod"]
+    domain_name: str
     postgres_db: str
     postgres_user: str
     postgres_password: str

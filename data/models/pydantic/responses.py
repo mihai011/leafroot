@@ -1,7 +1,7 @@
 """Module for pydantic responses."""
 from typing import Optional, Union, List, Dict, Any
 
-from pydantic import BaseModel, UUID4
+from pydantic import BaseModel, UUID4, HttpUrl
 
 
 class BaseResponse(BaseModel):
@@ -235,3 +235,15 @@ class MessageBoardResponseItem(BaseResponse):
     """Message Board Response Item"""
 
     item: MessageBoardResponse
+
+
+class UrlShortReponse(BaseModel):
+    """Base Response for Url Short"""
+
+    url: HttpUrl
+
+
+class UrlShortResponseItem(BaseResponse):
+    """Url Short response Item"""
+
+    item: UrlShortReponse

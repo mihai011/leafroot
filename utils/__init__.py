@@ -4,6 +4,7 @@
 import random
 import string
 import subprocess
+import hashlib
 
 from fastapi import HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
@@ -11,6 +12,7 @@ from passlib.context import CryptContext
 from jose import jwt
 from jose.exceptions import JWTError
 from sqlalchemy.orm import Session
+from redis.asyncio import Redis
 
 
 from config import config
@@ -43,6 +45,33 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 def get_password_hash(password: str) -> str:
     """Produce the hash of a password."""
     return pwd_context.hash(password)
+
+
+@log()
+@testproof_cache(
+    expire=int(config.access_token_expire_seconds), key_builder=my_key_builder
+)
+def make_short_hash(string: str):
+    """short hash for a string"""
+    return int(hashlib.sha1(string.encode("utf-8")).hexdigest(), 16) % (
+        10**8
+    )
+
+
+@log()
+async def store_string_at_key(redis_client: Redis, key: str, store_string: str):
+    """Store string at key in redis"""
+    await redis_client.set(key, store_string)
+
+    return string
+
+
+@log()
+async def get_string_at_key(redis_client, key: str):
+    """Store string at key in redis"""
+    store_string = await redis_client.get(key)
+
+    return store_string
 
 
 @log()

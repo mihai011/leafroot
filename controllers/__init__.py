@@ -10,6 +10,8 @@ from sqlalchemy.orm import Session
 from sqlalchemy.ext.asyncio import AsyncSession
 from motor.motor_asyncio import AsyncIOMotorClient
 from cassandra.cluster import Cluster
+from redis.asyncio import Redis
+from cache import get_redis_async_client
 
 from data import (
     User,
@@ -28,6 +30,7 @@ CurrentSyncSession = Annotated[Session, Depends(get_sync_session)]
 MongoDatabase = Annotated[AsyncIOMotorClient, Depends(get_mongo_database)]
 HttpSession = Annotated[ClientSession, Depends(get_http_session)]
 CassandraCluster = Annotated[Cluster, Depends(get_cassandra_cluster)]
+RedisAsyncClient = Annotated[Redis, Depends(get_redis_async_client)]
 
 
 @log()
