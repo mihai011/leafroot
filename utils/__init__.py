@@ -59,7 +59,9 @@ def make_short_hash(string: str):
 
 
 @log()
-async def store_string_at_key(redis_client: Redis, key: str, store_string: str):
+async def store_string_at_key(
+    redis_client: Redis, key: str, store_string: str
+):
     """Store string at key in redis"""
     await redis_client.set(key, store_string)
 

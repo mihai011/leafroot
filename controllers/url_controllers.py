@@ -32,7 +32,8 @@ async def create_url(
         response_model=UrlShortResponseItem,
         item={"url": f"http://{config.domain_name}/url-short/get/{str_hash}"},
     )
-    
+
+
 @url_router.get("/get/{url_hash}", response_model=UrlShortResponseItem)
 async def get_url(
     url_hash: str,
@@ -47,5 +48,5 @@ async def get_url(
         message="Url retrieved!",
         status=status.HTTP_307_TEMPORARY_REDIRECT,
         response_model=UrlShortResponseItem,
-        item={"url": url_string}
+        item={"url": url_string},
     )
