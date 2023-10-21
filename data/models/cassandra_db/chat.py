@@ -5,6 +5,7 @@ from cassandra.cqlengine.models import Model
 
 
 class MessageBoard(Model):
+    """Model for message board."""
     board_id = columns.UUID(primary_key=True)
     name = columns.Text()
 

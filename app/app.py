@@ -27,7 +27,7 @@ from controllers.library_controllers import library_router
 from controllers.quote_controllers import quotes_router
 from controllers.cassandradb_controllers import cassandra_router
 from controllers.url_controllers import url_router
-from data import async_session, User, create_database_app, initiate_cassandra
+from data import async_session, User, create_database_app
 from config import config
 from cache import initialize_cache
 from logger import initialize_logger

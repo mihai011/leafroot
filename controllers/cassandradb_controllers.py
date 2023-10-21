@@ -13,8 +13,7 @@ from data import (
     MessageResponseItem,
 )
 from controllers import create_response, CurrentUser, CassandraCluster
-from data.models.pydantic.responses import MessageResponse
-import cassandra
+
 
 cassandra_router = APIRouter(prefix="/cassandra", tags=["cassandra"])
 
