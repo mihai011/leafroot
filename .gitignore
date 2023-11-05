@@ -158,5 +158,9 @@ mongo_data/
 
 # airflow
 airflow/logs/
+
+#coverage
 .coveragerc
-.coveragerc
+
+#logs
+*.jsonl

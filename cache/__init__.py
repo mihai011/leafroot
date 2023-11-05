@@ -2,17 +2,16 @@
 
 from typing import Optional
 
-from aiohttp import ClientSession
 from fastapi import Request, Response
 from fastapi_cache import FastAPICache
 from fastapi_cache.backends.redis import RedisBackend
 from fastapi_cache.backends.inmemory import InMemoryBackend
 from fastapi_cache.decorator import cache
 import redis.asyncio as redis
-from sqlalchemy.ext.asyncio import AsyncSession
 
 
 from config import config
+from base_utils import clear_args_dicts
 
 
 def get_redis_async_client():
@@ -60,16 +59,7 @@ def my_key_builder(
     @returns (str): cache key
     """
     prefix = FastAPICache.get_prefix()
-    new_args = []
-    ignored = [AsyncSession, ClientSession]
-    for arg in kwargs["args"]:
-        to_be_ignored = False
-        for ignore in ignored:
-            if isinstance(arg, ignore):
-                to_be_ignored = True
-                break
-        if not to_be_ignored:
-            new_args.append(arg)
+    new_args, _ = clear_args_dicts()
 
     cache_key = (
         f"{prefix}:{namespace}:{func.__module__}:{func.__name__}:{new_args}"

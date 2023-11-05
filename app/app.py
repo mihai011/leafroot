@@ -2,7 +2,6 @@
 
 Here you include the routers for the application and middleware used.
 """
-import logging
 
 from fastapi import FastAPI, Request, status
 from fastapi.staticfiles import StaticFiles
@@ -113,6 +112,9 @@ async def user_on_startup(session: AsyncSession = async_session()):
     initialize_cache()
     initialize_logger()
     create_database_app()
+
+    from logger import logger
+
     # initiate_cassandra()
 
     if config.user_name and config.user_email and config.user_password:
@@ -127,4 +129,4 @@ async def user_on_startup(session: AsyncSession = async_session()):
             await User.AddNew(session, params)
             await session.close()
         except IntegrityError:
-            logging.warning("Init User already created!")
+            logger.warning("Init User already created!")

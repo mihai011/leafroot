@@ -18,6 +18,7 @@ from data import (
     get_mongo_client,
 )
 from config import config
+from logger import initialize_logger
 
 
 async def resolve_session(session_type):
@@ -110,3 +111,9 @@ async def mongo_db():
     await mongo_client.drop_database(str(database_name))
     mongo_client.close()
     app.dependency_overrides[get_mongo_database] = get_mongo_database
+
+@pytest.fixture(autouse=True)
+def initiation_for_test():
+    """This executes just before each test"""
+    initialize_logger()
+    yield
