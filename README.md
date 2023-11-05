@@ -17,7 +17,7 @@ Leafroot is a personal exercise for me as a software engineer.
     8. TODO: Circle CI pipeline for fast deployment to AWS.
     9. TODO: Add chat integration using socketio.
     10. TODO: Implement stress test.
-    11. Mongo database for test.(DONE)
+    11. DONE: Mongo database for test.
     12. TODO: Implement Exception processing.
     13. TODO: Implement Super User.
     14. TODO: Implement salts for passwords.
@@ -28,12 +28,12 @@ Leafroot is a personal exercise for me as a software engineer.
     19. TODO: Implment consistent hashing.
     20. TODO: Implement a key-value store.
     21. TODO: Implement a unique id generator in distributed systems.
-    22. TODO: Implement a url shortner.
+    22. DONE: Implement a url shortner.
     23. TODO: Implement a web crawler.
     24. TODO: Implement a notification system.
     25. TODO: Implement a news feed system.
     26. TODO: Implement a chat system.
-    27. TODO: Implement a search autcomplete system.
+    27. TODO: Implement a search autocomplete system.
     28. TODO: Implement Youtube.
     29. TODO: Implement Google Drive.
     30. TODO: Implement coverage html page exposed from path.

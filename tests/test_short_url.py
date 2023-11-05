@@ -29,13 +29,9 @@ async def test_url_status(async_session):
     assert response.status_code == status.HTTP_307_TEMPORARY_REDIRECT
     url_response = response.json()
     assert url_response["item"]["url"] == url_package["url"]
-    
-    
+
     url_package = {"url": "http:/wrong_url.com"}
     response = await ds.client.post(
         "/url-short/set", json=url_package, headers=ds.headers["Test_user"]
     )
     assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
-
-    
-
