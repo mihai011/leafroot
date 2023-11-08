@@ -14,5 +14,5 @@ def clear_args_dicts(args, kwargs):
     for k, v in kwargs.items():
         if type(v) in allowed:
             new_kwargs[k] = v
-            
+
     return new_args, new_kwargs
