@@ -112,6 +112,7 @@ async def mongo_db():
     mongo_client.close()
     app.dependency_overrides[get_mongo_database] = get_mongo_database
 
+
 @pytest.fixture(autouse=True)
 def initiation_for_test():
     """This executes just before each test"""
