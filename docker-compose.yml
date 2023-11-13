@@ -136,13 +136,17 @@ services:
             - shared_network
 
     rabbitmq:
-        image: rabbitmq:latest
+        build:
+            context: .
+            dockerfile: Dockerfile-rabbitmq
+        image: rabbitmq:3-management
         container_name: rabbitmq
         hostname: ${RABBITMQ_HOST}
         env_file:
             - ${ENV_FILE}
         ports:
-            - 127.0.0.1:5672:5672
+            - 5672:5672
+            - 15672:15672
         networks:
             - shared_network
 

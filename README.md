@@ -49,6 +49,7 @@ Leafroot is a personal exercise for me as a software engineer.
     49. TODO: Implement pagination, async logging, payload compression, connection pool.
     50. TODO: Make connection from scylladb to spark and kafka.
     51. TODO: Include Dask package.
+    52. TODO: Organize ELK infrastructure for logging.
 
 
 
