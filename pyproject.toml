@@ -112,7 +112,6 @@ yarl = "^1.9.2"
 sentry-sdk = "^1.30.0"
 polars = "^0.18.2"
 pyarrow = "^12.0.1"
-faust-streaming = "^0.10.13"
 scylla-driver = "^3.26.2"
 surrealdb = "^0.3.1"
 faker = "^18.13.0"
@@ -125,6 +124,7 @@ grpcio-status = "^1.59.0"
 timeout-decorator = "^0.5.0"
 kafka-python = "^2.0.2"
 json-log-formatter = "^0.5.2"
+faust-streaming = {git = "https://github.com/faust-streaming/faust.git"}
 
 
 [build-system]

@@ -165,3 +165,4 @@ airflow/logs/
 #logs
 *.jsonl
 airflow/logs/scheduler/latest/
+airflow/logs/scheduler/latest
