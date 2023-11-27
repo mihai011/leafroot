@@ -18,7 +18,7 @@ class Settings(BaseSettings):
     """Class responsible for loading up and generating settings."""
 
     app_name: str = "Fast Full API"
-    env: Literal["dev", "prod"]
+    env: Literal["dev", "prod", "circle"]
     domain_name: str
     postgres_db: str
     postgres_user: str
