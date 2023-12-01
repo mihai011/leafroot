@@ -6,8 +6,10 @@ SERVICES = db db_backup redis rabbitmq api mongo worker cassandradb scylladb sur
 AIRFLOW_SERVICES = airflow-webserver airflow-scheduler airflow-worker airflow-triggerer airflow-init airflow-cli flower
 SPARK_SERVICES = spark-master spark-worker
 KAFKA_SERVICES = zookeeper broker
-DOCKER_COMPOSES= -f docker-compose.yml -f docker-compose-airflow.yml -f docker-compose-spark.yml -f docker-compose-kafka.yml
-FULL_SERVICES = $(SERVICES) pgadmin $(AIRFLOW_SERVICES) $(SPARK_SERVICES) $(KAFKA_SERVICES)
+ELK_SERVICES = elasticsearch logstash kibana setup
+DOCKER_COMPOSES= -f docker-compose.yml -f docker-compose-airflow.yml -f docker-compose-spark.yml -f docker-compose-kafka.yml -f docker-compose-elk.yml
+FULL_SERVICES = $(SERVICES) $(AIRFLOW_SERVICES) $(SPARK_SERVICES) $(KAFKA_SERVICES) $(ELK_SERVICES)
+BASIC_SERVICES = $(SERVICES) $(ELK_SERVICES)
 USER=$(shell whoami)
 # for mac os install coreutils ot get nproc
 CORES := $(shell nproc)
@@ -15,6 +17,7 @@ MANUAL_CORES=8
 
 
 venv_create:
+	pip install poetry
 	poetry install
 	poetry run pre-commit install
 
@@ -74,6 +77,12 @@ docformatter:
 
 pycodestyle:
 	poetry run pycodestyle -r $(DIR_ARGS)
+
+
+basic:
+	docker compose --env-file $(ENV_FILE) up -d --build
+elk:
+	docker compose --env-file $(ENV_FILE) -f docker-compose-elk.yml up -d $(ELK_SERVICES)
 
 start_services:
 	docker compose --env-file $(ENV_FILE) up -d $(SERVICES)
