@@ -166,3 +166,5 @@ airflow/logs/
 *.jsonl
 airflow/logs/scheduler/latest/
 airflow/logs/scheduler/latest
+logstash.db
+logstash.db-journal

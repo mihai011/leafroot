@@ -4,11 +4,14 @@ import os
 import time
 import logging
 import asyncio
+import json
 from functools import wraps
+
 
 import json_log_formatter
 from starlette_context import context
 from starlette_context.errors import ContextDoesNotExistError
+from logstash_async.handler import AsynchronousLogstashHandler
 
 from contextlib import contextmanager
 from base_utils import clear_args_dicts
@@ -19,13 +22,24 @@ def initialize_logger():
     """Initiliaze loggers."""
 
     global logger
-    pid = os.getpid()
+    logstash_host = "logstash"
+    logstash_port = 5044
     formatter = json_log_formatter.JSONFormatter()
 
-    json_handler = logging.FileHandler(filename=f"logger/logs/app-{pid}.jsonl")
-    json_handler.setFormatter(formatter)
-    logger = logging.getLogger("my_json")
-    logger.addHandler(json_handler)
+    logger = logging.getLogger("async_logging")
+
+    handler = AsynchronousLogstashHandler(
+        host=logstash_host,
+        port=logstash_port,
+        ssl_enable=False,
+        ssl_verify=False,
+        transport="logstash_async.transport.BeatsTransport",
+        database_path="logstash.db",
+    )
+
+    handler.setFormatter(formatter)
+
+    logger.addHandler(handler)
     logger.setLevel(logging.INFO)
     logger.propagate = False
 
@@ -44,19 +58,22 @@ def wrapping_logic(func, request_id, args, kwargs):
         "function_args": new_args,
         "function_kwargs": new_kwargs,
         "start_ts": time.time(),
+        "message": None,
     }
     try:
-        logger.info(f"Function {func.__name__} started", extra=packet)
+        packet["messages"] = f"Function {func.__name__} started"
+        logger.info(json.dumps(packet))
         yield
         duration = time.time() - packet["start_ts"]
         packet["end_ts"] = time.time()
         packet["function_duration"] = duration
-        logger.info(f"Function {func.__name__} ended", extra=packet)
+        packet["messages"] = f"Function {func.__name__} ended"
+        logger.info(json.dumps(packet))
     except Exception as e:
-        logger.exception(
-            f"Exception raised in {func.__name__}. exception: {str(e)}",
-            extra=packet,
-        )
+        packet[
+            "messages"
+        ] = f"Exception raised in {func.__name__}. exception: {str(e)}"
+        logger.exception(json.dumps(packet))
         # TODO: parse the exception and return a proper one
         raise e
 

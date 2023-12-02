@@ -125,6 +125,7 @@ timeout-decorator = "^0.5.0"
 kafka-python = "^2.0.2"
 json-log-formatter = "^0.5.2"
 faust-streaming = {git = "https://github.com/faust-streaming/faust.git"}
+python-logstash-async = "^2.7.2"
 
 
 [build-system]
