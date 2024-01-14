@@ -51,6 +51,7 @@ Leafroot is a personal exercise for me as a software engineer.
     51. TODO: Include Dask package.
     52. TODO: Organize ELK infrastructure for logging.
     53. TODO: Create an ETL for machine learning models training and releasing to produdction.
+    54. TODO: Create a photo store.
 
 
 
