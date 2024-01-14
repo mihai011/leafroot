@@ -12,7 +12,7 @@ jobs:
             - image: redis/redis-stack-server
             - image: rabbitmq:latest
             - image: mongo:latest
-        resource_class: arm.xlarge
+        resource_class: arm.large
         steps:
             - checkout
             - run: whoami
