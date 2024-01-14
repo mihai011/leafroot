@@ -11,4 +11,6 @@ RUN apt update && apt install -y iputils-ping
 
 ENV SPARK_NO_DAEMONIZE=true
 
+COPY /spark-apps /apps
+
 CMD ["/opt/spark/sbin/start-master.sh"]
