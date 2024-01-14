@@ -100,3 +100,11 @@ Leafroot is a personal exercise for me as a software engineer.
 
 alembic revision --autogenerate -m "<migration_message>"
 alembic upgrade head
+
+# For updating the current install packages in poetry use the following
+
+```
+poetry update # this updates packages in lock file
+poetry self add poetry-plugin-up
+poetry up # this updates package versions in pyproject.toml
+```

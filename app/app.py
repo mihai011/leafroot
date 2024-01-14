@@ -77,7 +77,7 @@ async def treat_integrity_error(_: Request, exc: IntegrityError):
     )
 
 
-if config.env != "dev":
+if config.env not in ["dev", "circle"]:
     sentry_sdk.init(
         dsn=config.sentry_dsn,
         # Set traces_sample_rate to 1.0 to capture 100%
