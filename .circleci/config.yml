@@ -23,9 +23,9 @@ jobs:
             - run:
                   name: Create environment
                   command: make venv_create
-            - run:
-                  name: Install utilities
-                  command: sudo apt-get update -y && sudo apt-get install -y iputils-ping
+            # - run:
+            #       name: Install utilities
+            #       command: sudo apt-get update -y && sudo apt-get install -y iputils-ping
             - run:
                   name: Start celery workers
                   command: make start_celery_workers_detached
