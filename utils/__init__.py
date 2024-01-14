@@ -78,7 +78,7 @@ async def get_string_at_key(redis_client, key: str):
 
 @log()
 @testproof_cache(
-    expire=int(config.access_token_expire_seconds), key_builder=my_key_builder
+    expire=config.access_token_expire_seconds, key_builder=my_key_builder
 )
 def create_access_token(
     data: dict,
