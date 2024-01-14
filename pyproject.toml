@@ -23,8 +23,8 @@ astroid = "^2.15.8"
 async-timeout = "^4.0.3"
 asyncpg = "^0.27.0"
 attrs = "^23.2.0"
-bandit = "^1.7.6"
-bcrypt = "4.0.1"
+bandit = "^1.7.6" # could be issues here
+bcrypt = "^4.0.1"
 black = "^23.12.1"
 blacken-docs = "^1.16.0"
 celery = "^5.3.6"
@@ -126,6 +126,7 @@ kafka-python = "^2.0.2"
 json-log-formatter = "^0.5.2"
 faust-streaming = {git = "https://github.com/faust-streaming/faust.git"}
 python-logstash-async = "^2.7.2"
+pip = "^23.3.2"
 
 
 [build-system]
