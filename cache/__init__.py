@@ -72,7 +72,7 @@ def testproof_cache(*cache_args, **cache_kargs):
 
     def inner(func):
         def wrapper(*args, **kwargs):
-            if config.env == "dev":
+            if config.env in ["dev", "circle"]:
                 return func(*args, **kwargs)
 
             result = cache(*cache_args, **cache_kargs)(func)(*args, **kwargs)

@@ -107,7 +107,6 @@ async def login(
 
         item["token"] = token
         item["user"] = user.serialize()
-        print(token)
         return create_response(
             message="User logged in!",
             status=200,
