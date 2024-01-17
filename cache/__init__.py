@@ -2,6 +2,7 @@
 
 from typing import Optional
 
+import asyncio
 from fastapi import Request, Response
 from fastapi_cache import FastAPICache
 from fastapi_cache.backends.redis import RedisBackend
@@ -34,10 +35,10 @@ def initialize_cache():
             encoding="utf8",
             decode_responses=True,
         )
-        FastAPICache.init(cache_backend(cache_source), prefix="fastapi-cache")
+        FastAPICache.init(cache_backend(cache_source), prefix="leafroot")
         return None
 
-    FastAPICache.init(cache_backend(), prefix="fastapi-cache")
+    FastAPICache.init(cache_backend(), prefix="leafroot")
     return None
 
 
@@ -46,7 +47,7 @@ def my_key_builder(
     namespace: Optional[str] = "",
     request: Request = None,
     response: Response = None,
-    *args,
+    *_,
     **kwargs,
 ):
     """! Key builder for cache.
@@ -59,11 +60,9 @@ def my_key_builder(
     @returns (str): cache key
     """
     prefix = FastAPICache.get_prefix()
-    new_args, _ = clear_args_dicts()
+    new_args, new_kwargs = clear_args_dicts(kwargs["args"], kwargs["kwargs"])
 
-    cache_key = (
-        f"{prefix}:{namespace}:{func.__module__}:{func.__name__}:{new_args}"
-    )
+    cache_key = f"{prefix}:{namespace}:{func.__module__}:{func.__name__}:{new_kwargs}:{new_args}"
     return cache_key
 
 
@@ -75,9 +74,7 @@ def testproof_cache(*cache_args, **cache_kargs):
             if config.env in ["dev", "circle"]:
                 return func(*args, **kwargs)
 
-            result = cache(*cache_args, **cache_kargs)(func)(*args, **kwargs)
-
-            return result
+            return cache(*cache_args, **cache_kargs)(func)(*args, **kwargs)
 
         return wrapper
 

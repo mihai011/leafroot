@@ -24,6 +24,7 @@ async def make_api_request(session, request: HttpRequest):
     params = request.params
     body = request.body
     headers = request.headers
+    response = None
 
     query_url = "{}{}".format(url, urllib.parse.urlencode(params))
 
@@ -36,8 +37,8 @@ async def make_api_request(session, request: HttpRequest):
     return response
 
 
-@testproof_cache(key_builder=my_key_builder)
 @log()
+@testproof_cache(key_builder=my_key_builder)
 async def make_get_request(session, url, headers):
     """Makes a http request to an url with GET method.
 

@@ -18,6 +18,7 @@ from data import (
     get_mongo_client,
 )
 from config import config
+from cache import initialize_cache
 from logger import initialize_logger
 
 
@@ -117,4 +118,5 @@ async def mongo_db():
 def initiation_for_test():
     """This executes just before each test"""
     initialize_logger()
+    initialize_cache()
     yield

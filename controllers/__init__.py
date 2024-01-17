@@ -34,13 +34,13 @@ RedisAsyncClient = Annotated[Redis, Depends(get_redis_async_client)]
 
 
 @log()
-def auth(
+async def auth(
     session: CurrentSyncSession,
     authorization: str = Header(),
 ):
     """Auth function based on header."""
     token = authorization.split(" ")[-1]
-    return authenthicate_user(token, session)
+    return await authenthicate_user(token, session)
 
 
 CurrentUser = Annotated[User, Depends(auth)]

@@ -48,9 +48,6 @@ def get_password_hash(password: str) -> str:
 
 
 @log()
-@testproof_cache(
-    expire=int(config.access_token_expire_seconds), key_builder=my_key_builder
-)
 def make_short_hash(string: str):
     """short hash for a string"""
     return int(hashlib.sha1(string.encode("utf-8")).hexdigest(), 16) % (
@@ -77,9 +74,6 @@ async def get_string_at_key(redis_client, key: str):
 
 
 @log()
-@testproof_cache(
-    expire=config.access_token_expire_seconds, key_builder=my_key_builder
-)
 def create_access_token(
     data: dict,
 ):
@@ -95,7 +89,7 @@ def create_access_token(
 @testproof_cache(
     expire=config.access_token_expire_seconds, key_builder=my_key_builder
 )
-def authenthicate_user(token: str, session: Session) -> User:
+async def authenthicate_user(token: str, session: Session) -> User:
     """Authenticate a token."""
     try:
         payload = jwt.decode(
@@ -106,7 +100,7 @@ def authenthicate_user(token: str, session: Session) -> User:
             status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid token!"
         )
 
-    users = User.GetByArgsSync(session, payload)
+    users = await User.GetByArgs(session, payload)
 
     if len(users) != 1:
         raise HTTPException(

@@ -52,7 +52,7 @@ async def create_user(
 @user_router.get("/get_user/{id_user}", response_model=UserResponseItem)
 async def get_user(
     id_user: int,
-    _: CurrentUser,
+    user: CurrentUser,
     session: CurrentAsyncSession,
 ) -> ORJSONResponse:
     """Get user by id."""

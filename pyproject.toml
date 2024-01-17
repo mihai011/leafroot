@@ -127,6 +127,7 @@ json-log-formatter = "^0.5.2"
 faust-streaming = {git = "https://github.com/faust-streaming/faust.git"}
 python-logstash-async = "^2.7.2"
 pip = "^23.3.2"
+nest-asyncio = "^1.5.8"
 
 
 [build-system]
