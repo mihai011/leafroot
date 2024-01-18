@@ -49,7 +49,7 @@ def wrapping_logic(func, request_id, args, kwargs):
     new_args, new_kwargs = clear_args_dicts(args, kwargs)
 
     if config.env == "circle":
-        return
+        yield
 
     packet = {
         "request_id": request_id,
