@@ -33,9 +33,8 @@ CassandraCluster = Annotated[Cluster, Depends(get_cassandra_cluster)]
 RedisAsyncClient = Annotated[Redis, Depends(get_redis_async_client)]
 
 
-@log()
 async def auth(
-    session: CurrentSyncSession,
+    session: CurrentAsyncSession,
     authorization: str = Header(),
 ):
     """Auth function based on header."""

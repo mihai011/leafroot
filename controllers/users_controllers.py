@@ -29,7 +29,7 @@ templates = Jinja2Templates(directory="templates")
 @user_router.post("/create_user", response_model=UserResponseItem)
 async def create_user(
     pydantic_user: PydanticUser,
-    _: CurrentUser,
+    user: CurrentUser,
     session: CurrentAsyncSession,
 ):
     """Creating a simple user."""
