@@ -39,6 +39,9 @@ from data.models.pydantic import (
     UserResponse,
     BaseResponse,
     ErrorResponse,
+    PhotoPacket,
+    PhotoResponse,
+    PhotoInfoResponse,
     UrlShortResponseItem,
     UserResponseItem,
     AuthorizedUserResponseItem,
@@ -54,9 +57,14 @@ from data.models.pydantic import (
     RedisGraphResponseItem,
     RedisNodeResponseItem,
     RedisQueryResponseItem,
+    PhotoInfoResponseItem,
+    PhotoInfoResponseItem,
+    PhotoResponseItem,
+    PhotoInfoListResponseItem,
 )
 from data.models.mongo_db.library import Library, Book, BookUpdate, BookPackage
 from data.models.mongo_db import get_mongo_database, get_mongo_client
+from data.models.minio import get_object_storage_client, MinioObject
 
 from data.models.cassandra_db import (
     MessageBoard,

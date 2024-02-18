@@ -164,11 +164,27 @@ services:
         ports:
             - 5050:80
 
+    minio:
+        image: quay.io/minio/minio
+        env_file:
+            - ${ENV_FILE}
+        container_name: minio
+        hostname: ${MINIO_HOST}
+        ports:
+            - 127.0.0.1:9000:9000
+            - 127.0.0.1:9001:9001
+        volumes:
+            - minio_data:/data
+        networks:
+            - shared_network
+
+
 volumes:
     postgres-data:
     postgres-backup:
     pgadmin:
     mongodb-data:
+    minio_data:
 
 
 networks:

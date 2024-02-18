@@ -247,3 +247,37 @@ class UrlShortResponseItem(BaseResponse):
     """Url Short response Item"""
 
     item: UrlShortReponse
+
+
+class PhotoResponse(BaseModel):
+    """Response for photo."""
+
+    photo: str
+
+
+class PhotoResponseItem(BaseResponse):
+    """Response for photo item."""
+
+    item: PhotoResponse
+
+
+class PhotoInfoResponse(BaseModel):
+    """Response for photo info."""
+
+    photo_id: int
+    photo_name: str
+    photo_size: int
+    photo_type: str
+    photo_hash: str
+
+
+class PhotoInfoResponseItem(BaseModel):
+    """Response for photo info item."""
+
+    item: PhotoInfoResponse
+
+
+class PhotoInfoListResponseItem(BaseModel):
+    """Response for photo list."""
+
+    item: List[PhotoInfoResponse]

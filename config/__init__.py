@@ -53,6 +53,7 @@ class Settings(BaseSettings):
     scylladb_url: Optional[AnyUrl]
 
     surrealdb_host: Optional[str]
+    surrealdb_port: Optional[str]
     surrealdb_user: Optional[str]
     surrealdb_pass: Optional[str]
     surrealdb_namespace: Optional[str]
@@ -80,6 +81,15 @@ class Settings(BaseSettings):
     mongo_initdb_root_password: Optional[str]
     mongo_db: Optional[str]
 
+    minio_root_user: str
+    minio_root_password: str
+    minio_default_buckets: str
+    minio_host: str
+    minio_port: str
+    minio_endpoint: Optional[str]
+    minio_bucket: str
+    minio_secure: bool
+
     LOG_DIR: Optional[str] = "logs"
 
     INFO_LOG_FILE: Optional[str] = "info.log"
@@ -103,11 +113,17 @@ class Settings(BaseSettings):
         self.create_spark_url()
         self.create_kafka_url()
         self.create_surrealdb_url()
+        self.create_minio_url()
+
+    def create_minio_url(self):
+        """Create minio url from minio host and minio port."""
+        host = self.interface or self.minio_host
+        self.minio_endpoint = f"{host}:{self.minio_port}"
 
     def create_surrealdb_url(self):
         """Create Surrealdb url from surreal host."""
         host = self.interface or self.surrealdb_host
-        self.surrealdb_url = f"http://{host}:8000"
+        self.surrealdb_url = f"http://{host}:{self.surrealdb_port}"
 
     def create_kafka_url(self):
         """Create kafka connection url from kafka host"""

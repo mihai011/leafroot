@@ -2,7 +2,7 @@ ACTIVATE_BASH=source ~/.bashrc
 ACTIVATE_VENV= poetry shell
 DIR_ARGS = app/ controllers/ data/ tests/ scripts/ utils/ cache/ config/
 DIR_NO_TESTS = app/ controllers/ data/ scripts/ utils/ cache/
-SERVICES = db db_backup redis rabbitmq api mongo worker cassandradb scylladb surrealdb
+SERVICES = db db_backup redis rabbitmq api mongo worker cassandradb scylladb surrealdb minio
 AIRFLOW_SERVICES = airflow-webserver airflow-scheduler airflow-worker airflow-triggerer airflow-init airflow-cli flower
 SPARK_SERVICES = spark-master spark-worker
 KAFKA_SERVICES = zookeeper broker
@@ -18,11 +18,14 @@ MANUAL_CORES=8
 
 venv_create:
 	pip install poetry
-	poetry install
+	poetry install --no-root
 	poetry run pre-commit install
 
 venv_update:
 	poetry update
+
+venv_delete:
+	poetry env remove --all
 
 typehint:
 	poetry run mypy $(DIR_ARGS)
