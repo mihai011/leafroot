@@ -3,6 +3,8 @@
 
 from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship, selectinload
+from sqlalchemy.future import select
+
 from data.models.postgresql import ExtraBase, Base
 
 
@@ -38,6 +40,16 @@ class User(Base, ExtraBase):
         results = await session.run_sync(filter_sync)
 
         return results
+
+    @classmethod
+    async def GetById(cls, session, obj_id):
+        """Get object by his id."""
+
+        query = select(cls).where(cls.id == obj_id)
+        query = query.options(selectinload(cls.photos))
+        result = await session.execute(query)
+        o = result.scalars().first()
+        return o
 
     def serialize(self):
         serialization = super().serialize()

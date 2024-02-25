@@ -41,11 +41,19 @@ async def create_user(
 
     user = await User.AddNew(session, params)
 
+    item_user = {
+        "username": user.username,
+        "email": user.email,
+        "id": user.id,
+        "created_at": str(user.created_at),
+        "updated_at": str(user.updated_at),
+    }
+
     return create_response(
         message="User created!",
         status=200,
         response_model=UserResponseItem,
-        item=user.serialize(),
+        item=item_user,
     )
 
 
@@ -63,11 +71,19 @@ async def get_user(
             status_code=status.HTTP_200_OK, detail="No user found!"
         )
 
+    item_user = {
+        "username": user.username,
+        "email": user.email,
+        "id": user.id,
+        "created_at": str(user.created_at),
+        "updated_at": str(user.updated_at),
+    }
+
     return create_response(
         message="User fetched!",
         status=status.HTTP_200_OK,
         response_model=UserResponseItem,
-        item=user.serialize(),
+        item=item_user,
     )
 
 
