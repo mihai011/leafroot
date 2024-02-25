@@ -1,10 +1,8 @@
 """Module for testing endpoints of a photo store."""
 
 
-from pickletools import pyunicode
-import py
 import pytest  # pylint: disable=R0801
-
+from io import BytesIO  # pylint: disable=R0801
 
 from tests import DataSource  # pylint: disable=R0801
 
@@ -14,16 +12,12 @@ async def test_upload_photo(async_session):
     """Test upload photo."""
     ds = DataSource(async_session)
     await ds.make_user()
-    b64_image = ds.make_photo()
-
-    photo_packet = {
-        "photo_body": b64_image,
-        "photo_name": "test",
-        "photo_type": "png",
-    }
+    images_bytes = ds.make_photo()
 
     response = await ds.client.post(
-        "/photo/upload", headers=ds.headers["Test_user"], json=photo_packet
+        "/photo/upload",
+        headers=ds.headers["Test_user"],
+        files={"file": ("test.png", images_bytes, "image/png")},
     )
     assert response.status_code == 200
     assert response.json() == {

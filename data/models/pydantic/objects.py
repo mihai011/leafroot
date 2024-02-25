@@ -1,6 +1,6 @@
 """Pydantic class for objects."""
 from typing import Literal
-from pydantic import BaseModel
+from pydantic import BaseModel, StrictBytes
 
 
 class PhotoPacket(BaseModel):
@@ -8,7 +8,7 @@ class PhotoPacket(BaseModel):
 
     photo_name: str
     photo_type: Literal["jpg", "png", "gif"]
-    photo_body: str
+    photo_body: StrictBytes
 
     class Config:
         """Config class."""

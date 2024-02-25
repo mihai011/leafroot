@@ -72,7 +72,7 @@ class DataSource:
         """Make a photo."""
 
         # Create a new image with random pixel values
-        random_image = np.random.randint(0, 256, (256, 256), dtype=np.uint8)
+        random_image = np.random.randint(0, 256, (2048, 2048), dtype=np.uint8)
 
         # Convert the numpy array to a PIL image
         image = Image.fromarray(random_image)
@@ -84,7 +84,4 @@ class DataSource:
         # Move the cursor to the beginning of the file
         image_bytes.seek(0)
 
-        # encode the image to base64
-        b64image = base64.b64encode(image_bytes.read())
-
-        return str(b64image)
+        return image_bytes
