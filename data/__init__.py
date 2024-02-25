@@ -5,7 +5,7 @@ from sqlalchemy_utils import database_exists, create_database
 from pydantic import BaseModel, HttpUrl
 from pydantic.typing import Dict
 
-from data.models.postgresql import Base
+from data.models.postgresql import Base, ExtraBase
 from data.models.postgresql.user import User
 from data.models.postgresql.atom import Atom, Electron, Neutron, Proton
 from data.models.postgresql.glovo import (
@@ -15,6 +15,7 @@ from data.models.postgresql.glovo import (
     Order,
     OrderItem,
 )
+from data.models.postgresql.photos import Photo
 from data.models.postgresql import (
     get_async_session,
     async_session,

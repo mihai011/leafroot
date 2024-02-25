@@ -2,6 +2,7 @@
 
 
 from sqlalchemy import Column, String
+from sqlalchemy.orm import relationship, selectinload
 from data.models.postgresql import ExtraBase, Base
 
 
@@ -15,9 +16,28 @@ class User(Base, ExtraBase):
     hashed_pass = Column(String(256), unique=True, nullable=False)
     permissions = Column(String(3))
     address = Column(String(200))
+    photos = relationship("Photo", back_populates="user", lazy="select")
 
     def __repr__(self):
         return "<User %r>" % self.username
+
+    @classmethod
+    async def GetByArgs(cls, session, args):
+        """Get object by args."""
+
+        def filter_sync(session):
+            query = session.query(cls)
+            for attr, value in args.items():
+                query = query.filter(getattr(cls, attr) == value)
+                query = query.options(selectinload(cls.photos))
+            return query.all()
+
+        if not args:
+            return []
+
+        results = await session.run_sync(filter_sync)
+
+        return results
 
     def serialize(self):
         serialization = super().serialize()

@@ -64,15 +64,19 @@ class DataSource:
         response = await self.client.post("/users/login", json=args)
         response = response.json()
 
-        self.headers[args["username"]] = {
+        header = {
             "Authorization": "Bearer {}".format(response["item"]["token"])
         }
 
-    def make_photo(self, received_args=None):
+        self.headers[args["username"]] = header
+
+        return header
+
+    def make_photo(self, dims=(256, 256, 3)):
         """Make a photo."""
 
         # Create a new image with random pixel values
-        random_image = np.random.randint(0, 256, (2048, 2048), dtype=np.uint8)
+        random_image = np.random.randint(0, 256, dims, dtype=np.uint8)
 
         # Convert the numpy array to a PIL image
         image = Image.fromarray(random_image)
@@ -85,3 +89,22 @@ class DataSource:
         image_bytes.seek(0)
 
         return image_bytes
+
+    async def make_uploads_for_user(self, user_header, number_of_uploads):
+        """Make uploads for user."""
+        list_ids = []
+        for _ in range(number_of_uploads):
+            image_bytes = self.make_photo()
+
+            response = await self.client.post(
+                "/photo/upload",
+                headers=user_header,
+                files={"file": ("test.png", images_bytes, "image/png")},
+            )
+            assert response.status_code == 200
+            assert response.json() == {
+                "message": "Photo uploaded!",
+                "item": {"photo": "test.png"},
+            }
+
+            list_ids.append(response.json()["item"]["photo_id"])

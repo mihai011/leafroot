@@ -115,8 +115,6 @@ class ExtraBase(SerializerMixin):
 
         results = await session.run_sync(filter_sync)
 
-        await session.close()
-
         return results
 
     @classmethod

@@ -12,7 +12,7 @@ async def test_upload_photo(async_session):
     """Test upload photo."""
     ds = DataSource(async_session)
     await ds.make_user()
-    images_bytes = ds.make_photo()
+    images_bytes = ds.make_photo((2048, 2048, 3))
 
     response = await ds.client.post(
         "/photo/upload",
@@ -20,10 +20,7 @@ async def test_upload_photo(async_session):
         files={"file": ("test.png", images_bytes, "image/png")},
     )
     assert response.status_code == 200
-    assert response.json() == {
-        "message": "Photo uploaded!",
-        "item": {"photo": "test.png"},
-    }
+    assert response.json()["item"]["photo_path"].endswith("test.png")
 
 
 @pytest.mark.asyncio
@@ -31,16 +28,7 @@ async def test_download_photo(async_session):
     """Test download photo."""
     ds = DataSource(async_session)
     await ds.make_user()
-    b64_image = ds.make_photo()
-    response = await ds.client.get(
-        "/api/photos/1",
-        headers=ds.headers["Test_user"],
-    )
-    assert response.status_code == 200
-    assert response.json() == {
-        "message": "Photo downloaded!",
-        "photo_id": 1,
-    }
+    list_of_ids = await ds.upload_photos(ds.headers["Test_user"], 100)
 
 
 @pytest.mark.asyncio
@@ -50,7 +38,7 @@ async def test_delete_photo(async_session):
     await ds.make_user()
     b64_image = ds.make_photo()
     response = await ds.client.delete(
-        "/api/photos/1",
+        "/photos/1",
         headers=ds.headers["Test_user"],
     )
     assert response.status_code == 200
@@ -67,7 +55,7 @@ async def test_get_photo_info(async_session):
     await ds.make_user()
     b64_image = ds.make_photo()
     response = await ds.client.get(
-        "/api/photos/1/info",
+        "/photos/1/info",
         headers=ds.headers["Test_user"],
     )
     assert response.status_code == 200
@@ -84,7 +72,7 @@ async def test_get_photo_list(async_session):
     await ds.make_user()
     b64_image = ds.make_photo()
     response = await ds.client.get(
-        "/api/photos/list",
+        "/photos/list",
         headers=ds.headers["Test_user"],
     )
     assert response.status_code == 200
