@@ -169,3 +169,7 @@ airflow/logs/scheduler/latest
 logstash.db
 logstash.db-journal
 *.txt
+
+
+#minio data
+minio_data/
