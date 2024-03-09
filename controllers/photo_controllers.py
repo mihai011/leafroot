@@ -2,7 +2,7 @@
 import io
 
 from fastapi import APIRouter, status
-from fastapi.responses import ORJSONResponse
+from fastapi.responses import ORJSONResponse, Response
 
 from fastapi import UploadFile
 from controllers import (
@@ -10,6 +10,7 @@ from controllers import (
     CurrentUser,
     ObjectStorageClient,
     CurrentAsyncSession,
+    HttpSession,
 )
 from config import config
 from data import PhotoResponseItem, Photo
@@ -52,5 +53,40 @@ async def upload_photo(
         message="Photo uploaded!",
         status=status.HTTP_200_OK,
         response_model=PhotoResponseItem,
-        item={"photo_path": photo_path},
+        item={"photo_id": str(photo.uuid)},
+    )
+
+
+@log()
+@photo_router.get("/download/{photo_id}")
+async def download_photo(
+    photo_id: str,
+    object_client: ObjectStorageClient,
+    session: CurrentAsyncSession,
+    http_session: HttpSession,
+) -> Response:
+    """Download a photo."""
+
+    photo_res = await Photo.GetByArgs(session, {"uuid": photo_id})
+
+    if len(photo_res) == 0:
+        return create_response(
+            message="No photo found!",
+            status=status.HTTP_400_BAD_REQUEST,
+            response_model=PhotoResponseItem,
+            item={"photo": None},
+        )
+    photo = photo_res[0]
+
+    photo_path = photo.create_photos_path()
+    response = await object_client.get_object(
+        config.minio_bucket, photo_path, http_session
+    )
+
+    return Response(
+        content=await response.content.read(),
+        media_type=response.content_type,
+        headers={
+            "Content-Disposition": f'attachment; filename="{photo.photo_name}"'
+        },
     )

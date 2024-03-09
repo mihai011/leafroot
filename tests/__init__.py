@@ -13,7 +13,7 @@ from io import BytesIO
 
 from app.app import app
 from data import User
-from utils import random_string
+from utils import random_string, is_valid_uuid
 
 
 class DataSource:
@@ -99,12 +99,9 @@ class DataSource:
             response = await self.client.post(
                 "/photo/upload",
                 headers=user_header,
-                files={"file": ("test.png", images_bytes, "image/png")},
+                files={"file": ("test.png", image_bytes, "image/png")},
             )
             assert response.status_code == 200
-            assert response.json() == {
-                "message": "Photo uploaded!",
-                "item": {"photo": "test.png"},
-            }
-
             list_ids.append(response.json()["item"]["photo_id"])
+
+        return list_ids

@@ -252,7 +252,7 @@ class UrlShortResponseItem(BaseResponse):
 class PhotoResponse(BaseModel):
     """Response for photo."""
 
-    photo_path: str
+    photo_id: str
 
 
 class PhotoResponseItem(BaseResponse):

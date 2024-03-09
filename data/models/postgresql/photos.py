@@ -13,11 +13,11 @@ class Photo(Base, ExtraBase):
     __tablename__ = "photos"
 
     user_id = mapped_column(ForeignKey("users.id"))
-    user = relationship("User", back_populates="photos")
+    user = relationship("User")
     uuid = Column(
         UUID(as_uuid=True), unique=True, nullable=False, default=uuid.uuid4
     )
-    photo_name = Column(String(80), unique=True, nullable=False)
+    photo_name = Column(String(80), unique=False, nullable=False)
 
     def create_photos_path(self):
         """Create a bucket path."""

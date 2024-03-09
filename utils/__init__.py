@@ -5,6 +5,7 @@ import random
 import string
 import subprocess
 import hashlib
+import uuid
 
 from fastapi import HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
@@ -122,3 +123,12 @@ def random_string():
     )
 
     return init_pepper + r_string
+
+
+@log()
+def is_valid_uuid(val):
+    try:
+        uuid.UUID(str(val))
+        return True
+    except ValueError:
+        return False

@@ -119,7 +119,6 @@ async def login(
         data.pop("id")
         data.pop("created_at")
         data.pop("updated_at")
-        data.pop("photos")
         token = create_access_token(data)
 
         item["token"] = token
@@ -152,7 +151,6 @@ async def sign_up(
     password = params.pop("password")
     hashed_pass = get_password_hash(password)
     params["hashed_pass"] = hashed_pass
-    params["photos"] = []
 
     user = await User.AddNew(session, params)
 
