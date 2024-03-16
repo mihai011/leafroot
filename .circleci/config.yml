@@ -12,6 +12,10 @@ jobs:
             - image: redis/redis-stack-server
             - image: rabbitmq:latest
             - image: mongo:latest
+            - image: quay.io/minio/minio:latest
+              environment:
+                  MINIO_ROOT_USER: root
+                  MINIO_ROOT_PASSWORD: toortoor
         resource_class: arm.large
         steps:
             - checkout
