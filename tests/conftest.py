@@ -12,10 +12,13 @@ from sqlalchemy_utils import drop_database, create_database
 from app.app import app
 from data import (
     Base,
+    MyMinio,
+    minio_client,
     get_async_session,
     get_sync_session,
     get_mongo_database,
     get_mongo_client,
+    get_object_storage_client,
 )
 from config import config
 from cache import initialize_cache
@@ -112,6 +115,27 @@ async def mongo_db():
     await mongo_client.drop_database(str(database_name))
     mongo_client.close()
     app.dependency_overrides[get_mongo_database] = get_mongo_database
+
+
+@pytest.fixture
+async def minio_storage():
+    """Minio fixture for miniopy_async client."""
+    bucket_name = str(uuid4()).replace("-", "")
+    minio_object = MyMinio(bucket_name, minio_client)
+    await minio_object.make_bucket()
+
+    async def override_minio_storage():
+        yield minio_object
+
+    app.dependency_overrides[
+        get_object_storage_client
+    ] = override_minio_storage
+    yield minio_object
+    # Remove the test bucket
+    await minio_object.remove_bucket()
+    app.dependency_overrides[
+        get_object_storage_client
+    ] = get_object_storage_client
 
 
 @pytest.fixture(autouse=True)

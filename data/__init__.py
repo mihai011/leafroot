@@ -65,7 +65,7 @@ from data.models.pydantic import (
 )
 from data.models.mongo_db.library import Library, Book, BookUpdate, BookPackage
 from data.models.mongo_db import get_mongo_database, get_mongo_client
-from data.models.minio import get_object_storage_client, MyMinio
+from data.models.minio import get_object_storage_client, MyMinio, minio_client
 
 from data.models.cassandra_db import (
     MessageBoard,

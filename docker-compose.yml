@@ -165,7 +165,7 @@ services:
             - 5050:80
 
     minio:
-        image: quay.io/minio/minio
+        image: minio/minio
         env_file:
             - ${ENV_FILE}
         container_name: minio

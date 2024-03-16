@@ -1,11 +1,13 @@
 """Functions for accessing aobject storage service."""
 
+from ast import Delete
 from miniopy_async import Minio
+from miniopy_async.deleteobjects import DeleteObject
 
 from config import config
 
 
-client = Minio(
+minio_client = Minio(
     config.minio_endpoint,
     access_key=config.minio_root_user,
     secret_key=config.minio_root_password,
@@ -36,12 +38,20 @@ class MyMinio:
 
     async def make_bucket(self):
         """Make bucket method."""
-        if not await self.client.bucket_exists(config.minio_bucket):
-            await self.client.make_bucket(config.minio_bucket)
+        if not await self.client.bucket_exists(self.bucket):
+            await self.client.make_bucket(self.bucket)
+
+    async def remove_bucket(self):
+        """Remove bucket method."""
+        files = await self.client.list_objects(self.bucket, recursive=True)
+        delete_objects = [DeleteObject(file.object_name) for file in files]
+
+        await self.client.remove_objects(self.bucket, delete_objects)
+        await self.client.remove_bucket(self.bucket)
 
 
 async def get_object_storage_client():
     """Get object storage client."""
-    minio_object = MyMinio(config.minio_bucket, client)
+    minio_object = MyMinio(config.minio_bucket, minio_client)
     await minio_object.make_bucket()
     yield minio_object
