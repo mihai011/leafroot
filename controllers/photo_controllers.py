@@ -44,9 +44,9 @@ async def upload_photo(
     }
 
     photo = await Photo.AddNew(session, photo_packet)
-    photo_path = photo.create_photos_path()
+    photo_path = photo.create_storage_path()
     await object_client.put_object(
-        config.minio_bucket, photo_path, file, file.size, file.content_type
+        photo_path, file, file.size, file.content_type
     )
 
     return create_response(
@@ -78,10 +78,8 @@ async def download_photo(
         )
     photo = photo_res[0]
 
-    photo_path = photo.create_photos_path()
-    response = await object_client.get_object(
-        config.minio_bucket, photo_path, http_session
-    )
+    photo_path = photo.create_storage_path()
+    response = await object_client.get_object(photo_path, http_session)
 
     return Response(
         content=await response.content.read(),

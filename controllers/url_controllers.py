@@ -5,7 +5,6 @@ from fastapi import APIRouter, status
 from controllers import (
     create_response,
     CurrentUser,
-    CurrentAsyncSession,
     RedisAsyncClient,
 )
 from data import UrlPacket, UrlShortResponseItem

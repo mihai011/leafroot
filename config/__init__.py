@@ -83,7 +83,6 @@ class Settings(BaseSettings):
 
     minio_root_user: str
     minio_root_password: str
-    minio_default_buckets: str
     minio_host: str
     minio_port: str
     minio_endpoint: Optional[str]

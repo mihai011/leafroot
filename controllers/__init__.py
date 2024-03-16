@@ -15,13 +15,13 @@ from cache import get_redis_async_client
 
 from data import (
     User,
+    BaseResponse,
+    MyMinio,
     get_async_session,
     get_sync_session,
     get_mongo_database,
     get_cassandra_cluster,
     get_object_storage_client,
-    BaseResponse,
-    MinioObject,
 )
 from utils.external_api import get_http_session
 from utils import authenthicate_user
@@ -33,9 +33,7 @@ MongoDatabase = Annotated[AsyncIOMotorClient, Depends(get_mongo_database)]
 HttpSession = Annotated[ClientSession, Depends(get_http_session)]
 CassandraCluster = Annotated[Cluster, Depends(get_cassandra_cluster)]
 RedisAsyncClient = Annotated[Redis, Depends(get_redis_async_client)]
-ObjectStorageClient = Annotated[
-    MinioObject, Depends(get_object_storage_client)
-]
+ObjectStorageClient = Annotated[MyMinio, Depends(get_object_storage_client)]
 
 
 async def auth(

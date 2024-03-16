@@ -1,6 +1,6 @@
 """Module for photo objects"""
 
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, String, ForeignKey
 from sqlalchemy.orm import mapped_column, relationship
 from data import Base, ExtraBase
 from sqlalchemy.dialects.postgresql import UUID
@@ -19,6 +19,6 @@ class Photo(Base, ExtraBase):
     )
     photo_name = Column(String(80), unique=False, nullable=False)
 
-    def create_photos_path(self):
+    def create_storage_path(self):
         """Create a bucket path."""
         return f"{self.user_id}/photos/{self.uuid}/{self.photo_name}"

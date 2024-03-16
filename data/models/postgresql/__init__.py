@@ -1,7 +1,7 @@
 """Models init file."""
 from datetime import datetime
-
 import asyncio
+
 from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy import create_engine
