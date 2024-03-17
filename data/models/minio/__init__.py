@@ -41,6 +41,10 @@ class MyMinio:
         if not await self.client.bucket_exists(self.bucket):
             await self.client.make_bucket(self.bucket)
 
+    async def remove_object(self, object_path):
+        """Remove object method."""
+        await self.client.remove_object(self.bucket, object_path)
+
     async def remove_bucket(self):
         """Remove bucket method."""
         files = await self.client.list_objects(self.bucket, recursive=True)

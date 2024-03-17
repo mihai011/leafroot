@@ -88,3 +88,35 @@ async def download_photo(
             "Content-Disposition": f'attachment; filename="{photo.photo_name}"'
         },
     )
+
+
+@log()
+@photo_router.delete("/delete/{photo_id}", response_model=PhotoResponseItem)
+async def download_photo(
+    photo_id: str,
+    object_client: ObjectStorageClient,
+    session: CurrentAsyncSession,
+    http_session: HttpSession,
+) -> Response:
+    """Download a photo."""
+
+    photo_res = await Photo.GetByArgs(session, {"uuid": photo_id})
+
+    if len(photo_res) == 0:
+        return create_response(
+            message="No photo found!",
+            status=status.HTTP_400_BAD_REQUEST,
+            response_model=PhotoResponseItem,
+            item={"photo": None},
+        )
+    photo = photo_res[0]
+
+    photo_path = photo.create_storage_path()
+    await object_client.remove_object(photo_path)
+
+    return create_response(
+        message="Photo deleted!",
+        status=status.HTTP_200_OK,
+        response_model=PhotoResponseItem,
+        item={"photo_id": photo_id},
+    )

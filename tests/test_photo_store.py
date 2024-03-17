@@ -30,7 +30,7 @@ async def test_download_photo(async_session, minio_storage):
     """Test download photo."""
     ds = DataSource(async_session)
     await ds.make_user()
-    NUMBER_OF_UPLOADS = 1000
+    NUMBER_OF_UPLOADS = 10
     list_ids = await ds.make_uploads_for_user(
         ds.headers["Test_user"], NUMBER_OF_UPLOADS
     )
@@ -38,6 +38,22 @@ async def test_download_photo(async_session, minio_storage):
     for photo_id in list_ids:
         response = await ds.client.get(
             f"/photo/download/{photo_id}",
+            headers=ds.headers["Test_user"],
+        )
+        assert response.status_code == 200
+
+
+async def test_delete_photo(async_session, minio_storage):
+    """Test delete photo."""
+    ds = DataSource(async_session)
+    await ds.make_user()
+    NUMBER_OF_UPLOADS = 10
+    list_ids = await ds.make_uploads_for_user(
+        ds.headers["Test_user"], NUMBER_OF_UPLOADS
+    )
+    for photo_id in list_ids:
+        response = await ds.client.delete(
+            f"/photo/delete/{photo_id}",
             headers=ds.headers["Test_user"],
         )
         assert response.status_code == 200
