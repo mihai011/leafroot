@@ -261,6 +261,12 @@ class PhotoResponseItem(BaseResponse):
     item: PhotoResponse
 
 
+class PhotoResponseListItem(BaseResponse):
+    """Response for photo list item."""
+
+    item: List[PhotoResponse]
+
+
 class PhotoInfoResponse(BaseModel):
     """Response for photo info."""
 
@@ -277,7 +283,7 @@ class PhotoInfoResponseItem(BaseModel):
     item: PhotoInfoResponse
 
 
-class PhotoInfoListResponseItem(BaseModel):
+class PhotoInfoResponseListItem(BaseModel):
     """Response for photo list."""
 
     item: List[PhotoInfoResponse]

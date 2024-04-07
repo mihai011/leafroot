@@ -37,10 +37,10 @@ format:
 	poetry run black $(DIR_ARGS)
 
 test_parallel:
-	poetry run  pytest -n $(MANUAL_CORES) tests/ -W ignore::DeprecationWarning
+	poetry run  pytest -n $(MANUAL_CORES) --timeout=20 tests/ -W ignore::DeprecationWarning
 
 test:
-	poetry run  pytest tests/ -W ignore::DeprecationWarning
+	poetry run  pytest --timeout=20 tests/ -W ignore::DeprecationWarning
 
 coverage:
 	poetry run pytest --cov-report term-missing --cov=. --cov-report html tests/

@@ -6,7 +6,7 @@ from pydantic import BaseModel, HttpUrl
 from pydantic.typing import Dict
 
 from data.models.postgresql import Base, ExtraBase
-from data.models.postgresql.user import User
+from data.models.postgresql.user import User, UserFollowRelation
 from data.models.postgresql.atom import Atom, Electron, Neutron, Proton
 from data.models.postgresql.glovo import (
     Product,
@@ -61,7 +61,7 @@ from data.models.pydantic import (
     PhotoInfoResponseItem,
     PhotoInfoResponseItem,
     PhotoResponseItem,
-    PhotoInfoListResponseItem,
+    PhotoResponseListItem,
 )
 from data.models.mongo_db.library import Library, Book, BookUpdate, BookPackage
 from data.models.mongo_db import get_mongo_database, get_mongo_client

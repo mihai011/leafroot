@@ -1,8 +1,8 @@
 """Used module related data."""
 
 
-from sqlalchemy import Column, String
-from sqlalchemy.orm import relationship, selectinload
+from sqlalchemy import Column, String, Integer, ForeignKey
+from sqlalchemy.orm import relationship
 from sqlalchemy.future import select
 
 from data.models.postgresql import ExtraBase, Base
@@ -20,7 +20,7 @@ class User(Base, ExtraBase):
     address = Column(String(200))
 
     def __repr__(self):
-        return "<User %r>" % self.username
+        return f"<User {self.username}>"
 
     @classmethod
     async def GetById(cls, session, obj_id):
@@ -40,3 +40,14 @@ class User(Base, ExtraBase):
             serialization.pop(field)
 
         return serialization
+
+
+class UserFollowRelation(Base, ExtraBase):
+    """Class that resembles a user photo share model."""
+
+    __tablename__ = "user_follow_relations"
+
+    follower_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    follower = relationship("User", foreign_keys=[follower_id])
+    followed_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    followed = relationship("User", foreign_keys=[followed_id])

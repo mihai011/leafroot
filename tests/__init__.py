@@ -57,9 +57,11 @@ class DataSource:
         response = await self.client.post("users/sign-up", json=args)
         assert response.status_code == status.HTTP_200_OK
         response = response.json()
+        user_id = response["item"]["id"]
 
-        user = await User.GetById(self.session, 1)
-        assert str(user) == "<User 'Test_user'>"
+        user = await User.GetById(self.session, user_id)
+        username = args["username"]
+        assert str(user) == f"<User {username}>"
 
         response = await self.client.post("/users/login", json=args)
         response = response.json()
@@ -67,10 +69,11 @@ class DataSource:
         header = {
             "Authorization": "Bearer {}".format(response["item"]["token"])
         }
+        user_id = response["item"]["user"]["id"]
 
-        self.headers[args["username"]] = header
+        self.headers[username] = header
 
-        return header
+        return header, user_id
 
     def make_photo(self, dims=(256, 256, 3)):
         """Make a photo."""
@@ -90,7 +93,9 @@ class DataSource:
 
         return image_bytes
 
-    async def make_uploads_for_user(self, user_header, number_of_uploads):
+    async def make_photo_uploads_for_user(
+        self, user_header, number_of_uploads
+    ):
         """Make uploads for user."""
         list_ids = []
         for _ in range(number_of_uploads):

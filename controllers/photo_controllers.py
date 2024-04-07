@@ -13,7 +13,13 @@ from controllers import (
     HttpSession,
 )
 from config import config
-from data import PhotoResponseItem, Photo
+from data import (
+    PhotoResponseListItem,
+    PhotoResponseItem,
+    Photo,
+    UserFollowRelation,
+    BaseResponse,
+)
 from logger import log
 
 
@@ -91,12 +97,68 @@ async def download_photo(
 
 
 @log()
+@photo_router.get("/list/{user_id}", response_model=PhotoResponseListItem)
+async def list_photos(
+    user_id: int, session: CurrentAsyncSession, user: CurrentUser
+) -> Response:
+    """List all photos."""
+
+    if user_id != user.id:
+        relation = await UserFollowRelation.GetByArgs(
+            session, {"follower_id": user.id, "followed_id": user_id}
+        )
+        if not relation:
+            return create_response(
+                message="User is not following!",
+                status=status.HTTP_400_BAD_REQUEST,
+                response_model=PhotoResponseListItem,
+                item=[],
+            )
+    photos = await Photo.GetByArgs(session, {"user_id": user_id})
+    return create_response(
+        message="Photos listed!",
+        status=status.HTTP_200_OK,
+        response_model=PhotoResponseListItem,
+        item=[{"photo_id": str(photo.uuid)} for photo in photos],
+    )
+
+
+@log()
+@photo_router.post("/follow/{user_id}", response_model=BaseResponse)
+async def follow_user(
+    user_id: int, session: CurrentAsyncSession, user: CurrentUser
+) -> Response:
+    """Follow a user."""
+
+    relation = await UserFollowRelation.GetByArgs(
+        session, {"follower_id": user.id, "followed_id": user_id}
+    )
+    if relation:
+        return create_response(
+            message="User is already following!",
+            status=status.HTTP_400_BAD_REQUEST,
+            response_model=BaseResponse,
+            item=None,
+        )
+    await UserFollowRelation.AddNew(
+        session, {"follower_id": user.id, "followed_id": user_id}
+    )
+    return create_response(
+        message="User followed!",
+        status=status.HTTP_200_OK,
+        response_model=BaseResponse,
+        item=None,
+    )
+
+
+@log()
 @photo_router.delete("/delete/{photo_id}", response_model=PhotoResponseItem)
 async def download_photo(
     photo_id: str,
     object_client: ObjectStorageClient,
     session: CurrentAsyncSession,
     http_session: HttpSession,
+    _: CurrentUser,
 ) -> Response:
     """Download a photo."""
 

@@ -31,8 +31,9 @@ from .responses import (
     PhotoResponse,
     PhotoInfoResponse,
     PhotoResponseItem,
+    PhotoResponseListItem,
     PhotoInfoResponseItem,
-    PhotoInfoListResponseItem,
+    PhotoInfoResponseListItem,
 )
 
 from .quote import PydanticQuote
