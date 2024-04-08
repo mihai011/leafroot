@@ -42,7 +42,7 @@ Leafroot is a personal exercise for me as a software engineer.
     33. TODO: Add ChatGPT features.
     34. TODO: Add WebGPU features.
     35. TODO: Add all neccesary variables in a .env file to maintain a single source of truth.
-    46. TODO: Find out how ariflow init container works.
+    46. DONE: Find out how ariflow init container works.
     47. TODO: Add slack integrations.
     47. TODO: Add traefik.
     48. TODO: Add DISCORD implementation.
@@ -50,8 +50,8 @@ Leafroot is a personal exercise for me as a software engineer.
     50. TODO: Make connection from scylladb to spark and kafka.
     51. TODO: Include Dask package.
     52. TODO: Organize ELK infrastructure for logging.
-    53. TODO: Create an ETL for machine learning models training and releasing to produdction.
-    54. TODO: Create a photo store.
+    53. TODO: Create an ETL for machine learning models training and releasing to production.
+    54. DONE: Create a photo store.
 
 
 
@@ -114,3 +114,6 @@ poetry up # this updates package versions in pyproject.toml
 ```
 bash .git/hooks/pre-commit
 ```
+
+
+![Photo Store](diagrams_schema/photo_store.png)

@@ -10,6 +10,7 @@ from sqlalchemy.orm import sessionmaker, Session, declarative_base
 from sqlalchemy.future import select
 from sqlalchemy import Column, Integer, DateTime
 
+from cache import testproof_cache, my_key_builder
 from config import config
 
 
@@ -101,6 +102,7 @@ class ExtraBase(SerializerMixin):
         return o
 
     @classmethod
+    @testproof_cache(key_builder=my_key_builder)
     async def GetByArgs(cls, session, args):
         """Get object by args."""
 
