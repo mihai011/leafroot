@@ -13,45 +13,34 @@ Leafroot is a personal exercise for me as a software engineer.
     3. Docker containers and local environment already set up.
     4. Circle CI config for testing implemented.
     6. Implemented health check.
-    7. TODO: Add MongoDB, Cassandra, ScyllaDB and SurrealDB
-    8. TODO: Circle CI pipeline for fast deployment to AWS.
     9. TODO: Add chat integration using socketio.
     10. TODO: Implement stress test.
     11. DONE: Mongo database for test.
     12. TODO: Implement Exception processing.
     13. TODO: Implement Super User.
-    14. TODO: Implement salts for passwords.
-    15. TODO: Experiment with Apache Family (Kafka, Airlfow)
-    16. TODO: Integrate Buildkite workflow.
     17. TODO: Add a rate limiter and used circumvent it in testing.
-    18. TODO: Implement a rate limiter.
-    19. TODO: Implment consistent hashing.
-    20. TODO: Implement a key-value store.
-    21. TODO: Implement a unique id generator in distributed systems.
-    22. DONE: Implement a url shortner.
-    23. TODO: Implement a web crawler.
-    24. TODO: Implement a notification system.
-    25. TODO: Implement a news feed system.
-    26. TODO: Implement a chat system.
-    27. TODO: Implement a search autocomplete system.
-    28. TODO: Implement Youtube.
-    29. TODO: Implement Google Drive.
-    30. TODO: Implement coverage html page exposed from path.
-    31. DONE: Implement OpenAPI Swagger documentation and write Postman documentation for frontend developers.
+    18. TODO: Implement a key-value store.
+    19. TODO: Implement a unique id generator in distributed systems.
+    20. DONE: Implement a url shortner.
+    22. TODO: Implement a web crawler.
+    23. TODO: Implement a notification system.
+    24. TODO: Implement a news feed system.
+    25. TODO: Implement a chat system.
+    26. TODO: Implement a search autocomplete system.
+    27. TODO: Implement Youtube.
+    28. TODO: Implement Google Drive.
+    29. TODO: Implement coverage html page exposed from path.
+    30. DONE: Implement OpenAPI Swagger documentation and write
+    Postman documentation for frontend developers.
+    31. TODO: Implement discord.
     32. TODO: Implement stress test with locust and docker.
     33. TODO: Add ChatGPT features.
-    34. TODO: Add WebGPU features.
-    35. TODO: Add all neccesary variables in a .env file to maintain a single source of truth.
-    46. DONE: Find out how ariflow init container works.
-    47. TODO: Add slack integrations.
-    47. TODO: Add traefik.
-    48. TODO: Add DISCORD implementation.
-    49. TODO: Implement pagination, async logging, payload compression, connection pool.
-    50. TODO: Make connection from scylladb to spark and kafka.
-    51. TODO: Include Dask package.
-    52. TODO: Organize ELK infrastructure for logging.
-    53. TODO: Create an ETL for machine learning models training and releasing to production.
-    54. DONE: Create a photo store.
+    34. TODO: Add slack integrations.
+    35. TODO: Add DISCORD implementation.
+    36. TODO: Implement pagination, async logging, payload compression.
+    37. TODO: Organize ELK infrastructure for logging.
+    38. TODO: Create an ETL for machine learning models training and releasing to production.
+    39. DONE: Create a photo store.
 
 
 

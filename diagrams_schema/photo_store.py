@@ -1,8 +1,7 @@
 """Diagram for photo store"""
 
 # FastApi, Postgresql, Redis, Minio(S3)
-from diagrams import Diagram
-from diagrams import Diagram
+from diagrams import Diagram, Edge
 
 from diagrams.custom import Custom
 
@@ -18,6 +17,7 @@ with Diagram("Photo Store", show=False):
     postgres = Postgresql("Postgresql")
     minio = Custom("Minio", "minio-logo-white.png")
 
-    user >> api >> minio
-    api >> postgres
-    api >> redis
+    user >> Edge() << api
+    api >> Edge() << postgres
+    api >> Edge() << redis
+    api >> Edge() << minio
