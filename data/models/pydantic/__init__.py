@@ -40,3 +40,4 @@ from .quote import PydanticQuote
 from .message import MessageBoardPacket, MessagePacket, ChatUser
 from .url import UrlPacket
 from .objects import PhotoPacket
+from .keyvalue import KeyValuePacket

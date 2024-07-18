@@ -9,38 +9,37 @@ Leafroot is a personal exercise for me as a software engineer.
         - asynchronous controllers
         - asynchronous connections to external services like databases.
         - asynchronous and parallel tests
-    2. Alembic made migrations for the database.
-    3. Docker containers and local environment already set up.
-    4. Circle CI config for testing implemented.
-    6. Implemented health check.
-    9. TODO: Add chat integration using socketio.
-    10. TODO: Implement stress test.
-    11. DONE: Mongo database for test.
-    12. TODO: Implement Exception processing.
-    13. TODO: Implement Super User.
-    17. TODO: Add a rate limiter and used circumvent it in testing.
-    18. TODO: Implement a key-value store.
-    19. TODO: Implement a unique id generator in distributed systems.
-    20. DONE: Implement a url shortner.
-    22. TODO: Implement a web crawler.
-    23. TODO: Implement a notification system.
-    24. TODO: Implement a news feed system.
-    25. TODO: Implement a chat system.
-    26. TODO: Implement a search autocomplete system.
-    27. TODO: Implement Youtube.
-    28. TODO: Implement Google Drive.
-    29. TODO: Implement coverage html page exposed from path.
-    30. DONE: Implement OpenAPI Swagger documentation and write
+    2. DONE Alembic made migrations for the database.
+    3. DONE: Docker containers and local environment already set up.
+    4. DONE: Circle CI config for testing implemented.
+    5. TODO: Add chat integration using socketio.
+    6. TODO: Implement stress test.
+    7. DONE: Mongo database for test.
+    8. TODO: Implement Exception processing.
+    9. TODO: Implement Super User.
+    10. TODO: Add a rate limiter and used circumvent it in testing.
+    11. TODO: Implement a key-value store.
+    12. TODO: Implement a unique id generator in distributed systems.
+    23. DONE: Implement a url shortner.
+    24. TODO: Implement a web crawler.
+    25. TODO: Implement a notification system.
+    26. TODO: Implement a news feed system.
+    27. TODO: Implement a chat system.
+    28. TODO: Implement a search autocomplete system.
+    29. TODO: Implement Youtube.
+    30. TODO: Implement Google Drive.
+    31. TODO: Implement coverage html page exposed from path.
+    32. DONE: Implement OpenAPI Swagger documentation and write
     Postman documentation for frontend developers.
-    31. TODO: Implement discord.
-    32. TODO: Implement stress test with locust and docker.
-    33. TODO: Add ChatGPT features.
-    34. TODO: Add slack integrations.
-    35. TODO: Add DISCORD implementation.
-    36. TODO: Implement pagination, async logging, payload compression.
-    37. TODO: Organize ELK infrastructure for logging.
-    38. TODO: Create an ETL for machine learning models training and releasing to production.
-    39. DONE: Create a photo store.
+    34. TODO: Implement discord.
+    35. TODO: Implement stress test with locust and docker.
+    36. TODO: Add ChatGPT features.
+    37. TODO: Add slack integrations.
+    38. TODO: Add DISCORD implementation.
+    39. TODO: Implement pagination, async logging, payload compression.
+    40. TODO: Organize ELK infrastructure for logging.
+    41. TODO: Create an ETL for machine learning models training and releasing to production.
+    42. DONE: Create a photo store.
 
 
 
@@ -104,5 +103,24 @@ poetry up # this updates package versions in pyproject.toml
 bash .git/hooks/pre-commit
 ```
 
+
+What to learn in this project
+- Adhering to programming standards
+- Programming design principles, such as:
+  - Single Responsibility Principle
+  - Open/Closed Principle
+  - Liskov Substitution Principle
+  - Interface Segregation Principle
+  - Dependency Inversion Principle
+- Design patterns, including:
+  - Creational patterns
+  - Structural patterns
+  - Behavioral patterns
+- Enhancing code readability through effective naming
+- Testing concepts, like:
+  - End-to-end (E2E) testing
+  - Unit testing
+- Managing time efficiently
+- Strategically pacing project development
 
 ![Photo Store](diagrams_schema/photo_store.png)

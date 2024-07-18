@@ -41,6 +41,7 @@ from data.models.pydantic import (
     BaseResponse,
     ErrorResponse,
     PhotoPacket,
+    KeyValuePacket,
     PhotoResponse,
     PhotoInfoResponse,
     UrlShortResponseItem,

@@ -15,6 +15,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import IntegrityError
 import sentry_sdk
 
+from controllers.keyvalue_controllers import keyvalue_router
 from controllers.users_controllers import user_router
 from controllers.base_controllers import base_router
 from controllers.atom_controllers import atom_router
@@ -101,6 +102,7 @@ app.include_router(quotes_router)
 app.include_router(cassandra_router)
 app.include_router(url_router)
 app.include_router(photo_router)
+app.include_router(keyvalue_router)
 
 
 @app.on_event("startup")
