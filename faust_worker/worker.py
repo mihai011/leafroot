@@ -1,9 +1,14 @@
-#!/usr/bin/env python
 import faust
+
+import sys
+
+sys.path.append("/leafroot")
+
+from config import config
 
 app = faust.App(
     "hello-world",
-    broker="kafka://kafka:9092",
+    broker=f"kafka://{config.kafka_host}:9092",
 )
 
 greetings_topic = app.topic("greetings", value_type=str)
@@ -17,7 +22,7 @@ async def print_greetings(greetings):
 
 @app.timer(5)
 async def produce():
-    for i in range(1000000):
+    for i in range(1000):
         await greetings_topic.send(value=f"hello {i}")
 
 

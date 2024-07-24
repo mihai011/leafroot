@@ -7,7 +7,7 @@ AIRFLOW_SERVICES = airflow-webserver airflow-scheduler airflow-worker airflow-tr
 SPARK_SERVICES = spark-master spark-worker
 KAFKA_SERVICES = zookeeper broker
 ELK_SERVICES = elasticsearch logstash kibana setup
-DOCKER_COMPOSES= -f docker-compose.yml -f docker-compose-airflow.yml -f docker-compose-spark.yml -f docker-compose-kafka.yml -f docker-compose-elk.yml
+DOCKER_COMPOSES = -f docker-compose.yml -f docker-compose-airflow.yml -f docker-compose-spark.yml -f docker-compose-kafka.yml -f docker-compose-elk.yml
 FULL_SERVICES = $(SERVICES) $(AIRFLOW_SERVICES) $(SPARK_SERVICES) $(KAFKA_SERVICES) $(ELK_SERVICES)
 BASIC_SERVICES = $(SERVICES) $(ELK_SERVICES)
 USER=$(shell whoami)
@@ -81,11 +81,14 @@ docformatter:
 pycodestyle:
 	poetry run pycodestyle -r $(DIR_ARGS)
 
-
 basic:
-	docker compose --env-file $(ENV_FILE) up -d --build
+	docker compose --env-file $(ENV_FILE)  $(DOCKER_COMPOSES) up -d --build $(BASIC_SERVICES)
+
 elk:
-	docker compose --env-file $(ENV_FILE) -f docker-compose-elk.yml up -d $(ELK_SERVICES)
+	docker compose --env-file $(ENV_FILE)  $(DOCKER_COMPOSES)  up -d $(ELK_SERVICES)
+
+kafka:
+	docker compose --env-file $(ENV_FILE)  $(DOCKER_COMPOSES)  up -d $(KAFKA_SERVICES)
 
 start_services:
 	docker compose --env-file $(ENV_FILE) up -d $(SERVICES)
