@@ -1,3 +1,5 @@
+"""Just a file for pyspark test"""
+
 from pyspark.sql import SparkSession  # Create a SparkSession
 
 spark = (

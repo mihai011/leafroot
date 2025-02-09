@@ -12,7 +12,7 @@ async def test_url_status(async_session):
 
     ds = DataSource(async_session)
     await ds.make_user()
-    url_package = {"url": "http://test.com"}
+    url_package = {"url": "http://test.com/test"}
     response = await ds.client.post(
         "/url-short/set", json=url_package, headers=ds.headers["Test_user"]
     )
@@ -30,7 +30,7 @@ async def test_url_status(async_session):
     url_response = response.json()
     assert url_response["item"]["url"] == url_package["url"]
 
-    url_package = {"url": "http:/wrong_url.com"}
+    url_package = {"url": "ftp:/wrong_url.com"}
     response = await ds.client.post(
         "/url-short/set", json=url_package, headers=ds.headers["Test_user"]
     )

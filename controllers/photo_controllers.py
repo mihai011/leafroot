@@ -1,4 +1,5 @@
 """Photo controllers."""
+
 import io
 
 from fastapi import APIRouter, status

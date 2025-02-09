@@ -56,7 +56,6 @@ class Library(BaseMongo):
 class BookPackage(BaseModel):
     """Book Package top be received by controllers."""
 
-    id: str = Field(default_factory=uuid.uuid4, alias="_id")
     title: str = Field(...)
     author: str = Field(...)
     synopsis: str = Field(...)

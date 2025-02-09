@@ -1,4 +1,5 @@
 """Pydantic class for objects."""
+
 from typing import Literal
 from pydantic import BaseModel, StrictBytes
 

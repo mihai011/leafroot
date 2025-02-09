@@ -1,5 +1,5 @@
-""" Cassandra Models
-"""
+"""Cassandra Models"""
+
 from cassandra.cqlengine import columns
 from cassandra.cqlengine.models import Model
 

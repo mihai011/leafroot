@@ -22,8 +22,8 @@ async def create_url(
 ):
     """Make a short url controller"""
 
-    str_hash = make_short_hash(url_packet.url)
-    await store_string_at_key(redis_client, str_hash, url_packet.url)
+    str_hash = make_short_hash(str(url_packet.url))
+    await store_string_at_key(redis_client, str(str_hash), str(url_packet.url))
 
     return create_response(
         message="Url made!",

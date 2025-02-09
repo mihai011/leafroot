@@ -1,4 +1,5 @@
 """Test Glovo Queries."""
+
 import random
 
 import pytest

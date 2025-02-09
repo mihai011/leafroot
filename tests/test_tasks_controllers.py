@@ -1,4 +1,5 @@
 """Tests for util functions."""
+
 import json
 
 from fastapi import status

@@ -1,4 +1,5 @@
 """Mesage Board Packet model"""
+
 from pydantic import BaseModel, UUID4
 
 

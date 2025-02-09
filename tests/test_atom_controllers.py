@@ -1,4 +1,5 @@
 """Module for testing particles controller."""
+
 import pytest
 from fastapi import status
 
@@ -21,6 +22,8 @@ async def test_particles(async_session):
         json=payload_atom,
     )
     assert response.status_code == status.HTTP_200_OK
+    atom_id = response.json()["item"]["id"]
+    payload_particle["atom_id"] = atom_id
 
     response = await ds.client.post(
         "/atoms/proton", headers=ds.headers["Test_user"], json=payload_particle

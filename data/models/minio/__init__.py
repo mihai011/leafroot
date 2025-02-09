@@ -9,7 +9,7 @@ from config import config
 
 
 minio_client = Minio(
-    config.minio_endpoint,
+    config.minio_url,
     access_key=config.minio_root_user,
     secret_key=config.minio_root_password,
     secure=config.minio_secure,

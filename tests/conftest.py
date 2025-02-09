@@ -1,4 +1,5 @@
 """Configuration module for testing."""
+
 from uuid import uuid4
 
 import asyncio
@@ -127,15 +128,15 @@ async def minio_storage():
     async def override_minio_storage():
         yield minio_object
 
-    app.dependency_overrides[
-        get_object_storage_client
-    ] = override_minio_storage
+    app.dependency_overrides[get_object_storage_client] = (
+        override_minio_storage
+    )
     yield minio_object
     # Remove the test bucket
     await minio_object.remove_bucket()
-    app.dependency_overrides[
+    app.dependency_overrides[get_object_storage_client] = (
         get_object_storage_client
-    ] = get_object_storage_client
+    )
 
 
 @pytest.fixture(autouse=True)

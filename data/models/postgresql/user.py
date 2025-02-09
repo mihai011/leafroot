@@ -1,6 +1,5 @@
 """Used module related data."""
 
-
 from sqlalchemy import Column, String, Integer, ForeignKey
 from sqlalchemy.orm import relationship
 from sqlalchemy.future import select

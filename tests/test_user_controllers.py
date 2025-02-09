@@ -1,4 +1,5 @@
 """Base module for testing."""
+
 import pytest
 from fastapi import status
 
@@ -25,7 +26,11 @@ async def test_login_user(async_session):
     ds = DataSource(async_session)
     data_login = {"email": "test@gmail.com", "password": "test"}
     await ds.make_user(data_login)
-    unknown_data_login = {"email": "test2@gmail.com", "password": "test2"}
+    unknown_data_login = {
+        "email": "test2@gmail.com",
+        "password": "test2",
+        "username": "test2",
+    }
 
     response = await ds.client.post("users/login", json=unknown_data_login)
     response_content = response.json()
@@ -35,15 +40,19 @@ async def test_login_user(async_session):
         == "No user with such email or username found!"
     )
 
-    user_login_data = {"email": "test@gmail.com"}
+    user_login_data = {"email": "test@gmail.com", "password": "test"}
 
     response = await ds.client.post("users/login", json=user_login_data)
     response_content = response.json()
     assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
-    assert "password" in response_content["detail"][0]["loc"]
-    assert response_content["detail"][0]["msg"] == "field required"
+    assert "username" in response_content["detail"][0]["loc"]
+    assert response_content["detail"][0]["msg"] == "Field required"
 
-    user_login_data = {"email": "no_such_user@gmail.com", "password": "test"}
+    user_login_data = {
+        "email": "no_such_user@gmail.com",
+        "password": "test",
+        "username": "test",
+    }
 
     response = await ds.client.post("users/login", json=user_login_data)
     response_content = response.json()
@@ -53,7 +62,11 @@ async def test_login_user(async_session):
         == "No user with such email or username found!"
     )
 
-    user_login_data = {"email": "test@gmail.com", "password": "fake_pass"}
+    user_login_data = {
+        "email": "test@gmail.com",
+        "password": "fake_pass",
+        "username": "Test_user",
+    }
 
     response = await ds.client.post("users/login", json=user_login_data)
     response_content = response.json()
@@ -86,6 +99,7 @@ async def test_signup_user(async_session):
         "username": "test_duplicate",
         "email": "test_alternate@gmail.com",
         "password": "some_password",
+        "permissions": "110",
     }
 
     response = await ds.client.post("users/sign-up", json=user_signup_data)

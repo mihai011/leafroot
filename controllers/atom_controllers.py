@@ -1,4 +1,5 @@
 """Atom controllers."""
+
 from fastapi import APIRouter, status, Depends
 from fastapi.responses import ORJSONResponse
 
@@ -25,7 +26,7 @@ async def create_atom(
 ) -> ORJSONResponse:
     """Create atom here."""
 
-    atom = await Atom.AddNew(session, pydantic_atom.dict())
+    atom = await Atom.AddNew(session, pydantic_atom.model_dump())
 
     return create_response(
         message="Atom created succesfully!",
@@ -44,7 +45,7 @@ async def add_proton(
     """This controller creates a proton with the params received in the
     body."""
 
-    proton = await Proton.AddNew(session, pydantic_proton.dict())
+    proton = await Proton.AddNew(session, pydantic_proton.model_dump())
 
     return create_response(
         message="Proton created succesfully!",

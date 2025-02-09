@@ -1,4 +1,5 @@
 """Pydantic quotes classes."""
+
 from pydantic import BaseModel
 
 

@@ -1,4 +1,5 @@
 """Pydantic class for particle types."""
+
 from typing import Optional
 from pydantic import BaseModel
 

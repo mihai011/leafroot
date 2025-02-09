@@ -1,4 +1,5 @@
 """Models init file."""
+
 from datetime import datetime
 import asyncio
 

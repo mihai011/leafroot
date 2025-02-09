@@ -1,6 +1,6 @@
 """Start of the controller module."""
 
-
+import json
 from typing import Annotated
 
 from aiohttp import ClientSession
@@ -60,4 +60,6 @@ def create_response(
 
     response = response_model(**data)
 
-    return ORJSONResponse(status_code=status, content=response.dict())
+    return ORJSONResponse(
+        status_code=status, content=json.loads(response.json())
+    )

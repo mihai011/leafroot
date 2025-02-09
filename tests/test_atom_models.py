@@ -1,4 +1,5 @@
 """Module for testing particles models."""
+
 import pytest
 
 from data import Neutron, Proton, Electron, Atom

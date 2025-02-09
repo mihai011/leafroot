@@ -1,7 +1,9 @@
 """Models for mongodb database."""
 
 import motor.motor_asyncio
+import uuid
 
+from pydantic import BaseModel
 from config import config
 
 
@@ -56,10 +58,10 @@ class BaseMongo:
         return [document async for document in cursor]
 
     @classmethod
-    async def AddItem(cls, db, item) -> bool:
+    async def AddItem(cls, db, item: BaseModel) -> bool:
         """Add a book to library."""
         collection = db[cls.collection__name]
-        data = item.dict()
-        data["id"] = str(data["id"])
+        data = item.model_dump()
+        data["id"] = str(uuid.uuid4())
         res = await collection.insert_one(data)
         return res.acknowledged

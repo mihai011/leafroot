@@ -1,5 +1,6 @@
 """Module for pydantic responses."""
-from typing import Optional, Union, List, Dict, Any
+
+from typing import Optional, Union, List, Dict, Any, Union
 
 from pydantic import BaseModel, UUID4, HttpUrl
 
@@ -8,7 +9,7 @@ class BaseResponse(BaseModel):
     """Basic response."""
 
     message: str
-    item: Optional[str]
+    item: Optional[Union[str, bool, int, float, dict, list]]
 
 
 class BaseMeta(BaseModel):
@@ -88,9 +89,9 @@ class TaskResponse(BaseModel):
     """Response for task"""
 
     task_id: UUID4
-    date_done: Optional[str]
-    traceback: Optional[str]
-    children: Optional[List[str]]
+    date_done: Optional[str] = None
+    traceback: Optional[str] = None
+    children: Optional[List[str]] = None
     result: Optional[Dict[Any, Any]]
     status: str
 
@@ -159,6 +160,7 @@ class AtomResponse(BaseModel):
     x: float
     y: float
     z: float
+    id: int
 
     neutrons: Optional[List[ParticleResponse]]
     protons: Optional[List[ParticleResponse]]

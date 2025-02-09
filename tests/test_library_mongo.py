@@ -1,4 +1,5 @@
 """Tests for mongo library models."""
+
 import json
 import pytest
 from fastapi import status
@@ -37,7 +38,9 @@ async def test_library_controllers(async_session, mongo_db):
 
     book = BookPackage(title="test", author="test", synopsis="control")
     response = await ds.client.post(
-        "/library/book", headers=ds.headers["Test_user"], data=book.json()
+        "/library/book",
+        headers=ds.headers["Test_user"],
+        data=book.model_dump_json(),
     )
     assert response.status_code == status.HTTP_200_OK
 

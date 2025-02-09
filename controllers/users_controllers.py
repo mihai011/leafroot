@@ -101,7 +101,7 @@ async def login(
 ) -> ORJSONResponse:
     """Login controller for a user."""
 
-    data = pydantic_user.dict(exclude_none=True)
+    data = pydantic_user.model_dump(exclude_none=True)
     password = data.pop("password")
     users = await User.GetByArgs(session, data)
 
@@ -147,7 +147,7 @@ async def sign_up(
 ) -> ORJSONResponse:
     """Sign-up controller for the user."""
 
-    params = form.dict()
+    params = form.model_dump()
     password = params.pop("password")
     hashed_pass = get_password_hash(password)
     params["hashed_pass"] = hashed_pass

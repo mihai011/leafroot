@@ -1,4 +1,5 @@
 """Url packets"""
+
 from pydantic import BaseModel, HttpUrl
 
 

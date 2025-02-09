@@ -1,19 +1,17 @@
 """Datasource module for testing."""
-import base64
 
 from tqdm import tqdm
 from faker import Faker
-from httpx import AsyncClient
+from httpx import AsyncClient, ASGITransport
 from fastapi import status
 from fastapi.testclient import TestClient
-from PIL import Image
 import numpy as np
 from io import BytesIO
-
+from PIL import Image
 
 from app.app import app
 from data import User
-from utils import random_string, is_valid_uuid
+from utils import random_string
 
 
 class DataSource:
@@ -21,7 +19,9 @@ class DataSource:
 
     def __init__(self, session):
         """Datasource class constructor."""
-        self.client = AsyncClient(app=app, base_url="http://test")
+        self.client = AsyncClient(
+            transport=ASGITransport(app=app), base_url="http://test"
+        )
         self.test_client = TestClient(app=app, base_url="http://test")
         self.headers = {}
         self.session = session
@@ -48,7 +48,7 @@ class DataSource:
             "username": "Test_user",
             "email": "test@gmail.com",
             "password": "test",
-            "address": "test",
+            "permissions": "110",
         }
 
         if received_args:

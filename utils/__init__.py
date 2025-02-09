@@ -1,6 +1,5 @@
 """General util module."""
 
-
 import random
 import string
 import subprocess
@@ -51,9 +50,7 @@ def get_password_hash(password: str) -> str:
 @log()
 def make_short_hash(string: str):
     """short hash for a string"""
-    return int(hashlib.sha1(string.encode("utf-8")).hexdigest(), 16) % (
-        10**8
-    )
+    return int(hashlib.sha1(string.encode("utf-8")).hexdigest(), 16) % (10**8)
 
 
 @log()

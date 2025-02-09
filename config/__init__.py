@@ -1,21 +1,23 @@
 """Module that contains application settings."""
 
-from typing import Literal
+from typing import Literal, Optional
 
 from pydantic import (
     Field,
-    BaseSettings,
     RedisDsn,
     PostgresDsn,
     AmqpDsn,
     MongoDsn,
     AnyUrl,
+    computed_field,
 )
-from pydantic.typing import Optional
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
     """Class responsible for loading up and generating settings."""
+
+    model_config = SettingsConfigDict(case_sensitive=False)
 
     app_name: str = "Fast Full API"
     env: Literal["dev", "prod", "circle"]
@@ -42,15 +44,15 @@ class Settings(BaseSettings):
     port: Optional[int] = Field(..., ge=1024, le=65536)
 
     kafka_host: Optional[str]
-    kafka_url: Optional[AnyUrl]
+    # kafka_url: Optional[AnyUrl]
 
     spark_host: Optional[str]
-    spark_url: Optional[AnyUrl]
+    # spark_url: Optional[AnyUrl]
 
     cassandradb_host: Optional[str]
 
     scylladb_host: Optional[str]
-    scylladb_url: Optional[AnyUrl]
+    # scylladb_url: Optional[AnyUrl]
 
     surrealdb_host: Optional[str]
     surrealdb_port: Optional[str]
@@ -58,18 +60,18 @@ class Settings(BaseSettings):
     surrealdb_pass: Optional[str]
     surrealdb_namespace: Optional[str]
     surrealdb_db: Optional[str]
-    surrealdb_url: Optional[AnyUrl]
+    # surrealdb_url: Optional[AnyUrl]
 
-    celery_broker_url: Optional[AmqpDsn]
-    redis_url: Optional[RedisDsn]
+    # celery_broker_url: Optional[AmqpDsn]
+    # redis_url: Optional[RedisDsn]
 
-    mongo_url_auth: Optional[MongoDsn]
-    mongo_url_not_auth: Optional[MongoDsn]
+    # mongo_url_auth: Optional[MongoDsn]
+    # mongo_url_not_auth: Optional[MongoDsn]
 
-    sqlalchemy_database_url_async: Optional[PostgresDsn]
-    sqlalchemy_database_url_base_async: Optional[PostgresDsn]
-    sqlalchemy_database_url_sync: Optional[PostgresDsn]
-    sqlalchemy_database_url_base_sync: Optional[PostgresDsn]
+    # sqlalchemy_database_url_async: Optional[PostgresDsn]
+    # sqlalchemy_database_url_base_async: Optional[PostgresDsn]
+    # sqlalchemy_database_url_sync: Optional[PostgresDsn]
+    # sqlalchemy_database_url_base_sync: Optional[PostgresDsn]
 
     user_name: Optional[str]
     user_email: Optional[str]
@@ -85,7 +87,7 @@ class Settings(BaseSettings):
     minio_root_password: str
     minio_host: str
     minio_port: str
-    minio_endpoint: Optional[str]
+    # minio_url: Optional[str]
     minio_bucket: str
     minio_secure: bool
 
@@ -98,74 +100,69 @@ class Settings(BaseSettings):
     DEBUG_LOG_FILE: Optional[str] = "debug.log"
     CRITICAL_LOG_FILE: Optional[str] = "critical.log"
 
-    class Config:
-        """Config class."""
-
-        validate_assignment = True
-
-    def __init__(self):
-        super().__init__()
-        self.create_celery_broker_url()
-        self.create_celery_result_backend()
-        self.create_database_urls()
-        self.create_mongo_url()
-        self.create_spark_url()
-        self.create_kafka_url()
-        self.create_surrealdb_url()
-        self.create_minio_url()
-
-    def create_minio_url(self):
+    @computed_field
+    def minio_url(self) -> AnyUrl:
         """Create minio url from minio host and minio port."""
         host = self.interface or self.minio_host
-        self.minio_endpoint = f"{host}:{self.minio_port}"
+        return f"{host}:{self.minio_port}"
 
-    def create_surrealdb_url(self):
+    @computed_field
+    def surrealdb_url(self) -> AnyUrl:
         """Create Surrealdb url from surreal host."""
         host = self.interface or self.surrealdb_host
-        self.surrealdb_url = f"http://{host}:{self.surrealdb_port}"
+        return f"http://{host}:{self.surrealdb_port}"
 
-    def create_kafka_url(self):
+    @computed_field
+    def kafka_url(self) -> AnyUrl:
         """Create kafka connection url from kafka host"""
         host = self.interface or self.kafka_host
-        self.kafka_url = f"aiokafka://{host}"
+        return f"aiokafka://{host}"
 
-    def create_spark_url(self):
+    @computed_field
+    def spark_url(self) -> AnyUrl:
         """Create spark conection url"""
         host = self.interface or self.spark_host
+        return f"spark://{host}"
 
-        self.spark_url = f"spark://{host}"
-
-    def create_mongo_url(self):
+    @computed_field
+    def mongo_url_auth(self) -> AnyUrl:
         """Create the connection url for mongo."""
         host = self.interface or self.mongo_host
 
-        self.mongo_url_auth = "mongodb://{}:{}@{}:{}".format(
+        return "mongodb://{}:{}@{}:{}".format(
             self.mongo_initdb_root_username,
             self.mongo_initdb_root_password,
             host,
             self.mongo_port,
         )
 
-        self.mongo_url_not_auth = "mongodb://{}:{}".format(
-            host, self.mongo_port
-        )
+    @computed_field
+    def mongo_url_not_auth(self) -> MongoDsn:
+        """Create the connection not auth url for mongo."""
 
-    def create_celery_broker_url(self):
+        host = self.interface or self.mongo_host
+        return "mongodb://{}:{}".format(host, self.mongo_port)
+
+    @computed_field
+    def celery_broker_url(self) -> AmqpDsn:
         """Create the url for the celery broker."""
+
         host = self.interface or self.rabbitmq_host
-        self.celery_broker_url = "{}://{}:5672".format(
-            self.rabbitmq_protocol, host
-        )
+        return "{}://{}:5672".format(self.rabbitmq_protocol, host)
 
-    def create_celery_result_backend(self):
+    @computed_field
+    def redis_url(self) -> RedisDsn:
         """Create the url for the celery backend."""
-        host = self.interface or self.redis_host
-        self.redis_url = "{}://{}:6379".format(self.redis_protocol, host)
 
-    def create_database_urls(self):
+        host = self.interface or self.redis_host
+        return "{}://{}:6379".format(self.redis_protocol, host)
+
+    @computed_field
+    def sqlalchemy_database_url_async(self) -> PostgresDsn:
         """Create the database urls."""
+
         host = self.interface or self.postgres_host
-        self.sqlalchemy_database_url_async = "{}://{}:{}@{}/{}".format(
+        return "{}://{}:{}@{}/{}".format(
             "postgresql+asyncpg",
             self.postgres_user,
             self.postgres_password,
@@ -173,14 +170,24 @@ class Settings(BaseSettings):
             self.postgres_db,
         )
 
-        self.sqlalchemy_database_url_base_async = "{}://{}:{}@{}/".format(
+    @computed_field
+    def sqlalchemy_database_url_base_async(self) -> PostgresDsn:
+        """Create the base url for the async database."""
+
+        host = self.interface or self.postgres_host
+        return "{}://{}:{}@{}/".format(
             "postgresql+asyncpg",
             self.postgres_user,
             self.postgres_password,
             host,
         )
 
-        self.sqlalchemy_database_url_sync = "{}://{}:{}@{}/{}".format(
+    @computed_field
+    def sqlalchemy_database_url_sync(self) -> PostgresDsn:
+        """Created the base url for the sync database."""
+
+        host = self.interface or self.postgres_host
+        return "{}://{}:{}@{}/{}".format(
             "postgresql",
             self.postgres_user,
             self.postgres_password,
@@ -188,7 +195,11 @@ class Settings(BaseSettings):
             self.postgres_db,
         )
 
-        self.sqlalchemy_database_url_base_sync = "{}://{}:{}@{}/".format(
+    @computed_field
+    def sqlalchemy_database_url_base_sync(self) -> PostgresDsn:
+        """Created the base url for the sync database."""
+        host = self.interface or self.postgres_host
+        return "{}://{}:{}@{}/".format(
             "postgresql",
             self.postgres_user,
             self.postgres_password,

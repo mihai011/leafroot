@@ -1,4 +1,5 @@
 """External requests util functions."""
+
 import urllib
 from aiohttp import ClientSession
 

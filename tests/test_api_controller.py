@@ -20,13 +20,13 @@ async def test_api(async_session):
         body="request body",
         method="GET",
         params={},
-        headers=(),
+        headers={},
     )
     with aioresponses() as mocked:
-        mocked.get(payload_api.url, status=200, body="test1")
+        mocked.get(str(payload_api.url), status=200, body="test1")
         response = await ds.client.post(
             "/api/external",
-            data=payload_api.json(),
+            data=payload_api.model_dump_json(),
             headers=ds.headers["Test_user"],
         )
     assert response.status_code == status.HTTP_200_OK

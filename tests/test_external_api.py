@@ -1,4 +1,5 @@
 """Tests for external call functions."""
+
 import aiohttp
 import pytest
 from aioresponses import aioresponses

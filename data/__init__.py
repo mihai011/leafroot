@@ -3,7 +3,7 @@
 from enum import Enum
 from sqlalchemy_utils import database_exists, create_database
 from pydantic import BaseModel, HttpUrl
-from pydantic.typing import Dict
+from typing import Dict, Optional
 
 from data.models.postgresql import Base, ExtraBase
 from data.models.postgresql.user import User, UserFollowRelation

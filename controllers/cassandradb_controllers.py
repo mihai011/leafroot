@@ -1,4 +1,5 @@
 """Cassandraa db controllers."""
+
 import uuid
 from datetime import datetime
 

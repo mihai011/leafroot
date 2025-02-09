@@ -1,4 +1,5 @@
-"""KeyValues packet model """
+"""KeyValues packet model"""
+
 from typing import Union
 from pydantic import BaseModel
 

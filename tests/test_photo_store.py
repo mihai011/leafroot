@@ -1,6 +1,5 @@
 """Module for testing endpoints of a photo store."""
 
-
 import pytest  # pylint: disable=R0801
 
 from tests import DataSource  # pylint: disable=R0801
