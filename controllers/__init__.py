@@ -17,6 +17,8 @@ from data import (
     User,
     BaseResponse,
     MyMinio,
+    MyIcebergCatalog,
+    get_iceberg_catalog,
     get_async_session,
     get_sync_session,
     get_mongo_database,
@@ -34,6 +36,7 @@ HttpSession = Annotated[ClientSession, Depends(get_http_session)]
 CassandraCluster = Annotated[Cluster, Depends(get_cassandra_cluster)]
 RedisAsyncClient = Annotated[Redis, Depends(get_redis_async_client)]
 ObjectStorageClient = Annotated[MyMinio, Depends(get_object_storage_client)]
+IcebergCatalog = Annotated[MyIcebergCatalog, Depends(get_iceberg_catalog)]
 
 
 async def auth(

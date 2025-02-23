@@ -173,3 +173,6 @@ logstash.db-journal
 
 #minio data
 minio_data/
+
+#rabbitmq data
+rabbitmq_data/

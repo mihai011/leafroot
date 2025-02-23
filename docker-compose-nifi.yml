@@ -1,0 +1,52 @@
+---
+services:
+    nifi:
+        build:
+            context: .
+            dockerfile: Dockerfile-nifi
+        container_name: nifi
+        hostname: ${NIFI_HOST}
+        environment:
+            - SINGLE_USER_CREDENTIALS_USERNAME=${NIFI_USER}
+            - SINGLE_USER_CREDENTIALS_PASSWORD=${NIFI_PASSWORD}
+        ports:
+            - 8080:8080
+            - 8181:8181
+            - 8443:8443
+            - 10000:10000
+        volumes:
+            - type: volume
+              source: conf
+              target: /opt/nifi/nifi-current/conf
+            - type: volume
+              source: content
+              target: /opt/nifi/nifi-current/content_repository
+            - type: volume
+              source: db
+              target: /opt/nifi/nifi-current/database_repository
+            - type: volume
+              source: flowfile
+              target: /opt/nifi/nifi-current/flowfile_repository
+            - type: volume
+              source: provenance
+              target: /opt/nifi/nifi-current/provenance_repository
+            - type: volume
+              source: logs
+              target: /opt/nifi/nifi-current/logs
+            - type: volume
+              source: data
+              target: /opt/nifi/nifi-current/data
+            - type: volume
+              source: state
+              target: /opt/nifi/nifi-current/state
+        networks:
+            - shared_network
+volumes:
+    conf:
+    content:
+    db:
+    flowfile:
+    provenance:
+    logs:
+    data:
+    state:

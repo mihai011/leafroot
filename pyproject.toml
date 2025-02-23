@@ -137,6 +137,7 @@ pytest-timeout = ">=2.3.1"
 graphviz = ">=0.20.3"
 aiokafka = ">=0.10.0"
 pydantic-settings = "^2.7.1"
+pyiceberg = ">=0.8.1"
 
 
 [build-system]

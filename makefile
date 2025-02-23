@@ -7,7 +7,8 @@ AIRFLOW_SERVICES = airflow-webserver airflow-scheduler airflow-worker airflow-tr
 SPARK_SERVICES = spark-master spark-worker
 KAFKA_SERVICES = zookeeper broker
 ELK_SERVICES = elasticsearch logstash kibana setup
-DOCKER_COMPOSES = -f docker-compose.yml -f docker-compose-airflow.yml -f docker-compose-spark.yml -f docker-compose-kafka.yml -f docker-compose-elk.yml
+NIFI_SERVICES = nifi rabbitmq minio zookeeper broker
+DOCKER_COMPOSES = -f docker-compose.yml -f docker-compose-airflow.yml -f docker-compose-spark.yml -f docker-compose-kafka.yml -f docker-compose-elk.yml -f docker-compose-nifi.yml
 FULL_SERVICES = $(SERVICES) $(AIRFLOW_SERVICES) $(SPARK_SERVICES) $(KAFKA_SERVICES) $(ELK_SERVICES)
 BASIC_SERVICES = $(SERVICES) $(ELK_SERVICES)
 USER=$(shell whoami)
@@ -20,6 +21,7 @@ venv_create:
 	pip install poetry
 	poetry install --no-root
 	poetry run pre-commit install
+	apt update && apt install -y default-jre
 
 venv_update:
 	poetry update
@@ -86,6 +88,9 @@ basic:
 
 elk:
 	docker compose --env-file $(ENV_FILE)  $(DOCKER_COMPOSES)  up -d $(ELK_SERVICES)
+
+nifi:
+	docker compose --env-file $(ENV_FILE)  $(DOCKER_COMPOSES)  up -d $(NIFI_SERVICES)
 
 kafka:
 	docker compose --env-file $(ENV_FILE)  $(DOCKER_COMPOSES)  up -d $(KAFKA_SERVICES)

@@ -9,6 +9,7 @@ from pydantic import (
     AmqpDsn,
     MongoDsn,
     AnyUrl,
+    HttpUrl,
     computed_field,
 )
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -60,18 +61,6 @@ class Settings(BaseSettings):
     surrealdb_pass: Optional[str]
     surrealdb_namespace: Optional[str]
     surrealdb_db: Optional[str]
-    # surrealdb_url: Optional[AnyUrl]
-
-    # celery_broker_url: Optional[AmqpDsn]
-    # redis_url: Optional[RedisDsn]
-
-    # mongo_url_auth: Optional[MongoDsn]
-    # mongo_url_not_auth: Optional[MongoDsn]
-
-    # sqlalchemy_database_url_async: Optional[PostgresDsn]
-    # sqlalchemy_database_url_base_async: Optional[PostgresDsn]
-    # sqlalchemy_database_url_sync: Optional[PostgresDsn]
-    # sqlalchemy_database_url_base_sync: Optional[PostgresDsn]
 
     user_name: Optional[str]
     user_email: Optional[str]
@@ -90,6 +79,8 @@ class Settings(BaseSettings):
     # minio_url: Optional[str]
     minio_bucket: str
     minio_secure: bool
+    minio_access_key: str
+    minio_secret_key: str
 
     LOG_DIR: Optional[str] = "logs"
 
@@ -205,6 +196,11 @@ class Settings(BaseSettings):
             self.postgres_password,
             host,
         )
+
+    @computed_field
+    def s3_endpoint(self) -> HttpUrl:
+        """Create the s3 endpoint."""
+        return f"http://{self.minio_host}:{self.minio_port}"
 
 
 config = Settings()

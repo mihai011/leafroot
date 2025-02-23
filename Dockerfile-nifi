@@ -1,0 +1,5 @@
+FROM apache/nifi:2.2.0
+
+RUN curl -o /opt/nifi/nifi-current/nar_extensions/nifi-iceberg-services-api-nar-2.0.0-M4.nar https://repo1.maven.org/maven2/org/apache/nifi/nifi-iceberg-services-api-nar/2.0.0-M4/nifi-iceberg-services-api-nar-2.0.0-M4.nar
+RUN curl -o /opt/nifi/nifi-current/nar_extensions/nifi-iceberg-services-nar-2.0.0-M4.nar https://repo1.maven.org/maven2/org/apache/nifi/nifi-iceberg-services-nar/2.0.0-M4/nifi-iceberg-services-nar-2.0.0-M4.nar
+RUN curl -o /opt/nifi/nifi-current/nar_extensions/nifi-iceberg-processors-nar-2.0.0-M4.nar https://repo1.maven.org/maven2/org/apache/nifi/nifi-iceberg-processors-nar/2.0.0-M4/nifi-iceberg-processors-nar-2.0.0-M4.nar
