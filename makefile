@@ -13,7 +13,7 @@ FULL_SERVICES = $(SERVICES) $(AIRFLOW_SERVICES) $(SPARK_SERVICES) $(KAFKA_SERVIC
 BASIC_SERVICES = $(SERVICES) $(ELK_SERVICES)
 USER=$(shell whoami)
 # for mac os install coreutils ot get nproc
-CORES := $(shell nproc)
+CORES := $(sysctl -n hw.ncpu)
 MANUAL_CORES=8
 
 
