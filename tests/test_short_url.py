@@ -1,7 +1,6 @@
 """Test short url feature"""
 
 from fastapi import status
-import pytest
 
 from tests import DataSource
 

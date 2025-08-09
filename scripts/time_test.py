@@ -1,9 +1,10 @@
 # pylint: disable-all
 """Python3 time test controllers."""
 
+import asyncio
 import json
 import sys
-import asyncio
+
 import aiohttp
 from tqdm.asyncio import tqdm
 

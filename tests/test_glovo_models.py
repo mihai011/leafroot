@@ -2,9 +2,7 @@
 
 import random
 
-import pytest
-
-from data import User, Curier, Restaurant, Order, Product, OrderItem
+from data import Curier, Order, OrderItem, Product, Restaurant, User
 
 
 async def test_glovo_queries(async_session):
@@ -56,9 +54,7 @@ async def test_glovo_queries(async_session):
         for i in range(TOTAL_CURIERS)
     ]
 
-    active_curiers = list(
-        set(random.choice(curiers) for _ in range(AVAILABLE_CURIERS))
-    )
+    active_curiers = list(set(random.choice(curiers) for _ in range(AVAILABLE_CURIERS)))
     orders = []
 
     for curier in active_curiers:

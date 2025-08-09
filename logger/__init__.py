@@ -1,19 +1,17 @@
 """Loggers and configuration for loggers."""
 
-import os
-import time
-import logging
 import asyncio
 import json
+import logging
+import time
+from contextlib import contextmanager
 from functools import wraps
 
-
 import json_log_formatter
+from logstash_async.handler import AsynchronousLogstashHandler
 from starlette_context import context
 from starlette_context.errors import ContextDoesNotExistError
-from logstash_async.handler import AsynchronousLogstashHandler
 
-from contextlib import contextmanager
 from base_utils import clear_args_dicts
 from config import config
 
@@ -70,9 +68,7 @@ def wrapping_logic(func, request_id, args, kwargs):
         packet["messages"] = f"Function {func.__name__} ended"
         logger.info(json.dumps(packet))
     except Exception as e:
-        packet[
-            "messages"
-        ] = f"Exception raised in {func.__name__}. exception: {str(e)}"
+        packet["messages"] = f"Exception raised in {func.__name__}. exception: {str(e)}"
         logger.exception(json.dumps(packet))
         # TODO: parse the exception and return a proper one
         raise e
@@ -86,7 +82,7 @@ def log():
             result = None
             try:
                 request_id = context["X-Request-ID"]
-            except ContextDoesNotExistError as e:
+            except ContextDoesNotExistError:
                 pass
 
             if not asyncio.iscoroutinefunction(func):

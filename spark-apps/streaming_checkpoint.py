@@ -3,7 +3,6 @@ Streaming Check point
 """
 
 from pyspark.sql import SparkSession  # Create a SparkSession
-from pyspark.sql.functions import expr
 
 spark = SparkSession.builder.appName("streaming checkpoint").getOrCreate()
 

@@ -2,14 +2,14 @@
 
 from fastapi import APIRouter, status
 
+from config import config
 from controllers import (
-    create_response,
     CurrentUser,
     RedisAsyncClient,
+    create_response,
 )
 from data import UrlPacket, UrlShortResponseItem
 from utils import get_string_at_key, make_short_hash, store_string_at_key
-from config import config
 
 url_router = APIRouter(prefix="/url-short", tags=["url-short"])
 

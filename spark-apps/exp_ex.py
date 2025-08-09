@@ -30,9 +30,7 @@ departureDelays = departureDelays.withColumn(
 
 departureDelays.createOrReplaceTempView("departureDelays")
 
-foo = departureDelays.filter(
-    expr("""origin == 'SEA' and destination == 'SFO'""")
-)
+foo = departureDelays.filter(expr("""origin == 'SEA' and destination == 'SFO'"""))
 foo.createOrReplaceTempView("foo")
 
 spark.sql("select * from airports_na limit 10").show()

@@ -1,8 +1,7 @@
+import collections
+
 from pyspark import SparkConf, SparkContext
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import countDistinct
-
-import collections
 
 
 def print_line_rdd(line):
@@ -27,10 +26,10 @@ lines_df.show()
 # Simple operations on a rdd
 ratings = lines_rdd.map(lambda x: x[2])
 result_rdd = ratings.countByValue()
-sortedResults = collections.OrderedDict(sorted(result.items()))
+sortedResults = collections.OrderedDict(sorted(result_rdd.items()))
 for k, v in sortedResults.items():
     print(k, v)
 
 # Simple operations on a DataFrame
 result_df = lines_df.groupBy("rating").count().sort("rating")
-result.show()
+result_df.show()

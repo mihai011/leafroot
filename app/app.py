@@ -3,39 +3,38 @@
 Here you include the routers for the application and middleware used.
 """
 
+import sentry_sdk
 from fastapi import FastAPI, Request, status
-from fastapi.staticfiles import StaticFiles
-from fastapi.exceptions import RequestValidationError, HTTPException
 from fastapi.encoders import jsonable_encoder
+from fastapi.exceptions import HTTPException, RequestValidationError
 from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
+from sqlalchemy.exc import IntegrityError
+from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.middleware import Middleware
 from starlette_context import plugins
 from starlette_context.middleware import RawContextMiddleware
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.exc import IntegrityError
-import sentry_sdk
 
-from controllers.keyvalue_controllers import keyvalue_router
-from controllers.users_controllers import user_router
-from controllers.base_controllers import base_router
-from controllers.atom_controllers import atom_router
-from controllers.api_controllers import api_router
-from controllers.task_controllers import task_router
-from controllers.ws_controllers import ws_router
-from controllers.utils_controllers import utils_router
-from controllers.library_controllers import library_router
-from controllers.quote_controllers import quotes_router
-from controllers.cassandradb_controllers import cassandra_router
-from controllers.url_controllers import url_router
-from controllers.photo_controllers import photo_router
-from controllers.iceberg_controllers import iceberg_router
-from data import async_session, User, create_database_app
-from config import config
 from cache import initialize_cache
+from config import config
+from controllers.api_controllers import api_router
+from controllers.atom_controllers import atom_router
+from controllers.base_controllers import base_router
+from controllers.cassandradb_controllers import cassandra_router
+from controllers.iceberg_controllers import iceberg_router
+from controllers.keyvalue_controllers import keyvalue_router
+from controllers.library_controllers import library_router
+from controllers.photo_controllers import photo_router
+from controllers.quote_controllers import quotes_router
+from controllers.task_controllers import task_router
+from controllers.url_controllers import url_router
+from controllers.users_controllers import user_router
+from controllers.utils_controllers import utils_router
+from controllers.ws_controllers import ws_router
+from data import User, async_session, create_database_app
 from logger import initialize_logger
-from utils import get_password_hash
 from middleware import TimeRequestMiddleware
-
+from utils import get_password_hash
 
 middleware = [
     Middleware(
@@ -52,9 +51,7 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # Error handlers
 @app.exception_handler(RequestValidationError)
-async def validation_exception_handler(
-    _: Request, exc: RequestValidationError
-):
+async def validation_exception_handler(_: Request, exc: RequestValidationError):
     """Error handler for Request package."""
     return JSONResponse(
         status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,

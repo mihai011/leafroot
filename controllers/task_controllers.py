@@ -4,10 +4,9 @@ from celery import uuid
 from fastapi import APIRouter, status
 from fastapi.responses import ORJSONResponse
 
-from controllers import create_response, CurrentUser
-from celery_worker import small_task, create_task_metadata
+from celery_worker import create_task_metadata, small_task
+from controllers import CurrentUser, create_response
 from data import TaskResponseItem
-
 
 task_router = APIRouter(prefix="/tasks", tags=["tasks"])
 

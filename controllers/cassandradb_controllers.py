@@ -1,27 +1,24 @@
 """Cassandraa db controllers."""
 
 import uuid
-from datetime import datetime
 
-from data import MessageBoardResponseItem
 from fastapi import APIRouter, status
 from fastapi.responses import ORJSONResponse
+
+from controllers import CurrentUser, create_response
 from data import (
-    MessageBoard,
     Message,
+    MessageBoard,
     MessageBoardPacket,
+    MessageBoardResponseItem,
     MessagePacket,
     MessageResponseItem,
 )
-from controllers import create_response, CurrentUser, CassandraCluster
-
 
 cassandra_router = APIRouter(prefix="/cassandra", tags=["cassandra"])
 
 
-@cassandra_router.post(
-    "/message-board", response_model=MessageBoardResponseItem
-)
+@cassandra_router.post("/message-board", response_model=MessageBoardResponseItem)
 async def create_message_board(
     mb: MessageBoardPacket,
     _: CurrentUser,

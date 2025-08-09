@@ -1,19 +1,17 @@
 """Models init file."""
 
-from datetime import datetime
 import asyncio
+from datetime import datetime
 
-from sqlalchemy_serializer import SerializerMixin
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
-from sqlalchemy import create_engine
-from sqlalchemy.sql.expression import func
-from sqlalchemy.orm import sessionmaker, Session, declarative_base
+from sqlalchemy import Column, DateTime, Integer, create_engine
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.future import select
-from sqlalchemy import Column, Integer, DateTime
+from sqlalchemy.orm import Session, declarative_base, sessionmaker
+from sqlalchemy.sql.expression import func
+from sqlalchemy_serializer import SerializerMixin
 
-from cache import testproof_cache, my_key_builder
+from cache import my_key_builder, testproof_cache
 from config import config
-
 
 async_engine = create_async_engine(
     config.sqlalchemy_database_url_async,
@@ -34,12 +32,8 @@ sync_engine = create_engine(
     pool_pre_ping=True,
 )
 
-async_session = sessionmaker(
-    async_engine, class_=AsyncSession, expire_on_commit=False
-)
-sync_session = sessionmaker(
-    sync_engine, class_=Session, expire_on_commit=False
-)
+async_session = sessionmaker(async_engine, class_=AsyncSession, expire_on_commit=False)
+sync_session = sessionmaker(sync_engine, class_=Session, expire_on_commit=False)
 
 Base = declarative_base()
 secret = config.secret

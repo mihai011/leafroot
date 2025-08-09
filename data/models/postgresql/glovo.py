@@ -1,11 +1,9 @@
 """Glovo models."""
 
-from sqlalchemy import Column, String, Float, Integer, ForeignKey
-from sqlalchemy import select
-from sqlalchemy.orm import Mapped
-from sqlalchemy.orm import mapped_column
+from sqlalchemy import Column, Float, ForeignKey, Integer, String, select
+from sqlalchemy.orm import Mapped, mapped_column
 
-from data.models.postgresql import ExtraBase, Base
+from data.models.postgresql import Base, ExtraBase
 
 
 class Restaurant(Base, ExtraBase):
@@ -27,19 +25,14 @@ class Product(Base, ExtraBase):
 
     name = Column(String)
     price = Column(Float)
-    restaurant_id: Mapped[Integer] = mapped_column(
-        ForeignKey("restaurants.id")
-    )
+    restaurant_id: Mapped[Integer] = mapped_column(ForeignKey("restaurants.id"))
 
     @classmethod
     async def getProductsbyClientId(cls, session, client_id):
         """Get all products ordered by a client."""
 
         join_query = (
-            select(cls)
-            .join(OrderItem)
-            .join(Order)
-            .filter(Order.client_id == client_id)
+            select(cls).join(OrderItem).join(Order).filter(Order.client_id == client_id)
         )
 
         result = await session.scalars(join_query)

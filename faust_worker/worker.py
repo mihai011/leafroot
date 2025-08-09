@@ -1,6 +1,6 @@
-import faust
-
 import sys
+
+import faust
 
 sys.path.append("/leafroot")
 

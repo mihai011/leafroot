@@ -1,9 +1,9 @@
 """Redis graph models."""
 
 import uuid
-from typing import Optional
+from typing import Any, Dict, Optional
+
 from pydantic import BaseModel, Field
-from typing import Any, Dict
 
 
 class RedisGraph(BaseModel):

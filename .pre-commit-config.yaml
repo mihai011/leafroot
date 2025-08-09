@@ -6,15 +6,25 @@ repos:
       rev: v5.0.0
       hooks:
           - id: check-yaml
+            exclude: kibana/config/kibana.yml
           - id: check-toml
           - id: end-of-file-fixer
           - id: trailing-whitespace
           - id: check-docstring-first
 
-    - repo: https://github.com/psf/black
-      rev: 25.1.0
+    - repo: https://github.com/charliermarsh/ruff-pre-commit
+      rev: v0.11.10
       hooks:
-          - id: black
+          - id: ruff-check
+            args: [--fix]
+          - id: ruff-format
+
+
+    - repo: https://github.com/pycqa/isort
+      rev: 6.0.1
+      hooks:
+          - id: isort
+            args: [--profile, black]
 
     - repo: https://github.com/jumanjihouse/pre-commit-hook-yamlfmt
       rev: 0.2.3 # or other specific tag
@@ -33,6 +43,10 @@ repos:
       hooks:
           - id: circleci-config-validate
           - id: forbid-binary
+            exclude: >
+                (?x)^(
+                  diagrams_schema/photo_store.png
+                )$
 
     - repo: https://github.com/python-poetry/poetry
       rev: 2.1.3

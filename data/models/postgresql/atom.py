@@ -1,11 +1,9 @@
 """Atom class related models."""
 
-from sqlalchemy import Column, Float, Integer, ForeignKey
-from sqlalchemy.orm import relationship
-from sqlalchemy.orm import selectinload
-from sqlalchemy import select
+from sqlalchemy import Column, Float, ForeignKey, Integer, select
+from sqlalchemy.orm import relationship, selectinload
 
-from data.models.postgresql import ExtraBase, Base
+from data.models.postgresql import Base, ExtraBase
 
 
 class Atom(Base, ExtraBase):

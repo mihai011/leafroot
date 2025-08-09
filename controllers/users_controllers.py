@@ -1,26 +1,23 @@
 """Basic controllers for users."""
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, status
 from fastapi.responses import ORJSONResponse
 from fastapi.templating import Jinja2Templates
-from fastapi import status
 
+from controllers import CurrentAsyncSession, CurrentUser, create_response
 from data import (
-    User,
-    PydanticUser,
-    PydanticUserSignUp,
-    UserResponseItem,
     AuthorizedUserResponseItem,
     ErrorResponse,
+    PydanticUser,
+    PydanticUserSignUp,
+    User,
+    UserResponseItem,
 )
-
-from controllers import create_response, CurrentUser, CurrentAsyncSession
 from utils import (
     create_access_token,
     get_password_hash,
     verify_password,
 )
-
 
 user_router = APIRouter(prefix="/users", tags=["users"])
 templates = Jinja2Templates(directory="templates")
@@ -67,9 +64,7 @@ async def get_user(
 
     user = await User.GetById(session, id_user)
     if user is None:
-        raise HTTPException(
-            status_code=status.HTTP_200_OK, detail="No user found!"
-        )
+        raise HTTPException(status_code=status.HTTP_200_OK, detail="No user found!")
 
     item_user = {
         "username": user.username,

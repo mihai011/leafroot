@@ -1,29 +1,28 @@
 """Models for mongodb database."""
 
-import motor.motor_asyncio
 import uuid
 
+import motor.motor_asyncio
 from pydantic import BaseModel
+
 from config import config
 
 
 async def get_mongo_client():
     """Creates mongo client."""
     client_auth = motor.motor_asyncio.AsyncIOMotorClient(config.mongo_url_auth)
-    client_not_auth = motor.motor_asyncio.AsyncIOMotorClient(
-        config.mongo_url_not_auth
-    )
+    client_not_auth = motor.motor_asyncio.AsyncIOMotorClient(config.mongo_url_not_auth)
 
     try:
         await client_auth.server_info()
         yield client_auth
-    except:
+    except Exception:
         yield client_not_auth
 
 
 async def get_mongo_database():
     """Get mongodb database."""
-    client = await anext(get_mongo_client())
+    client = await anext(get_mongo_client())  # noqa
     database = client[config.mongo_db]
     yield database
     client.close()

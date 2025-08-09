@@ -2,11 +2,11 @@
 
 import json
 
-from fastapi import status
 import redis
+from fastapi import status
 
-from tests import DataSource
 from config import config
+from tests import DataSource
 
 
 async def test_small_task(async_session):

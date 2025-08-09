@@ -1,12 +1,10 @@
 """Functions for accessing aobject storage service."""
 
-import asyncio
 from miniopy_async import Minio
 from miniopy_async.deleteobjects import DeleteObject
 
-from cache import testproof_cache, my_key_builder
+from cache import my_key_builder, testproof_cache
 from config import config
-
 
 minio_client = Minio(
     config.minio_url,
@@ -30,9 +28,7 @@ class MyMinio:
     @testproof_cache(key_builder=my_key_builder)
     async def get_object(self, object_name, http_session):
         """Get object method."""
-        return await self.client.get_object(
-            self.bucket, object_name, http_session
-        )
+        return await self.client.get_object(self.bucket, object_name, http_session)
 
     async def list_objects(self):
         """List objects method."""

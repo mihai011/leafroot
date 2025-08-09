@@ -1,9 +1,8 @@
 from pyspark import SparkConf, SparkContext
 from pyspark.sql import SparkSession
-from pyspark.sql.types import StringType, StructField, IntegerType, StructType
-from pyspark.sql.window import Window
 from pyspark.sql.functions import col, row_number
-
+from pyspark.sql.types import IntegerType, StringType, StructField, StructType
+from pyspark.sql.window import Window
 
 conf = SparkConf().setMaster("spark://spark:7077").setAppName("Example")
 # conf = SparkConf().setMaster("local").setAppName("MovieRatings")
@@ -62,9 +61,7 @@ print(joined_df.show())
 print(joined_df.printSchema())
 
 # Select person on each Department with the highest salary
-windowDept = Window.partitionBy("Department_Name").orderBy(
-    col("Salary").desc()
-)
+windowDept = Window.partitionBy("Department_Name").orderBy(col("Salary").desc())
 joined_df = (
     person_df.join(department_df, "Department_ID")
     .select(["Department_Name", "Person_Name", "Salary"])

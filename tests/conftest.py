@@ -1,30 +1,28 @@
 """Configuration module for testing."""
 
+import asyncio
 from uuid import uuid4
 
-import asyncio
 import pytest
-
 from sqlalchemy import create_engine
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
-from sqlalchemy.orm import sessionmaker, Session
-from sqlalchemy_utils import drop_database, create_database
+from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
+from sqlalchemy.orm import Session, sessionmaker
+from sqlalchemy_utils import create_database, drop_database
 
 from app.app import app
+from cache import initialize_cache
+from config import config
 from data import (
     Base,
     MyMinio,
-    minio_client,
     get_async_session,
-    get_sync_session,
-    get_mongo_database,
     get_mongo_client,
+    get_mongo_database,
     get_object_storage_client,
+    get_sync_session,
+    minio_client,
 )
-from config import config
-from cache import initialize_cache
 from logger import initialize_logger
-
 
 pytestmark = pytest.mark.asyncio
 
@@ -108,7 +106,7 @@ async def sync_session():
 async def mongo_db():
     """Mongodb fixture for mongodb MotorAsync client."""
     database_name = uuid4()
-    mongo_client = await anext(get_mongo_client())
+    mongo_client = await anext(get_mongo_client())  # noqa
     mongo_db = mongo_client[str(database_name)]
 
     async def override_mongo_db():
@@ -131,15 +129,11 @@ async def minio_storage():
     async def override_minio_storage():
         yield minio_object
 
-    app.dependency_overrides[get_object_storage_client] = (
-        override_minio_storage
-    )
+    app.dependency_overrides[get_object_storage_client] = override_minio_storage
     yield minio_object
     # Remove the test bucket
     await minio_object.remove_bucket()
-    app.dependency_overrides[get_object_storage_client] = (
-        get_object_storage_client
-    )
+    app.dependency_overrides[get_object_storage_client] = get_object_storage_client
 
 
 @pytest.fixture(autouse=True)

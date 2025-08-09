@@ -3,7 +3,7 @@
 import pytest
 from fastapi import HTTPException
 
-from utils import create_access_token, authenthicate_user
+from utils import authenthicate_user, create_access_token
 
 
 async def test_fake_user(async_session):

@@ -1,13 +1,14 @@
 """Datasource module for testing."""
 
-from tqdm import tqdm
+from io import BytesIO
+
+import numpy as np
 from faker import Faker
-from httpx import AsyncClient, ASGITransport
 from fastapi import status
 from fastapi.testclient import TestClient
-import numpy as np
-from io import BytesIO
+from httpx import ASGITransport, AsyncClient
 from PIL import Image
+from tqdm import tqdm
 
 from app.app import app
 from data import User
@@ -66,9 +67,7 @@ class DataSource:
         response = await self.client.post("/users/login", json=args)
         response = response.json()
 
-        header = {
-            "Authorization": "Bearer {}".format(response["item"]["token"])
-        }
+        header = {"Authorization": "Bearer {}".format(response["item"]["token"])}
         user_id = response["item"]["user"]["id"]
 
         self.headers[username] = header
@@ -93,9 +92,7 @@ class DataSource:
 
         return image_bytes
 
-    async def make_photo_uploads_for_user(
-        self, user_header, number_of_uploads
-    ):
+    async def make_photo_uploads_for_user(self, user_header, number_of_uploads):
         """Make uploads for user."""
         list_ids = []
         for _ in range(number_of_uploads):

@@ -1,6 +1,6 @@
 """Module for testing particles models."""
 
-from data import Neutron, Proton, Electron, Atom
+from data import Atom, Electron, Neutron, Proton
 
 
 async def test_atom_model(async_session):

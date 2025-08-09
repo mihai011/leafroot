@@ -1,10 +1,10 @@
 """Used module related data."""
 
-from sqlalchemy import Column, String, Integer, ForeignKey
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.future import select
+from sqlalchemy.orm import relationship
 
-from data.models.postgresql import ExtraBase, Base
+from data.models.postgresql import Base, ExtraBase
 
 
 class User(Base, ExtraBase):

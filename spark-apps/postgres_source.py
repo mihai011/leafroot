@@ -1,7 +1,6 @@
-"""Postgress import source
-"""
+"""Postgress import source"""
+
 from pyspark.sql import SparkSession  # Create a SparkSession
-from pyspark.sql.functions import col, desc, count, when
 
 spark = SparkSession.builder.appName("Postgress app").getOrCreate()
 

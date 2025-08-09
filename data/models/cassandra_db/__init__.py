@@ -1,12 +1,12 @@
 """Cassandra models module."""
 
 from cassandra.cluster import Cluster
-from cassandra.cqlengine.management import sync_table, create_keyspace_simple
 from cassandra.cqlengine.connection import setup
-
+from cassandra.cqlengine.management import create_keyspace_simple, sync_table
 
 from config import config
-from .chat import Message, MessageBoard, ChatUser
+
+from .chat import ChatUser, Message, MessageBoard
 
 
 async def get_cassandra_cluster():

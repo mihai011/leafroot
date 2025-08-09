@@ -1,10 +1,9 @@
 """Tests for external call functions."""
 
 import aiohttp
-import pytest
 from aioresponses import aioresponses
-from data import HttpRequest
 
+from data import HttpRequest
 from utils.external_api import (
     make_api_request,
     make_get_request,

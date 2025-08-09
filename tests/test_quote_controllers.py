@@ -3,7 +3,6 @@
 import json
 
 from fastapi import status
-import pytest
 
 from tests import DataSource
 
@@ -20,9 +19,7 @@ async def test_quotes(async_session):
         "/quotes/quote", headers=ds.headers["Test_user"], json=payload_quote
     )
     assert response.status_code == status.HTTP_200_OK
-    response = await ds.client.get(
-        "/quotes/quote", headers=ds.headers["Test_user"]
-    )
+    response = await ds.client.get("/quotes/quote", headers=ds.headers["Test_user"])
     assert response.status_code == status.HTTP_200_OK
     response_data = json.loads(response.text)
     assert response_data["item"]["quote"] == payload_quote["quote"]

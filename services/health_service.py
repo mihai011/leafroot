@@ -1,20 +1,17 @@
-from logger import log
-from config import config
-
+import motor.motor_asyncio
+import pika
+import redis.asyncio as redis
+import timeout_decorator
 from cassandra import UnresolvableContactPoints
 from cassandra.cluster import Cluster
-from sqlalchemy import create_engine
-from surrealdb import Surreal
-from pyspark.sql import SparkSession
 from kafka import KafkaProducer
 from kafka.errors import NoBrokersAvailable
-import timeout_decorator
+from pyspark.sql import SparkSession
+from sqlalchemy import create_engine
+from surrealdb import Surreal
 
-import redis.asyncio as redis
-import pika
-import motor.motor_asyncio
-
-from utils import check_host
+from config import config
+from logger import log
 
 
 async def health_check():
@@ -58,9 +55,7 @@ def check_spark():
     @timeout_decorator.timeout(5)
     def try_connect():
         """Try to connect to spark"""
-        spark = SparkSession.builder.remote(
-            f"sc://{config.spark_host}"
-        ).getOrCreate()
+        spark = SparkSession.builder.remote(f"sc://{config.spark_host}").getOrCreate()
 
         sample_data = [
             {"name": "John    D.", "age": 30},
@@ -88,7 +83,7 @@ async def check_cassandradb():
         cluster = Cluster(contact_points=[config.cassandradb_host])
         cluster.connect()
         return True
-    except UnresolvableContactPoints as e:
+    except UnresolvableContactPoints:
         return False
 
 
@@ -117,7 +112,7 @@ async def check_surrealdb():
             )
             await db.use(config.surrealdb_namespace, config.surrealdb_db)
             return True
-    except SurrealAuthenticationException:
+    except Exception:
         return False
 
 
@@ -129,25 +124,9 @@ async def check_mongodb():
     client_auth = motor.motor_asyncio.AsyncIOMotorClient(
         config.mongo_url_auth, serverSelectionTimeoutMS=1000
     )
-    client_no_auth = motor.motor_asyncio.AsyncIOMotorClient(
-        config.mongo_url_not_auth, serverSelectionTimeoutMS=1000
-    )
 
-    error = None
-
-    try:
-        await client_auth.server_info()
-        return True
-    except Exception as e:
-        error = e
-
-    try:
-        await client_no_auth.server_info()
-        return True
-    except Exception as e:
-        error = e
-
-    return False
+    await client_auth.server_info()
+    return True
 
 
 @log()
@@ -158,7 +137,7 @@ async def check_postgressql():
     try:
         with engine.connect() as _:
             return True
-    except Exception as e:
+    except Exception:
         return False
 
 
@@ -170,7 +149,7 @@ async def check_redis():
     try:
         await redis_connection.ping()
         return True
-    except Exception as e:
+    except Exception:
         return False
 
 
@@ -188,5 +167,5 @@ async def check_rabbitmq():
         )
         connection.close()
         return True
-    except Exception as e:
+    except Exception:
         return False

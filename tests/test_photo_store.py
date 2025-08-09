@@ -89,7 +89,6 @@ async def test_follower(async_session, minio_storage):
         files={"file": ("alice.png", alice_image, "image/png")},
     )
     assert response.status_code == 200
-    alice_image_id = response.json()["item"]["photo_id"]
 
     bob_image = ds.make_photo((2048, 2048, 3))
     response = await ds.client.post(
@@ -100,9 +99,7 @@ async def test_follower(async_session, minio_storage):
     assert response.status_code == 200
     bob_image_id = response.json()["item"]["photo_id"]
 
-    response = await ds.client.get(
-        f"/photo/list/{bob_id}", headers=alice_header
-    )
+    response = await ds.client.get(f"/photo/list/{bob_id}", headers=alice_header)
     assert response.status_code == 400
 
     response = await ds.client.post(
@@ -114,9 +111,7 @@ async def test_follower(async_session, minio_storage):
     )
     assert response.status_code == 400
 
-    response = await ds.client.get(
-        f"/photo/list/{bob_id}", headers=alice_header
-    )
+    response = await ds.client.get(f"/photo/list/{bob_id}", headers=alice_header)
     assert response.status_code == 200
     assert len(response.json()["item"]) == 1
     assert response.json()["item"][0]["photo_id"] == bob_image_id

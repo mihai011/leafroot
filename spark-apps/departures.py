@@ -1,7 +1,7 @@
-"""This file contains example for sql queries and dataframe api on data from departures.csv file.
-"""
+"""This file contains example for sql queries and dataframe api on data from departures.csv file."""
+
 from pyspark.sql import SparkSession  # Create a SparkSession
-from pyspark.sql.functions import col, desc, count, when
+from pyspark.sql.functions import col, count, when
 
 spark = SparkSession.builder.appName("SparkSQLExampleApp").getOrCreate()
 
@@ -22,15 +22,9 @@ spark.sql(
           ORDER BY distance DESC"""
 ).show(5)
 
-df.select("distance", "origin", "destination").where(
-    col("distance") > 1000
-).groupBy(col("distance"), col("origin"), col("destination")).count().drop(
-    col("count")
-).orderBy(
-    col("distance").desc()
-).show(
-    5
-)
+df.select("distance", "origin", "destination").where(col("distance") > 1000).groupBy(
+    col("distance"), col("origin"), col("destination")
+).count().drop(col("count")).orderBy(col("distance").desc()).show(5)
 
 spark.sql(
     """SELECT date, delay, origin, destination FROM
@@ -38,9 +32,7 @@ spark.sql(
 ).show(5)
 
 df.select("date", "delay", "origin", "destination").where(
-    (col("delay") > 150)
-    & (col("destination") == "ORD")
-    & (col("origin") == "SFO")
+    (col("delay") > 150) & (col("destination") == "ORD") & (col("origin") == "SFO")
 ).orderBy(col("delay").desc()).show(5)
 
 spark.sql(
@@ -48,9 +40,9 @@ spark.sql(
           us_delay_flights_tbl group by origin, destination ORDER by delays DESC"""
 ).show(5)
 
-df.select("origin", "destination").groupBy(
-    col("origin"), col("destination")
-).agg(count("*").alias("delays")).orderBy(col("delays").desc()).show(5)
+df.select("origin", "destination").groupBy(col("origin"), col("destination")).agg(
+    count("*").alias("delays")
+).orderBy(col("delays").desc()).show(5)
 
 spark.sql(
     """SELECT count(*) as total_delays,
@@ -75,22 +67,16 @@ df.withColumn(
     .otherwise("Early"),
 ).groupBy(col("Flight_Delays")).agg(count("*").alias("total_delays")).orderBy(
     col("total_delays").desc()
-).select(
-    "total_delays", "Flight_Delays"
-).show(
-    10
-)
+).select("total_delays", "Flight_Delays").show(10)
 
 
 # working with dataframes writes
 # parquet
-df.write.format("parquet").mode("overwrite").option(
-    "compression", "snappy"
-).save("spark-data/dataframes_wr/departures.parquet")
-
-df.write.mode("overwrite").parquet(
+df.write.format("parquet").mode("overwrite").option("compression", "snappy").save(
     "spark-data/dataframes_wr/departures.parquet"
 )
+
+df.write.mode("overwrite").parquet("spark-data/dataframes_wr/departures.parquet")
 
 df.write.format("json").mode("overwrite").option("compression", "snappy").save(
     "spark-data/dataframes_wr/"

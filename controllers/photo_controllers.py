@@ -1,28 +1,26 @@
 """Photo controllers."""
 
 import io
+from typing import Optional
 
-from fastapi import APIRouter, status
+from fastapi import APIRouter, UploadFile, status
 from fastapi.responses import ORJSONResponse, Response
 
-from fastapi import UploadFile
 from controllers import (
-    create_response,
-    CurrentUser,
-    ObjectStorageClient,
     CurrentAsyncSession,
+    CurrentUser,
     HttpSession,
+    ObjectStorageClient,
+    create_response,
 )
-from config import config
 from data import (
-    PhotoResponseListItem,
-    PhotoResponseItem,
-    Photo,
-    UserFollowRelation,
     BaseResponse,
+    Photo,
+    PhotoResponseItem,
+    PhotoResponseListItem,
+    UserFollowRelation,
 )
 from logger import log
-
 
 photo_router = APIRouter(prefix="/photo", tags=["photo"])
 
@@ -33,7 +31,7 @@ async def upload_photo(
     user: CurrentUser,
     object_client: ObjectStorageClient,
     session: CurrentAsyncSession,
-    file: UploadFile | None = None,
+    file: Optional[UploadFile] | None = None,
 ) -> ORJSONResponse:
     """Upload a photo."""
 
@@ -53,9 +51,7 @@ async def upload_photo(
     photo = await Photo.AddNew(session, photo_packet)
     photo_path = photo.create_storage_path()
     file_bytes = io.BytesIO(await file.read())
-    await object_client.put_object(
-        photo_path, file_bytes, file.size, file.content_type
-    )
+    await object_client.put_object(photo_path, file_bytes, file.size, file.content_type)
 
     return create_response(
         message="Photo uploaded!",
@@ -92,9 +88,7 @@ async def download_photo(
     return Response(
         content=await response.content.read(),
         media_type=response.content_type,
-        headers={
-            "Content-Disposition": f'attachment; filename="{photo.photo_name}"'
-        },
+        headers={"Content-Disposition": f'attachment; filename="{photo.photo_name}"'},
     )
 
 
@@ -155,11 +149,10 @@ async def follow_user(
 
 @log()
 @photo_router.delete("/delete/{photo_id}", response_model=PhotoResponseItem)
-async def download_photo(
+async def delete_photo(
     photo_id: str,
     object_client: ObjectStorageClient,
     session: CurrentAsyncSession,
-    http_session: HttpSession,
     _: CurrentUser,
 ) -> Response:
     """Download a photo."""

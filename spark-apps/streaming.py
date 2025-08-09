@@ -1,8 +1,5 @@
-from pyspark.sql.functions import *
 from pyspark import SparkConf, SparkContext
-from pyspark.sql import SparkSession
 from pyspark.streaming import StreamingContext
-
 
 # conf = SparkConf().setMaster("spark://spark:7077").setAppName("Network Count")
 conf = SparkConf().setMaster("local").setAppName("Network COunt")

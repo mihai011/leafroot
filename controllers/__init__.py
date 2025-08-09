@@ -4,30 +4,30 @@ import json
 from typing import Annotated
 
 from aiohttp import ClientSession
-from fastapi.responses import ORJSONResponse
-from fastapi import Header, Depends
-from sqlalchemy.orm import Session
-from sqlalchemy.ext.asyncio import AsyncSession
-from motor.motor_asyncio import AsyncIOMotorClient
 from cassandra.cluster import Cluster
+from fastapi import Depends, Header
+from fastapi.responses import ORJSONResponse
+from motor.motor_asyncio import AsyncIOMotorClient
 from redis.asyncio import Redis
-from cache import get_redis_async_client
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import Session
 
+from cache import get_redis_async_client
 from data import (
-    User,
     BaseResponse,
-    MyMinio,
     MyIcebergCatalog,
-    get_iceberg_catalog,
+    MyMinio,
+    User,
     get_async_session,
-    get_sync_session,
-    get_mongo_database,
     get_cassandra_cluster,
+    get_iceberg_catalog,
+    get_mongo_database,
     get_object_storage_client,
+    get_sync_session,
 )
-from utils.external_api import get_http_session
-from utils import authenthicate_user
 from logger import log
+from utils import authenthicate_user
+from utils.external_api import get_http_session
 
 CurrentAsyncSession = Annotated[AsyncSession, Depends(get_async_session)]
 CurrentSyncSession = Annotated[Session, Depends(get_sync_session)]
@@ -63,6 +63,4 @@ def create_response(
 
     response = response_model(**data)
 
-    return ORJSONResponse(
-        status_code=status, content=json.loads(response.json())
-    )
+    return ORJSONResponse(status_code=status, content=json.loads(response.json()))

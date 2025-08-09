@@ -1,17 +1,15 @@
-"""Udf spark example.
-"""
+"""Udf spark example."""
 
-from pyspark.sql.types import LongType
 import pandas as pd
-
-
 from pyspark.sql import SparkSession  # Create a SparkSession
 from pyspark.sql.functions import col, pandas_udf
+from pyspark.sql.types import LongType
+
+from utils import cubed
 
 spark = SparkSession.builder.appName("UDF").getOrCreate()
 spark.sparkContext.addPyFile("spark-apps/utils.py")
 
-from utils import cubed
 
 spark.udf.register("cubed", cubed, LongType())
 spark.range(1, 9).createOrReplaceTempView("udf_test")

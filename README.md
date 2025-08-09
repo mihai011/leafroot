@@ -100,7 +100,7 @@ poetry up # this updates package versions in pyproject.toml
 
 # To run pre-commit hooks without commit
 ```
-bash .git/hooks/pre-commit
+pre-commit run --all-files
 ```
 
 

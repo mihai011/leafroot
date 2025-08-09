@@ -31,7 +31,6 @@ asyncpg = ">=0.30.0"
 attrs = ">=25.3.0"
 bandit = ">=1.8.6"
 bcrypt = "4.0.1" # could be issues here (needs to be set to 4.0.1)
-black = ">=25.1.0"
 blacken-docs = ">=1.19.1"
 celery = ">=5.5.3"
 certifi = ">=2025.8.3"
@@ -80,7 +79,6 @@ py = ">=1.11.0"
 pyasn1 = ">=0.6.1"
 pycparser = ">=2.22"
 pydantic = {extras = ["email"], version = ">=2.11.7"}
-pylint = ">=3.3.7"
 pyparsing = ">=3.2.3"
 pytest = ">=8.4.1"
 pytest-asyncio = ">=1.1.0"
@@ -145,6 +143,7 @@ aiokafka = ">=0.12.0"
 pydantic-settings = "^2.10.1"
 pyiceberg = ">=0.9.1"
 psycopg2-binary = "^2.9.10"
+ruff = "^0.12.8"
 
 
 [build-system]

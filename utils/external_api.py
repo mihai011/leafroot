@@ -1,10 +1,11 @@
 """External requests util functions."""
 
 import urllib
+
 from aiohttp import ClientSession
 
+from cache import my_key_builder, testproof_cache
 from data import HttpRequest
-from cache import testproof_cache, my_key_builder
 from logger import log
 
 

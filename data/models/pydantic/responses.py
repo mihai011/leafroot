@@ -1,8 +1,8 @@
 """Module for pydantic responses."""
 
-from typing import Optional, Union, List, Dict, Any, Union
+from typing import Any, Dict, List, Optional, Union
 
-from pydantic import BaseModel, UUID4, HttpUrl
+from pydantic import UUID4, BaseModel, HttpUrl
 
 
 class BaseResponse(BaseModel):

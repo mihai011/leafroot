@@ -1,9 +1,9 @@
 import datetime
 
-from airflow import DAG
+from airflow.models.baseoperator import chain, cross_downstream
 from airflow.operators.empty import EmptyOperator
-from airflow.models.baseoperator import cross_downstream, chain
 
+from airflow import DAG
 
 my_dag = DAG(
     dag_id="my_dag_name",

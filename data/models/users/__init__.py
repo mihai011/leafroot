@@ -1,6 +1,7 @@
 """Pydantic models related to user."""
 
 from typing import Optional
+
 from pydantic import BaseModel, EmailStr
 
 

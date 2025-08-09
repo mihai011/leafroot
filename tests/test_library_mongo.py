@@ -1,10 +1,10 @@
 """Tests for mongo library models."""
 
 import json
-import pytest
+
 from fastapi import status
 
-from data import Library, Book, BookPackage
+from data import Book, BookPackage, Library
 from tests import DataSource
 
 

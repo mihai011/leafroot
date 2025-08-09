@@ -1,19 +1,22 @@
 """Atom controllers."""
 
-from fastapi import APIRouter, status, Depends
+from fastapi import APIRouter, Depends, status
 from fastapi.responses import ORJSONResponse
 
-from data import Atom, Electron, Neutron, Proton
+from controllers import CurrentAsyncSession, CurrentUser, create_response
 from data import (
-    PydanticAtom,
-    PydanticProton,
-    PydanticElectron,
-    PydanticNeutron,
+    Atom,
     AtomResponseItem,
+    Electron,
+    Neutron,
     ParticleResponseItem,
     ParticleResponseListItem,
+    Proton,
+    PydanticAtom,
+    PydanticElectron,
+    PydanticNeutron,
+    PydanticProton,
 )
-from controllers import create_response, CurrentUser, CurrentAsyncSession
 
 atom_router = APIRouter(prefix="/atoms", tags=["atoms"])
 

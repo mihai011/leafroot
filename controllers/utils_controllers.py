@@ -3,8 +3,8 @@
 from fastapi import APIRouter, status
 from fastapi.responses import ORJSONResponse
 
+from controllers import CurrentUser, create_response
 from data import StatusResponseItem
-from controllers import create_response, CurrentUser
 from services.health_service import health_check
 
 utils_router = APIRouter(prefix="/utils", tags=["utils"])

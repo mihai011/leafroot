@@ -32,10 +32,7 @@ async def test_login_user(async_session):
     response = await ds.client.post("users/login", json=unknown_data_login)
     response_content = response.json()
     assert response.status_code == status.HTTP_400_BAD_REQUEST
-    assert (
-        response_content["detail"]
-        == "No user with such email or username found!"
-    )
+    assert response_content["detail"] == "No user with such email or username found!"
 
     user_login_data = {"email": "test@gmail.com", "password": "test"}
 
@@ -54,10 +51,7 @@ async def test_login_user(async_session):
     response = await ds.client.post("users/login", json=user_login_data)
     response_content = response.json()
     assert response.status_code == status.HTTP_400_BAD_REQUEST
-    assert (
-        response_content["detail"]
-        == "No user with such email or username found!"
-    )
+    assert response_content["detail"] == "No user with such email or username found!"
 
     user_login_data = {
         "email": "test@gmail.com",

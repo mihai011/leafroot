@@ -5,7 +5,10 @@ from redis import Redis
 
 from config import config
 from logger import log
-from .graph import RedisGraph, RedisNode, RedisEdge, RedisGraphQuery
+
+from .graph import RedisEdge, RedisGraph, RedisGraphQuery, RedisNode
+
+__all__ = [RedisEdge, RedisGraph, RedisGraphQuery, RedisNode]
 
 
 @log()

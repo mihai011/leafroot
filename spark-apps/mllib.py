@@ -1,12 +1,8 @@
 from pyspark import SparkConf, SparkContext
-from pyspark.sql import SparkSession
-from pyspark.sql.types import StringType, StructField, IntegerType, StructType
-from pyspark.sql.window import Window
-from pyspark.sql.functions import col, row_number
+from pyspark.ml.evaluation import RegressionEvaluator
 from pyspark.ml.feature import VectorAssembler
 from pyspark.ml.regression import LinearRegression
-from pyspark.ml.evaluation import RegressionEvaluator
-
+from pyspark.sql import SparkSession
 
 conf = SparkConf().setMaster("spark://spark:7077").setAppName("MLLib")
 # conf = SparkConf().setMaster("local").setAppName("MovieRatings")

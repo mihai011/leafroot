@@ -3,10 +3,10 @@
 from fastapi import APIRouter, status
 from fastapi.responses import ORJSONResponse
 
-from controllers import create_response, CurrentUser, HttpSession
-from data import HttpRequest, BaseResponse
-from utils.external_api import make_api_request
+from controllers import CurrentUser, HttpSession, create_response
+from data import BaseResponse, HttpRequest
 from logger import log
+from utils.external_api import make_api_request
 
 api_router = APIRouter(prefix="/api", tags=["api"])
 

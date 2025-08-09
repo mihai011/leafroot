@@ -1,25 +1,23 @@
 """General util module."""
 
+import hashlib
 import random
 import string
 import subprocess
-import hashlib
 import uuid
 
 from fastapi import HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
-from passlib.context import CryptContext
 from jose import jwt
 from jose.exceptions import JWTError
-from sqlalchemy.orm import Session
+from passlib.context import CryptContext
 from redis.asyncio import Redis
+from sqlalchemy.orm import Session
 
-
+from cache import my_key_builder, testproof_cache
 from config import config
-from cache import testproof_cache, my_key_builder
 from data import User
 from logger import log
-
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
@@ -54,9 +52,7 @@ def make_short_hash(string: str):
 
 
 @log()
-async def store_string_at_key(
-    redis_client: Redis, key: str, store_string: str
-):
+async def store_string_at_key(redis_client: Redis, key: str, store_string: str):
     """Store string at key in redis"""
     await redis_client.set(key, store_string)
 
@@ -77,22 +73,16 @@ def create_access_token(
 ):
     """Create the access token hash for data."""
 
-    encoded_jwt = jwt.encode(
-        data, config.secret_key, algorithm=config.algorithm
-    )
+    encoded_jwt = jwt.encode(data, config.secret_key, algorithm=config.algorithm)
     return encoded_jwt
 
 
 @log()
-@testproof_cache(
-    expire=config.access_token_expire_seconds, key_builder=my_key_builder
-)
+@testproof_cache(expire=config.access_token_expire_seconds, key_builder=my_key_builder)
 async def authenthicate_user(token: str, session: Session) -> User:
     """Authenticate a token."""
     try:
-        payload = jwt.decode(
-            token, config.secret_key, algorithms=[config.algorithm]
-        )
+        payload = jwt.decode(token, config.secret_key, algorithms=[config.algorithm])
     except JWTError:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid token!"
@@ -115,8 +105,7 @@ def random_string():
     """Make a random string."""
     init_pepper = "R"
     r_string = "".join(
-        random.choice(string.ascii_uppercase + string.digits)
-        for _ in range(10)
+        random.choice(string.ascii_uppercase + string.digits) for _ in range(10)
     )
 
     return init_pepper + r_string

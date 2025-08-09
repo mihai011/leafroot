@@ -2,25 +2,21 @@
 
 from typing import Optional
 
-import asyncio
+import redis.asyncio as redis
 from fastapi import Request, Response
 from fastapi_cache import FastAPICache
-from fastapi_cache.backends.redis import RedisBackend
 from fastapi_cache.backends.inmemory import InMemoryBackend
+from fastapi_cache.backends.redis import RedisBackend
 from fastapi_cache.decorator import cache
-import redis.asyncio as redis
 
-
-from config import config
 from base_utils import clear_args_dicts
+from config import config
 
 
 def get_redis_async_client():
     """Create and returns an asyunc redis client"""
 
-    return redis.from_url(
-        config.redis_url, encoding="utf8", decode_responses=True
-    )
+    return redis.from_url(config.redis_url, encoding="utf8", decode_responses=True)
 
 
 def initialize_cache():
