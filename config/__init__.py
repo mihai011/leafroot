@@ -33,6 +33,8 @@ class Settings(BaseSettings):
 
     rabbitmq_host: str
     rabbitmq_protocol: Literal["amqp", "amqps"]
+    rabbitmq_default_user: str
+    rabbitmq_default_pass: str
 
     sentry_dsn: AnyUrl
 
@@ -139,7 +141,12 @@ class Settings(BaseSettings):
         """Create the url for the celery broker."""
 
         host = self.interface or self.rabbitmq_host
-        return "{}://{}:5672".format(self.rabbitmq_protocol, host)
+        return "{}://{}:{}@{}:5672".format(
+            self.rabbitmq_protocol,
+            config.rabbitmq_default_user,
+            config.rabbitmq_default_pass,
+            host,
+        )
 
     @computed_field
     def redis_url(self) -> RedisDsn:

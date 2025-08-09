@@ -6,7 +6,6 @@ import pytest
 from tests import DataSource
 
 
-@pytest.mark.asyncio
 async def test_url_status(async_session):
     """Test url shortner"""
 

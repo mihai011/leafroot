@@ -7,7 +7,6 @@ import pytest
 from data import User, Curier, Restaurant, Order, Product, OrderItem
 
 
-@pytest.mark.asyncio
 async def test_glovo_queries(async_session):
     """Testing sqlalchemy queries."""
 

@@ -26,6 +26,9 @@ from cache import initialize_cache
 from logger import initialize_logger
 
 
+pytestmark = pytest.mark.asyncio
+
+
 async def resolve_session(session_type):
     """Creating async and sync session for testing."""
     database_name = uuid4()
@@ -81,7 +84,7 @@ async def resolve_session(session_type):
     yield 0
 
 
-@pytest.fixture
+@pytest.fixture(scope="function")
 async def async_session():
     """Pytest fixture for SQLAlchemy postgresql session."""
 
@@ -91,7 +94,7 @@ async def async_session():
     await session_generator.__anext__()
 
 
-@pytest.fixture
+@pytest.fixture(scope="function")
 async def sync_session():
     """Pytest fixture for SQLAlchemy postgresql session."""
 
@@ -118,7 +121,7 @@ async def mongo_db():
     app.dependency_overrides[get_mongo_database] = get_mongo_database
 
 
-@pytest.fixture
+@pytest.fixture(scope="function")
 async def minio_storage():
     """Minio fixture for miniopy_async client."""
     bucket_name = str(uuid4()).replace("-", "")

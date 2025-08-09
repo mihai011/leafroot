@@ -1,11 +1,8 @@
 """Module for testing particles models."""
 
-import pytest
-
 from data import Neutron, Proton, Electron, Atom
 
 
-@pytest.mark.asyncio
 async def test_atom_model(async_session):
     """Simple test for Atom model."""
 
@@ -17,7 +14,6 @@ async def test_atom_model(async_session):
     assert atom_obj.z == 1.0
 
 
-@pytest.mark.asyncio
 async def test_sub_atomic_model(async_session):
     """Test for subparticles of atom."""
 

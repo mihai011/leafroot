@@ -115,7 +115,7 @@ services:
             - shared_network
 
     redis:
-        image: redis/redis-stack-server
+        image: redis:latest
         expose:
             - 6379
         container_name: redis

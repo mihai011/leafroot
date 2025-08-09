@@ -12,7 +12,6 @@ from utils.external_api import (
 )
 
 
-@pytest.mark.asyncio
 async def test_make_get_request():
     """Tests for a make-get_request."""
     url_test = "http://fake_url.com"
@@ -25,7 +24,6 @@ async def test_make_get_request():
     await session.close()
 
 
-@pytest.mark.asyncio
 async def test_make_post_request():
     """Tests for a make-get_request."""
     url_test = "http://fake_url.com"
@@ -39,7 +37,6 @@ async def test_make_post_request():
     await session.close()
 
 
-@pytest.mark.asyncio
 async def test_get_request_external():
     """Test a simple request to a fake api service."""
     url_test = "http://fake_url.com"

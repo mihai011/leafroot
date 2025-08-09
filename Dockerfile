@@ -5,6 +5,7 @@ RUN mkdir /leafroot
 WORKDIR /leafroot
 
 COPY . .
+RUN apt update && apt-get install -y python3-dev
 RUN make venv_create
 RUN apt update && apt install -y iputils-ping
 

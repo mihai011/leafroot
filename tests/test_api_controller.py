@@ -1,6 +1,5 @@
 """Module for testing api controller."""
 
-import pytest  # pylint: disable=R0801
 from aioresponses import aioresponses  # pylint: disable=R0801
 from fastapi import status
 
@@ -8,7 +7,6 @@ from data import HttpRequest
 from tests import DataSource  # pylint: disable=R0801
 
 
-@pytest.mark.asyncio
 async def test_api(async_session):
     """Test api request controller."""
 
@@ -26,7 +24,7 @@ async def test_api(async_session):
         mocked.get(str(payload_api.url), status=200, body="test1")
         response = await ds.client.post(
             "/api/external",
-            data=payload_api.model_dump_json(),
+            data=payload_api.json(),
             headers=ds.headers["Test_user"],
         )
     assert response.status_code == status.HTTP_200_OK

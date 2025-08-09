@@ -5,7 +5,6 @@ import pytest
 from tests import DataSource
 
 
-@pytest.mark.asyncio
 async def test_keyvalue_controller(async_session, mongo_db):
     """Test key_value store"""
     ds = DataSource(async_session)

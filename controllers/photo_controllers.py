@@ -52,8 +52,9 @@ async def upload_photo(
 
     photo = await Photo.AddNew(session, photo_packet)
     photo_path = photo.create_storage_path()
+    file_bytes = io.BytesIO(await file.read())
     await object_client.put_object(
-        photo_path, file, file.size, file.content_type
+        photo_path, file_bytes, file.size, file.content_type
     )
 
     return create_response(

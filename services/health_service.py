@@ -4,7 +4,7 @@ from config import config
 from cassandra import UnresolvableContactPoints
 from cassandra.cluster import Cluster
 from sqlalchemy import create_engine
-from surrealdb import SurrealDB as Surreal
+from surrealdb import Surreal
 from pyspark.sql import SparkSession
 from kafka import KafkaProducer
 from kafka.errors import NoBrokersAvailable

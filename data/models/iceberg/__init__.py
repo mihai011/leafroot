@@ -1,7 +1,7 @@
 from re import M
 import pyiceberg
 from pyiceberg.catalog import load_catalog
-from config.config import s3_endpoint, minio_access_key, minio_secret_key
+from config import config
 
 
 def get_iceberg_catalog():
@@ -15,10 +15,10 @@ class MyIcebergCatalog:
         self.catalog = load_catalog(
             "leafroot",
             **{
-                "uri": s3_endpoint,
-                "s3.endpoint": s3_endpoint,
+                "uri": config.s3_endpoint,
+                "s3.endpoint": config.s3_endpoint,
                 "py-io-impl": "pyiceberg.io.pyarrow.PyArrowFileIO",
-                "s3.access-key-id": minio_access_key,
-                "s3.secret-access-key": minio_secret_key,
+                "s3.access-key-id": config.minio_access_key,
+                "s3.secret-access-key": config.minio_secret_key,
             }
         )

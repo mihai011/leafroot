@@ -1,11 +1,8 @@
 """Testing db populate"""
 
-import pytest
-
 from tests import DataSource
 
 
-@pytest.mark.asyncio
 async def test_lot_users(async_session):
     """Add a lot of users in db"""
 

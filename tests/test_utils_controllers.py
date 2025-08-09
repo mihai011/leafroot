@@ -3,12 +3,10 @@
 import json
 
 from fastapi import status
-import pytest
 
 from tests import DataSource
 
 
-@pytest.mark.asyncio
 async def test_health_status(async_session):
     """Verifying the health check."""
 

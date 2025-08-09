@@ -1,13 +1,11 @@
 """Base module for testing."""
 
-import pytest
 from fastapi import status
 
 from data import User
 from tests import DataSource
 
 
-@pytest.mark.asyncio
 async def test_greetings_controller(async_session):
     """Testing simple controller."""
 
@@ -19,7 +17,6 @@ async def test_greetings_controller(async_session):
     assert '<html lang="en">' in response.text
 
 
-@pytest.mark.asyncio
 async def test_login_user(async_session):
     """Testing simple flow."""
 
@@ -74,7 +71,6 @@ async def test_login_user(async_session):
     assert response_content["detail"] == "Incorrect Password!"
 
 
-@pytest.mark.asyncio
 async def test_signup_user(async_session):
     """Testing simple flow."""
 
@@ -141,7 +137,6 @@ async def test_signup_user(async_session):
     assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
 
-@pytest.mark.asyncio
 async def test_create_user(async_session):
     """Testing simple flow."""
     ds = DataSource(async_session)

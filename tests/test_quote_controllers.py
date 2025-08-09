@@ -8,7 +8,6 @@ import pytest
 from tests import DataSource
 
 
-@pytest.mark.asyncio
 async def test_quotes(async_session):
     """Verifying the quotes endpoint."""
 

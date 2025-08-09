@@ -25,6 +25,8 @@ venv_create:
 
 venv_update:
 	poetry update
+	poetry self add poetry-plugin-up
+	poetry up
 
 venv_delete:
 	poetry env remove --all

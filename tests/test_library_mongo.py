@@ -8,7 +8,6 @@ from data import Library, Book, BookPackage
 from tests import DataSource
 
 
-@pytest.mark.asyncio
 async def test_library(mongo_db):
     """Testing the mongodb class."""
     book1 = Book(title="test", author="test", synopsis="test")
@@ -29,7 +28,6 @@ async def test_library(mongo_db):
     assert len(books) == 1
 
 
-@pytest.mark.asyncio
 async def test_library_controllers(async_session, mongo_db):
     """Testing the library controllers."""
 
@@ -40,7 +38,7 @@ async def test_library_controllers(async_session, mongo_db):
     response = await ds.client.post(
         "/library/book",
         headers=ds.headers["Test_user"],
-        data=book.model_dump_json(),
+        data=book.json(),
     )
     assert response.status_code == status.HTTP_200_OK
 

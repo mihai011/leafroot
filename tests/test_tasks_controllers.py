@@ -3,14 +3,12 @@
 import json
 
 from fastapi import status
-import pytest
 import redis
 
 from tests import DataSource
 from config import config
 
 
-@pytest.mark.asyncio
 async def test_small_task(async_session):
     """Test authenthication."""
 

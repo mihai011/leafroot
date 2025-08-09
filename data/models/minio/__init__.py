@@ -53,7 +53,6 @@ class MyMinio:
         delete_objects = [DeleteObject(file.object_name) for file in files]
 
         await self.client.remove_objects(self.bucket, delete_objects)
-        await asyncio.sleep(1)
         await self.client.remove_bucket(self.bucket)
 
 

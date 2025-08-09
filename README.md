@@ -1,5 +1,5 @@
 # Leafroot
-Leafroot is a personal exercise for me as a software engineer.
+Leafroot is a personal exercise for me as a software engineer and data engineer.
 
 ## Features
 

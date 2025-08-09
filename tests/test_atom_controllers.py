@@ -1,12 +1,10 @@
 """Module for testing particles controller."""
 
-import pytest
 from fastapi import status
 
 from tests import DataSource
 
 
-@pytest.mark.asyncio
 async def test_particles(async_session):
     """Testing particles."""
 
