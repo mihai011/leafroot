@@ -5,6 +5,7 @@ import requests
 from fastapi import APIRouter, Request
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
+from starlette.templating import _TemplateResponse as TemplateResponse
 
 from controllers import CurrentUser
 
@@ -13,30 +14,27 @@ templates = Jinja2Templates(directory="templates")
 
 
 @base_router.get("/", response_class=HTMLResponse)
-async def login(request: Request):
+async def login(request: Request) -> TemplateResponse:
     """Simple login page."""
-
     return templates.TemplateResponse("login.html", {"request": request})
 
 
 @base_router.get("/main", response_class=HTMLResponse)
-async def main(request: Request, user: CurrentUser):
+async def main(request: Request, _: CurrentUser) -> HTMLResponse:
     """Simple main page."""
-
     return templates.TemplateResponse("main.html", {"request": request})
 
 
 @base_router.get("/sync_controller", response_class=JSONResponse)
-def sync():
+def sync() -> dict:
     """Simple sync controller."""
-
     requests.get("http://google.com", timeout=1)
 
     return {"status": 200}
 
 
 @base_router.get("/async_controller", response_class=JSONResponse)
-async def async_func():
+async def async_func() -> dict:
     """Simple async controller."""
     async with aiohttp.ClientSession() as session:
         await session.get("http://google.com", timeout=1)

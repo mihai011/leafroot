@@ -3,18 +3,19 @@
 import json
 
 from fastapi import status
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from tests import DataSource
 
 
-async def test_health_status(async_session):
+async def test_health_status(async_session: AsyncSession) -> None:
     """Verifying the health check."""
-
     ds = DataSource(async_session)
     await ds.make_user()
 
     response = await ds.client.get(
-        "/utils/health_check", headers=ds.headers["Test_user"]
+        "/utils/health_check",
+        headers=ds.headers["Test_user"],
     )
 
     assert response.status_code == status.HTTP_200_OK

@@ -3,34 +3,38 @@
 import json
 
 from fastapi import status
+from motor.motor_asyncio import AsyncIOMotorClient
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from data import Book, BookPackage, Library
 from tests import DataSource
 
 
-async def test_library(mongo_db):
+async def test_library(mongo_db: AsyncIOMotorClient) -> None:
     """Testing the mongodb class."""
+    total_books = 2
     book1 = Book(title="test", author="test", synopsis="test")
     book2 = Book(title="test2", author="test2", synopsis="test2")
-    assert await Library.AddItem(mongo_db, book1)
-    assert await Library.AddItem(mongo_db, book2)
+    assert await Library.add_item(mongo_db, book1)
+    assert await Library.add_item(mongo_db, book2)
 
-    books = await Library.GetItemsByFilter(mongo_db, {})
-    assert len(books) == 2
+    books = await Library.get_items_by_filter(mongo_db, {})
+    assert len(books) == total_books
 
-    book_by_id = await Library.GetItemById(mongo_db, books[0]["id"])
+    book_by_id = await Library.get_item_by_id(mongo_db, books[0]["id"])
     assert book_by_id["id"] == books[0]["id"]
 
-    deleted = await Library.DeleteItemById(mongo_db, book_by_id["id"])
+    deleted = await Library.delete_item_by_id(mongo_db, book_by_id["id"])
     assert deleted == 1
 
-    books = await Library.GetItemsByFilter(mongo_db, {})
+    books = await Library.get_items_by_filter(mongo_db, {})
     assert len(books) == 1
 
 
-async def test_library_controllers(async_session, mongo_db):
+async def test_library_controllers(
+    async_session: AsyncSession, mongo_db: AsyncIOMotorClient
+) -> None:
     """Testing the library controllers."""
-
     ds = DataSource(async_session)
     await ds.make_user()
 

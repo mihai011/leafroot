@@ -1,7 +1,8 @@
 """Class for the mongo Library."""
 
+from __future__ import annotations
+
 import uuid
-from typing import Optional
 
 from pydantic import BaseModel, Field
 
@@ -19,33 +20,33 @@ class Book(BaseModel):
     class Config:
         """Config class."""
 
-        allow_population_by_field_name = True
-        schema_extra = {
+        validate_by_name = True
+        json_json_schema_extra = {
             "example": {
                 "_id": "066de609-b04a-4b30-b46c-32537c7f1f6e",
                 "title": "Don Quixote",
                 "author": "Miguel de Cervantes",
                 "synopsis": "...",
-            }
+            },
         }
 
 
 class BookUpdate(BaseModel):
     """Book class model update for mongodb."""
 
-    title: Optional[str]
-    author: Optional[str]
-    synopsis: Optional[str]
+    title: str | None
+    author: str | None
+    synopsis: str | None
 
     class Config:
         """Config class."""
 
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "title": "Don Quixote",
                 "author": "Miguel de Cervantes",
                 "synopsis": "Don Quixote is a Spanish novel by Miguel de Cervantes...",
-            }
+            },
         }
 
 
@@ -65,10 +66,10 @@ class BookPackage(BaseModel):
     class Config:
         """Config class."""
 
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "title": "Don Quixote",
                 "author": "Miguel de Cervantes",
                 "synopsis": "...",
-            }
+            },
         }

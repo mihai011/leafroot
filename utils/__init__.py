@@ -1,10 +1,12 @@
 """General util module."""
 
+from __future__ import annotations
+
 import hashlib
-import random
+import secrets
 import string
-import subprocess
 import uuid
+from typing import TYPE_CHECKING
 
 from fastapi import HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
@@ -12,25 +14,18 @@ from jose import jwt
 from jose.exceptions import JWTError
 from passlib.context import CryptContext
 from redis.asyncio import Redis
-from sqlalchemy.orm import Session
 
 from cache import my_key_builder, testproof_cache
 from config import config
 from data import User
 from logger import log
 
+if TYPE_CHECKING:
+    from redis.asyncio import Redis
+    from sqlalchemy.orm import Session
+
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
-
-
-@log()
-async def check_host(hostname):
-    """Check generic host is alive."""
-
-    # Building the command. Ex: "ping -c 1 google.com"
-    command = ["ping", "-c", "1", hostname]
-
-    return subprocess.call(command) == 0
 
 
 @log()
@@ -46,35 +41,29 @@ def get_password_hash(password: str) -> str:
 
 
 @log()
-def make_short_hash(string: str):
-    """short hash for a string"""
-    return int(hashlib.sha1(string.encode("utf-8")).hexdigest(), 16) % (10**8)
+def make_short_hash(string: str) -> int:
+    """Short hash for a string."""
+    return int(hashlib.sha1(string.encode("utf-8")).hexdigest(), 16) % (10**8)  # noqa
 
 
 @log()
-async def store_string_at_key(redis_client: Redis, key: str, store_string: str):
-    """Store string at key in redis"""
+async def store_string_at_key(redis_client: Redis, key: str, store_string: str) -> None:
+    """Store string at key in redis."""
     await redis_client.set(key, store_string)
 
-    return string
-
 
 @log()
-async def get_string_at_key(redis_client, key: str):
-    """Store string at key in redis"""
-    store_string = await redis_client.get(key)
-
-    return store_string
+async def get_string_at_key(redis_client: Redis, key: str) -> str:
+    """Store string at key in redis."""
+    return await redis_client.get(key)
 
 
 @log()
 def create_access_token(
     data: dict,
-):
+) -> str:
     """Create the access token hash for data."""
-
-    encoded_jwt = jwt.encode(data, config.secret_key, algorithm=config.algorithm)
-    return encoded_jwt
+    return jwt.encode(data, config.secret_key, algorithm=config.algorithm)
 
 
 @log()
@@ -83,38 +72,39 @@ async def authenthicate_user(token: str, session: Session) -> User:
     """Authenticate a token."""
     try:
         payload = jwt.decode(token, config.secret_key, algorithms=[config.algorithm])
-    except JWTError:
+    except JWTError as e:
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid token!"
-        )
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid token!",
+        ) from e
 
-    users = await User.GetByArgs(session, payload)
+    users = await User.get_by_args(session, payload)
 
     if len(users) != 1:
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, detail="No user found!"
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="No user found!",
         )
 
-    user = users[0]
-
-    return user
+    return users[0]
 
 
 @log()
-def random_string():
+def random_string() -> str:
     """Make a random string."""
     init_pepper = "R"
     r_string = "".join(
-        random.choice(string.ascii_uppercase + string.digits) for _ in range(10)
+        secrets.choice(string.ascii_uppercase + string.digits) for _ in range(10)
     )
 
     return init_pepper + r_string
 
 
 @log()
-def is_valid_uuid(val):
+def is_valid_uuid(val: str) -> bool | None:
+    """Check if a val is a valid UUID."""
     try:
         uuid.UUID(str(val))
-        return True
     except ValueError:
         return False
+    return True

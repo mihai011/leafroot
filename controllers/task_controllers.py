@@ -18,7 +18,6 @@ async def add_simple_task(_: CurrentUser) -> ORJSONResponse:
     response = small_task.apply_async((), task_id=task_id)
 
     metadata_task = create_task_metadata(response, task_id)
-    metadata_task
     return create_response(
         message="Task put on Queue!",
         status=status.HTTP_200_OK,

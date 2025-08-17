@@ -1,6 +1,6 @@
 """Pydantic models related to user."""
 
-from typing import Optional
+from __future__ import annotations
 
 from pydantic import BaseModel, EmailStr
 
@@ -8,8 +8,8 @@ from pydantic import BaseModel, EmailStr
 class PydanticUser(BaseModel):
     """Pydantinc User class."""
 
-    username: Optional[str]
-    email: Optional[str]
+    username: str | None
+    email: str | None
     password: str
 
     class Config:
@@ -28,7 +28,7 @@ class PydanticUserSignUp(BaseModel):
     username: str
     email: EmailStr
     password: str
-    permissions: Optional[str]
+    permissions: str | None
 
     class Config:
         """Pydantic config class for user."""

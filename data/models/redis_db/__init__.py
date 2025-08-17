@@ -8,7 +8,7 @@ from logger import log
 
 from .graph import RedisEdge, RedisGraph, RedisGraphQuery, RedisNode
 
-__all__ = [RedisEdge, RedisGraph, RedisGraphQuery, RedisNode]
+__all__ = ["RedisEdge", "RedisGraph", "RedisGraphQuery", "RedisNode"]
 
 
 @log()

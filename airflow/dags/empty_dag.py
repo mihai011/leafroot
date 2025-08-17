@@ -1,13 +1,15 @@
-import datetime
+"""Module for an empty python dags."""
 
+import datetime
+from datetime import timezone
+
+from airflow import DAG
 from airflow.models.baseoperator import chain, cross_downstream
 from airflow.operators.empty import EmptyOperator
 
-from airflow import DAG
-
 my_dag = DAG(
     dag_id="my_dag_name",
-    start_date=datetime.datetime(2021, 1, 1),
+    start_date=datetime.datetime(2021, 1, 1, tzinfo=timezone.utc),
     schedule="@daily",
 )
 t1 = EmptyOperator(task_id="task1", dag=my_dag)

@@ -1,5 +1,77 @@
-[tool.black]
-line-length=79
+[tool.ruff]
+
+lint.select = [
+    "E",     # pycodestyle (errors)
+    "W",     # pycodestyle (warnings)
+    "F",     # pyflakes
+    "C90",   # mccabe complexity
+    "I",     # isort
+    "N",     # pep8-naming
+    "D",     # pydocstyle
+    "UP",    # pyupgrade
+    "YTT",   # flake8-2020
+    "ANN",   # flake8-annotations
+    "ASYNC", # flake8-async
+    "S",     # flake8-bandit
+    "BLE",   # flake8-blind-except
+    "B",     # flake8-bugbear
+    "A",     # flake8-builtins
+    "C4",    # flake8-comprehensions
+    "DTZ",   # flake8-datetimez
+    "T10",   # flake8-debugger
+    "DJ",    # flake8-django
+    "EM",    # flake8-errmsg
+    "EXE",   # flake8-executable
+    "FA",    # flake8-future-annotations
+    "ICN",   # flake8-import-conventions
+    "INP",   # flake8-no-pep420
+    "PIE",   # flake8-pie
+    "PT",    # flake8-pytest-style
+    "Q",     # flake8-quotes
+    "RSE",   # flake8-raise
+    "RET",   # flake8-return
+    "SLF",   # flake8-self
+    "SIM",   # flake8-simplify
+    "TCH",   # flake8-type-checking
+    "ARG",   # flake8-unused-arguments
+    "PTH",   # flake8-use-pathlib
+    "TD",    # flake8-todos
+    "ERA",   # eradicate (commented-out code)
+    "PL",    # pylint rules
+    "TRY",   # tryceratops
+    "FLY",   # flynt (string formatting improvements)
+    "NPY",   # NumPy-specific rules
+    "PERF",  # performance improvements
+    "FURB",  # refurb plugin
+]
+lint.ignore = ["S101"]
+
+[tool.ruff.lint.per-file-ignores]
+"/leafroot/tests/*.py" = ["ARG001"]
+"/leafroot/spark_apps/*.py" = ["S608"]
+"/leafroot/data/alembic/*" = ["ALL"]
+
+[tool.ruff.lint.isort]
+case-sensitive = true
+force-wrap-aliases = true
+combine-as-imports = true
+
+section-order = [
+    "future",
+    "standard-library",
+    "third-party",
+    "first-party",
+    "local-folder",
+]
+# McCabe complexity settings
+[tool.ruff.lint.mccabe]
+max-complexity = 10
+
+# Enable all `pydocstyle` rules, limiting to those that adhere to the
+# Google convention via `convention = "google"`, below.
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
 
 [tool.bandit]
 exclude_dirs = ["tests", "scripts", "utils"]
@@ -13,9 +85,7 @@ readme = "README.md"
 
 [tool.pytest.ini_options]
 pythonpath = "."
-addopts = [
-    "--import-mode=importlib",
-]
+addopts = ["--import-mode=importlib"]
 
 [tool.poetry.dependencies]
 python = ">=3.11,<=3.14"
@@ -30,7 +100,7 @@ async-timeout = ">=5.0.1"
 asyncpg = ">=0.30.0"
 attrs = ">=25.3.0"
 bandit = ">=1.8.6"
-bcrypt = "4.0.1" # could be issues here (needs to be set to 4.0.1)
+bcrypt = "4.0.1"                                                           # could be issues here (needs to be set to 4.0.1)
 blacken-docs = ">=1.19.1"
 celery = ">=5.5.3"
 certifi = ">=2025.8.3"
@@ -45,7 +115,7 @@ docformatter = ">=1.7.7"
 ecdsa = ">=0.19.1"
 execnet = "2.1.0"
 fastapi = ">=0.116.1"
-fastapi-cache2 = {extras = ["redis"], version = ">=0.2.2"}
+fastapi-cache2 = { extras = ["redis"], version = ">=0.2.2" }
 flower = ">=2.0.1"
 frozenlist = ">=1.7.0"
 greenlet = ">=3.2.4"
@@ -78,7 +148,7 @@ psycopg2 = ">=2.9.10"
 py = ">=1.11.0"
 pyasn1 = ">=0.6.1"
 pycparser = ">=2.22"
-pydantic = {extras = ["email"], version = ">=2.11.7"}
+pydantic = { extras = ["email"], version = ">=2.11.7" }
 pyparsing = ">=3.2.3"
 pytest = ">=8.4.1"
 pytest-asyncio = ">=1.1.0"
@@ -128,7 +198,7 @@ grpcio-status = ">=1.74.0"
 timeout-decorator = ">=0.5.0"
 kafka-python = ">=2.2.15"
 json-log-formatter = ">=1.1.1"
-faust-streaming = {git = "https://github.com/faust-streaming/faust.git"}
+faust-streaming = { git = "https://github.com/faust-streaming/faust.git" }
 python-logstash-async = ">=4.0.2"
 pip = ">=25.2"
 nest-asyncio = ">=1.6.0"

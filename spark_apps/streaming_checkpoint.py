@@ -1,6 +1,4 @@
-"""
-Streaming Check point
-"""
+"""Streaming Check point."""
 
 from pyspark.sql import SparkSession  # Create a SparkSession
 

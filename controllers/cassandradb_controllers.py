@@ -23,8 +23,7 @@ async def create_message_board(
     mb: MessageBoardPacket,
     _: CurrentUser,
 ) -> ORJSONResponse:
-    """Create message Board"""
-
+    """Create message Board."""
     board_id = uuid.uuid4()
     MessageBoard.create(board_id=board_id, name=mb.name)
 
@@ -39,10 +38,9 @@ async def create_message_board(
 @cassandra_router.post("/message", response_model=MessageResponseItem)
 async def create_message(
     message: MessagePacket,
-    user: CurrentUser,
+    _: CurrentUser,
 ) -> ORJSONResponse:
     """Create messsage on a board."""
-
     user_id = uuid.uuid4()
     message = {
         "message_id": uuid.uuid4(),

@@ -42,7 +42,7 @@ IcebergCatalog = Annotated[MyIcebergCatalog, Depends(get_iceberg_catalog)]
 async def auth(
     session: CurrentAsyncSession,
     authorization: str = Header(),
-):
+) -> User:
     """Auth function based on header."""
     token = authorization.split(" ")[-1]
     return await authenthicate_user(token, session)
@@ -53,10 +53,12 @@ CurrentUser = Annotated[User, Depends(auth)]
 
 @log()
 def create_response(
-    message: str, status: int, response_model: BaseResponse, item=None
+    message: str,
+    status: int,
+    response_model: BaseResponse,
+    item: dict,
 ) -> ORJSONResponse:
-    """Receive a message parameter from which a reponse is created and item
-    from wich a dictionay is ORJSONResponse object is made as response."""
+    """Create a response based on response_model."""
     data = {}
     data["message"] = message
     data["item"] = item

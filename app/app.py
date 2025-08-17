@@ -31,7 +31,7 @@ from controllers.url_controllers import url_router
 from controllers.users_controllers import user_router
 from controllers.utils_controllers import utils_router
 from controllers.ws_controllers import ws_router
-from data import User, async_session, create_database_app
+from data import User, create_database_app
 from logger import initialize_logger
 from middleware import TimeRequestMiddleware
 from utils import get_password_hash
@@ -51,7 +51,9 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 # Error handlers
 @app.exception_handler(RequestValidationError)
-async def validation_exception_handler(_: Request, exc: RequestValidationError):
+async def validation_exception_handler(
+    _: Request, exc: RequestValidationError
+) -> JSONResponse:
     """Error handler for Request package."""
     return JSONResponse(
         status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
@@ -60,8 +62,8 @@ async def validation_exception_handler(_: Request, exc: RequestValidationError):
 
 
 @app.exception_handler(HTTPException)
-async def http_exception_handler(_: Request, exc: HTTPException):
-    """Error handler for HTTPException"""
+async def http_exception_handler(_: Request, exc: HTTPException) -> JSONResponse:
+    """Error handler for HTTPException."""
     return JSONResponse(
         status_code=exc.status_code,
         content=jsonable_encoder({"detail": exc.detail}),
@@ -69,11 +71,11 @@ async def http_exception_handler(_: Request, exc: HTTPException):
 
 
 @app.exception_handler(IntegrityError)
-async def treat_integrity_error(_: Request, exc: IntegrityError):
+async def treat_integrity_error(_: Request, exc: IntegrityError) -> JSONResponse:
     """Error handler for Integrity error."""
     return JSONResponse(
         status_code=status.HTTP_400_BAD_REQUEST,
-        content=jsonable_encoder({"detail": "Integrity Error!"}),
+        content=jsonable_encoder({"detail": f"Integrity Error! {exc}"}),
     )
 
 
@@ -105,20 +107,18 @@ app.include_router(iceberg_router)
 
 
 @app.on_event("startup")
-async def user_on_startup(session: AsyncSession = async_session()):
+async def user_on_startup(session: AsyncSession) -> None:
     """Creates a user at startup.
 
     Args:
-        session (AsyncSession, optional): _description_. Defaults to Depends(get_async_session).
+        session (AsyncSession, optional): _description_.
+        Defaults to Depends(get_async_session).
     """
-
     initialize_cache()
     initialize_logger()
     create_database_app()
 
-    from logger import logger
-
-    # initiate_cassandra()
+    from logger import logger  # noqa
 
     if config.user_name and config.user_email and config.user_password:
         params = {
@@ -129,7 +129,7 @@ async def user_on_startup(session: AsyncSession = async_session()):
         try:
             hashed_pass = get_password_hash(config.user_password)
             params["hashed_pass"] = hashed_pass
-            await User.AddNew(session, params)
+            await User.add_new(session, params)
             await session.close()
         except IntegrityError:
             logger.warning("Init User already created!")

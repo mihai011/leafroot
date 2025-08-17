@@ -1,7 +1,9 @@
 """Redis graph models."""
 
+from __future__ import annotations
+
 import uuid
-from typing import Any, Dict, Optional
+from typing import Any
 
 from pydantic import BaseModel, Field
 
@@ -15,11 +17,11 @@ class RedisGraph(BaseModel):
     class Config:
         """Class Config for Redis Graph."""
 
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "_id": "066de609-b04a-4b30-b46c-32537c7f1f6e",
                 "name": "Graph Name",
-            }
+            },
         }
 
 
@@ -29,17 +31,17 @@ class RedisNode(BaseModel):
     id: str = Field(default_factory=uuid.uuid4, alias="_id")
     graph: str
     label: str
-    properties: Dict[str, Any]
+    properties: dict[str, Any]
 
     class Config:
         """Class Config for Redis Node."""
 
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "_id": "066de609-b04a-4b30-b46c-32537c7f1f6e",
                 "label": "Node label",
                 "properties": {"key": "value"},
-            }
+            },
         }
 
 
@@ -51,19 +53,19 @@ class RedisEdge(BaseModel):
     source: str
     destination: str
     relation: str
-    properties: Optional[Dict[str, Any]]
+    properties: dict[str, Any] | None
 
     class Config:
         """Class Config for Redis Edge."""
 
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "_id": "066de609-b04a-4b30-b46c-32537c7f1f6e",
                 "graph": "Graph Name",
                 "source": "Source node",
                 "destination": "Destination source",
                 "relation": "Relation ",
-            }
+            },
         }
 
 
@@ -76,10 +78,11 @@ class RedisGraphQuery(BaseModel):
     class Config:
         """Class Config for Redis Query."""
 
-        schema_extra = {
+        json_schema_extra = {
             "example": {
                 "_id": "066de609-b04a-4b30-b46c-32537c7f1f6e",
                 "graph": "Graph Name",
-                "query": "MATCH (p:president)-[:born]->(:state {name:'Hawaii'}) RETURN p",
-            }
+                "query": """MATCH (p:president)-[:born]->(:state {name:'Hawaii'})
+                            RETURN p""",
+            },
         }

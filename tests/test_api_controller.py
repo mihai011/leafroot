@@ -1,15 +1,15 @@
 """Module for testing api controller."""
 
-from aioresponses import aioresponses  # pylint: disable=R0801
+from aioresponses import aioresponses
 from fastapi import status
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from data import HttpRequest
-from tests import DataSource  # pylint: disable=R0801
+from tests import DataSource
 
 
-async def test_api(async_session):
+async def test_api(async_session: AsyncSession) -> None:
     """Test api request controller."""
-
     ds = DataSource(async_session)
     await ds.make_user()
 

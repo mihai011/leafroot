@@ -2,13 +2,13 @@
 
 import pytest
 from fastapi import HTTPException
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from utils import authenthicate_user, create_access_token
 
 
-async def test_fake_user(async_session):
+async def test_fake_user(async_session: AsyncSession) -> None:
     """Test authenthication with fake creds."""
-
     user_args = {
         "username": "test_name",
         "email": "test@gmail.com",

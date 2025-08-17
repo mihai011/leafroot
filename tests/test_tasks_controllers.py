@@ -4,19 +4,20 @@ import json
 
 import redis
 from fastapi import status
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from config import config
 from tests import DataSource
 
 
-async def test_small_task(async_session):
+async def test_small_task(async_session: AsyncSession) -> None:
     """Test authenthication."""
-
     ds = DataSource(async_session)
     await ds.make_user()
 
     response = await ds.client.post(
-        "/tasks/create_task", headers=ds.headers["Test_user"]
+        "/tasks/create_task",
+        headers=ds.headers["Test_user"],
     )
     assert response.status_code == status.HTTP_200_OK
     task_metadata = json.loads(response.text)

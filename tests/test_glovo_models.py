@@ -1,65 +1,66 @@
 """Test Glovo Queries."""
 
-import random
+import secrets
+
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from data import Curier, Order, OrderItem, Product, Restaurant, User
 
 
-async def test_glovo_queries(async_session):
+async def test_glovo_queries(async_session: AsyncSession) -> None:
     """Testing sqlalchemy queries."""
-
-    TOTAL_USERS = 100
-    USERS_THAT_ORDER = 10
-    TOTAL_RESTAURANTS = 10
-    AVAILABLE_RESTAURANTS = 10
-    TOTAL_PRODUCTS = 100
-    TOTAL_CURIERS = 100
-    AVAILABLE_CURIERS = 5
+    total_users = 100
+    users_that_order = 10
+    total_restaurants = 10
+    available_restaurants = 10
+    total_products = 100
+    total_curiers = 100
+    available_curiers = 5
 
     users = [
-        await User.AddNew(
+        await User.add_new(
             async_session,
             {"username": str(i), "email": str(i), "hashed_pass": str(i)},
         )
-        for i in range(TOTAL_USERS)
+        for i in range(total_users)
     ]
 
     users_that_make_orders = list(
-        set(random.choice(users) for _ in range(USERS_THAT_ORDER))
+        {secrets.choice(users) for _ in range(users_that_order)},
     )
 
     restaurants = [
-        await Restaurant.AddNew(async_session, {"name": str(i)})
-        for i in range(TOTAL_RESTAURANTS)
+        await Restaurant.add_new(async_session, {"name": str(i)})
+        for i in range(total_restaurants)
     ]
 
     available_restaurants = list(
-        set(random.choice(restaurants) for _ in range(AVAILABLE_RESTAURANTS))
+        {secrets.choice(restaurants) for _ in range(available_restaurants)},
     )
 
     products = [
-        await Product.AddNew(
+        await Product.add_new(
             async_session,
             {
                 "name": str(i),
-                "restaurant_id": random.choice(available_restaurants).id,
+                "restaurant_id": secrets.choice(available_restaurants).id,
             },
         )
-        for i in range(TOTAL_PRODUCTS)
+        for i in range(total_products)
     ]
-    ordered_products = list(set(random.choice(products) for _ in range(10)))
+    ordered_products = list({secrets.choice(products) for _ in range(10)})
 
     curiers = [
-        await Curier.AddNew(async_session, {"name": str(i), "price": i})
-        for i in range(TOTAL_CURIERS)
+        await Curier.add_new(async_session, {"name": str(i), "price": i})
+        for i in range(total_curiers)
     ]
 
-    active_curiers = list(set(random.choice(curiers) for _ in range(AVAILABLE_CURIERS)))
+    active_curiers = list({secrets.choice(curiers) for _ in range(available_curiers)})
     orders = []
 
     for curier in active_curiers:
         for user in users_that_make_orders:
-            o = await Order.AddNew(
+            o = await Order.add_new(
                 async_session,
                 {"curier_id": curier.id, "client_id": user.id},
             )
@@ -67,7 +68,7 @@ async def test_glovo_queries(async_session):
 
     for order in orders:
         for product in ordered_products:
-            await OrderItem.AddNew(
+            await OrderItem.add_new(
                 async_session,
                 {
                     "product_id": product.id,
@@ -75,7 +76,7 @@ async def test_glovo_queries(async_session):
                 },
             )
 
-    user_id = random.choice(users_that_make_orders).id
-    user_orders = await Order.getOrdersByClientId(async_session, user_id)
-    user_products = await Product.getProductsbyClientId(async_session, user_id)
+    user_id = secrets.choice(users_that_make_orders).id
+    user_orders = await Order.get_orders_by_client_id(async_session, user_id)
+    user_products = await Product.get_products_by_client_id(async_session, user_id)
     assert len(user_products) == len(user_orders) * len(ordered_products)

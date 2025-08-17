@@ -14,7 +14,6 @@ iceberg_router = APIRouter(prefix="/iceberg", tags=["iceberg"])
 @iceberg_router.get("/iceberg", response_model=BaseResponse)
 async def api_request(_: CurrentUser, catalog: IcebergCatalog) -> ORJSONResponse:
     """Execute a query to the iceberg catalog."""
-
     result = catalog.list_namespaces()
 
     return create_response(

@@ -1,22 +1,22 @@
-"""Mesage Board Packet model"""
+"""Mesage Board Packet model."""
 
 from pydantic import UUID4, BaseModel
 
 
 class MessageBoardPacket(BaseModel):
-    """Message Board Packet"""
+    """Message Board Packet."""
 
     name: str
 
 
 class MessagePacket(BaseModel):
-    """Message Packet"""
+    """Message Packet."""
 
     text: str
     board_id: UUID4
 
 
 class ChatUser(BaseModel):
-    """CharUser Packet"""
+    """CharUser Packet."""
 
     username: str

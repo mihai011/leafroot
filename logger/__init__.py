@@ -4,8 +4,9 @@ import asyncio
 import json
 import logging
 import time
-from contextlib import contextmanager
+from contextlib import contextmanager, suppress
 from functools import wraps
+from typing import Callable
 
 import json_log_formatter
 from logstash_async.handler import AsynchronousLogstashHandler
@@ -16,10 +17,9 @@ from base_utils import clear_args_dicts
 from config import config
 
 
-def initialize_logger():
+def initialize_logger() -> None:
     """Initiliaze loggers."""
-
-    global logger
+    global logger  # noqa: PLW0603
     logstash_host = "logstash"
     logstash_port = 5044
     formatter = json_log_formatter.JSONFormatter()
@@ -43,7 +43,8 @@ def initialize_logger():
 
 
 @contextmanager
-def wrapping_logic(func, request_id, args, kwargs):
+def wrapping_logic(func: Callable, request_id: str, args: list, kwargs: dict) -> None:
+    """Context manager for logging context data on request."""
     new_args, new_kwargs = clear_args_dicts(args, kwargs)
 
     if config.env in ["circle", "dev"]:
@@ -70,20 +71,19 @@ def wrapping_logic(func, request_id, args, kwargs):
     except Exception as e:
         packet["messages"] = f"Exception raised in {func.__name__}. exception: {str(e)}"
         logger.exception(json.dumps(packet))
-        # TODO: parse the exception and return a proper one
-        raise e
+        raise
 
 
-def log():
-    def inner(func):
+def log() -> Callable:
+    """Log decorator to be used in the async and sync functions and methods."""
+
+    def inner(func: Callable) -> Callable:
         @wraps(func)
-        def wrapper(*args, **kwargs):
+        def wrapper(*args: list, **kwargs: dict):  # noqa: ANN401, ANN202
             request_id = None
             result = None
-            try:
+            with suppress(ContextDoesNotExistError):
                 request_id = context["X-Request-ID"]
-            except ContextDoesNotExistError:
-                pass
 
             if not asyncio.iscoroutinefunction(func):
                 with wrapping_logic(func, request_id, args, kwargs):
@@ -91,7 +91,7 @@ def log():
 
             else:
 
-                async def wrap():
+                async def wrap():  # noqa: ANN401, ANN202
                     with wrapping_logic(func, request_id, args, kwargs):
                         return await func(*args, **kwargs)
 

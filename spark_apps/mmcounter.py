@@ -1,10 +1,13 @@
+"""Just file for spark experimentation."""
+
 import sys
 
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import count
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
+    exp_args = 2
+    if len(sys.argv) != exp_args:
         print("Usage: mmcounter <file>", file=sys.stderr)
         sys.exit(-1)
 
@@ -28,7 +31,7 @@ if __name__ == "__main__":
         .orderBy("Total", ascending=False)
     )
     count_mnm_df.show(n=50, truncate=False)
-    print("Total Rows = %d" % (count_mnm_df.count()))
+    print(f"Total Rows = {count_mnm_df.count()}")
     ca_count_mnm_df = (
         mnm_df.select("State", "Color", "Count")
         .where(mnm_df.State == "CA")

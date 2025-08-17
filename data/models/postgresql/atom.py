@@ -1,6 +1,7 @@
 """Atom class related models."""
 
 from sqlalchemy import Column, Float, ForeignKey, Integer, select
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import relationship, selectinload
 
 from data.models.postgresql import Base, ExtraBase
@@ -22,14 +23,14 @@ class Atom(Base, ExtraBase):
     __mapper_args__ = {"eager_defaults": True}
 
     @classmethod
-    async def AddNew(cls, session, args):
-        obj = await super().AddNew(session, args)
-        obj = await cls.GetById(session, obj.id)
-
-        return obj
+    async def add_new(cls, session: AsyncSession, args: list) -> "Atom":
+        """Adding an atom to the database."""
+        obj = await super().add_new(session, args)
+        return await cls.get_by_id(session, obj.id)
 
     @classmethod
-    async def GetById(cls, session, obj_id):
+    async def get_by_id(cls, session: AsyncSession, obj_id: int) -> "Atom":
+        """Get the atom by id."""
         result = await session.execute(
             select(cls)
             .options(
@@ -37,11 +38,9 @@ class Atom(Base, ExtraBase):
                 selectinload(cls.electrons),
                 selectinload(cls.protons),
             )
-            .filter(cls.id == obj_id)
+            .filter(cls.id == obj_id),
         )
-        obj = result.scalars().first()
-
-        return obj
+        return result.scalars().first()
 
 
 class Proton(Base, ExtraBase):

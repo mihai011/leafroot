@@ -1,7 +1,7 @@
 """Models init file."""
 
 import asyncio
-from datetime import datetime
+from datetime import datetime, timezone
 
 from sqlalchemy import Column, DateTime, Integer, create_engine
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
@@ -61,17 +61,16 @@ class ExtraBase(SerializerMixin):
     """Extra base class used for child models."""
 
     id = Column(Integer, primary_key=True)
-    created_at = Column(DateTime, default=datetime.now())
-    updated_at = Column(DateTime, default=datetime.now())
+    created_at = Column(DateTime(timezone=True), default=datetime.now(timezone.utc))
+    updated_at = Column(DateTime(timezone=True), default=datetime.now(timezone.utc))
 
-    def serialize(self):
+    def serialize(self) -> dict:
         """Base serializer method."""
         return self.to_dict()
 
     @classmethod
-    async def AddNew(cls, session, args):
+    async def add_new(cls, session: AsyncSession, args: list) -> "ExtraBase":
         """Add object method."""
-
         obj = cls(**args)
         session.add(obj)
         await session.commit()
@@ -79,29 +78,27 @@ class ExtraBase(SerializerMixin):
         return obj
 
     @classmethod
-    async def GetAll(cls, session):
+    async def get_all(cls, session: AsyncSession) -> list:
         """Get all objects method."""
 
-        def get_all(session):
+        def get_all_sync(session: Session) -> list:
             return session.query(cls).all()
 
-        return await session.run_sync(get_all)
+        return await session.run_sync(get_all_sync)
 
     @classmethod
-    async def GetById(cls, session, obj_id):
+    async def get_by_id(cls, session: AsyncSession, obj_id: int) -> "ExtraBase":
         """Get object by his id."""
-
         query = select(cls).where(cls.id == obj_id)
         result = await session.execute(query)
-        o = result.scalars().first()
-        return o
+        return result.scalars().first()
 
     @classmethod
     @testproof_cache(key_builder=my_key_builder)
-    async def GetByArgs(cls, session, args):
+    async def get_by_args(cls, session: AsyncSession, args: list) -> "ExtraBase":
         """Get object by args."""
 
-        def filter_sync(session):
+        def filter_sync(session: Session) -> list:
             query = session.query(cls)
             for attr, value in args.items():
                 query = query.filter(getattr(cls, attr) == value)
@@ -110,35 +107,32 @@ class ExtraBase(SerializerMixin):
         if not args:
             return []
 
-        results = await session.run_sync(filter_sync)
-
-        return results
+        return await session.run_sync(filter_sync)
 
     @classmethod
-    def GetByArgsSync(cls, session, args):
+    def get_by_args_sync(cls, session: Session, args: list) -> list:
         """Get object by args in a sync way."""
-
         query = session.query(cls)
         for attr, value in args.items():
             query = query.filter(getattr(cls, attr) == value)
         return query.all()
 
     @classmethod
-    async def DeleteAll(Cls, session):
+    async def delete_all(cls, session: AsyncSession) -> bool:
         """Delete all objects method."""
 
-        def delete(session):
-            session.query(Cls).delete()
+        def delete(session: Session) -> None:
+            session.query(cls).delete()
 
         await session.run_sync(delete)
         await session.commit()
         return True
 
     @classmethod
-    async def GetRandom(Cls, session):
+    async def get_random(cls, session: AsyncSession) -> "ExtraBase":
         """Get random object."""
 
-        def get_random(session):
-            return session.query(Cls).order_by(func.random()).first()
+        def get_random_sync(session: Session) -> "ExtraBase":
+            return session.query(cls).order_by(func.random()).first()
 
-        return await session.run_sync(get_random)
+        return await session.run_sync(get_random_sync)

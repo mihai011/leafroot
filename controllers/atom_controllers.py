@@ -28,8 +28,7 @@ async def create_atom(
     session: CurrentAsyncSession,
 ) -> ORJSONResponse:
     """Create atom here."""
-
-    atom = await Atom.AddNew(session, pydantic_atom.model_dump())
+    atom = await Atom.add_new(session, pydantic_atom.model_dump())
 
     return create_response(
         message="Atom created succesfully!",
@@ -45,10 +44,8 @@ async def add_proton(
     _: CurrentUser,
     session: CurrentAsyncSession,
 ) -> ORJSONResponse:
-    """This controller creates a proton with the params received in the
-    body."""
-
-    proton = await Proton.AddNew(session, pydantic_proton.model_dump())
+    """This controller creates a proton with the params received in the body."""
+    proton = await Proton.add_new(session, pydantic_proton.model_dump())
 
     return create_response(
         message="Proton created succesfully!",
@@ -62,11 +59,10 @@ async def add_proton(
 async def get_proton(
     _: CurrentUser,
     session: CurrentAsyncSession,
-    pydantic_proton: PydanticProton = Depends(),
+    pydantic_proton: PydanticProton = Depends(),  # noqa: B008
 ) -> ORJSONResponse:
     """Getting protons based on params."""
-
-    protons = await Proton.GetByArgs(session, pydantic_proton.dict())
+    protons = await Proton.get_by_args(session, pydantic_proton.dict())
     protons = {"protons": [proton.serialize() for proton in protons]}
 
     return create_response(
@@ -83,9 +79,8 @@ async def add_neutron(
     _: CurrentUser,
     session: CurrentAsyncSession,
 ) -> ORJSONResponse:
-    """This controller creates a neutron with the params received in the
-    body."""
-    neutron = await Neutron.AddNew(session, pydantic_neutron.dict())
+    """This controller creates a neutron with the params received in the body."""
+    neutron = await Neutron.add_new(session, pydantic_neutron.dict())
 
     return create_response(
         message="Neutron created succesfully!",
@@ -99,11 +94,10 @@ async def add_neutron(
 async def get_neutron(
     _: CurrentUser,
     session: CurrentAsyncSession,
-    pydantic_neutron: PydanticNeutron = Depends(),
+    pydantic_neutron: PydanticNeutron = Depends(),  # noqa: B008
 ) -> ORJSONResponse:
     """Getting neutron based on params."""
-
-    neutrons = await Neutron.GetByArgs(session, pydantic_neutron.dict())
+    neutrons = await Neutron.get_by_args(session, pydantic_neutron.dict())
     neutrons = {"neutrons": [neutron.serialize() for neutron in neutrons]}
 
     return create_response(
@@ -119,11 +113,9 @@ async def add_electron(
     pydantic_electron: PydanticElectron,
     _: CurrentUser,
     session: CurrentAsyncSession,
-):
-    """This controller creates a electron with the params received in the
-    body."""
-
-    electron = await Electron.AddNew(session, pydantic_electron.dict())
+) -> ParticleResponseItem:
+    """This controller creates a electron with the params received in the body."""
+    electron = await Electron.add_new(session, pydantic_electron.dict())
 
     return create_response(
         message="Electron created succesfully!",
@@ -137,11 +129,10 @@ async def add_electron(
 async def get_electron(
     _: CurrentUser,
     session: CurrentAsyncSession,
-    pydantic_electron: PydanticElectron = Depends(),
+    pydantic_electron: PydanticElectron = Depends(),  # noqa: B008
 ) -> ORJSONResponse:
     """Getting neutron based on params."""
-
-    electrons = await Electron.GetByArgs(session, pydantic_electron.dict())
+    electrons = await Electron.get_by_args(session, pydantic_electron.dict())
     electrons = {"electrons": [electron.serialize() for electron in electrons]}
 
     return create_response(

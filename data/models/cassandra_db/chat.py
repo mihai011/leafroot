@@ -1,4 +1,4 @@
-"""Cassandra Models"""
+"""Cassandra Models."""
 
 from cassandra.cqlengine import columns
 from cassandra.cqlengine.models import Model
@@ -12,11 +12,15 @@ class MessageBoard(Model):
 
 
 class ChatUser(Model):
+    """Model for char user."""
+
     user_id = columns.UUID(primary_key=True)
     username = columns.Text()
 
 
 class Message(Model):
+    """Model for chat messager."""
+
     message_id = columns.UUID(primary_key=True)
     board_id = columns.UUID()
     user_id = columns.UUID()

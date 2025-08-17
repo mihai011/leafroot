@@ -1,12 +1,12 @@
-"""KeyValues packet model"""
+"""KeyValues packet model."""
 
-from typing import Union
+from __future__ import annotations
 
 from pydantic import BaseModel
 
 
 class KeyValuePacket(BaseModel):
-    """KeyValue Packet"""
+    """KeyValue Packet."""
 
     key: str
-    value: Union[int, str]
+    value: int | str

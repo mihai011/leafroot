@@ -7,7 +7,7 @@ ws_router = APIRouter(prefix="/ws", tags=["ws"])
 
 
 @ws_router.websocket_route("/ws")
-async def websocket(websocket: WebSocket):
+async def websocket(websocket: WebSocket) -> None:
     """Simple websocket controller.
 
     Args:

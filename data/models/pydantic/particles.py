@@ -1,6 +1,6 @@
 """Pydantic class for particle types."""
 
-from typing import Optional
+from __future__ import annotations
 
 from pydantic import BaseModel
 
@@ -22,18 +22,18 @@ class PydanticElectron(BaseModel):
     """Electron Class Model."""
 
     charge: float
-    atom_id: Optional[int]
+    atom_id: int | None
 
 
 class PydanticNeutron(BaseModel):
     """Neutron Class Model."""
 
     charge: float
-    atom_id: Optional[int]
+    atom_id: int | None
 
 
 class PydanticProton(BaseModel):
     """Proton Class Model."""
 
     charge: float
-    atom_id: Optional[int]
+    atom_id: int | None

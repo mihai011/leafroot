@@ -1,9 +1,10 @@
-from data.models.postgresql.quote import Quote
+"""Module for quotes functions."""
+
+from sqlalchemy.orm import Session
+
+from data import Quote
 
 
-async def get_random_quote(session):
-    """Retreives a random Quote"""
-
-    quote = await Quote.GetRandom(session)
-
-    return quote
+async def get_random_quote(session: Session) -> Quote:
+    """Retreives a random Quote."""
+    return await Quote.get_random(session)

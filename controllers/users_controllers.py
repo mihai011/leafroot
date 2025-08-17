@@ -28,15 +28,14 @@ async def create_user(
     pydantic_user: PydanticUser,
     user: CurrentUser,
     session: CurrentAsyncSession,
-):
+) -> UserResponseItem:
     """Creating a simple user."""
-
     params = pydantic_user.dict()
     password = params.pop("password")
     hashed_pass = get_password_hash(password)
     params["hashed_pass"] = hashed_pass
 
-    user = await User.AddNew(session, params)
+    user = await User.add_new(session, params)
 
     item_user = {
         "username": user.username,
@@ -48,7 +47,7 @@ async def create_user(
 
     return create_response(
         message="User created!",
-        status=200,
+        status=status.HTTP_200_OK,
         response_model=UserResponseItem,
         item=item_user,
     )
@@ -61,8 +60,7 @@ async def get_user(
     session: CurrentAsyncSession,
 ) -> ORJSONResponse:
     """Get user by id."""
-
-    user = await User.GetById(session, id_user)
+    user = await User.get_by_id(session, id_user)
     if user is None:
         raise HTTPException(status_code=status.HTTP_200_OK, detail="No user found!")
 
@@ -95,10 +93,9 @@ async def login(
     session: CurrentAsyncSession,
 ) -> ORJSONResponse:
     """Login controller for a user."""
-
     data = pydantic_user.model_dump(exclude_none=True)
     password = data.pop("password")
-    users = await User.GetByArgs(session, data)
+    users = await User.get_by_args(session, data)
 
     if not users:
         raise HTTPException(
@@ -120,7 +117,7 @@ async def login(
         item["user"] = user.serialize()
         return create_response(
             message="User logged in!",
-            status=200,
+            status=status.HTTP_200_OK,
             response_model=AuthorizedUserResponseItem,
             item=item,
         )
@@ -141,13 +138,12 @@ async def sign_up(
     session: CurrentAsyncSession,
 ) -> ORJSONResponse:
     """Sign-up controller for the user."""
-
     params = form.model_dump()
     password = params.pop("password")
     hashed_pass = get_password_hash(password)
     params["hashed_pass"] = hashed_pass
 
-    user = await User.AddNew(session, params)
+    user = await User.add_new(session, params)
 
     return create_response(
         message="User created!",

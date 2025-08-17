@@ -35,10 +35,10 @@ typehint:
 	poetry run mypy $(DIR_ARGS)
 
 lint:
-	poetry run ruff check $(DIR_ARGS)
+	poetry run ruff check --fix --unsafe-fixes
 
 format:
-	poetry run ruff format $(DIR_ARGS)
+	poetry run ruff format
 
 test_parallel:
 	poetry run  pytest -n $(MANUAL_CORES) --timeout=20 tests/ -W ignore::DeprecationWarning

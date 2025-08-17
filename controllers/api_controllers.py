@@ -19,7 +19,6 @@ async def api_request(
     http_session: HttpSession,
 ) -> ORJSONResponse:
     """Make a http request to an external api."""
-
     response = await make_api_request(http_session, http_request)
 
     return create_response(

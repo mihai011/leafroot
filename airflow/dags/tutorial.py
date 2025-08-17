@@ -1,11 +1,13 @@
-from datetime import datetime, timedelta
-from textwrap import dedent
+"""Tutorial moduel for airflow."""
 
-# Operators; we need this to operate!
-from airflow.operators.bash import BashOperator
+from datetime import datetime, timedelta, timezone
+from textwrap import dedent
 
 # The DAG object; we'll need this to instantiate a DAG
 from airflow import DAG
+
+# Operators; we need this to operate!
+from airflow.operators.bash import BashOperator
 
 with DAG(
     dag_id="tutorial",
@@ -18,22 +20,10 @@ with DAG(
         "email_on_retry": False,
         "retries": 1,
         "retry_delay": timedelta(minutes=5),
-        # 'queue': 'bash_queue',
-        # 'pool': 'backfill',
-        # 'priority_weight': 10,
-        # 'end_date': datetime(2016, 1, 1),
-        # 'wait_for_downstream': False,
-        # 'sla': timedelta(hours=2),
-        # 'execution_timeout': timedelta(seconds=300),
-        # 'on_failure_callback': some_function, # or list of functions
-        # 'on_success_callback': some_other_function, # or list of functions
-        # 'on_retry_callback': another_function, # or list of functions
-        # 'sla_miss_callback': yet_another_function, # or list of functions
-        # 'trigger_rule': 'all_success'
     },
     description="A simple tutorial DAG",
     schedule=timedelta(days=1),
-    start_date=datetime(2021, 1, 1),
+    start_date=datetime(2021, 1, 1, tzinfo=timezone.utc),
     catchup=False,
     tags=["example"],
 ) as dag:
@@ -59,7 +49,7 @@ with DAG(
     ![Alt Text](https://media.giphy.com/media/OqB5Oz1tNp6Q6Ld7tk/giphy.gif)
 
 
-    """
+    """,
     )
 
     dag.doc_md = (
@@ -74,7 +64,7 @@ with DAG(
         echo "{{ ds }}"
         echo "{{ macros.ds_add(ds, 7)}}"
     {% endfor %}
-    """
+    """,
     )
 
     t3 = BashOperator(

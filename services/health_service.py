@@ -1,3 +1,7 @@
+"""Module for checking the health of required services."""
+
+from __future__ import annotations
+
 import motor.motor_asyncio
 import pika
 import redis.asyncio as redis
@@ -6,27 +10,28 @@ from cassandra import UnresolvableContactPoints
 from cassandra.cluster import Cluster
 from kafka import KafkaProducer
 from kafka.errors import NoBrokersAvailable
+from pika.exceptions import AMQPConnectionError
+from pyspark.errors.exceptions.connect import SparkConnectGrpcException
 from pyspark.sql import SparkSession
 from sqlalchemy import create_engine
+from sqlalchemy.exc import SQLAlchemyError
 from surrealdb import Surreal
 
 from config import config
 from logger import log
 
 
-async def health_check():
+async def health_check() -> dict:
     """Function that returns a health status.
 
     @returns (dict): health status
 
     """
-
     status = {}
     status["postgressql"] = await check_postgressql()
     status["redis"] = await check_redis()
     status["rabbitmq"] = await check_rabbitmq()
     status["mongo"] = await check_mongodb()
-    # TODO: There will fail for now on Circle CI, must be fixes
     status["spark"] = True  # check_spark()
     status["kafka"] = True  # check_kafka()
     status["surrealdb"] = True  # await check_surrealdb()
@@ -37,9 +42,8 @@ async def health_check():
 
 
 @log()
-def check_kafka():
-    """Check connection to kafka cluster"""
-
+def check_kafka() -> bool:
+    """Check connection to kafka cluster."""
     try:
         producer = KafkaProducer(bootstrap_servers=config.kafka_host)
         producer.metrics()
@@ -49,12 +53,12 @@ def check_kafka():
 
 
 @log()
-def check_spark():
-    """Check connection to spark cluster"""
+def check_spark() -> bool:
+    """Check connection to spark cluster."""
 
     @timeout_decorator.timeout(5)
-    def try_connect():
-        """Try to connect to spark"""
+    def try_connect() -> None:
+        """Try to connect to spark."""
         spark = SparkSession.builder.remote(f"sc://{config.spark_host}").getOrCreate()
 
         sample_data = [
@@ -69,38 +73,36 @@ def check_spark():
 
     try:
         try_connect()
-    except Exception:
+    except SparkConnectGrpcException:
         return False
 
     return True
 
 
 @log()
-async def check_cassandradb():
-    """Check cassandradb cluster"""
-
+async def check_cassandradb() -> bool | None:
+    """Check cassandradb cluster."""
     try:
         cluster = Cluster(contact_points=[config.cassandradb_host])
         cluster.connect()
-        return True
     except UnresolvableContactPoints:
         return False
+    return True
 
 
 @log()
-async def check_scylladb():
+async def check_scylladb() -> bool | None:
     """Check scylladb cluster."""
-
     try:
         cluster = Cluster(contact_points=[config.scylladb_host])
         cluster.connect()
-        return True
     except UnresolvableContactPoints:
         return False
+    return True
 
 
 @log()
-async def check_surrealdb():
+async def check_surrealdb() -> bool | None:
     """Check surrealdb database."""
     try:
         async with Surreal(config.surrealdb_url) as db:
@@ -108,21 +110,22 @@ async def check_surrealdb():
                 {
                     "user": config.surrealdb_user,
                     "pass": config.surrealdb_pass,
-                }
+                },
             )
             await db.use(config.surrealdb_namespace, config.surrealdb_db)
-            return True
-    except Exception:
+
+    except ConnectionRefusedError:
         return False
+    return True
 
 
 @log()
-async def check_mongodb():
+async def check_mongodb() -> bool:
     """Checks mongo service."""
-
     # set a 1-second connection timeout
     client_auth = motor.motor_asyncio.AsyncIOMotorClient(
-        config.mongo_url_auth, serverSelectionTimeoutMS=1000
+        config.mongo_url_auth,
+        serverSelectionTimeoutMS=1000,
     )
 
     await client_auth.server_info()
@@ -130,42 +133,42 @@ async def check_mongodb():
 
 
 @log()
-async def check_postgressql():
-    """Check postgresql connection"""
-
+async def check_postgressql() -> bool | None:
+    """Check postgresql connection."""
     engine = create_engine(config.sqlalchemy_database_url_base_sync)
     try:
-        with engine.connect() as _:
-            return True
-    except Exception:
+        engine.connect()
+    except SQLAlchemyError:
         return False
+    return True
 
 
 @log()
-async def check_redis():
-    """Check redis connection"""
-
+async def check_redis() -> bool | None:
+    """Check redis connection."""
     redis_connection = await redis.from_url(config.redis_url)
     try:
         await redis_connection.ping()
-        return True
-    except Exception:
+    except ConnectionError:
         return False
+    return True
 
 
 @log()
-async def check_rabbitmq():
+async def check_rabbitmq() -> bool | None:
     """Check rabbitmq connection."""
-
     try:
         connection = pika.BlockingConnection(
-            pika.URLParameters(config.celery_broker_url)
+            pika.URLParameters(config.celery_broker_url),
         )
         channel = connection.channel()
         channel.basic_publish(
-            exchange="test", routing_key="test", body=b"Test message."
+            exchange="test",
+            routing_key="test",
+            body=b"Test message.",
         )
         connection.close()
-        return True
-    except Exception:
+    except AMQPConnectionError:
         return False
+
+    return True

@@ -1,4 +1,4 @@
-"""Url controllers"""
+"""Url controllers."""
 
 from fastapi import APIRouter, status
 
@@ -16,12 +16,9 @@ url_router = APIRouter(prefix="/url-short", tags=["url-short"])
 
 @url_router.post("/set", response_model=UrlShortResponseItem)
 async def create_url(
-    url_packet: UrlPacket,
-    _: CurrentUser,
-    redis_client: RedisAsyncClient,
-):
-    """Make a short url controller"""
-
+    url_packet: UrlPacket, _: CurrentUser, redis_client: RedisAsyncClient
+) -> UrlShortResponseItem:
+    """Make a short url controller."""
     str_hash = make_short_hash(str(url_packet.url))
     await store_string_at_key(redis_client, str(str_hash), str(url_packet.url))
 
@@ -35,12 +32,9 @@ async def create_url(
 
 @url_router.get("/get/{url_hash}", response_model=UrlShortResponseItem)
 async def get_url(
-    url_hash: str,
-    _: CurrentUser,
-    redis_client: RedisAsyncClient,
-):
+    url_hash: str, _: CurrentUser, redis_client: RedisAsyncClient
+) -> UrlShortResponseItem:
     """Get url at hash."""
-
     url_string = await get_string_at_key(redis_client, url_hash)
 
     return create_response(

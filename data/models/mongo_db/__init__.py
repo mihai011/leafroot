@@ -2,25 +2,21 @@
 
 import uuid
 
-import motor.motor_asyncio
+from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorDatabase
 from pydantic import BaseModel
 
 from config import config
 
 
-async def get_mongo_client():
+async def get_mongo_client() -> AsyncIOMotorClient:
     """Creates mongo client."""
-    client_auth = motor.motor_asyncio.AsyncIOMotorClient(config.mongo_url_auth)
-    client_not_auth = motor.motor_asyncio.AsyncIOMotorClient(config.mongo_url_not_auth)
+    client_auth = AsyncIOMotorClient(config.mongo_url_auth)
 
-    try:
-        await client_auth.server_info()
-        yield client_auth
-    except Exception:
-        yield client_not_auth
+    await client_auth.server_info()
+    yield client_auth
 
 
-async def get_mongo_database():
+async def get_mongo_database() -> AsyncIOMotorDatabase:
     """Get mongodb database."""
     client = await anext(get_mongo_client())  # noqa
     database = client[config.mongo_db]
@@ -34,30 +30,29 @@ class BaseMongo:
     collection__name = "base"
 
     @classmethod
-    async def GetItemById(cls, db, item_id):
+    async def get_item_by_id(cls, db: AsyncIOMotorClient, item_id: int) -> dict:
         """Get Item by id  field."""
         collection = db[cls.collection__name]
-        res = await collection.find_one({"id": item_id}, {"_id": False})
-        return res
+        return await collection.find_one({"id": item_id}, {"_id": False})
 
     @classmethod
-    async def DeleteItemById(cls, db, item_id):
+    async def delete_item_by_id(cls, db: AsyncIOMotorClient, item_id: int) -> int:
         """Delete Item by id."""
         collection = db[cls.collection__name]
         delete_result = await collection.delete_one({"id": item_id})
         return delete_result.deleted_count
 
     @classmethod
-    async def GetItemsByFilter(cls, db, filter_dict=None):
-        """Get Items by filter, or all if filter is {}"""
-        if filter_dict is None:
-            filter_dict = {}
+    async def get_items_by_filter(
+        cls, db: AsyncIOMotorClient, filter_dict: dict
+    ) -> list:
+        """Get Items by filter, or all if filter is {}."""
         collection = db[cls.collection__name]
         cursor = collection.find(filter_dict, {"_id": False})
         return [document async for document in cursor]
 
     @classmethod
-    async def AddItem(cls, db, item: BaseModel) -> bool:
+    async def add_item(cls, db: AsyncIOMotorClient, item: BaseModel) -> bool:
         """Add a book to library."""
         collection = db[cls.collection__name]
         data = item.model_dump()

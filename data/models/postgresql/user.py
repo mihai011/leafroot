@@ -1,6 +1,7 @@
 """Used module related data."""
 
 from sqlalchemy import Column, ForeignKey, Integer, String
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import relationship
 
@@ -18,19 +19,19 @@ class User(Base, ExtraBase):
     permissions = Column(String(3))
     address = Column(String(200))
 
-    def __repr__(self):
+    def __repr__(self) -> str:
+        """Represenntation method."""
         return f"<User {self.username}>"
 
     @classmethod
-    async def GetById(cls, session, obj_id):
+    async def get_by_id(cls, session: AsyncSession, obj_id: int) -> "User":
         """Get object by his id."""
-
         query = select(cls).where(cls.id == obj_id)
         result = await session.execute(query)
-        o = result.scalars().first()
-        return o
+        return result.scalars().first()
 
-    def serialize(self):
+    def serialize(self) -> dict:
+        """Method for object serialization."""
         serialization = super().serialize()
 
         to_pop = ["hashed_pass", "permissions"]

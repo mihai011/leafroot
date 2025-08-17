@@ -1,6 +1,5 @@
-"""Diagram for photo store"""
+"""Diagram for photo store."""
 
-# FastApi, Postgresql, Redis, Minio(S3)
 from diagrams import Diagram, Edge
 from diagrams.custom import Custom
 from diagrams.onprem.client import User

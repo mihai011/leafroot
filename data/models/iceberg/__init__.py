@@ -1,17 +1,14 @@
+"""Module for iceberg module."""
+
 from pyiceberg.catalog import load_catalog
 
 from config import config
 
 
-def get_iceberg_catalog():
-    """Get the iceberg catalog."""
-    return MyIcebergCatalog()
-
-
 class MyIcebergCatalog:
-    """Iceberg Catalog"""
+    """Iceberg Catalog."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Construct the Iceberg object."""
         self.catalog = load_catalog(
             "leafroot",
@@ -23,3 +20,8 @@ class MyIcebergCatalog:
                 "s3.secret-access-key": config.minio_secret_key,
             },
         )
+
+
+def get_iceberg_catalog() -> MyIcebergCatalog:
+    """Get the iceberg catalog."""
+    return MyIcebergCatalog()

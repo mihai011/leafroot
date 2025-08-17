@@ -1,0 +1,39 @@
+"""Example of a spark application."""
+
+import collections
+
+from pyspark import SparkConf, SparkContext
+from pyspark.sql import SparkSession
+
+
+def print_line_rdd(line: list) -> None:
+    """Print a list  and his length."""
+    print(line, len(line))
+
+
+def main() -> None:
+    """Main function."""
+    conf = SparkConf().setMaster("spark://spark:7077").setAppName("MovieRatings")
+    sc = SparkContext(conf=conf)
+    spark = SparkSession(sc)
+    spark.sparkContext.setLogLevel("WARN")
+
+    lines_rdd = sc.textFile("file:///opt/spark-data/ml-100k/u.data")
+    print("Partitions:", lines_rdd.getNumPartitions())
+    # Getting a dataframe from a RDD.
+    lines_rdd.foreach(print_line_rdd)
+    lines_rdd = lines_rdd.map(lambda line: line.split())
+    lines_rdd.foreach(print_line_rdd)
+    lines_df = lines_rdd.toDF(["client_id", "movie_id", "rating", "timestamp"])
+    lines_df.show()
+
+    # Simple operations on a rdd
+    ratings = lines_rdd.map(lambda x: x[2])
+    result_rdd = ratings.countByValue()
+    sorted_results = collections.OrderedDict(sorted(result_rdd.items()))
+    for k, v in sorted_results.items():
+        print(k, v)
+
+    # Simple operations on a DataFrame
+    result_df = lines_df.groupBy("rating").count().sort("rating")
+    result_df.show()

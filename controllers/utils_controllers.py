@@ -13,7 +13,6 @@ utils_router = APIRouter(prefix="/utils", tags=["utils"])
 @utils_router.get("/health_check", response_model=StatusResponseItem)
 async def get_health_check(_: CurrentUser) -> ORJSONResponse:
     """Returns the health state of the system."""
-
     health_status = await health_check()
 
     return create_response(

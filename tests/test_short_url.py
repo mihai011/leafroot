@@ -1,18 +1,20 @@
-"""Test short url feature"""
+"""Test short url feature."""
 
 from fastapi import status
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from tests import DataSource
 
 
-async def test_url_status(async_session):
-    """Test url shortner"""
-
+async def test_url_status(async_session: AsyncSession) -> None:
+    """Test url shortner."""
     ds = DataSource(async_session)
     await ds.make_user()
     url_package = {"url": "http://test.com/test"}
     response = await ds.client.post(
-        "/url-short/set", json=url_package, headers=ds.headers["Test_user"]
+        "/url-short/set",
+        json=url_package,
+        headers=ds.headers["Test_user"],
     )
 
     assert response.status_code == status.HTTP_200_OK
@@ -30,6 +32,8 @@ async def test_url_status(async_session):
 
     url_package = {"url": "ftp:/wrong_url.com"}
     response = await ds.client.post(
-        "/url-short/set", json=url_package, headers=ds.headers["Test_user"]
+        "/url-short/set",
+        json=url_package,
+        headers=ds.headers["Test_user"],
     )
     assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY

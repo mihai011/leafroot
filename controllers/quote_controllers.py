@@ -18,7 +18,6 @@ quotes_router = APIRouter(prefix="/quotes", tags=["quote"])
 @quotes_router.get("/quote", response_model=QuoteResponseItem)
 async def get_quote(_: CurrentUser, session: CurrentAsyncSession) -> ORJSONResponse:
     """Returns a random quote from the database."""
-
     quote = await get_random_quote(session)
 
     return create_response(
@@ -36,8 +35,7 @@ async def create_quote(
     session: CurrentAsyncSession,
 ) -> ORJSONResponse:
     """Creates a quote object."""
-
-    quote = await Quote.AddNew(session, quote.dict())
+    quote = await Quote.add_new(session, quote.dict())
 
     return create_response(
         message="Quote created succesfully!",

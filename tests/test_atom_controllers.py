@@ -1,13 +1,13 @@
 """Module for testing particles controller."""
 
 from fastapi import status
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from tests import DataSource
 
 
-async def test_particles(async_session):
+async def test_particles(async_session: AsyncSession) -> None:
     """Testing particles."""
-
     ds = DataSource(async_session)
     await ds.make_user()
     # make proton
@@ -24,7 +24,9 @@ async def test_particles(async_session):
     payload_particle["atom_id"] = atom_id
 
     response = await ds.client.post(
-        "/atoms/proton", headers=ds.headers["Test_user"], json=payload_particle
+        "/atoms/proton",
+        headers=ds.headers["Test_user"],
+        json=payload_particle,
     )
     assert response.status_code == status.HTTP_200_OK
 

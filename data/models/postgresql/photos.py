@@ -1,4 +1,4 @@
-"""Module for photo objects"""
+"""Module for photo objects."""
 
 import uuid
 
@@ -19,6 +19,6 @@ class Photo(Base, ExtraBase):
     uuid = Column(UUID(as_uuid=True), unique=True, nullable=False, default=uuid.uuid4)
     photo_name = Column(String(80), unique=False, nullable=False)
 
-    def create_storage_path(self):
+    def create_storage_path(self) -> str:
         """Create a bucket path."""
         return f"{self.user_id}/photos/{self.uuid}/{self.photo_name}"

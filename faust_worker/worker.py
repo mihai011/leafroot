@@ -1,3 +1,5 @@
+"""Module for Faust worker."""
+
 import sys
 
 import faust
@@ -15,13 +17,15 @@ greetings_topic = app.topic("greetings", value_type=str)
 
 
 @app.agent(greetings_topic)
-async def print_greetings(greetings):
+async def print_greetings(greetings: list) -> None:
+    """Print some strings."""
     async for greeting in greetings:
         print(greeting)
 
 
 @app.timer(5)
-async def produce():
+async def produce() -> None:
+    """Send some string data to kafka topic."""
     for i in range(1000):
         await greetings_topic.send(value=f"hello {i}")
 

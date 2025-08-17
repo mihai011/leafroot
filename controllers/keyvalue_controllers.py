@@ -11,11 +11,13 @@ keyvalue_router = APIRouter(prefix="/keyvalue", tags=["keyvalue"])
 
 @keyvalue_router.post("", response_model=BaseResponse)
 async def add_key_value(
-    _: CurrentUser, mongo_db: MongoDatabase, keyvalue: KeyValuePacket
+    _: CurrentUser,
+    mongo_db: MongoDatabase,
+    keyvalue: KeyValuePacket,
 ) -> ORJSONResponse:
     """Add key value to database."""
     await mongo_db["keyvalue"].insert_one(
-        {"key": keyvalue.key, "value": keyvalue.value}
+        {"key": keyvalue.key, "value": keyvalue.value},
     )
     return create_response(
         message="Key Value added!",
@@ -27,7 +29,9 @@ async def add_key_value(
 
 @keyvalue_router.get("/{key}", response_model=BaseResponse)
 async def get_key_value(
-    _: CurrentUser, mongo_db: MongoDatabase, key: str
+    _: CurrentUser,
+    mongo_db: MongoDatabase,
+    key: str,
 ) -> ORJSONResponse:
     """Get key value from database."""
     response = await mongo_db["keyvalue"].find_one({"key": key})
@@ -48,7 +52,9 @@ async def get_key_value(
 
 @keyvalue_router.delete("/{key}", response_model=BaseResponse)
 async def delete_key_value(
-    _: CurrentUser, mongo_db: MongoDatabase, key: str
+    _: CurrentUser,
+    mongo_db: MongoDatabase,
+    key: str,
 ) -> ORJSONResponse:
     """Delete key value from database."""
     response = await mongo_db["keyvalue"].delete_one({"key": key})

@@ -1,6 +1,8 @@
 """Module for pydantic responses."""
 
-from typing import Any, Dict, List, Optional, Union
+from __future__ import annotations
+
+from typing import Any
 
 from pydantic import UUID4, BaseModel, HttpUrl
 
@@ -9,7 +11,7 @@ class BaseResponse(BaseModel):
     """Basic response."""
 
     message: str
-    item: Optional[Union[str, bool, int, float, dict, list]]
+    item: str | bool | int | float | dict | list | None
 
 
 class BaseMeta(BaseModel):
@@ -55,15 +57,15 @@ class ErrorResponse(BaseModel):
 class StatusResponse(BaseModel):
     """Response for status."""
 
-    postgressql: Optional[bool]
-    redis: Optional[bool]
-    rabbitmq: Optional[bool]
-    mongo: Optional[bool]
-    spark: Optional[bool]
-    kafka: Optional[bool]
-    surrealdb: Optional[bool]
-    scylladb: Optional[bool]
-    cassandradb: Optional[bool]
+    postgressql: bool | None
+    redis: bool | None
+    rabbitmq: bool | None
+    mongo: bool | None
+    spark: bool | None
+    kafka: bool | None
+    surrealdb: bool | None
+    scylladb: bool | None
+    cassandradb: bool | None
 
 
 class StatusResponseItem(BaseResponse):
@@ -86,13 +88,13 @@ class QuoteResponseItem(BaseResponse):
 
 
 class TaskResponse(BaseModel):
-    """Response for task"""
+    """Response for task."""
 
     task_id: UUID4
-    date_done: Optional[str] = None
-    traceback: Optional[str] = None
-    children: Optional[List[str]] = None
-    result: Optional[Dict[Any, Any]]
+    date_done: str | None = None
+    traceback: str | None = None
+    children: list[str] | None = None
+    result: dict[Any, Any] | None
     status: str
 
 
@@ -114,14 +116,14 @@ class BookListResponse(BaseModel):
 class BookListResponseItem(BaseResponse):
     """Response for book item."""
 
-    item: List[BookListResponse]
+    item: list[BookListResponse]
 
 
 class ParticleResponse(BaseModel):
     """Response for particle."""
 
     charge: float
-    atom_id: Optional[int]
+    atom_id: int | None
 
 
 class ParticleResponseItem(BaseResponse):
@@ -133,25 +135,25 @@ class ParticleResponseItem(BaseResponse):
 class ProtonResponse(BaseModel):
     """Response for proton list."""
 
-    protons: List[ParticleResponse]
+    protons: list[ParticleResponse]
 
 
 class ElectronResponse(BaseModel):
     """Response for electron list."""
 
-    electrons: List[ParticleResponse]
+    electrons: list[ParticleResponse]
 
 
 class NeutronResponse(BaseModel):
     """Response for neutron list."""
 
-    neutrons: List[ParticleResponse]
+    neutrons: list[ParticleResponse]
 
 
 class ParticleResponseListItem(BaseResponse):
     """Response for particle list item."""
 
-    item: Union[NeutronResponse, ProtonResponse, ElectronResponse]
+    item: NeutronResponse | ProtonResponse | ElectronResponse
 
 
 class AtomResponse(BaseModel):
@@ -162,9 +164,9 @@ class AtomResponse(BaseModel):
     z: float
     id: int
 
-    neutrons: Optional[List[ParticleResponse]]
-    protons: Optional[List[ParticleResponse]]
-    electrons: Optional[List[ParticleResponse]]
+    neutrons: list[ParticleResponse] | None
+    protons: list[ParticleResponse] | None
+    electrons: list[ParticleResponse] | None
 
 
 class AtomResponseItem(BaseResponse):
@@ -177,7 +179,7 @@ class RedisGraphResponse(BaseModel):
     """Response for redis graph."""
 
     name: str
-    nodes: List[str]
+    nodes: list[str]
     edges: int
 
 
@@ -202,7 +204,7 @@ class RedisNodeResponseItem(BaseResponse):
 class RedisQueryResponse(BaseModel):
     """Response for query result."""
 
-    result: List[List[Dict[Any, Any]]]
+    result: list[list[dict[Any, Any]]]
 
 
 class RedisQueryResponseItem(BaseResponse):
@@ -220,7 +222,7 @@ class MessageResponse(BaseModel):
 
 
 class MessageResponseItem(BaseResponse):
-    """Message Response Item"""
+    """Message Response Item."""
 
     item: MessageResponse
 
@@ -230,23 +232,23 @@ class MessageBoardResponse(BaseModel):
 
     board: UUID4
     name: str
-    messages: Optional[List[MessageResponse]]
+    messages: list[MessageResponse] | None
 
 
 class MessageBoardResponseItem(BaseResponse):
-    """Message Board Response Item"""
+    """Message Board Response Item."""
 
     item: MessageBoardResponse
 
 
 class UrlShortReponse(BaseModel):
-    """Base Response for Url Short"""
+    """Base Response for Url Short."""
 
     url: HttpUrl
 
 
 class UrlShortResponseItem(BaseResponse):
-    """Url Short response Item"""
+    """Url Short response Item."""
 
     item: UrlShortReponse
 
@@ -266,7 +268,7 @@ class PhotoResponseItem(BaseResponse):
 class PhotoResponseListItem(BaseResponse):
     """Response for photo list item."""
 
-    item: List[PhotoResponse]
+    item: list[PhotoResponse]
 
 
 class PhotoInfoResponse(BaseModel):
@@ -288,4 +290,4 @@ class PhotoInfoResponseItem(BaseModel):
 class PhotoInfoResponseListItem(BaseModel):
     """Response for photo list."""
 
-    item: List[PhotoInfoResponse]
+    item: list[PhotoInfoResponse]

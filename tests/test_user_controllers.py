@@ -1,25 +1,26 @@
 """Base module for testing."""
 
 from fastapi import status
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from data import User
 from tests import DataSource
 
+STATUS_CODE_200 = status.HTTP_200_OK
 
-async def test_greetings_controller(async_session):
+
+async def test_greetings_controller(async_session: AsyncSession) -> None:
     """Testing simple controller."""
-
     ds = DataSource(async_session)
     await ds.make_user()
 
     response = await ds.client.get("/", headers=ds.headers["Test_user"])
-    assert response.status_code == 200
+    assert response.status_code == STATUS_CODE_200
     assert '<html lang="en">' in response.text
 
 
-async def test_login_user(async_session):
+async def test_login_user(async_session: AsyncSession) -> None:
     """Testing simple flow."""
-
     ds = DataSource(async_session)
     data_login = {"email": "test@gmail.com", "password": "test"}
     await ds.make_user(data_login)
@@ -65,9 +66,8 @@ async def test_login_user(async_session):
     assert response_content["detail"] == "Incorrect Password!"
 
 
-async def test_signup_user(async_session):
+async def test_signup_user(async_session: AsyncSession) -> None:
     """Testing simple flow."""
-
     ds = DataSource(async_session)
     await ds.make_user()
     user_signup_data = {"username": "test"}
@@ -100,13 +100,15 @@ async def test_signup_user(async_session):
 
     user_id = 2
     response = await ds.client.get(
-        "/users/get_user/{}".format(user_id), headers=ds.headers["Test_user"]
+        f"/users/get_user/{user_id}",
+        headers=ds.headers["Test_user"],
     )
     assert response.status_code == status.HTTP_200_OK
 
     user_id = 3
     response = await ds.client.get(
-        "/users/get_user/{}".format(user_id), headers=ds.headers["Test_user"]
+        f"/users/get_user/{user_id}",
+        headers=ds.headers["Test_user"],
     )
     assert response.status_code == status.HTTP_200_OK
     response_content = response.json()
@@ -116,7 +118,8 @@ async def test_signup_user(async_session):
     fake_headers = {}
     fake_headers["Authorization"] = "Bearer fake"
     response = await ds.client.get(
-        "/users/get_user/{}".format(user_id), headers=fake_headers
+        f"/users/get_user/{user_id}",
+        headers=fake_headers,
     )
     response_content = response.json()
     assert response.status_code == status.HTTP_400_BAD_REQUEST
@@ -126,15 +129,19 @@ async def test_signup_user(async_session):
     fake_headers = {}
     fake_headers["header"] = "Bearer fake"
     response = await ds.client.get(
-        "/users/get_user/{}".format(user_id), headers=fake_headers
+        f"/users/get_user/{user_id}",
+        headers=fake_headers,
     )
     assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
 
-async def test_create_user(async_session):
+async def test_create_user(async_session: AsyncSession) -> None:
     """Testing simple flow."""
     ds = DataSource(async_session)
     await ds.make_user()
+
+    total_users = 2
+    left_users = 0
 
     # test endpoint for creating user
     response = await ds.client.post(
@@ -162,13 +169,15 @@ async def test_create_user(async_session):
 
     # test endpoint for creating users
     response = await ds.client.post(
-        "/users/create_user", headers=ds.headers["Test_user"], json={}
+        "/users/create_user",
+        headers=ds.headers["Test_user"],
+        json={},
     )
     assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
-    users = await User.GetAll(async_session)
-    assert len(users) == 2
+    users = await User.get_all(async_session)
+    assert len(users) == total_users
 
-    await User.DeleteAll(async_session)
-    users = await User.GetAll(async_session)
-    assert len(users) == 0
+    await User.delete_all(async_session)
+    users = await User.get_all(async_session)
+    assert len(users) == left_users

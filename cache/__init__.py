@@ -1,9 +1,10 @@
 """Modules that contains cache related functions."""
 
-from typing import Optional
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Callable
 
 import redis.asyncio as redis
-from fastapi import Request, Response
 from fastapi_cache import FastAPICache
 from fastapi_cache.backends.inmemory import InMemoryBackend
 from fastapi_cache.backends.redis import RedisBackend
@@ -12,19 +13,22 @@ from fastapi_cache.decorator import cache
 from base_utils import clear_args_dicts
 from config import config
 
+if TYPE_CHECKING:
+    from fastapi import Request, Response
+    from redis.asyncio.client import Redis
 
-def get_redis_async_client():
-    """Create and returns an asyunc redis client"""
 
+def get_redis_async_client() -> Redis:
+    """Create and returns an asyunc redis client."""
     return redis.from_url(config.redis_url, encoding="utf8", decode_responses=True)
 
 
-def initialize_cache():
+def initialize_cache() -> None:
     """Initialize cache with an available backend."""
     cache_backend = InMemoryBackend
     cache_source = None
 
-    if getattr(config, "redis_url") is not None and config.env != "dev":
+    if config.redis_url is not None and config.env != "dev":
         cache_backend = RedisBackend
         cache_source = redis.from_url(
             config.redis_url,
@@ -32,20 +36,20 @@ def initialize_cache():
             decode_responses=True,
         )
         FastAPICache.init(cache_backend(cache_source), prefix="leafroot")
-        return None
+        return
 
     FastAPICache.init(cache_backend(), prefix="leafroot")
-    return None
+    return
 
 
 def my_key_builder(
-    func,
-    namespace: Optional[str] = "",
-    request: Request = None,
-    response: Response = None,
-    *_,
-    **kwargs,
-):
+    func: Callable,
+    namespace: str | None = "",
+    _request: Request = None,
+    _response: Response = None,
+    *_: list,
+    **kwargs: dict,
+) -> str:
     """! Key builder for cache.
 
     @param func (function):function to be cached
@@ -58,15 +62,15 @@ def my_key_builder(
     prefix = FastAPICache.get_prefix()
     new_args, new_kwargs = clear_args_dicts(kwargs["args"], kwargs["kwargs"])
 
-    cache_key = f"{prefix}:{namespace}:{func.__module__}:{func.__name__}:{new_kwargs}:{new_args}"
-    return cache_key
+    return f"""{prefix}:{namespace}:{func.__module__}:\
+        {func.__name__}:{new_kwargs}:{new_args}"""
 
 
-def testproof_cache(*cache_args, **cache_kargs):
+def testproof_cache(*cache_args: list, **cache_kargs: dict) -> Callable:
     """Test proof cache to avoid cache when testing."""
 
-    def inner(func):
-        def wrapper(*args, **kwargs):
+    def inner(func: Callable) -> Callable:
+        def wrapper(*args: list, **kwargs: dict):  # noqa:ANN202
             if config.env in ["dev", "circle"]:
                 return func(*args, **kwargs)
 

@@ -2,6 +2,7 @@
 
 import aiohttp
 from aioresponses import aioresponses
+from fastapi import status
 
 from data import HttpRequest
 from utils.external_api import (
@@ -11,19 +12,19 @@ from utils.external_api import (
 )
 
 
-async def test_make_get_request():
+async def test_make_get_request() -> None:
     """Tests for a make-get_request."""
     url_test = "http://fake_url.com"
     session = aiohttp.ClientSession()
     headers = {}
     with aioresponses() as mocked:
-        mocked.get(url_test, status=200, body="test1")
+        mocked.get(url_test, status=status.HTTP_200_OK, body="test1")
         response = await make_get_request(session, url_test, headers)
         assert response == "test1"
     await session.close()
 
 
-async def test_make_post_request():
+async def test_make_post_request() -> None:
     """Tests for a make-get_request."""
     url_test = "http://fake_url.com"
     session = aiohttp.ClientSession()
@@ -36,7 +37,7 @@ async def test_make_post_request():
     await session.close()
 
 
-async def test_get_request_external():
+async def test_get_request_external() -> None:
     """Test a simple request to a fake api service."""
     url_test = "http://fake_url.com"
 
