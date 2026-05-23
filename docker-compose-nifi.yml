@@ -50,3 +50,8 @@ volumes:
     logs:
     data:
     state:
+
+
+networks:
+    shared_network:
+        driver: bridge

@@ -1,4 +1,4 @@
-ACTIVATE_BASH=source ~/.bashrc
+ACTIVATE_BASH= source ~/.bashrc
 ACTIVATE_VENV= poetry shell
 DIR_ARGS = app/ controllers/ data/ tests/ scripts/ utils/ cache/ config/
 DIR_NO_TESTS = app/ controllers/ data/ scripts/ utils/ cache/
@@ -133,7 +133,7 @@ start_celery_workers_detached:
 	poetry run celery -A celery_worker worker --loglevel=info --detach
 
 
-bare_bones: venv_create start_services test_parallel sr_services
+bare_bones: venv_create start_services test_parallel start_services
 
 soft_checklist: typehint coverage lint
 hard_checklist: format lint typehint test coverage

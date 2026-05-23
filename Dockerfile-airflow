@@ -8,7 +8,7 @@ RUN mkdir /$AIRFLOW_PROJ_DIR
 WORKDIR $AIRFLOW_PROJ_DIR
 COPY ./$AIRFLOW_PROJ_DIR/scripts/poetry.lock poetry.lock
 COPY ./$AIRFLOW_PROJ_DIR/scripts/pyproject.toml pyproject.toml
-RUN poetry install
+RUN poetry lock install
 RUN apt update && apt install -y postgresql-client
 
 COPY ./$AIRFLOW_PROJ_DIR/scripts/entrypoint.sh /

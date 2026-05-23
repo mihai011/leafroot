@@ -1,1 +1,1 @@
-"""Modules with examples in the spark ecoysystem."""
+"""Modules with examples in the spark ecosystem."""  # ignore: N999

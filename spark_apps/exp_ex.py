@@ -8,21 +8,21 @@ def main() -> None:
     """Main function for file reading."""
     spark = SparkSession.builder.appName("UDF").getOrCreate()
 
-    trip_delaysfile_path = "spark-data/departure_delays.csv"
-    airportsnafile_path = "spark-data/airport-codes-na.txt"
+    trip_delays_file_path = "spark-data/departure_delays.csv"
+    airports_na_file_path = "spark-data/airport-codes-na.txt"
 
-    airportsna = (
+    airports_na = (
         spark.read.format("csv")
         .options(header="true", inferSchema=True, sep="\t")
-        .load(airportsnafile_path)
+        .load(airports_na_file_path)
     )
 
-    airportsna.createOrReplaceTempView("airports_na")
+    airports_na.createOrReplaceTempView("airports_na")
 
     departure_delays = (
         spark.read.format("csv")
         .options(header="true", inferSchema=True)
-        .load(trip_delaysfile_path)
+        .load(trip_delays_file_path)
     )
 
     departure_delays = departure_delays.withColumn(
